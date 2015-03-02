@@ -1,0 +1,40 @@
+<RCC>
+    <qresource prefix="/images">
+        <file alias="cover">images/cover.png</file>
+        <file alias="icon">cyanide.png</file>
+
+        <file alias="blankavatar">Tox-UI/contact list icons/blankavatar.png</file>
+        <file alias="blankavatar_2x">Tox-UI/contact list icons/blankavatar_2x.png</file>
+        <file alias="blankavatar_svg">Tox-UI/contact list icons/blankavatar.svg</file>
+
+        <file alias="busy">Tox-UI/status/dot_busy.png</file>
+        <file alias="away">Tox-UI/status/dot_idle.png</file>
+        <file alias="offline">Tox-UI/status/dot_offline.png</file>
+        <file alias="online">Tox-UI/status/dot_online.png</file>
+
+        <file alias="busy_2x">Tox-UI/status/dot_busy_2x.png</file>
+        <file alias="away_2x">Tox-UI/status/dot_idle_2x.png</file>
+        <file alias="offline_2x">Tox-UI/status/dot_offline_2x.png</file>
+        <file alias="online_2x">Tox-UI/status/dot_online_2x.png</file>
+
+        <file alias="busy_svg">Tox-UI/status/dot_busy.svg</file>
+        <file alias="away_svg">Tox-UI/status/dot_idle.svg</file>
+        <file alias="offline_svg">Tox-UI/status/dot_offline.svg</file>
+        <file alias="online_svg">Tox-UI/status/dot_online.svg</file>
+
+        <file alias="busy_notification">Tox-UI/status/dot_busy_notification.png</file>
+        <file alias="away_notification">Tox-UI/status/dot_idle_notification.png</file>
+        <file alias="offline_notification">Tox-UI/status/dot_offline_notification.png</file>
+        <file alias="online_notification">Tox-UI/status/dot_online_notification.png</file>
+
+        <file alias="busy_notification_2x">Tox-UI/status/dot_busy_notification_2x.png</file>
+        <file alias="away_notification_2x">Tox-UI/status/dot_idle_notification_2x.png</file>
+        <file alias="offline_notification_2x">Tox-UI/status/dot_offline_notification_2x.png</file>
+        <file alias="online_notification_2x">Tox-UI/status/dot_online_notification_2x.png</file>
+
+        <file alias="busy_notification_svg">Tox-UI/status/dot_busy_notification.svg</file>
+        <file alias="away_notification_svg">Tox-UI/status/dot_idle_notification.svg</file>
+        <file alias="offline_notification_svg">Tox-UI/status/dot_offline_notification.svg</file>
+        <file alias="online_notification_svg">Tox-UI/status/dot_online_notification.svg</file>
+    </qresource>
+</RCC>
