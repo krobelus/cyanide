@@ -21,7 +21,6 @@ Page {
         //TODO fill block
         anchors.fill: parent
 
-
         Component.onCompleted: {
             for(var i=0; i<cyanide.get_number_of_messages(currentFid); i++)
                 model.append({'author': cyanide.get_message_author(currentFid, i)
@@ -48,30 +47,29 @@ Page {
             }
         }
 
-        //delegate: BackgroundItem {
-        //    id: delegate
-            //x: Theme.paddingLarge
-            //width: parent.width - 2*Theme.paddingLarge
-            //height: childrenRect.height
+        delegate: Item {
+            id: delegate
+            height: messageText.height + Theme.paddingMedium
+            // height: childrenRect.height
+            x: author ? Theme.paddingLarge : page.width/3 - Theme.paddingLarge
+            //width: page.width*2/3 - 2 * Theme.paddingLarge
 
-        /*
-        delegate: Label {
-            id: messageLabel
-            text: message_text
-            font.pixelSize: Theme.fontSizeSmall
-            color: author ? Theme.secondaryColor : Theme.primaryColor
-            horizontalAlignment: author ? Text.AlignLeft : Text.AlignRight
-            wrapMode: Text.WordWrap
-            //width: page.width*2/3
-            //x: author ? Theme.paddingMedium : page.width/3-3*Theme.paddingMedium
-            //anchors.fill: parent
-            anchors {
-                top: parent.top
-                left: parent.left
-                bottom: parent.bottom
+            Text {
+                id: messageText
+                text: message_text
+                width: page.width*2/3
+                font.pixelSize: Theme.fontSizeMedium
+                color: author ? Theme.secondaryColor : Theme.primaryColor
+                horizontalAlignment: author ? Text.AlignLeft : Text.AlignRight
+                wrapMode: Text.WordWrap
+                /*
+                anchors {
+                    left: parent.left
+                    leftMargin: Theme.paddingMedium
+                    top: parent.top
+                    bottom: parent.bottom
+                }*/
             }
-        }
-        */
             /*
             Label {
                 id: timestampLabel
@@ -87,7 +85,7 @@ Page {
                 }
             }
             */
-        //}
+        }
         VerticalScrollDecorator {}
     }
 

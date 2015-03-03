@@ -83,7 +83,8 @@ void Cyanide::tox_thread()
 
     set_callbacks();
 
-    // return; // asdf
+    //return; // asdf
+
     // Connect to bootstraped nodes in "tox_bootstrap.h"
 
     do_bootstrap();
