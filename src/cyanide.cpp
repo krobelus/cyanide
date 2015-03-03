@@ -189,7 +189,9 @@ void Cyanide::load_defaults()
     uint16_t name_len = sizeof(DEFAULT_NAME) - 1, status_len = sizeof(DEFAULT_STATUS) - 1;
 
     memcpy(self()->name, name, name_len);
+    self()->name_length = name_len;
     memcpy(self()->status_message, status, status_len);
+    self()->status_message_length = status_len;
 
     tox_set_name(tox, name, name_len);
     tox_set_status_message(tox, status, status_len);
@@ -210,6 +212,7 @@ void Cyanide::write_save()
     tox_save(tox, (uint8_t*)data);
 
     //TODO use relative paths
+    mkdir("/home/nemo/.config/tox", 775);
     sprintf(tmp_path, "%s/.config/tox/tox_save.tmp", getenv("HOME"));
 
     file = fopen(tmp_path, "wb");
