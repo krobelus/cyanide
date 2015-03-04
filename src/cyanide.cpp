@@ -3,11 +3,13 @@
 #include <sys/stat.h>
 #include <sailfishapp.h>
 #include <thread>
+#include <QtQuick>
 
 #include "cyanide.h"
 #include "tox_bootstrap.h"
 #include "tox_callbacks.h"
 #include "util.h"
+
 
 Cyanide cyanide;
 
