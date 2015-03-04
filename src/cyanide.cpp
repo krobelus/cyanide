@@ -207,7 +207,8 @@ void Cyanide::write_save()
     tox_save(tox, (uint8_t*)data);
 
     //TODO use relative paths
-    mkdir("/home/nemo/.config/tox", 775);
+    mkdir("/home/nemo/.config/tox", 0755);
+    chmod("/home/nemo/.config/tox", 0755);
     sprintf(tmp_path, "%s/.config/tox/tox_save.tmp", getenv("HOME"));
 
     file = fopen(tmp_path, "wb");
@@ -716,8 +717,11 @@ void Cyanide::accept_friend_request(int fid)
 {
     qDebug() << "accepting friend request";
     uint8_t cid[TOX_PUBLIC_KEY_SIZE];
-    tox_get_client_id(tox, fid, cid);
+    if(tox_get_client_id(tox, fid, cid) == -1) {
+        qDebug() << "Failed to get client id";
+    }
     int ret = tox_add_friend_norequest(tox, cid);
+    save_needed = true;
     qDebug() << "tox_add_friend_norequest() returned " << ret;
     friends[fid].accepted = true;
 }
