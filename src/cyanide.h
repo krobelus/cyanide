@@ -9,6 +9,7 @@
 
 #define DEFAULT_NAME "Tox User"
 #define DEFAULT_STATUS "Toxing on Cyanide"
+#define DEFAULT_FRIEND_REQUEST_MESSAGE "Tox me?"
 
 class Cyanide : public QObject
 {
@@ -41,7 +42,7 @@ public:
     /* */
     Q_INVOKABLE bool send_friend_request(QString id_string, QString msg_string);
     Q_INVOKABLE bool send_friend_message(int fid, QString msg);
-    Q_INVOKABLE void accept_friend_request(int fid);
+    Q_INVOKABLE bool accept_friend_request(int fid);
     Q_INVOKABLE void remove_friend(int fid);
 
     /* setters and getters */
@@ -54,6 +55,7 @@ public:
     Q_INVOKABLE QString get_friend_status_icon(int fid);
     Q_INVOKABLE bool get_friend_connection_status(int fid);
     Q_INVOKABLE bool get_friend_accepted(int fid);
+    Q_INVOKABLE QString get_friend_public_key(int fid);
 
     Q_INVOKABLE int get_number_of_messages(int fid);
     Q_INVOKABLE QString get_message_text(int fid, int mid);

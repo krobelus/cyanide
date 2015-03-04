@@ -95,10 +95,8 @@ Page {
                     if(fid== -1) {
                         pageStack.push(Qt.resolvedUrl("Profile.qml"))
                     } else if (!cyanide.get_friend_accepted(fid)) {
-                        remorsePopup.execute("adding friend", function() {
-                                cyanide.accept_friend_request(fid)
-                                refreshFriendList()
-                                })
+                        currentFid = index - 1
+                        pageStack.push(Qt.resolvedUrl("AcceptFriend.qml"))
                     } else {
                         currentFid = index - 1
                         pageStack.push(Qt.resolvedUrl("Friend.qml"), {})

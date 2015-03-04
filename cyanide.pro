@@ -32,7 +32,8 @@ OTHER_FILES += \
     qml/pages/Friend.qml \
     qml/cyanide.qml \
     cyanide.desktop \
-    qml/pages/AddFriend.qml
+    qml/pages/AddFriend.qml \
+    qml/pages/AcceptFriend.qml
 
 # to disable building translations every time, comment out the
 # following CONFIG line

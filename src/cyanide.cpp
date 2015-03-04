@@ -644,7 +644,8 @@ void callback_file_data(Tox *UNUSED(tox), int32_t fid, uint8_t filenumber, const
 /* */
 bool Cyanide::send_friend_request(QString id_string, QString msg_string)
 {
-    msg_string += " ";
+    if(msg_string.isEmpty())
+        msg_string = DEFAULT_FRIEND_REQUEST_MESSAGE;
     int msg_length = tox_string_length(msg_string);
     void *msg = malloc(msg_length * sizeof(char));
     to_tox_string(msg_string, (uint8_t*)msg);
@@ -688,8 +689,12 @@ bool Cyanide::send_friend_request(QString id_string, QString msg_string)
             qDebug() << "TOX_FAERR_NOMEM";
             break;
         default:
-            qDebug() << "friend request was sent";
+            qDebug() << "sent friend request";
     }
+
+    if(fid < 0)
+        return false;
+
     Friend *f = new Friend((const uint8_t*)data, (const uint8_t*)id, TOX_FRIEND_ADDRESS_SIZE, NULL, 0);
     add_friend(f);
 
@@ -713,17 +718,16 @@ bool Cyanide::send_friend_message(int fid, QString msg)
     return true;
 }
 
-void Cyanide::accept_friend_request(int fid)
+bool Cyanide::accept_friend_request(int fid)
 {
-    qDebug() << "accepting friend request";
-    uint8_t cid[TOX_PUBLIC_KEY_SIZE];
-    if(tox_get_client_id(tox, fid, cid) == -1) {
-        qDebug() << "Failed to get client id";
+    if(tox_add_friend_norequest(tox, friends[fid].cid) == -1) {
+        qDebug() << "could not add friend";
+        return false;
     }
-    int ret = tox_add_friend_norequest(tox, cid);
-    save_needed = true;
-    qDebug() << "tox_add_friend_norequest() returned " << ret;
+
     friends[fid].accepted = true;
+    save_needed = true;
+    return true;
 }
 
 void Cyanide::remove_friend(int fid)
@@ -801,6 +805,14 @@ bool Cyanide::get_friend_connection_status(int fid)
 bool Cyanide::get_friend_accepted(int fid)
 {
     return friends[fid].accepted;
+}
+
+QString Cyanide::get_friend_public_key(int fid)
+{
+    Friend f = fid == -1 ? self : friends[fid];
+    //return to_QString(f.cid, TOX_PUBLIC_KEY_SIZE)
+    //TODO
+    return QString("pubkey");
 }
 
 int Cyanide::get_number_of_messages(int fid)
