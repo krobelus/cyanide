@@ -32,6 +32,13 @@
     </message>
 </context>
 <context>
+    <name>Friend</name>
+    <message>
+        <source>Remove friend</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>FriendList</name>
     <message>
         <source>Show Page 2</source>

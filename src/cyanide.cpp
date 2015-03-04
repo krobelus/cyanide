@@ -742,6 +742,13 @@ bool Cyanide::send_friend_message(int fid, QString msg)
     return true;
 }
 
+void Cyanide::remove_friend(int fid)
+{
+    tox_del_friend(tox, fid);
+    save_needed = true;
+    friends.erase(friends.begin() + fid);
+}
+
 /* setters and getters */
 
 void Cyanide::set_friend_notification(int fid, bool status)

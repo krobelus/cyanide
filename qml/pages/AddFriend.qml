@@ -44,7 +44,6 @@ Page {
     }
     function submit() {
         if(cyanide.send_friend_request(toxID.text, message.text)) {
-            console.log("sending friend request")
             refreshFriendList()
             pageStack.pop()
         } else {

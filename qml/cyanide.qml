@@ -27,7 +27,6 @@ ApplicationWindow
     function refreshFriendList() {
         friendList.clear()
         var n = cyanide.get_number_of_friends()
-        console.log("number of friends: " + n)
         appendFriend(n)
         var i = 0
         while(i < n) {

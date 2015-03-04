@@ -12,6 +12,17 @@ Page {
             title: cyanide.get_friend_name(currentFid)
         }
 
+        PullDownMenu {
+            MenuItem {
+                text: qsTr("Remove friend")
+                onClicked: {
+                    cyanide.remove_friend(currentFid)
+                    refreshFriendList()
+                    pageStack.pop()
+                }
+            }
+        }
+
         model: ListModel {
             id: model
         }
