@@ -274,7 +274,7 @@ bool Cyanide::load_save()
         f->status_message_length = tox_get_status_message_size(tox, i);
         tox_get_status_message(tox, i, f->status_message, TOX_MAX_STATUSMESSAGE_LENGTH);
 
-        add_friend(f);
+        friends.push_back(*f);
     }
 
     self.name_length = tox_get_self_name(tox, self.name);
@@ -298,6 +298,8 @@ bool Cyanide::load_save()
 void Cyanide::add_friend(Friend *f)
 {
     friends.push_back(*f);
+    qDebug() << "added friend number" << friends.size() - 1 << "to the list view";
+    emit cyanide.signal_friend_added(friends.size() - 1);
 }
 
 void Cyanide::set_callbacks()
@@ -385,22 +387,12 @@ void Cyanide::set_callbacks()
 void callback_friend_request(Tox *UNUSED(tox), const uint8_t *id, const uint8_t *msg, uint16_t length, void *UNUSED(userdata))
 {
     qDebug() << "was called";
-    return;
-//    length = utf8_validate(msg, length);
-//
-//    FRIENDREQ *req = malloc(sizeof(FRIENDREQ) + length);
-//
-//    req->length = length;
-//    memcpy(req->id, id, sizeof(req->id));
-//    memcpy(req->msg, msg, length);
-//
-//    postmessage(FRIEND_REQUEST, 0, 0, req);
-//
-//    /*int r = tox_add_friend_norequest(tox, id);
-//    void *data = malloc(TOX_FRIEND_ADDRESS_SIZE);
-//    memcpy(data, id, TOX_FRIEND_ADDRESS_SIZE);
-//
-//    postmessage(FRIEND_ACCEPT, (r < 0), (r < 0) ? 0 : r, data);*/
+    int name_length = 2 * TOX_FRIEND_ADDRESS_SIZE * sizeof(char);
+    void *name = malloc(name_length);
+    id_to_string((char*)name, (char*)id);
+    Friend f = *new Friend(id, (const uint8_t*)name, name_length, (const uint8_t*)msg, length);
+    f.accepted = false;
+    cyanide.add_friend(&f);
 }
 
 void callback_friend_message(Tox *tox, int fid, const uint8_t *message, uint16_t length, void *UNUSED(userdata))
@@ -697,13 +689,8 @@ bool Cyanide::send_friend_request(QString id_string, QString msg_string)
         default:
             qDebug() << "friend request was sent";
     }
-    Friend f = *new Friend();
-
-    memcpy(f.cid, data, TOX_CLIENT_ID_SIZE);
-    f.name_length = TOX_FRIEND_ADDRESS_SIZE;
-    memcpy(f.name, id, TOX_FRIEND_ADDRESS_SIZE);
-    f.status_message_length = 0;
-    add_friend(&f);
+    Friend *f = new Friend((const uint8_t*)data, (const uint8_t*)id, TOX_FRIEND_ADDRESS_SIZE, NULL, 0);
+    add_friend(f);
 
     free(msg);
     free(id);
@@ -723,6 +710,16 @@ bool Cyanide::send_friend_message(int fid, QString msg)
     emit cyanide.signal_friend_message(self_fid, f->messages.size() - 1);
 
     return true;
+}
+
+void Cyanide::accept_friend_request(int fid)
+{
+    qDebug() << "accepting friend request";
+    uint8_t cid[TOX_PUBLIC_KEY_SIZE];
+    tox_get_client_id(tox, fid, cid);
+    int ret = tox_add_friend_norequest(tox, cid);
+    qDebug() << "tox_add_friend_norequest() returned " << ret;
+    friends[fid].accepted = true;
 }
 
 void Cyanide::remove_friend(int fid)
@@ -795,6 +792,11 @@ bool Cyanide::get_friend_connection_status(int fid)
 {
     Friend f = fid == -1 ? self : friends[fid];
     return f.connection_status;
+}
+
+bool Cyanide::get_friend_accepted(int fid)
+{
+    return friends[fid].accepted;
 }
 
 int Cyanide::get_number_of_messages(int fid)

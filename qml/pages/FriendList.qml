@@ -5,6 +5,8 @@ import Sailfish.Silica 1.0
 Page {
     id: contactsPage
 
+    RemorsePopup { id: remorsePopup }
+
     // To enable PullDownMenu, place our content in a SilicaFlickable
     SilicaFlickable {
         anchors.fill: parent
@@ -89,11 +91,17 @@ Page {
                     color: Theme.secondaryColor
                 }
                 onClicked: {
-                    if(index == 0) {
+                    var fid = index - 1
+                    if(fid== -1) {
                         pageStack.push(Qt.resolvedUrl("Profile.qml"))
+                    } else if (!cyanide.get_friend_accepted(fid)) {
+                        remorsePopup.execute("adding friend", function() {
+                                cyanide.accept_friend_request(fid)
+                                refreshFriendList()
+                                })
                     } else {
                         currentFid = index - 1
-                        pageStack.push(Qt.resolvedUrl("Friend.qml"))
+                        pageStack.push(Qt.resolvedUrl("Friend.qml"), {})
                     }
                 }
             }

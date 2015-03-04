@@ -44,7 +44,6 @@ Page {
     }
     function submit() {
         if(cyanide.send_friend_request(toxID.text, message.text)) {
-            refreshFriendList()
             pageStack.pop()
         } else {
             button.text = "Failed to send friend request, try again?"

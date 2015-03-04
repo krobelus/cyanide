@@ -14,5 +14,9 @@
         <source>Add a friend</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>refresh friend list (debugging)</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 </TS>

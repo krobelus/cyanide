@@ -41,6 +41,7 @@ public:
     /* */
     Q_INVOKABLE bool send_friend_request(QString id_string, QString msg_string);
     Q_INVOKABLE bool send_friend_message(int fid, QString msg);
+    Q_INVOKABLE void accept_friend_request(int fid);
     Q_INVOKABLE void remove_friend(int fid);
 
     /* setters and getters */
@@ -52,6 +53,7 @@ public:
     Q_INVOKABLE QString get_friend_status_message(int fid);
     Q_INVOKABLE QString get_friend_status_icon(int fid);
     Q_INVOKABLE bool get_friend_connection_status(int fid);
+    Q_INVOKABLE bool get_friend_accepted(int fid);
 
     Q_INVOKABLE int get_number_of_messages(int fid);
     Q_INVOKABLE QString get_message_text(int fid, int mid);
@@ -59,6 +61,8 @@ public:
     Q_INVOKABLE bool get_message_author(int fid, int mid);
 
 signals:
+    void signal_friend_added(int fid);
+
     void signal_friend_request();
     void signal_friend_message(int fid, int mid);
     void signal_friend_action();

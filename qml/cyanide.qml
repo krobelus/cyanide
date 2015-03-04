@@ -29,6 +29,9 @@ ApplicationWindow
     }
     Connections {
         target: cyanide
+        onSignal_friend_added: {
+            appendFriend(fid)
+        }
         onSignal_name_change: {
             var i = fid + 1
             friendList.setProperty(i, "friend_name", cyanide.get_friend_name(fid))
