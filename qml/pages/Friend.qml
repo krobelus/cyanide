@@ -5,6 +5,8 @@ import "../js/Misc.js" as Misc
 Page {
     id: friendPage
 
+    RemorsePopup { id: remorsePopup }
+
     SilicaListView {
         id: messageList
 
@@ -16,9 +18,11 @@ Page {
             MenuItem {
                 text: qsTr("Remove friend")
                 onClicked: {
-                    cyanide.remove_friend(currentFid)
-                    refreshFriendList()
-                    pageStack.pop()
+                    remorsePopup.execute("Removing friend...", function() {
+                        cyanide.remove_friend(currentFid)
+                        refreshFriendList()
+                        pageStack.pop()
+                    })
                 }
             }
         }
