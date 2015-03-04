@@ -20,10 +20,10 @@ private:
     uint8_t self_id[TOX_FRIEND_ADDRESS_SIZE];
     char self_hex_id[2 * TOX_FRIEND_ADDRESS_SIZE];
 
-    bool save_needed;
     char save_path[512];
 
 public:
+    bool save_needed;
     std::vector<Friend> friends;
     Friend *self(); // always the last element in friends
     int self_fid();  // friends.size() - 1
@@ -41,6 +41,7 @@ public:
     void tox_thread();
 
     /* */
+    Q_INVOKABLE bool send_friend_request(QString id_string, QString msg_string);
     Q_INVOKABLE bool send_friend_message(int fid, QString msg);
 
     /* setters and getters */

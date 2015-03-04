@@ -31,7 +31,8 @@ OTHER_FILES += \
     qml/js/Misc.js \
     qml/pages/Friend.qml \
     qml/cyanide.qml \
-    cyanide.desktop
+    cyanide.desktop \
+    qml/pages/AddFriend.qml
 
 # to disable building translations every time, comment out the
 # following CONFIG line
@@ -54,6 +55,7 @@ DEPENDPATH += $$PWD/res/usr/include
 
 QMAKE_CXXFLAGS += "-std=c++0x -pthread"
 QMAKE_CXXFLAGS += "-Wno-write-strings"
+QMAKE_CXXFLAGS += "-Wno-pointer-arith"
 QMAKE_CXXFLAGS += "-Wno-unused-function -Wno-comment -Wno-unused-parameter"
 
 RESOURCES += \

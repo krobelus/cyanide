@@ -4,7 +4,7 @@
 <context>
     <name>FriendList</name>
     <message>
-        <source>\o/</source>
+        <source>Add a friend</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

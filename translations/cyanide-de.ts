@@ -42,7 +42,7 @@
         <translation type="obsolete">Unterseite</translation>
     </message>
     <message>
-        <source>\o/</source>
+        <source>Add a friend</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

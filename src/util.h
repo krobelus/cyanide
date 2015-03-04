@@ -28,6 +28,7 @@ QString to_QString(const void *ptr, int length);
 
 const uint8_t *to_tox_string(QString str);
 int to_tox_string(QString str, uint8_t *dest);
+//TODO rename
 int tox_string_length(QString str);
 
 const char *to_const_char(QString str);

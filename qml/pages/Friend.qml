@@ -3,7 +3,7 @@ import Sailfish.Silica 1.0
 import "../js/Misc.js" as Misc
 
 Page {
-    id: page
+    id: friendPage
 
     SilicaListView {
         id: messageList
@@ -51,13 +51,13 @@ Page {
             id: delegate
             height: messageText.height + Theme.paddingMedium
             // height: childrenRect.height
-            x: author ? Theme.paddingLarge : page.width/3 - Theme.paddingLarge
-            //width: page.width*2/3 - 2 * Theme.paddingLarge
+            x: author ? Theme.paddingLarge : friendPage.width/3 - Theme.paddingLarge
+            //width: friendPage.width*2/3 - 2 * Theme.paddingLarge
 
             Text {
                 id: messageText
                 text: message_text
-                width: page.width*2/3
+                width: friendPage.width*2/3
                 font.pixelSize: Theme.fontSizeMedium
                 color: author ? Theme.secondaryColor : Theme.primaryColor
                 horizontalAlignment: author ? Text.AlignLeft : Text.AlignRight
@@ -75,7 +75,7 @@ Page {
                 id: timestampLabel
                 text: qsTr(Misc.elapsedTime(timestamp))
                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-                width: page.width/3 - 3*Theme.paddingMedium
+                width: friendPage.width/3 - 3*Theme.paddingMedium
                 font.pixelSize: Theme.fontSizeExtraSmall
                 color: Theme.secondaryColor
                 horizontalAlignment: author ? Text.AlignRight : Text.AlignLeft
@@ -96,7 +96,7 @@ Page {
         placeholderText: "type your message here"
         inputMethodHints: Qt.ImhNoAutoUppercase
         focus: false
-        y: page.height - height - Theme.paddingLarge
+        y: friendPage.height - height - Theme.paddingLarge
         //horizontalAlignment: textAlignment
         EnterKey.onClicked: {
             // TODO split long messages
