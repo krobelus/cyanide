@@ -13,26 +13,10 @@ ApplicationWindow
     /* the list of friends with */
     property ListModel friendList: ListModel { id: friendList }
 
-    function listID(fid) {
-        if(fid === cyanide.get_number_of_friends())
-            return 0
-        else
-            return fid + 1
-    }
-
-    Connections {
-        target: cyanide
-    }
-
     function refreshFriendList() {
         friendList.clear()
-        var n = cyanide.get_number_of_friends()
-        appendFriend(n)
-        var i = 0
-        while(i < n) {
+        for(var i = -1; i < cyanide.get_number_of_friends(); i++)
             appendFriend(i)
-            i++
-        }
     }
     function appendFriend(i) {
             friendList.append({
@@ -46,23 +30,21 @@ ApplicationWindow
     Connections {
         target: cyanide
         onSignal_name_change: {
-            var i = listID(fid)
+            var i = fid + 1
             friendList.setProperty(i, "friend_name", cyanide.get_friend_name(fid))
         }
         onSignal_connection_status: {
-            var i = listID(fid)
+            var i = fid + 1
             friendList.setProperty(i, "friend_connection_status", cyanide.get_friend_connection_status(fid))
             friendList.setProperty(i, "friend_status_icon", cyanide.get_friend_status_icon(fid))
         }
         onSignal_status_message: {
-            var i = listID(fid)
+            var i = fid + 1
             friendList.setProperty(i, "friend_status_message", cyanide.get_friend_status_message(fid))
         }
         onSignal_friend_message: {
-            var i = listID(fid)
-            if(i > 0) {
-                friendList.setProperty(i, "friend_status_icon", cyanide.get_friend_status_icon(fid))
-            }
+            var i = fid + 1
+            friendList.setProperty(i, "friend_status_icon", cyanide.get_friend_status_icon(fid))
         }
     }
 }

@@ -43,8 +43,7 @@ Page {
         Connections {
             target: cyanide
             onSignal_friend_message: {
-                var i = listID(fid)
-                if(fid == currentFid || i == 0) {
+                if(fid == currentFid || fid == -1) {
                     cyanide.set_friend_notification(fid, false)
                     model.append({'author': cyanide.get_message_author(currentFid, mid)
                                  ,'message_text': cyanide.get_message_text(currentFid, mid)

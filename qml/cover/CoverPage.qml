@@ -5,11 +5,14 @@ CoverBackground {
 
     CoverActionList {
         id: coverAction
-
-        //CoverAction {
-            //iconSource: "image://theme/icon-cover-next"
-            //iconSource: cyanide.get_self_status_dot_path()
-        //}
+        /*
+        CoverAction {
+            iconSource: selfStatusIcon
+        }
+        CoverAction {
+            iconSource: "image://theme/icon-cover-refresh"
+        }
+        */
     }
 
     Image {

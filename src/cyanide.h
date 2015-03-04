@@ -23,13 +23,11 @@ private:
     char save_path[512];
 
 public:
-    bool save_needed;
+    Friend self;
+    static const int self_fid = -1;
     std::vector<Friend> friends;
-    Friend *self(); // always the last element in friends
-    int self_fid();  // friends.size() - 1
+    bool save_needed;
     void add_friend(Friend *p);
-
-    Cyanide();
 
     void load_defaults();
     bool load_save();

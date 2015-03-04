@@ -17,8 +17,8 @@ int main(int argc, char *argv[])
 {
     QGuiApplication *app = SailfishApp::application(argc, argv);
     app->setOrganizationName("Tox");
-    app->setOrganizationDomain("harbour-cyanide");
-    app->setApplicationName("harbour-cyanide");
+    app->setOrganizationDomain("Tox");
+    app->setApplicationName("Cyanide");
     QQuickView *view = SailfishApp::createView();
 
     cyanide.load_tox_and_stuff_pretty_please();
@@ -31,20 +31,14 @@ int main(int argc, char *argv[])
     return app->exec();
 }
 
-Cyanide::Cyanide()
-{
-}
-
 void init(Cyanide *cyanide)
 {
-    //cyanide->load_tox_and_stuff_pretty_please();
     cyanide->tox_thread();
 }
 
 void Cyanide::load_tox_and_stuff_pretty_please()
 {
     save_needed = false;
-    friends.push_back(Friend());
 
     if((tox = tox_new(&options)) == NULL) {
         qDebug() << "tox_new() failed";
@@ -58,8 +52,8 @@ void Cyanide::load_tox_and_stuff_pretty_please()
 
     tox_get_address(tox, self_id);
     id_to_string(self_hex_id, (char*)self_id);
-    qDebug() << "name:" << to_QString(self()->name, self()->name_length);
-    qDebug() << "status" << to_QString(self()->status_message, self()->status_message_length);
+    qDebug() << "name:" << to_QString(self.name, self.name_length);
+    qDebug() << "status" << to_QString(self.status_message, self.status_message_length);
     qDebug() << "Tox ID: " << self_hex_id;
 }
 
@@ -114,8 +108,8 @@ void Cyanide::tox_thread()
         // Check current connection
         if(tox_isconnected(tox) != connected) {
             connected = !connected;
-            self()->connection_status = connected;
-            emit cyanide.signal_connection_status(self_fid());
+            self.connection_status = connected;
+            emit cyanide.signal_connection_status(self_fid);
             qDebug() << (connected ? "Connected to DHT" : "Disconnected from DHT");
         }
 
@@ -188,16 +182,16 @@ void Cyanide::load_defaults()
     uint8_t *name = (uint8_t*)DEFAULT_NAME, *status = (uint8_t*)DEFAULT_STATUS;
     uint16_t name_len = sizeof(DEFAULT_NAME) - 1, status_len = sizeof(DEFAULT_STATUS) - 1;
 
-    memcpy(self()->name, name, name_len);
-    self()->name_length = name_len;
-    memcpy(self()->status_message, status, status_len);
-    self()->status_message_length = status_len;
+    memcpy(self.name, name, name_len);
+    self.name_length = name_len;
+    memcpy(self.status_message, status, status_len);
+    self.status_message_length = status_len;
 
     tox_set_name(tox, name, name_len);
     tox_set_status_message(tox, status, status_len);
 
-    emit cyanide.signal_name_change(self_fid());
-    emit cyanide.signal_status_message(self_fid());
+    emit cyanide.signal_name_change(self_fid);
+    emit cyanide.signal_status_message(self_fid);
     save_needed = true;
 }
 
@@ -283,12 +277,12 @@ bool Cyanide::load_save()
         add_friend(f);
     }
 
-    self()->name_length = tox_get_self_name(tox, self()->name);
-    self()->status_message_length = tox_get_self_status_message_size(tox);
-    tox_get_self_status_message(tox, self()->status_message, self()->status_message_length);
+    self.name_length = tox_get_self_name(tox, self.name);
+    self.status_message_length = tox_get_self_status_message_size(tox);
+    tox_get_self_status_message(tox, self.status_message, self.status_message_length);
 
-    emit cyanide.signal_name_change(self_fid());
-    emit cyanide.signal_status_message(self_fid());
+    emit cyanide.signal_name_change(self_fid);
+    emit cyanide.signal_status_message(self_fid);
     save_needed = true;
 
     //char new_save_path[512];
@@ -301,20 +295,9 @@ bool Cyanide::load_save()
     return true;
 }
 
-Friend *Cyanide::self()
-{
-    return &friends[friends.size()-1];
-}
-
-int Cyanide::self_fid()
-{
-    return friends.size()-1;
-}
-
 void Cyanide::add_friend(Friend *f)
 {
-    friends.push_back(*self());
-    friends[friends.size()-2] = *f;
+    friends.push_back(*f);
 }
 
 void Cyanide::set_callbacks()
@@ -737,7 +720,7 @@ bool Cyanide::send_friend_message(int fid, QString msg)
     qDebug() << "message id:" << message_id;
 
     f->messages.push_back(Message(msg, true));
-    emit cyanide.signal_friend_message(self_fid(), f->messages.size() - 1);
+    emit cyanide.signal_friend_message(self_fid, f->messages.size() - 1);
 
     return true;
 }
@@ -759,12 +742,12 @@ void Cyanide::set_friend_notification(int fid, bool status)
 
 int Cyanide::get_number_of_friends()
 {
-    return friends.size() - 1;
+    return friends.size();
 }
 
 QString Cyanide::get_friend_name(int fid)
 {
-    Friend f = friends[fid];
+    Friend f = fid == -1 ? self : friends[fid];
     return to_QString(f.name, f.name_length);
 }
 
@@ -775,19 +758,19 @@ QString Cyanide::get_friend_avatar(int fid)
 
 QString Cyanide::get_friend_status_message(int fid)
 {
-    Friend f = friends[fid];
+    Friend f = fid == -1 ? self : friends[fid];
     return to_QString(f.status_message, f.status_message_length);
 }
 
 QString Cyanide::get_friend_status_icon(int fid)
 {
     QString url = "qrc:/images/";
-    Friend *f = &friends[fid];
-    uint8_t status = f->user_status;
+    Friend f = fid == -1 ? self : friends[fid];
+    uint8_t status = f.user_status;
 
     switch(status) {
     case TOX_USERSTATUS_NONE:
-        url.append(f->connection_status ? "online" : "offline");
+        url.append(f.connection_status ? "online" : "offline");
         break;
     case TOX_USERSTATUS_AWAY:
         url.append("away");
@@ -800,7 +783,7 @@ QString Cyanide::get_friend_status_icon(int fid)
         url.append("offline");
     }
     
-    if(f->notification)
+    if(f.notification)
         url.append("_notification");
 
     url.append("_2x");
@@ -810,7 +793,8 @@ QString Cyanide::get_friend_status_icon(int fid)
 
 bool Cyanide::get_friend_connection_status(int fid)
 {
-    return friends[fid].connection_status;
+    Friend f = fid == -1 ? self : friends[fid];
+    return f.connection_status;
 }
 
 int Cyanide::get_number_of_messages(int fid)
