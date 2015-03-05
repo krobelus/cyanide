@@ -1,6 +1,10 @@
 Cyanide
 ==========
 
+Installing
+----------
+Use the [warehouse app](https://openrepos.net/content/basil/warehouse-sailfishos) for easy installation and updates
+
 Features
 --------
 
