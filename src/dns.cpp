@@ -302,21 +302,21 @@ static bool dns_thread(void *data)
         pt = answer + sizeof(HEADER);
 
         if((len = dn_expand(answer, answend, pt, host, sizeof(host))) < 0) {
-            printf("^dn_expand failed\n");
+            qDebug() << "^dn_expand failed";
             return false;
             //goto FAIL;
         }
 
         pt += len;
         if(pt > answend - 4) {
-            printf("^Bad (too short) DNS reply\n");
+            qDebug() << "^Bad (too short) DNS reply";
             return false;
             //goto FAIL;
         }
 
         GETSHORT(type, pt);
         if(type != T_TXT) {
-            printf("^Broken DNS reply.\n");
+            qDebug() << "^Broken DNS reply.";
             return false;
             //goto FAIL;
         }
@@ -326,14 +326,14 @@ static bool dns_thread(void *data)
         do { /* recurse through CNAME rr's */
             pt += size;
             if((len = dn_expand(answer, answend, pt, host, sizeof(host))) < 0) {
-                printf("^second dn_expand failed\n");
+                qDebug() << "^second dn_expand failed";
                 return false;
                 //goto FAIL;
             }
-            printf("^Host: %s\n", host);
+            qDebug() << "^Host:" << host;
             pt += len;
             if(pt > answend-10) {
-                printf("^Bad (too short) DNS reply\n");
+                qDebug() << "^Bad (too short) DNS reply";
                 return false;
                 //goto FAIL;
             }
@@ -342,20 +342,20 @@ static bool dns_thread(void *data)
             pt += 4;//GETLONG(cttl, pt);
             GETSHORT(size, pt);
             if(pt + size < answer || pt + size > answend) {
-                printf("^DNS rr overflow\n");
+                qDebug() << "^DNS rr overflow\n";
                 return false;
                 //goto FAIL;
             }
         } while(type == T_CNAME);
 
         if(type != T_TXT) {
-            printf("^Not a TXT record\n");
+            qDebug() << "^Not a TXT record\n";
             return false;
             //goto FAIL;
         }
 
         if(!size || (txtlen = *pt) >= size || !txtlen) {
-            printf("^Broken TXT record (txtlen = %d, size = %d)\n", txtlen, size);
+            qDebug() << "^Broken TXT record (txtlen =" << txtlen << ",size =" << size << ")";
             return false;
             //goto FAIL;
         }

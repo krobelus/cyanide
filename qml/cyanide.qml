@@ -7,8 +7,10 @@ ApplicationWindow
     initialPage: Component { FriendList { } }
     cover: Qt.resolvedUrl("cover/CoverPage.qml")
 
-    /* used in Friend.qml to identify the friend object */
-    property int currentFid: 0
+    /* used in Friend.qml to identify the selected friend */
+    property int currentFID: 0
+
+    property int selfID: -1
 
     /* the list of friends with */
     property ListModel friendList: ListModel { id: friendList }

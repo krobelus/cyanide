@@ -92,13 +92,13 @@ Page {
                 }
                 onClicked: {
                     var fid = index - 1
-                    if(fid== -1) {
+                    if(fid == selfID) {
                         pageStack.push(Qt.resolvedUrl("Profile.qml"))
                     } else if (!cyanide.get_friend_accepted(fid)) {
-                        currentFid = index - 1
+                        currentFID = index - 1
                         pageStack.push(Qt.resolvedUrl("AcceptFriend.qml"))
                     } else {
-                        currentFid = index - 1
+                        currentFID = index - 1
                         pageStack.push(Qt.resolvedUrl("Friend.qml"), {})
                     }
                 }

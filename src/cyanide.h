@@ -3,13 +3,14 @@
 
 #include <tox/tox.h>
 #include <QObject>
+#include <QClipboard>
 
 #include "friend.h"
 #include "message.h"
 
 #define DEFAULT_NAME "Tox User"
 #define DEFAULT_STATUS "Toxing on Cyanide"
-#define DEFAULT_FRIEND_REQUEST_MESSAGE "Tox me?"
+#define DEFAULT_FRIEND_REQUEST_MESSAGE "Tox me maybe?"
 
 class Cyanide : public QObject
 {
@@ -19,7 +20,6 @@ private:
     Tox *tox;
 
     uint8_t self_id[TOX_FRIEND_ADDRESS_SIZE];
-    char self_hex_id[2 * TOX_FRIEND_ADDRESS_SIZE];
 
     char save_path[512];
 
@@ -40,14 +40,17 @@ public:
     void tox_thread();
 
     /* */
-    Q_INVOKABLE bool send_friend_request(QString id_string, QString msg_string);
+    Q_INVOKABLE QString send_friend_request(QString id_string, QString msg_string);
     Q_INVOKABLE bool send_friend_message(int fid, QString msg);
     Q_INVOKABLE bool accept_friend_request(int fid);
     Q_INVOKABLE void remove_friend(int fid);
 
     /* setters and getters */
     Q_INVOKABLE void set_friend_notification(int fid, bool status);
+    Q_INVOKABLE bool set_self_name(QString name);
+    Q_INVOKABLE bool set_self_status_message(QString status_message);
 
+    Q_INVOKABLE QString get_self_id();
     Q_INVOKABLE int get_number_of_friends();
     Q_INVOKABLE QString get_friend_name(int fid);
     Q_INVOKABLE QString get_friend_avatar(int fid);
@@ -55,7 +58,6 @@ public:
     Q_INVOKABLE QString get_friend_status_icon(int fid);
     Q_INVOKABLE bool get_friend_connection_status(int fid);
     Q_INVOKABLE bool get_friend_accepted(int fid);
-    Q_INVOKABLE QString get_friend_public_key(int fid);
 
     Q_INVOKABLE int get_number_of_messages(int fid);
     Q_INVOKABLE QString get_message_text(int fid, int mid);

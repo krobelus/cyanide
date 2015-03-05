@@ -4,7 +4,7 @@ import Sailfish.Silica 1.0
 Page {
     id: addFriendPage
 
-    TextArea {
+    TextField {
         id: toxID
         width: parent.width
         height: implicitHeight
@@ -19,7 +19,7 @@ Page {
             message.focus = true
         }
     }
-    TextArea {
+    TextField {
         id: message
         width: parent.width
         //height: Math.max(page.width/3, implicitHeight)
@@ -27,7 +27,8 @@ Page {
         y: 3 * Theme.paddingLarge + toxID.height
 
         inputMethodHints: Qt.ImhNoAutoUppercase
-        placeholderText: "Include a message for your friend"
+        // TODO use DEFAULT_FRIEND_REQUEST_MESSAGE
+        placeholderText: "Tox me maybe?"
         EnterKey.onClicked: {
             submit()
         }
@@ -42,10 +43,11 @@ Page {
         anchors.topMargin: Theme.paddingLarge
     }
     function submit() {
-        if(cyanide.send_friend_request(toxID.text, message.text)) {
+        var err = cyanide.send_friend_request(toxID.text, message.text)
+        if(err === "") {
             pageStack.pop()
         } else {
-            button.text = "Failed to send friend request, try again?"
+            button.text = err;
         }
     }
 }

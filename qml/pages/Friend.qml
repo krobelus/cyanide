@@ -11,7 +11,7 @@ Page {
         id: messageList
 
         header: PageHeader {
-            title: cyanide.get_friend_name(currentFid)
+            title: cyanide.get_friend_name(currentFID)
         }
 
         PullDownMenu {
@@ -19,7 +19,7 @@ Page {
                 text: qsTr("Remove friend")
                 onClicked: {
                     remorsePopup.execute("Removing friend...", function() {
-                        cyanide.remove_friend(currentFid)
+                        cyanide.remove_friend(currentFID)
                         refreshFriendList()
                         pageStack.pop()
                     })
@@ -37,21 +37,21 @@ Page {
         anchors.fill: parent
 
         Component.onCompleted: {
-            for(var i=0; i<cyanide.get_number_of_messages(currentFid); i++)
-                model.append({'author': cyanide.get_message_author(currentFid, i)
-                             ,'message_text': cyanide.get_message_text(currentFid, i)
-                             ,'timestamp': new Date(cyanide.get_message_timestamp(currentFid, i))
+            for(var i=0; i<cyanide.get_number_of_messages(currentFID); i++)
+                model.append({'author': cyanide.get_message_author(currentFID, i)
+                             ,'message_text': cyanide.get_message_text(currentFID, i)
+                             ,'timestamp': new Date(cyanide.get_message_timestamp(currentFID, i))
                              })
-            cyanide.set_friend_notification(currentFid, false)
+            cyanide.set_friend_notification(currentFID, false)
         }
         Connections {
             target: cyanide
             onSignal_friend_message: {
-                if(fid == currentFid || fid == -1) {
+                if(fid == currentFID || fid == selfID) {
                     cyanide.set_friend_notification(fid, false)
-                    model.append({'author': cyanide.get_message_author(currentFid, mid)
-                                 ,'message_text': cyanide.get_message_text(currentFid, mid)
-                                 ,'timestamp': cyanide.get_message_timestamp(currentFid, mid)
+                    model.append({'author': cyanide.get_message_author(currentFID, mid)
+                                 ,'message_text': cyanide.get_message_text(currentFID, mid)
+                                 ,'timestamp': cyanide.get_message_timestamp(currentFID, mid)
                                  })
                 } else {
                     // TODO notifications
@@ -114,7 +114,7 @@ Page {
         //horizontalAlignment: textAlignment
         EnterKey.onClicked: {
             // TODO split long messages
-            if(cyanide.send_friend_message(currentFid, text)) {
+            if(cyanide.send_friend_message(currentFID, text)) {
                 text = ""
                 parent.focus = true;
             } else {
