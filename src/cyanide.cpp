@@ -3,13 +3,14 @@
 #include <sys/stat.h>
 #include <sailfishapp.h>
 #include <thread>
-#include <QtQuick>
 
 #include "cyanide.h"
 #include "tox_bootstrap.h"
 #include "tox_callbacks.h"
 #include "util.h"
+#include "dns.cpp"
 
+#include <QtQuick>
 
 Cyanide cyanide;
 
@@ -661,7 +662,9 @@ bool Cyanide::send_friend_request(QString id_string, QString msg_string)
 
     if(!string_to_id((char*)data, (char*)id)) {
         qDebug() << "string_to_id() failed";
-        return false;
+        data = dns_request((char*)id, id_length);
+        if(data == NULL)
+            return false;
     }
 
     int32_t fid = tox_add_friend(tox, (const uint8_t*)data, (const uint8_t*)data + TOX_FRIEND_ADDRESS_SIZE, msg_length);
@@ -812,9 +815,9 @@ bool Cyanide::get_friend_accepted(int fid)
 QString Cyanide::get_friend_public_key(int fid)
 {
     Friend f = fid == -1 ? self : friends[fid];
-    //return to_QString(f.cid, TOX_PUBLIC_KEY_SIZE)
-    //TODO
-    return QString("pubkey");
+    uint8_t hex_cid[2 * TOX_PUBLIC_KEY_SIZE];
+    cid_to_string((char*)hex_cid, (char*)f.cid);
+    return to_QString(hex_cid, 2 * TOX_PUBLIC_KEY_SIZE);
 }
 
 int Cyanide::get_number_of_messages(int fid)

@@ -37,4 +37,5 @@ int to_const_char(QString str, char *dest);
 uint64_t get_time();
 int get_time_ms();
 
+
 #endif // UTIL_H

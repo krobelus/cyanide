@@ -5,14 +5,20 @@ CoverBackground {
 
     CoverActionList {
         id: coverAction
-        /*
         CoverAction {
-            iconSource: selfStatusIcon
+            id: status
+            iconSource: cyanide.get_friend_status_icon(-1)
         }
+
+        /*
         CoverAction {
             iconSource: "image://theme/icon-cover-refresh"
         }
         */
+    }
+    Connections {
+        target: cyanide
+        onSignal_connection_status: status.iconSource = cyanide.get_friend_status_icon(-1)
     }
 
     Image {

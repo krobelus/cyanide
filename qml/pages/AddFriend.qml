@@ -13,7 +13,6 @@ Page {
         inputMethodHints: Qt.ImhNoPredictiveText + Qt.ImhNoAutoUppercase + Qt.ImhEmailCharactersOnly
         focus: true
         placeholderText: "Tox ID"
-        label: "(toxdns is currently not supported)"
 
         EnterKey.onClicked: {
             toxID.focus = false

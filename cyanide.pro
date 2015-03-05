@@ -18,7 +18,8 @@ SOURCES += \
     src/cyanide.cpp \
     src/util.cpp \
     src/friend.cpp \
-    src/message.cpp
+    src/message.cpp \
+    src/dns.cpp
 
 OTHER_FILES += \
     qml/cover/CoverPage.qml \
@@ -49,7 +50,7 @@ HEADERS += \
     src/tox_callbacks.h \
     src/message.h
 
-unix:!macx: LIBS += -L$$PWD/res/usr/lib/ -ltoxcore -lsodium -lrt
+unix:!macx: LIBS += -L$$PWD/res/usr/lib/ -ltoxcore -ltoxdns -lsodium -lrt -lresolv
 
 INCLUDEPATH += $$PWD/res/usr/include
 DEPENDPATH += $$PWD/res/usr/include
