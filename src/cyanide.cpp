@@ -643,55 +643,92 @@ void callback_file_data(Tox *UNUSED(tox), int32_t fid, uint8_t filenumber, const
     return;
 }
 
-/* */
 QString Cyanide::send_friend_request(QString id_string, QString msg_string)
 {
-    if(msg_string.isEmpty())
-        msg_string = DEFAULT_FRIEND_REQUEST_MESSAGE;
-    int msg_length = tox_string_length(msg_string);
-    void *msg = malloc(msg_length * sizeof(char));
-    to_tox_string(msg_string, (uint8_t*)msg);
-
-    int id_length = tox_string_length(id_string);
-    void *id = malloc(id_length);
+    int id_len = tox_string_length(id_string);
+    char id[id_len];
     to_tox_string(id_string, (uint8_t*)id);
 
-    void *data = malloc(TOX_FRIEND_ADDRESS_SIZE + msg_length * sizeof(char));
-    memcpy(data + TOX_FRIEND_ADDRESS_SIZE, msg, msg_length);
+    if(msg_string.isEmpty())
+        msg_string = QString(DEFAULT_FRIEND_REQUEST_MESSAGE);
 
-    if(!string_to_id((char*)data, (char*)id)) {
-        data = dns_request((char*)id, id_length);
+    int msg_len = tox_string_length(msg_string);
+    char msg[msg_len];
+    to_tox_string(msg_string, (uint8_t*)msg);
+
+    return send_friend_request_unboxed(id, id_len, msg, msg_len);
+}
+
+QString Cyanide::send_friend_request_unboxed(char *name, int length, char *msg, int msg_length)
+{
+    if(!length) {
+        return "No name";
+    }
+
+    /*
+    uint8_t name_cleaned[length];
+    uint16_t length_cleaned = 0;
+
+    for (auto i = 0; i < length; ++i) {
+        if (name[i] != ' ') {
+            name_cleaned[length_cleaned] = name[i];
+            ++length_cleaned;
+        }
+    }
+
+    if(!length_cleaned) {
+        return "No name";
+    }
+    */
+
+    uint8_t id[TOX_FRIEND_ADDRESS_SIZE];
+    //if(length_cleaned == TOX_FRIEND_ADDRESS_SIZE * 2 && string_to_id((char*)id, (char*)name_cleaned)) {
+    if(string_to_id((char*)id, (char*)name)) {
+        //return friend_addid(id, msg, msg_length);
+    } else {
+        /* not a regular id, try DNS discovery */
+        // addfriend_status = ADDF_DISCOVER;
+        //void *data = dns_request((char*)name_cleaned, length_cleaned);
+        void *data = dns_request((char*)name, length);
         if(data == NULL)
-            return "Error: Invalid Tox ID";
+            return "Invalid Tox ID";
+        memcpy(id, data, TOX_FRIEND_ADDRESS_SIZE);
+        free(data);
     }
 
-    int32_t fid = tox_add_friend(tox, (const uint8_t*)data, (const uint8_t*)data + TOX_FRIEND_ADDRESS_SIZE, msg_length);
-    switch(fid) {
-        case TOX_FAERR_TOOLONG:
-            return QString("Error: Message is too long");
-        case TOX_FAERR_NOMESSAGE:
-            return QString("Error: Empty message");
-        case TOX_FAERR_OWNKEY:
-            return QString("Error: Empty message");
-        case TOX_FAERR_ALREADYSENT:
-            return QString("Error: Tox ID is already in friend list");
-        case TOX_FAERR_UNKNOWN:
-            return QString("Error: Unknown");
-        case TOX_FAERR_BADCHECKSUM:
-            return QString("Error: Invalid Tox ID (bad checksum)");
-        case TOX_FAERR_SETNEWNOSPAM:
-            return QString("Error: Invalid Tox ID (bad nospam value)");
-        case TOX_FAERR_NOMEM:
-            return QString("Error: No memory");
-    }
-
+    QString error = send_friend_request_id(id, (const uint8_t*)msg, msg_length);
     const char *m = "awaiting reply...";
-    Friend *f = new Friend((const uint8_t*)data, (const uint8_t*)id, TOX_FRIEND_ADDRESS_SIZE, (const uint8_t*)m, strlen(m));
+    Friend *f = new Friend((const uint8_t*)id, (const uint8_t*)name, length, (const uint8_t*)m, strlen(m));
     add_friend(f);
 
-    free(msg);
-    free(id);
-    return QString("");
+    return error;
+}
+
+
+/* */
+QString Cyanide::send_friend_request_id(const uint8_t *id, const uint8_t *msg, int msg_length)
+{
+    int32_t fid = tox_add_friend(tox, id, msg, msg_length);
+    switch(fid) {
+        case TOX_FAERR_TOOLONG:
+            return "Error: Message is too long";
+        case TOX_FAERR_NOMESSAGE:
+            return "Error: Empty message";
+        case TOX_FAERR_OWNKEY:
+            return "Error: Empty message";
+        case TOX_FAERR_ALREADYSENT:
+            return "Error: Tox ID is already in friend list";
+        case TOX_FAERR_UNKNOWN:
+            return "Error: Unknown";
+        case TOX_FAERR_BADCHECKSUM:
+            return "Error: Invalid Tox ID (bad checksum)";
+        case TOX_FAERR_SETNEWNOSPAM:
+            return "Error: Invalid Tox ID (bad nospam value)";
+        case TOX_FAERR_NOMEM:
+            return "Error: No memory";
+        default:
+            return "";
+    }
 }
 
 bool Cyanide::send_friend_message(int fid, QString msg)

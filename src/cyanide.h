@@ -23,6 +23,9 @@ private:
 
     char save_path[512];
 
+    QString send_friend_request_id(const uint8_t *id, const uint8_t *msg, int msg_length);
+    QString send_friend_request_unboxed(char *name, int length, char *msg, int msg_length);
+
 public:
     Friend self;
     static const int self_fid = -1;

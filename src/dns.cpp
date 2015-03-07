@@ -363,7 +363,6 @@ static bool dns_thread(void *data)
         qDebug() << "Attempting:" << txtlen << pt+1;
 
         pt[txtlen + 1] = 0;
-        //TODO
         success = parserecord((uint8_t*)data, pt + 1, pin, dns3);
     } else {
         qDebug() << "timeout";
@@ -371,7 +370,6 @@ static bool dns_thread(void *data)
     return success;
 }
 
-// TOX_FRIEND_ADDRESS_SIZE
 uint8_t *dns_request(char *name, uint16_t length)
 {
     void *data = malloc((2u + length < TOX_FRIEND_ADDRESS_SIZE) ? TOX_FRIEND_ADDRESS_SIZE : 2u + length * sizeof(char));

@@ -23,7 +23,6 @@ SOURCES += \
 
 OTHER_FILES += \
     qml/cover/CoverPage.qml \
-    rpm/cyanide.changes.in \
     rpm/cyanide.spec \
     rpm/cyanide.yaml \
     translations/*.ts \
@@ -35,7 +34,8 @@ OTHER_FILES += \
     cyanide.desktop \
     qml/pages/AddFriend.qml \
     qml/pages/AcceptFriend.qml \
-    cyanide.png
+    cyanide.png \
+    rpm/cyanide.changes
 
 # to disable building translations every time, comment out the
 # following CONFIG line

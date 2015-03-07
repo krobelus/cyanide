@@ -3,6 +3,8 @@
 
 #define countof(x) (sizeof(x)/sizeof(*(x)))
 
+#define MAX(a,b) a > b ? a : b
+
 /*todo: sprint_bytes */
 
 /* read a whole file from a path,
