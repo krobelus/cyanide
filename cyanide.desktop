@@ -3,8 +3,8 @@ Type=Application
 X-Nemo-Application-Type=silica-qt5
 Icon=cyanide
 Exec=cyanide
-Name=cyanide
+Name=Cyanide
 # translation example:
 # your app name in German locale (de)
-Name[de]=cyanide
+Name[de]=Cyanide
 

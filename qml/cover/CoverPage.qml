@@ -5,25 +5,44 @@ CoverBackground {
 
     CoverActionList {
         id: coverAction
-        CoverAction {
-            id: status
-            iconSource: cyanide.get_friend_status_icon(-1)
-        }
-
         /*
         CoverAction {
-            iconSource: "image://theme/icon-cover-refresh"
+            id: setAway
+            iconSource: "qrc:/images/away_2x"
+        }
+        CoverAction {
+            id: setBusy
+            iconSource: "qrc:/images/busy_2x"
         }
         */
     }
+    /*
     Connections {
         target: cyanide
-        onSignal_connection_status: status.iconSource = cyanide.get_friend_status_icon(-1)
+        onSignal_connection_status: {
+            statusIcon.source = cyanide.get_friend_status_icon(selfID)
+        }
     }
 
     Image {
-        id: iconLabel
-
+        id: statusIcon
+        source: cyanide.get_friend_status_icon(selfID)
+        fillMode: Image.Pad
+        anchors {
+            //leftMargin: 2*Theme.paddingLarge
+            //rightMargin: 2*Theme.paddingLarge
+            left: tox.left
+            right: tox.right
+            top: tox.top
+            topMargin: 30
+            bottom: tox.bottom
+        }
+    }
+    */
+    Image {
+        id: tox
+        source: "qrc:/images/cover"
+        fillMode: Image.PreserveAspectFit
         anchors {
             left: parent.left
             leftMargin: 2*Theme.paddingLarge
@@ -32,10 +51,6 @@ CoverBackground {
             top: parent.top
             bottom: parent.bottom
         }
-
-        source: "qrc:/images/cover"
-
-        fillMode: Image.PreserveAspectFit
     }
     /*
     OpacityRampEffect {

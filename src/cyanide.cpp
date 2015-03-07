@@ -465,11 +465,10 @@ void callback_read_receipt(Tox *UNUSED(tox), int fid, uint32_t receipt, void *UN
 
 void callback_connection_status(Tox *tox, int fid, uint8_t status, void *UNUSED(userdata))
 {
-    qDebug() << "was called";
-    if(status) {
+    if(fid > -1)
         qDebug() << "Friend " << fid << "now" << (status ? "online" : "offline");
+    //if(status)
         //tox_request_avatar_info(tox, fid);
-    }
     cyanide.friends[fid].connection_status = status;
     emit cyanide.signal_connection_status(fid);
 //    FRIEND *f = &friend[fid];
