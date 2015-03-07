@@ -25,6 +25,22 @@ Page {
                     })
                 }
             }
+            MenuItem {
+                text: qsTr("Copy Tox ID to clipboard")
+                onClicked: {
+                    clipboard.setClipboard(cyanide.get_friend_cid(currentFID))
+                }
+            }
+        }
+
+        TextEdit {
+            id: clipboard
+            visible: false
+            function setClipboard(value) {
+                text = value
+                selectAll()
+                copy()
+            }
         }
 
         model: ListModel {

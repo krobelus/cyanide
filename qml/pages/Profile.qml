@@ -47,7 +47,7 @@ Page {
         y: 4 * Theme.paddingLarge + name.height + message.height
         color: Theme.primaryColor
 
-        text: cyanide.get_self_id()
+        text: cyanide.get_self_address()
         wrapMode: Text.WrapAnywhere
     }
     TextEdit {

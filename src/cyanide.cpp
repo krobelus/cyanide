@@ -857,7 +857,14 @@ bool Cyanide::get_friend_accepted(int fid)
     return friends[fid].accepted;
 }
 
-QString Cyanide::get_self_id()
+QString Cyanide::get_friend_cid(int fid)
+{
+    uint8_t hex_id[2 * TOX_PUBLIC_KEY_SIZE];
+    cid_to_string((char*)hex_id, (char*)friends[fid].cid);
+    return to_QString(hex_id, 2 * TOX_PUBLIC_KEY_SIZE);
+}
+
+QString Cyanide::get_self_address()
 {
     uint8_t hex_id[2 * TOX_FRIEND_ADDRESS_SIZE];
     id_to_string((char*)hex_id, (char*)self_id);

@@ -53,7 +53,8 @@ public:
     Q_INVOKABLE bool set_self_name(QString name);
     Q_INVOKABLE bool set_self_status_message(QString status_message);
 
-    Q_INVOKABLE QString get_self_id();
+    Q_INVOKABLE QString get_self_address();
+    Q_INVOKABLE QString get_friend_cid(int fid);
     Q_INVOKABLE int get_number_of_friends();
     Q_INVOKABLE QString get_friend_name(int fid);
     Q_INVOKABLE QString get_friend_avatar(int fid);

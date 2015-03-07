@@ -15,6 +15,7 @@
 * Sat Mar 7 2015 Johannes Altmanninger <aclopte@gmail.com> 0.1.6-1
 - Added a proper Icon (thanks to Nokius)
 - Don't send garbage instead of the default friend request message
+- Added the option to copy friend's Tox ID in the pulldown menu
 
 * Thu Mar 5 2015 Johannes Altmanninger <aclopte@gmail.com> 0.1.5-1
 - Friend requests can now be sent and received
