@@ -41,6 +41,7 @@ OTHER_FILES += \
 # following CONFIG line
 CONFIG += sailfishapp_i18n
 TRANSLATIONS += translations/cyanide-de.ts
+TRANSLATIONS += translations/cyanide-sv.ts
 
 HEADERS += \
     src/cyanide.h \
