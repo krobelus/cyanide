@@ -58,8 +58,11 @@ void Cyanide::load_tox_and_stuff_pretty_please()
         load_defaults();
 
     tox_get_address(tox, self_id);
-    qDebug() << "name:" << to_QString(self.name, self.name_length);
-    qDebug() << "status" << to_QString(self.status_message, self.status_message_length);
+    char hex_id[2 * TOX_FRIEND_ADDRESS_SIZE];
+    id_to_string(hex_id, (char*)self_id);
+    qDebug() << "Name:" << to_QString(self.name, self.name_length);
+    qDebug() << "Status" << to_QString(self.status_message, self.status_message_length);
+    qDebug() << "Tox ID" << to_QString(hex_id, 2 * TOX_FRIEND_ADDRESS_SIZE);
 }
 
 void Cyanide::tox_thread()
@@ -857,9 +860,9 @@ QString Cyanide::get_friend_cid(int fid)
 
 QString Cyanide::get_self_address()
 {
-    uint8_t hex_id[2 * TOX_FRIEND_ADDRESS_SIZE];
+    char hex_id[2 * TOX_FRIEND_ADDRESS_SIZE];
     id_to_string((char*)hex_id, (char*)self_id);
-    return to_QString(hex_id, 2 * TOX_PUBLIC_KEY_SIZE);
+    return to_QString(hex_id, 2 * TOX_FRIEND_ADDRESS_SIZE);
 }
 
 int Cyanide::get_number_of_messages(int fid)
