@@ -25,12 +25,14 @@ Page {
                     })
                 }
             }
+            /*
             MenuItem {
                 text: qsTr("Copy Tox ID to clipboard")
                 onClicked: {
                     clipboard.setClipboard(cyanide.get_friend_cid(currentFID))
                 }
             }
+            */
         }
 
         TextEdit {
