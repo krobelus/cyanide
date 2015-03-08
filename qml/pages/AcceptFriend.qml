@@ -3,6 +3,7 @@ import Sailfish.Silica 1.0
 
 Page {
     id: page
+    allowedOrientations: Orientation.All
     Text {
         id: cid
         text: cyanide.get_friend_public_key(currentFID)

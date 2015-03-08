@@ -4,6 +4,7 @@ import Sailfish.Silica 1.0
 
 Page {
     id: contactsPage
+    allowedOrientations: Orientation.All
 
     RemorsePopup { id: remorsePopup }
 

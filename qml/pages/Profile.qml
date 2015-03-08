@@ -3,10 +3,12 @@ import Sailfish.Silica 1.0
 
 Page {
     id: page
+    allowedOrientations: Orientation.Landscape | Orientation.Portrait
+
     TextField {
         id: name
         label: "Name"
-        width: parent.width
+        width: parent.width - Theme.paddingLarge
         height: implicitHeight
         y: 2 * Theme.paddingLarge
         x: Theme.paddingMedium
@@ -24,7 +26,7 @@ Page {
     TextField {
         id: message
         label: "Status Message"
-        width: parent.width
+        width: parent.width - Theme.paddingLarge
         height: implicitHeight
         x: Theme.paddingMedium
         y: 3 * Theme.paddingLarge + name.height
@@ -41,7 +43,7 @@ Page {
     }
     Text {
         id: id
-        width: parent.width
+        width: parent.width - Theme.paddingLarge
         height: implicitHeight
         x: Theme.paddingMedium
         y: 4 * Theme.paddingLarge + name.height + message.height

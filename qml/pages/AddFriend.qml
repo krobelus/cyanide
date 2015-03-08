@@ -3,6 +3,7 @@ import Sailfish.Silica 1.0
 
 Page {
     id: addFriendPage
+    allowedOrientations: Orientation.All
 
     TextField {
         id: toxID

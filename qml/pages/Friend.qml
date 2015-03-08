@@ -4,6 +4,7 @@ import "../js/Misc.js" as Misc
 
 Page {
     id: friendPage
+    allowedOrientations: Orientation.All
 
     RemorsePopup { id: remorsePopup }
 
@@ -123,7 +124,7 @@ Page {
 
     TextField {
         id: inputField
-        width: parent.width
+        width: parent.width - Theme.paddingLarge
         //label: "Text field"
         placeholderText: "type your message here"
         inputMethodHints: Qt.ImhNoAutoUppercase
