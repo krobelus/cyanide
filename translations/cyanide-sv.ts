@@ -9,7 +9,7 @@
     </message>
     <message>
         <source>Copy Tox ID to clipboard</source>
-        <translation>Kopiera Tox-ID till Urklipp</translation>
+        <translation type="vanished">Kopiera Tox-ID till Urklipp</translation>
     </message>
 </context>
 <context>
