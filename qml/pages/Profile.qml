@@ -7,7 +7,7 @@ Page {
 
     TextField {
         id: name
-        label: "Name"
+        label: qsTr("Name")
         width: parent.width - Theme.paddingLarge
         height: implicitHeight
         y: 2 * Theme.paddingLarge
@@ -25,7 +25,7 @@ Page {
     }
     TextField {
         id: message
-        label: "Status Message"
+        label: qsTr("Status Message")
         width: parent.width - Theme.paddingLarge
         height: implicitHeight
         x: Theme.paddingMedium
@@ -35,10 +35,8 @@ Page {
         inputMethodHints: Qt.ImhNoAutoUppercase
         text: cyanide.get_friend_status_message(selfID)
         EnterKey.onClicked: {
-            if(cyanide.set_self_status_message(text))
-                focus = false
-            else
-                console.log("set_self_status_message() failed")
+            cyanide.set_self_status_message(text)
+            focus = false
         }
     }
     Text {
@@ -72,10 +70,10 @@ Page {
         //x: Theme.paddingMedium
         y: 5 * Theme.paddingLarge + name.height + message.height + id.height
         color: Theme.primaryColor
-        text: "copy my Tox ID"
+        text: qsTr("Copy my Tox ID") + " ☐"
         onClicked: {
             clipboard.setClipboard(id.text)
-            text = "copied"
+            text = qsTr("Copy my Tox ID") + " ☑"
         }
     }
 }

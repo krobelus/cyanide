@@ -47,7 +47,7 @@ ApplicationWindow
             friendList.setProperty(i, "friend_name", name)
             if(fid != selfID && notificationNameChange) {
                 currentFID = fid
-                notify(nNameChange, "Name change: " + name, "(previously known as " + previous_name + ")")
+                notify(nNameChange, previous_name + qsTr(" is now known as ") + name, "")
             }
         }
         onSignal_connection_status: {
@@ -65,9 +65,9 @@ ApplicationWindow
             friendList.setProperty(i, "friend_status_message", cyanide.get_friend_status_message(fid))
         }
         onSignal_friend_message: {
+            var i = fid + 1
             friendList.setProperty(i, "friend_status_icon", cyanide.get_friend_status_icon(fid))
             if(fid != selfID && notificationFriendMessage) {
-                var i = fid + 1
                 currentFID = fid
                 notify(nFriendMessage, cyanide.get_friend_name(fid), cyanide.get_message_text(fid, mid))
             }

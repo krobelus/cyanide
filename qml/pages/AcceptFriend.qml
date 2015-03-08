@@ -31,7 +31,7 @@ Page {
         }
 
         Button {
-            text: "Accept"
+            text: qsTr("Accept")
             onClicked: {
                 if(cyanide.accept_friend_request(currentFID)) {
                     refreshFriendList()
@@ -42,7 +42,7 @@ Page {
             }
         }
         Button {
-            text: "Ignore"
+            text: qsTr("Ignore")
             onClicked: {
                 cyanide.remove_friend(currentFID)
                 refreshFriendList()

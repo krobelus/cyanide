@@ -27,7 +27,7 @@ Page {
             id: friendListView
 
             header: PageHeader {
-                title: 'Contacts'
+                title: qsTr("Friends")
             }
 
             anchors.fill: parent

@@ -1,78 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1">
+<TS version="2.1" language="de_DE">
 <context>
-    <name>CoverPage</name>
+    <name>AcceptFriend</name>
     <message>
-        <source>My Cover</source>
-        <translation type="vanished">Mein Cover</translation>
+        <source>Accept</source>
+        <translation>Annehmen</translation>
+    </message>
+    <message>
+        <source>Ignore</source>
+        <translation>Ignorieren</translation>
     </message>
 </context>
 <context>
-    <name>FirstPage</name>
+    <name>AddFriend</name>
     <message>
-        <source>Show Page 2</source>
-        <translation type="vanished">Zur Seite 2</translation>
+        <source>Tox me maybe?</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>UI Template</source>
-        <translation type="vanished">UI-Vorlage</translation>
-    </message>
-    <message>
-        <source>Hello Sailors</source>
-        <translation type="vanished">Hallo Matrosen</translation>
-    </message>
-    <message>
-        <source>Nested Page</source>
-        <translation type="obsolete">Unterseite</translation>
-    </message>
-    <message>
-        <source>Item</source>
-        <translation type="obsolete">Element</translation>
+        <source>Send friend request</source>
+        <translation>Freundschaftsanfrage senden</translation>
     </message>
 </context>
 <context>
     <name>Friend</name>
     <message>
         <source>Remove friend</source>
-        <translation type="unfinished"></translation>
+        <translation>Freund entfernen</translation>
+    </message>
+    <message>
+        <source>About to remove friend</source>
+        <translation>Freund wird entfernt</translation>
     </message>
 </context>
 <context>
     <name>FriendList</name>
     <message>
-        <source>Show Page 2</source>
-        <translation type="obsolete">Zur Seite 2</translation>
-    </message>
-    <message>
-        <source>Nested Page</source>
-        <translation type="obsolete">Unterseite</translation>
-    </message>
-    <message>
         <source>Add a friend</source>
-        <translation type="unfinished"></translation>
+        <translation>Freund hinzufügen</translation>
+    </message>
+    <message>
+        <source>Friends</source>
+        <translation>Freunde</translation>
     </message>
 </context>
 <context>
-    <name>FriendView</name>
+    <name>Profile</name>
     <message>
-        <source>Show Page 2</source>
-        <translation type="obsolete">Zur Seite 2</translation>
+        <source>Name</source>
+        <translation>Name</translation>
     </message>
     <message>
-        <source>Hello Sailors</source>
-        <translation type="obsolete">Hallo Matrosen</translation>
+        <source>Status Message</source>
+        <translation>Status</translation>
+    </message>
+    <message>
+        <source>Copy my Tox ID</source>
+        <translation>Meine Tox ID kopieren</translation>
     </message>
 </context>
 <context>
-    <name>SecondPage</name>
+    <name>cyanide</name>
     <message>
-        <source>Nested Page</source>
-        <translation type="vanished">Unterseite</translation>
-    </message>
-    <message>
-        <source>Item</source>
-        <translation type="vanished">Element</translation>
+        <source> is now known as </source>
+        <translation> heißt jetzt </translation>
     </message>
 </context>
 </TS>

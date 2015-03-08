@@ -29,14 +29,14 @@ Page {
 
         inputMethodHints: Qt.ImhNoAutoUppercase
         // TODO use DEFAULT_FRIEND_REQUEST_MESSAGE
-        placeholderText: "Tox me maybe?"
+        placeholderText: qsTr("Tox me maybe?")
         EnterKey.onClicked: {
             submit()
         }
     }
     Button {
         id: button
-        text: "Send friend request"
+        text: qsTr("Send friend request")
         enabled: true
         onClicked: submit()
         anchors.horizontalCenter: parent.horizontalCenter

@@ -19,7 +19,7 @@ Page {
             MenuItem {
                 text: qsTr("Remove friend")
                 onClicked: {
-                    remorsePopup.execute("Removing friend...", function() {
+                    remorsePopup.execute(qsTr("About to remove friend"), function() {
                         cyanide.remove_friend(currentFID)
                         refreshFriendList()
                         pageStack.pop()
@@ -72,9 +72,6 @@ Page {
                                  ,'message_text': cyanide.get_message_text(currentFID, mid)
                                  ,'timestamp': cyanide.get_message_timestamp(currentFID, mid)
                                  })
-                } else {
-                    // TODO notifications
-                    // also in the first branch, if not focused
                 }
 
             }
@@ -94,7 +91,11 @@ Page {
                 font.pixelSize: Theme.fontSizeMedium
                 color: author ? Theme.secondaryColor : Theme.primaryColor
                 horizontalAlignment: author ? Text.AlignLeft : Text.AlignRight
-                wrapMode: Text.WordWrap
+                wrapMode: Text.Wrap
+                textFormat: Text.StyledText
+                linkColor: Theme.highlightColor
+                onLinkActivated: Misc.openLinkInBrowser(link)
+                //onLinkActivated: console.log("activated "+link)
                 /*
                 anchors {
                     left: parent.left
@@ -125,12 +126,9 @@ Page {
     TextField {
         id: inputField
         width: parent.width - Theme.paddingLarge
-        //label: "Text field"
-        placeholderText: "type your message here"
         inputMethodHints: Qt.ImhNoAutoUppercase
         focus: false
         y: friendPage.height - height - Theme.paddingLarge
-        //horizontalAlignment: textAlignment
         EnterKey.onClicked: {
             // TODO split long messages
             if(cyanide.send_friend_message(currentFID, text)) {
