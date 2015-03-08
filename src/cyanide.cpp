@@ -3,6 +3,7 @@
 #include <sys/stat.h>
 #include <sailfishapp.h>
 #include <thread>
+#include <nemonotifications-qt5/notification.h>
 
 #include "cyanide.h"
 #include "tox_bootstrap.h"
@@ -19,6 +20,8 @@ Tox_Options options;
 
 int main(int argc, char *argv[])
 {
+    qmlRegisterType<Notification>("nemonotifications", 1, 0, "Notification");
+
     QGuiApplication *app = SailfishApp::application(argc, argv);
     app->setOrganizationName("Tox");
     app->setOrganizationDomain("Tox");

@@ -1,9 +1,8 @@
 #ifndef CYANIDE_H
 #define CYANIDE_H
 
-#include <tox/tox.h>
 #include <QObject>
-#include <QClipboard>
+#include <tox/tox.h>
 
 #include "friend.h"
 #include "message.h"

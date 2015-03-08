@@ -14,6 +14,8 @@ TARGET = cyanide
 
 CONFIG += sailfishapp
 
+QT += sql dbus
+
 SOURCES += \
     src/cyanide.cpp \
     src/util.cpp \
@@ -56,12 +58,10 @@ HEADERS += \
     src/settings.h \
     src/config.h
 
-unix:!macx: LIBS += -L$$PWD/res/usr/lib/ -ltoxcore -ltoxdns -lsodium -lrt -lresolv
+unix:!macx: LIBS += -L$$PWD/res/usr/lib/ -ltoxcore -ltoxdns -lsodium -lrt -lresolv -lnemonotifications-qt5
 
 INCLUDEPATH += $$PWD/res/usr/include
 DEPENDPATH += $$PWD/res/usr/include
-
-QT += sql
 
 QMAKE_CXXFLAGS += "-std=c++0x -pthread"
 QMAKE_CXXFLAGS += "-Wno-write-strings"

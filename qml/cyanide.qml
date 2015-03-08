@@ -1,5 +1,6 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
+import nemonotifications 1.0
 import "pages"
 
 ApplicationWindow
@@ -7,13 +8,19 @@ ApplicationWindow
     initialPage: Component { FriendList { } }
     cover: Qt.resolvedUrl("cover/CoverPage.qml")
 
-    /* used in Friend.qml to identify the selected friend */
+    /* used in Friend.qml to identify the selected friend
+     * TODO pass a local variable with pageStack.push */
     property int currentFID: 0
 
+    /* pass this to functions that take a friend ID to refer to self */
     property int selfID: -1
 
-    /* the list of friends with */
+    /* the list of friends */
     property ListModel friendList: ListModel { id: friendList }
+
+    property bool notificationNameChange: false
+    property bool notificationConnectionStatus: false
+    property bool notificationFriendMessage: true
 
     function refreshFriendList() {
         friendList.clear()
@@ -36,21 +43,58 @@ ApplicationWindow
         }
         onSignal_name_change: {
             var i = fid + 1
-            friendList.setProperty(i, "friend_name", cyanide.get_friend_name(fid))
+            var name = cyanide.get_friend_name(fid)
+            friendList.setProperty(i, "friend_name", name)
+            if(fid != selfID && notificationNameChange) {
+                currentFID = fid
+                notify(nNameChange, "Name change: " + name, "(previously known as " + previous_name + ")")
+            }
         }
         onSignal_connection_status: {
             var i = fid + 1
-            friendList.setProperty(i, "friend_connection_status", cyanide.get_friend_connection_status(fid))
+            var online = cyanide.get_friend_connection_status(fid)
+            friendList.setProperty(i, "friend_connection_status", online)
             friendList.setProperty(i, "friend_status_icon", cyanide.get_friend_status_icon(fid))
+            if(fid != selfID && notificationConnectionStatus) {
+                currentFID = fid
+                notify(nConnectionStatus, cyanide.get_friend_name(fid), online ? "is now online" : "is now offline")
+            }
         }
         onSignal_status_message: {
             var i = fid + 1
             friendList.setProperty(i, "friend_status_message", cyanide.get_friend_status_message(fid))
         }
         onSignal_friend_message: {
-            var i = fid + 1
             friendList.setProperty(i, "friend_status_icon", cyanide.get_friend_status_icon(fid))
+            if(fid != selfID && notificationFriendMessage) {
+                var i = fid + 1
+                currentFID = fid
+                notify(nFriendMessage, cyanide.get_friend_name(fid), cyanide.get_message_text(fid, mid))
+            }
         }
     }
-}
 
+    Notification {
+        id: nNameChange
+        onClicked: {
+            pageStack.push(Qt.resolvedUrl("pages/Friend.qml"))
+        }
+    }
+    Notification {
+        id: nConnectionStatus
+        onClicked: {
+            pageStack.push(Qt.resolvedUrl("pages/Friend.qml"))
+        }
+    }
+    Notification {
+        id: nFriendMessage
+        onClicked: {
+            pageStack.push(Qt.resolvedUrl("pages/Friend.qml"))
+        }
+    }
+    function notify(n, summary, body) {
+        n.previewSummary = summary
+        n.previewBody = body
+        n.publish()
+    }
+}
