@@ -19,7 +19,8 @@ SOURCES += \
     src/util.cpp \
     src/friend.cpp \
     src/message.cpp \
-    src/dns.cpp
+    src/dns.cpp \
+    src/settings.cpp
 
 OTHER_FILES += \
     qml/cover/CoverPage.qml \
@@ -50,12 +51,16 @@ HEADERS += \
     src/util.h \
     src/friend.h \
     src/tox_callbacks.h \
-    src/message.h
+    src/message.h \
+    src/settings.h \
+    src/config.h
 
 unix:!macx: LIBS += -L$$PWD/res/usr/lib/ -ltoxcore -ltoxdns -lsodium -lrt -lresolv
 
 INCLUDEPATH += $$PWD/res/usr/include
 DEPENDPATH += $$PWD/res/usr/include
+
+QT += sql
 
 QMAKE_CXXFLAGS += "-std=c++0x -pthread"
 QMAKE_CXXFLAGS += "-Wno-write-strings"

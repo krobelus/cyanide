@@ -9,6 +9,7 @@
 #include "tox_callbacks.h"
 #include "util.h"
 #include "dns.cpp"
+#include "config.h"
 
 #include <QtQuick>
 
@@ -31,7 +32,10 @@ int main(int argc, char *argv[])
     view->setSource(SailfishApp::pathTo("qml/cyanide.qml"));
     view->showFullScreen();
 
-    return app->exec();
+    int result = app->exec();
+
+    //TODO tox_kill
+    return result;
 }
 
 void init(Cyanide *cyanide)
@@ -210,9 +214,9 @@ void Cyanide::write_save()
     tox_save(tox, (uint8_t*)data);
 
     //TODO use relative paths
-    mkdir("/home/nemo/.config/tox", 0755);
-    chmod("/home/nemo/.config/tox", 0755);
-    sprintf(tmp_path, "%s/.config/tox/tox_save.tmp", getenv("HOME"));
+    mkdir(CONFIG_PATH, 0755);
+    chmod(CONFIG_PATH, 0755);
+    sprintf(tmp_path, "%s/tox_save.tmp", CONFIG_PATH);
 
     file = fopen(tmp_path, "wb");
     if(file) {
@@ -665,22 +669,6 @@ QString Cyanide::send_friend_request_unboxed(char *name, int length, char *msg, 
         return "No name";
     }
 
-    /*
-    uint8_t name_cleaned[length];
-    uint16_t length_cleaned = 0;
-
-    for (auto i = 0; i < length; ++i) {
-        if (name[i] != ' ') {
-            name_cleaned[length_cleaned] = name[i];
-            ++length_cleaned;
-        }
-    }
-
-    if(!length_cleaned) {
-        return "No name";
-    }
-    */
-
     uint8_t id[TOX_FRIEND_ADDRESS_SIZE];
     //if(length_cleaned == TOX_FRIEND_ADDRESS_SIZE * 2 && string_to_id((char*)id, (char*)name_cleaned)) {
     if(string_to_id((char*)id, (char*)name)) {
@@ -697,9 +685,12 @@ QString Cyanide::send_friend_request_unboxed(char *name, int length, char *msg, 
     }
 
     QString error = send_friend_request_id(id, (const uint8_t*)msg, msg_length);
-    const char *m = "awaiting reply...";
-    Friend *f = new Friend((const uint8_t*)id, (const uint8_t*)name, length, (const uint8_t*)m, strlen(m));
-    add_friend(f);
+
+    if(error == "") {
+        const char *m = "awaiting reply...";
+        Friend *f = new Friend((const uint8_t*)id, (const uint8_t*)name, length, (const uint8_t*)m, strlen(m));
+        add_friend(f);
+    }
 
     return error;
 }

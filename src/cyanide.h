@@ -8,10 +8,6 @@
 #include "friend.h"
 #include "message.h"
 
-#define DEFAULT_NAME "Tox User"
-#define DEFAULT_STATUS "Toxing on Cyanide"
-#define DEFAULT_FRIEND_REQUEST_MESSAGE "Tox me maybe?"
-
 class Cyanide : public QObject
 {
     Q_OBJECT
