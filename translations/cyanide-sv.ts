@@ -1,26 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="sv_SE">
+<TS version="2.0" language="sv_SE">
 <context>
     <name>AcceptFriend</name>
     <message>
         <source>Accept</source>
-        <translation type="unfinished"></translation>
+        <translation>Acceptera</translation>
     </message>
     <message>
         <source>Ignore</source>
-        <translation type="unfinished"></translation>
+        <translation>Avslå</translation>
     </message>
 </context>
 <context>
     <name>AddFriend</name>
     <message>
         <source>Tox me maybe?</source>
-        <translation type="unfinished"></translation>
+        <translation>Toxa mig kanske?</translation>
     </message>
     <message>
         <source>Send friend request</source>
-        <translation type="unfinished"></translation>
+        <translation>Skicka kontaktförfrågan</translation>
     </message>
 </context>
 <context>
@@ -31,11 +31,11 @@
     </message>
     <message>
         <source>Copy Tox ID to clipboard</source>
-        <translation type="vanished">Kopiera Tox-ID till Urklipp</translation>
+        <translation>Kopiera Tox-ID till Urklipp</translation>
     </message>
     <message>
         <source>About to remove friend</source>
-        <translation type="unfinished"></translation>
+        <translation>Om att ta bort en vän</translation>
     </message>
 </context>
 <context>
@@ -46,29 +46,29 @@
     </message>
     <message>
         <source>Friends</source>
-        <translation type="unfinished"></translation>
+        <translation>Vänner</translation>
     </message>
 </context>
 <context>
     <name>Profile</name>
     <message>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Namn</translation>
     </message>
     <message>
         <source>Status Message</source>
-        <translation type="unfinished"></translation>
+        <translation>Statusmeddelande</translation>
     </message>
     <message>
         <source>Copy my Tox ID</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopiera mitt Tox-ID</translation>
     </message>
 </context>
 <context>
     <name>cyanide</name>
     <message>
         <source> is now known as </source>
-        <translation type="unfinished"></translation>
+        <translation>är känd som</translation>
     </message>
 </context>
 </TS>
