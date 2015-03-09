@@ -1,5 +1,6 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
+import nemonotifications 1.0
 import "../js/Misc.js" as Misc
 
 Page {
@@ -7,6 +8,8 @@ Page {
     allowedOrientations: Orientation.All
 
     RemorsePopup { id: remorsePopup }
+
+    Notification { id: notification }
 
     SilicaListView {
         id: messageList
@@ -96,7 +99,10 @@ Page {
                 textFormat: Text.StyledText
 
                 linkColor: Theme.highlightColor
-                onLinkActivated: Misc.openUrl(link)
+                onLinkActivated: {
+                    notify(notification, qsTr("Launching web browser..."), "")
+                    Misc.openUrl(link)
+                }
 
                 /*
                 anchors {
