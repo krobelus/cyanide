@@ -880,7 +880,7 @@ QString Cyanide::get_message_text(int fid, int mid)
 QString Cyanide::get_message_rich_text(int fid, int mid)
 {
     QString text = friends[fid].messages[mid].text;
-    QRegExp rx("([a-z]+:[^ ]*|\\b[a-z]+\\.[a-z]+\\b)");
+    QRegExp rx("([a-z]+:[^ ]*|\\b[^\\s]+\\.[^\\s]+\\b)");
     QString link;
     int pos = 0;
 
@@ -890,7 +890,6 @@ QString Cyanide::get_message_rich_text(int fid, int mid)
          pos += link.length();
      }
 
-     qDebug() << text;
     return text;
 }
 
