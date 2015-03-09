@@ -12,9 +12,9 @@ Page {
     TextField {
         id: name
         label: qsTr("Name")
-        width: parent.width - Theme.paddingLarge
+        width: parent.width - 2 * Theme.paddingLarge
         height: implicitHeight
-        y: 2 * Theme.paddingLarge
+        y: Theme.paddingLarge
         x: Theme.paddingMedium
         color: Theme.primaryColor
 
@@ -33,7 +33,7 @@ Page {
         width: parent.width - Theme.paddingLarge
         height: implicitHeight
         x: Theme.paddingMedium
-        y: 3 * Theme.paddingLarge + name.height
+        y: name.y + name.height + Theme.paddingLarge
         color: Theme.primaryColor
 
         inputMethodHints: Qt.ImhNoAutoUppercase
@@ -43,12 +43,37 @@ Page {
             focus = false
         }
     }
+    ComboBox {
+        id: statusMenu
+        x: Theme.paddingMedium
+        y: message.y + message.height + Theme.paddingLarge
+        width: parent.width - 2 * Theme.paddingLarge
+        label: "Status"
+        currentIndex: cyanide.get_self_user_status()
+
+        menu: ContextMenu {
+            MenuItem { text: qsTr("Online") }
+            MenuItem { text: qsTr("Away") }
+            MenuItem { text: qsTr("Busy") }
+        }
+        onCurrentIndexChanged:  cyanide.set_self_user_status(currentIndex)
+    }
+    Image {
+        id: selfStatusIcon
+        source: friendList.get(0).friend_status_icon
+        anchors {
+            right: parent.right
+            rightMargin: Theme.paddingLarge
+            top: statusMenu.top
+            topMargin: statusMenu.height / 2 - height / 2
+        }
+    }
     Text {
         id: id
         width: parent.width - Theme.paddingLarge
         height: implicitHeight
         x: Theme.paddingMedium
-        y: 4 * Theme.paddingLarge + name.height + message.height
+        y: statusMenu.y + statusMenu.height + Theme.paddingLarge
         color: Theme.primaryColor
 
         text: cyanide.get_self_address()
@@ -72,7 +97,7 @@ Page {
         id: copyButton
         width: parent.width / 2
         x: Theme.paddingLarge
-        y: 5 * Theme.paddingLarge + name.height + message.height + id.height
+        y: id.y + id.height + Theme.paddingSmall
         color: Theme.primaryColor
         text: qsTr("Copy my Tox ID") + " ☐"
         onClicked: {

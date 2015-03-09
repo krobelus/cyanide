@@ -55,6 +55,10 @@ ApplicationWindow
                 notify(nNameChange, previous_name + qsTr(" is now known as ") + name, "")
             }
         }
+        onSignal_user_status: {
+            var i = fid + 1
+            friendList.setProperty(i, "friend_status_icon", cyanide.get_friend_status_icon(fid))
+        }
         onSignal_connection_status: {
             var i = fid + 1
             var online = cyanide.get_friend_connection_status(fid)

@@ -63,6 +63,18 @@
         <source>Copy my Tox ID</source>
         <translation>Meine Tox ID kopieren</translation>
     </message>
+    <message>
+        <source>Online</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Away</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Busy</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>cyanide</name>

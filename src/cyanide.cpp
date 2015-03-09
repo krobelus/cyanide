@@ -49,6 +49,7 @@ void init(Cyanide *cyanide)
 void Cyanide::load_tox_and_stuff_pretty_please()
 {
     save_needed = false;
+    self.user_status = TOX_USERSTATUS_NONE;
 
     if((tox = tox_new(&options)) == NULL) {
         qDebug() << "tox_new() failed";
@@ -454,7 +455,7 @@ void callback_user_status(Tox *UNUSED(tox), int fid, uint8_t status, void *UNUSE
 {
     qDebug() << "was called";
     cyanide.friends[fid].user_status = status;
-    emit cyanide.signal_user_status();
+    emit cyanide.signal_user_status(fid);
 }
 
 void callback_typing_change(Tox *UNUSED(tox), int fid, uint8_t is_typing, void *UNUSED(userdata))
@@ -793,6 +794,40 @@ bool Cyanide::set_self_status_message(QString status_message)
     return success;
 }
 
+int Cyanide::get_self_user_status()
+{
+    switch(self.user_status) {
+        case TOX_USERSTATUS_NONE:
+            return 0;
+        case TOX_USERSTATUS_AWAY:
+            return 1;
+        case TOX_USERSTATUS_BUSY:
+            return 2;
+        default: //TOX_USERSTATUS_INVALID:
+            return 3;
+    }
+}
+
+void Cyanide::set_self_user_status(int status)
+{
+    switch(status) {
+        case 0:
+            self.user_status = TOX_USERSTATUS_NONE;
+            break;
+        case 1:
+            self.user_status = TOX_USERSTATUS_AWAY;
+            break;
+        case 2:
+            self.user_status = TOX_USERSTATUS_BUSY;
+            break;
+         default:
+            self.user_status = TOX_USERSTATUS_INVALID;
+            break;
+    }
+    tox_set_user_status(tox, self.user_status);
+    emit cyanide.signal_user_status(self_fid);
+}
+
 int Cyanide::get_number_of_friends()
 {
     return friends.size();
@@ -832,7 +867,7 @@ QString Cyanide::get_friend_status_icon(int fid)
         url.append("busy");
         break;
     default: //case TOX_USERSTATUS_INVALID:
-        qDebug() << "invalid user status_2x";
+        qDebug() << "invalid user status";
         url.append("offline");
     }
     
