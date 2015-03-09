@@ -4,7 +4,10 @@ import Sailfish.Silica 1.0
 Page {
     id: pageAcceptFriend
     allowedOrientations: Orientation.All
-    Component.onCompleted: activePage = "AcceptFriend.qml"
+    Component.onCompleted: {
+        activePage = "AcceptFriend.qml"
+        currentFID = 0
+    }
 
     Text {
         id: cid

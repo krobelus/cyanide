@@ -6,7 +6,9 @@ import "../js/Misc.js" as Misc
 Page {
     id: pageFriend
     allowedOrientations: Orientation.All
-    Component.onCompleted: activePage = "Friend.qml"
+    Component.onCompleted: {
+        activePage = "Friend.qml"
+    }
 
     RemorsePopup { id: remorsePopup }
 
@@ -15,8 +17,23 @@ Page {
     SilicaListView {
         id: messageList
 
-        header: PageHeader {
-            title: cyanide.get_friend_name(currentFID)
+        header: PageHeader { }
+        PageHeader {
+            id: header
+            title: friendList.get(currentFID+1).friend_name
+            anchors {
+                right: parent.right
+                rightMargin: 2 * Theme.paddingLarge + friendStatusIcon.width
+            }
+        }
+        Image {
+            id: friendStatusIcon
+            source: friendList.get(currentFID+1).friend_status_icon
+            y: header.height / 2 - height / 2
+            anchors {
+                right: parent.right
+                rightMargin: Theme.paddingLarge
+            }
         }
 
         PullDownMenu {
@@ -54,9 +71,6 @@ Page {
             id: model
         }
 
-        //height: parent.height - inputField.height - Theme.paddingLarge
-        //spacing: Theme.paddingMedium
-        //TODO fill block
         anchors.fill: parent
 
         Component.onCompleted: {
@@ -77,7 +91,6 @@ Page {
                                  ,'timestamp': cyanide.get_message_timestamp(currentFID, mid)
                                  })
                 }
-
             }
         }
 
@@ -89,7 +102,7 @@ Page {
             Label {
                 id: messageText
                 text: message_text
-                width: friendPage.width*2/3
+                width: pageFriend.width*2/3
                 font.pixelSize: Theme.fontSizeMedium
                 color: author ? Theme.secondaryColor : Theme.primaryColor
                 horizontalAlignment: author ? Text.AlignLeft : Text.AlignRight
@@ -116,7 +129,7 @@ Page {
                 id: timestampLabel
                 text: qsTr(Misc.elapsedTime(timestamp))
                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-                width: friendPage.width/3 - 3*Theme.paddingMedium
+                width: pageFriend.width/3 - 3*Theme.paddingMedium
                 font.pixelSize: Theme.fontSizeExtraSmall
                 color: Theme.secondaryColor
                 horizontalAlignment: author ? Text.AlignRight : Text.AlignLeft
@@ -135,7 +148,7 @@ Page {
         width: parent.width - Theme.paddingLarge
         inputMethodHints: Qt.ImhNoAutoUppercase
         focus: false
-        y: friendPage.height - height - Theme.paddingLarge
+        y: pageFriend.height - height - Theme.paddingLarge
         EnterKey.onClicked: {
             // TODO split long messages
             if(cyanide.send_friend_message(currentFID, text)) {

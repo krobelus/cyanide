@@ -203,7 +203,7 @@ void Cyanide::load_defaults()
     tox_set_name(tox, name, name_len);
     tox_set_status_message(tox, status, status_len);
 
-    emit cyanide.signal_name_change(self_fid);
+    emit cyanide.signal_name_change(self_fid, NULL);
     emit cyanide.signal_status_message(self_fid);
     save_needed = true;
 }
@@ -295,7 +295,7 @@ bool Cyanide::load_save()
     self.status_message_length = tox_get_self_status_message_size(tox);
     tox_get_self_status_message(tox, self.status_message, self.status_message_length);
 
-    emit cyanide.signal_name_change(self_fid);
+    emit cyanide.signal_name_change(self_fid, NULL);
     emit cyanide.signal_status_message(self_fid);
     save_needed = true;
 
@@ -433,9 +433,11 @@ void callback_friend_action(Tox *tox, int fid, const uint8_t *action, uint16_t l
 void callback_name_change(Tox *UNUSED(tox), int fid, const uint8_t *newname, uint16_t length, void *UNUSED(userdata))
 {
     qDebug() << "was called";
-    memcpy(cyanide.friends[fid].name, newname, length);
-    cyanide.friends[fid].name_length = length;
-    emit cyanide.signal_name_change(fid);
+    Friend *f = &cyanide.friends[fid];
+    QString previous_name = to_QString(f->name, f->name_length);
+    memcpy(f->name, newname, length);
+    f->name_length = length;
+    emit cyanide.signal_name_change(fid, previous_name);
     cyanide.save_needed = true;
 }
 
@@ -776,7 +778,7 @@ bool Cyanide::set_self_name(QString name)
     to_tox_string(name, self.name);
     success = 0 == tox_set_name(tox, self.name, self.name_length);
     save_needed = true;
-    emit signal_name_change(self_fid);
+    emit signal_name_change(self_fid, NULL);
     return success;
 }
 

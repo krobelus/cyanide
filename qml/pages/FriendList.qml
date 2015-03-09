@@ -5,7 +5,10 @@ import Sailfish.Silica 1.0
 Page {
     id: pageFriendList
     allowedOrientations: Orientation.All
-    Component.onCompleted: activePage = "FriendList.qml"
+    Component.onCompleted: {
+        activePage = "FriendList.qml"
+        currentFID = 0
+    }
 
     RemorsePopup { id: remorsePopup }
 

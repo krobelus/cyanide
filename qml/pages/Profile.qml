@@ -4,7 +4,10 @@ import Sailfish.Silica 1.0
 Page {
     id: pageProfile
     allowedOrientations: Orientation.Landscape | Orientation.Portrait
-    Component.onCompleted: activePage = "Profile.qml"
+    Component.onCompleted: {
+        activePage = "Profile.qml"
+        currentFID = 0
+    }
 
     TextField {
         id: name

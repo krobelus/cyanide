@@ -70,7 +70,7 @@ signals:
     void signal_friend_request();
     void signal_friend_message(int fid, int mid);
     void signal_friend_action();
-    void signal_name_change(int fid);
+    void signal_name_change(int fid, QString previous_name);
     void signal_status_message(int fid);
     void signal_user_status();
     void signal_typing_change();

@@ -4,7 +4,10 @@ import Sailfish.Silica 1.0
 Page {
     id: pageAddFriend
     allowedOrientations: Orientation.All
-    Component.onCompleted: activePage = "AddFriend.qml"
+    Component.onCompleted: {
+        activePage = "AddFriend.qml"
+        currentFID = 0
+    }
 
     TextField {
         id: toxID
