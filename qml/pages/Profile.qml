@@ -2,8 +2,9 @@ import QtQuick 2.0
 import Sailfish.Silica 1.0
 
 Page {
-    id: page
+    id: pageProfile
     allowedOrientations: Orientation.Landscape | Orientation.Portrait
+    Component.onCompleted: activePage = "Profile.qml"
 
     TextField {
         id: name

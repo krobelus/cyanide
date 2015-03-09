@@ -4,8 +4,9 @@ import nemonotifications 1.0
 import "../js/Misc.js" as Misc
 
 Page {
-    id: friendPage
+    id: pageFriend
     allowedOrientations: Orientation.All
+    Component.onCompleted: activePage = "Friend.qml"
 
     RemorsePopup { id: remorsePopup }
 
@@ -83,9 +84,7 @@ Page {
         delegate: Item {
             id: delegate
             height: messageText.height + Theme.paddingMedium
-            // height: childrenRect.height
-            x: author ? Theme.paddingLarge : friendPage.width/3 - Theme.paddingLarge
-            //width: friendPage.width*2/3 - 2 * Theme.paddingLarge
+            x: author ? Theme.paddingLarge : pageFriend.width/3 - Theme.paddingLarge
 
             Label {
                 id: messageText

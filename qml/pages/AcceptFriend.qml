@@ -2,8 +2,10 @@ import QtQuick 2.0
 import Sailfish.Silica 1.0
 
 Page {
-    id: page
+    id: pageAcceptFriend
     allowedOrientations: Orientation.All
+    Component.onCompleted: activePage = "AcceptFriend.qml"
+
     Text {
         id: cid
         text: cyanide.get_friend_public_key(currentFID)

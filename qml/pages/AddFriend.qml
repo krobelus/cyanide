@@ -2,8 +2,9 @@ import QtQuick 2.0
 import Sailfish.Silica 1.0
 
 Page {
-    id: addFriendPage
+    id: pageAddFriend
     allowedOrientations: Orientation.All
+    Component.onCompleted: activePage = "AddFriend.qml"
 
     TextField {
         id: toxID

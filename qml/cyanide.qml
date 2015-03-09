@@ -18,6 +18,9 @@ ApplicationWindow
     /* the list of friends */
     property ListModel friendList: ListModel { id: friendList }
 
+    /* the currently activated page (is there a better way to get this?) */
+    property string activePage: ""
+
     property bool notificationNameChange: false
     property bool notificationConnectionStatus: false
     property bool notificationFriendMessage: true
@@ -67,7 +70,9 @@ ApplicationWindow
         onSignal_friend_message: {
             var i = fid + 1
             friendList.setProperty(i, "friend_status_icon", cyanide.get_friend_status_icon(fid))
-            if(fid != selfID && notificationFriendMessage) {
+            if(fid != selfID && notificationFriendMessage
+                && !(activePage == "Friend.qml" && currentFid == fid))
+            {
                 currentFID = fid
                 notify(nFriendMessage, cyanide.get_friend_name(fid), cyanide.get_message_text(fid, mid))
             }
