@@ -5,22 +5,22 @@
     <name>AcceptFriend</name>
     <message>
         <source>Accept</source>
-        <translation type="unfinished"></translation>
+        <translation>Принять</translation>
     </message>
     <message>
         <source>Ignore</source>
-        <translation type="unfinished"></translation>
+        <translation>Игнорировать</translation>
     </message>
 </context>
 <context>
     <name>AddFriend</name>
     <message>
         <source>Tox me maybe?</source>
-        <translation type="unfinished"></translation>
+        <translation>Привет, добавите меня в друзья?</translation>
     </message>
     <message>
         <source>Send friend request</source>
-        <translation type="unfinished"></translation>
+        <translation>Отправить запрос</translation>
     </message>
 </context>
 <context>
@@ -30,12 +30,8 @@
         <translation>Удалить из друзей</translation>
     </message>
     <message>
-        <source>Copy Tox ID to clipboard</source>
-        <translation type="vanished">Копировать Tox ID</translation>
-    </message>
-    <message>
         <source>About to remove friend</source>
-        <translation type="unfinished"></translation>
+        <translation>Удаление из друзей</translation>
     </message>
 </context>
 <context>
@@ -46,29 +42,29 @@
     </message>
     <message>
         <source>Friends</source>
-        <translation type="unfinished"></translation>
+        <translation>Друзья</translation>
     </message>
 </context>
 <context>
     <name>Profile</name>
     <message>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Имя</translation>
     </message>
     <message>
         <source>Status Message</source>
-        <translation type="unfinished"></translation>
+        <translation>Статус</translation>
     </message>
     <message>
         <source>Copy my Tox ID</source>
-        <translation type="unfinished"></translation>
+        <translation>Скопировать Tox ID</translation>
     </message>
 </context>
 <context>
     <name>cyanide</name>
     <message>
         <source> is now known as </source>
-        <translation type="unfinished"></translation>
+        <translation> сменил имя на </translation>
     </message>
 </context>
 </TS>
