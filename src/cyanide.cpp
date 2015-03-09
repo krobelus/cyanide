@@ -693,8 +693,7 @@ QString Cyanide::send_friend_request_unboxed(char *name, int length, char *msg, 
     QString error = send_friend_request_id(id, (const uint8_t*)msg, msg_length);
 
     if(error == "") {
-        const char *m = "awaiting reply...";
-        Friend *f = new Friend((const uint8_t*)id, (const uint8_t*)name, length, (const uint8_t*)m, strlen(m));
+        Friend *f = new Friend((const uint8_t*)id, (const uint8_t*)name, length, NULL, 0);
         add_friend(f);
     }
 
@@ -876,6 +875,23 @@ int Cyanide::get_number_of_messages(int fid)
 QString Cyanide::get_message_text(int fid, int mid)
 {
     return friends[fid].messages[mid].text;
+}
+
+QString Cyanide::get_message_rich_text(int fid, int mid)
+{
+    QString text = friends[fid].messages[mid].text;
+    QRegExp rx("([a-z]+:[^ ]*|\\b[a-z]+\\.[a-z]+\\b)");
+    QString link;
+    int pos = 0;
+
+     while ((pos = rx.indexIn(text, pos)) != -1) {
+         link = "<a href=\"" + rx.cap(1) + "\">" + rx.cap(1) + "</a>";
+         text.replace(pos, rx.matchedLength(), link);
+         pos += link.length();
+     }
+
+     qDebug() << text;
+    return text;
 }
 
 QDateTime Cyanide::get_message_timestamp(int fid, int mid)

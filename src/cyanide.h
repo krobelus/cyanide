@@ -60,6 +60,7 @@ public:
 
     Q_INVOKABLE int get_number_of_messages(int fid);
     Q_INVOKABLE QString get_message_text(int fid, int mid);
+    Q_INVOKABLE QString get_message_rich_text(int fid, int mid);
     Q_INVOKABLE QDateTime get_message_timestamp(int fid, int mid);
     Q_INVOKABLE bool get_message_author(int fid, int mid);
 

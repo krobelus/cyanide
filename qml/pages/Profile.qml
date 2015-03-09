@@ -67,7 +67,7 @@ Page {
     Button {
         id: copyButton
         width: parent.width / 2
-        //x: Theme.paddingMedium
+        x: Theme.paddingLarge
         y: 5 * Theme.paddingLarge + name.height + message.height + id.height
         color: Theme.primaryColor
         text: qsTr("Copy my Tox ID") + " ☐"

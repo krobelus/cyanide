@@ -58,7 +58,7 @@ Page {
         Component.onCompleted: {
             for(var i=0; i<cyanide.get_number_of_messages(currentFID); i++)
                 model.append({'author': cyanide.get_message_author(currentFID, i)
-                             ,'message_text': cyanide.get_message_text(currentFID, i)
+                             ,'message_text': cyanide.get_message_rich_text(currentFID, i)
                              ,'timestamp': new Date(cyanide.get_message_timestamp(currentFID, i))
                              })
             cyanide.set_friend_notification(currentFID, false)
@@ -69,7 +69,7 @@ Page {
                 if(fid == currentFID || fid == selfID) {
                     cyanide.set_friend_notification(fid, false)
                     model.append({'author': cyanide.get_message_author(currentFID, mid)
-                                 ,'message_text': cyanide.get_message_text(currentFID, mid)
+                                 ,'message_text': cyanide.get_message_rich_text(currentFID, mid)
                                  ,'timestamp': cyanide.get_message_timestamp(currentFID, mid)
                                  })
                 }
@@ -84,18 +84,20 @@ Page {
             x: author ? Theme.paddingLarge : friendPage.width/3 - Theme.paddingLarge
             //width: friendPage.width*2/3 - 2 * Theme.paddingLarge
 
-            Text {
+            Label {
                 id: messageText
                 text: message_text
                 width: friendPage.width*2/3
                 font.pixelSize: Theme.fontSizeMedium
                 color: author ? Theme.secondaryColor : Theme.primaryColor
                 horizontalAlignment: author ? Text.AlignLeft : Text.AlignRight
+
                 wrapMode: Text.Wrap
                 textFormat: Text.StyledText
+
                 linkColor: Theme.highlightColor
-                onLinkActivated: Misc.openLinkInBrowser(link)
-                //onLinkActivated: console.log("activated "+link)
+                onLinkActivated: Misc.openUrl(link)
+
                 /*
                 anchors {
                     left: parent.left
