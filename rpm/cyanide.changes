@@ -12,6 +12,12 @@
 # - Scrubbed the deck
 # - Hoisted the sails
 
+* Tue Mar 10 2015 Johannes Altmanninger <aclopte@gmail.com> 0.1.7-1
+- nemomobile notifications when a message is received
+- allow landscape mode
+- clickable links
+- allow changing user status
+
 * Sun Mar 8 2015 Johannes Altmanninger <aclopte@gmail.com> 0.1.6-1
 - Added a proper Icon (thanks to Nokius)
 - Don't send garbage in place of the default friend request message
