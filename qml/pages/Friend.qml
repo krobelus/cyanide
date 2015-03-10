@@ -49,7 +49,7 @@ Page {
         }
 
         PageHeader {
-            id: header
+            id: pageHeader
             title: friendList.get(currentFID+1).friend_name
             anchors {
                 right: parent.right
@@ -59,7 +59,7 @@ Page {
         Image {
             id: friendStatusIcon
             source: friendList.get(currentFID+1).friend_status_icon
-            y: header.height / 2 - height / 2
+            y: pageHeader.height / 2 - height / 2
             anchors {
                 right: parent.right
                 rightMargin: Theme.paddingLarge
@@ -73,9 +73,14 @@ Page {
                 id: model
             }
 
+            anchors.fill: parent
+            anchors.topMargin: pageHeader.height
+            /*
             anchors {
-                top: header.bottom
+                top: pageHeader.bottom
+                //bottom: parent.bottom
             }
+            */
 
             Component.onCompleted: {
                 for(var i=0; i<cyanide.get_number_of_messages(currentFID); i++)
@@ -84,10 +89,6 @@ Page {
                                  ,'timestamp': new Date(cyanide.get_message_timestamp(currentFID, i))
                                  })
                 cyanide.set_friend_notification(currentFID, false)
-                model.append({'author': false
-                             ,'message_text': "this is a test mailto:aclopte@gmail.com"
-                             ,'timestamp': new Date()
-                             })
             }
             Connections {
                 target: cyanide
@@ -120,7 +121,7 @@ Page {
 
                     linkColor: Theme.highlightColor
                     onLinkActivated: {
-                        notify(notification, qsTr("Launching web browser..."), "")
+                        notify(notification, qsTr("Opening URL..."), "")
                         Misc.openUrl(link)
                     }
 
