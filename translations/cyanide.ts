@@ -30,11 +30,11 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>About to remove friend</source>
+        <source>Launching web browser...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Launching web browser...</source>
+        <source>Removing friend</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -31,10 +31,14 @@
     </message>
     <message>
         <source>About to remove friend</source>
-        <translation>Freund wird entfernt</translation>
+        <translation type="vanished">Freund wird entfernt</translation>
     </message>
     <message>
         <source>Launching web browser...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Removing friend</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

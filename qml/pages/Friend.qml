@@ -31,7 +31,7 @@ Page {
             MenuItem {
                 text: qsTr("Remove friend")
                 onClicked: {
-                    remorsePopup.execute(qsTr("About to remove friend"), function() {
+                    remorsePopup.execute(qsTr("Removing friend"), function() {
                         cyanide.remove_friend(currentFID)
                         refreshFriendList()
                         pageStack.pop()
