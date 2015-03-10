@@ -39,10 +39,14 @@
     </message>
     <message>
         <source>Launching web browser...</source>
-        <translation>Startar webläsaren...</translation>
+        <translation type="vanished">Startar webläsaren...</translation>
     </message>
     <message>
         <source>Removing friend</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Opening URL...</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

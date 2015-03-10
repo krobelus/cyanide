@@ -34,11 +34,11 @@
         <translation type="vanished">Удаление из друзей</translation>
     </message>
     <message>
-        <source>Launching web browser...</source>
+        <source>Removing friend</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Removing friend</source>
+        <source>Opening URL...</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
