@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="sv_SE">
+<TS version="2.0" language="sv_SE">
 <context>
     <name>AcceptFriend</name>
     <message>
@@ -31,7 +31,7 @@
     </message>
     <message>
         <source>Copy Tox ID to clipboard</source>
-        <translation type="vanished">Kopiera Tox-ID till Urklipp</translation>
+        <translation>Kopiera Tox-ID till Urklipp</translation>
     </message>
     <message>
         <source>About to remove friend</source>
@@ -39,7 +39,7 @@
     </message>
     <message>
         <source>Launching web browser...</source>
-        <translation type="unfinished"></translation>
+        <translation>Startar webläsaren...</translation>
     </message>
 </context>
 <context>
@@ -69,15 +69,15 @@
     </message>
     <message>
         <source>Online</source>
-        <translation type="unfinished"></translation>
+        <translation>Ansluten</translation>
     </message>
     <message>
         <source>Away</source>
-        <translation type="unfinished"></translation>
+        <translation>Borta</translation>
     </message>
     <message>
         <source>Busy</source>
-        <translation type="unfinished"></translation>
+        <translation>Upptagen</translation>
     </message>
 </context>
 <context>
