@@ -6,9 +6,5 @@ function elapsedTime(date) {
 }
 
 function openUrl(link) {
-    if (link.match(/^http/))
-        Qt.openUrlExternally(link)
-    else
-        Qt.openUrlExternally("http://" + link)
-    //TODO use xdg-open for some other protocols
+    Qt.openUrlExternally(link)
 }
