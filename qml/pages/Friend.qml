@@ -14,6 +14,16 @@ Page {
 
     Notification { id: notification }
 
+    TextEdit {
+        id: clipboard
+        visible: false
+        function setClipboard(value) {
+        text = value
+            selectAll()
+            copy()
+        }
+    }
+
     SilicaFlickable {
         anchors.fill: parent
 
@@ -38,43 +48,34 @@ Page {
             */
         }
 
+        PageHeader {
+            id: header
+            title: friendList.get(currentFID+1).friend_name
+            anchors {
+                right: parent.right
+                rightMargin: 2 * Theme.paddingLarge + friendStatusIcon.width
+            }
+        }
+        Image {
+            id: friendStatusIcon
+            source: friendList.get(currentFID+1).friend_status_icon
+            y: header.height / 2 - height / 2
+            anchors {
+                right: parent.right
+                rightMargin: Theme.paddingLarge
+            }
+        }
+
         SilicaListView {
             id: messageList
-
-            header: header
-            PageHeader {
-                id: header
-                title: friendList.get(currentFID+1).friend_name
-                anchors {
-                    right: parent.right
-                    rightMargin: 2 * Theme.paddingLarge + friendStatusIcon.width
-                }
-            }
-            Image {
-                id: friendStatusIcon
-                source: friendList.get(currentFID+1).friend_status_icon
-                y: header.height / 2 - height / 2
-                anchors {
-                    right: parent.right
-                    rightMargin: Theme.paddingLarge
-                }
-            }
-
-            TextEdit {
-                id: clipboard
-                visible: false
-                function setClipboard(value) {
-                    text = value
-                    selectAll()
-                    copy()
-                }
-            }
 
             model: ListModel {
                 id: model
             }
 
-            anchors.fill: parent
+            anchors {
+                top: header.bottom
+            }
 
             Component.onCompleted: {
                 for(var i=0; i<cyanide.get_number_of_messages(currentFID); i++)
@@ -83,6 +84,10 @@ Page {
                                  ,'timestamp': new Date(cyanide.get_message_timestamp(currentFID, i))
                                  })
                 cyanide.set_friend_notification(currentFID, false)
+                model.append({'author': false
+                             ,'message_text': "this is a test mailto:aclopte@gmail.com"
+                             ,'timestamp': new Date()
+                             })
             }
             Connections {
                 target: cyanide
