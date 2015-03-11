@@ -30,20 +30,16 @@
         <translation>Удалить из друзей</translation>
     </message>
     <message>
-        <source>About to remove friend</source>
-        <translation type="vanished">Удаление из друзей</translation>
-    </message>
-    <message>
         <source>Opening URL...</source>
-        <translation type="unfinished"></translation>
+        <translation>Открывается URL...</translation>
     </message>
     <message>
         <source>Removing friend</source>
-        <translation type="unfinished"></translation>
+        <translation>Удаление из друзей</translation>
     </message>
     <message>
-        <source> is typing a message</source>
-        <translation type="unfinished"></translation>
+        <source> is typing...</source>
+        <translation> печатает...</translation>
     </message>
 </context>
 <context>
@@ -73,15 +69,15 @@
     </message>
     <message>
         <source>Online</source>
-        <translation type="unfinished"></translation>
+        <translation>В сети</translation>
     </message>
     <message>
         <source>Away</source>
-        <translation type="unfinished"></translation>
+        <translation>Отошел</translation>
     </message>
     <message>
         <source>Busy</source>
-        <translation type="unfinished"></translation>
+        <translation>Занят</translation>
     </message>
 </context>
 <context>
