@@ -2,7 +2,7 @@
 
 #include "config.h"
 
-settings::settings()
+Settings::Settings()
 {
 }
 
@@ -12,7 +12,7 @@ void execute_sql_query(QSqlQuery q)
         qFatal("Failed to execute SQL query: %s", qPrintable(q.lastError().text()));
 }
 
-void init_db()
+void Settings::init()
 {
     QSqlDatabase db;
     QString dbdir = CONFIG_PATH;
@@ -27,7 +27,7 @@ void init_db()
     execute_sql_query(q);
 }
 
-void settings_add_friend_address(const QVariant &fid, const QVariant &address)
+void Settings::add_friend_address(const QVariant fid, const QVariant address)
 {
     QSqlQuery q;
     q.prepare("INSERT INTO friends (fid, address) VALUES (?, ?)");
@@ -36,7 +36,7 @@ void settings_add_friend_address(const QVariant &fid, const QVariant &address)
     execute_sql_query(q);
 }
 
-QString settings_get_friend_address(const QVariant &fid)
+QString Settings::get_friend_address(const QVariant fid)
 {
     QSqlQuery q;
     q.prepare("SELECT address FROM friends WHERE fid = ?");

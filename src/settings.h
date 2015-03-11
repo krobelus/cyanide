@@ -6,18 +6,23 @@
 #include <QSqlError>
 #include <QVariant>
 
-class settings
+class Settings : public QObject
 {
+    Q_OBJECT
+
 public:
-    settings();
+    Settings();
+    void init();
+    enum Parameters {
+        send_typing_notifications = 1,
+        notify_on_friend_message = 2
+    };
+
+    void add_friend_address(const QVariant fid, const QVariant address);
+    QString get_friend_address(const QVariant fid);
+
 };
 
-void execute_sql_query(QSqlQuery q);
-
-void init_db();
-
-void settings_add_friend_address(int fid, QString address);
-
-void settings_get_friend_address(int fid);
+static void execute_sql_query(QSqlQuery q);
 
 #endif // SETTINGS_H

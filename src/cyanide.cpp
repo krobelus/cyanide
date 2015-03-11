@@ -4,6 +4,7 @@
 #include <sailfishapp.h>
 #include <thread>
 #include <nemonotifications-qt5/notification.h>
+#include <QtQuick>
 
 #include "cyanide.h"
 #include "tox_bootstrap.h"
@@ -11,8 +12,7 @@
 #include "util.h"
 #include "dns.cpp"
 #include "config.h"
-
-#include <QtQuick>
+#include "settings.h"
 
 Cyanide cyanide;
 
@@ -31,6 +31,8 @@ int main(int argc, char *argv[])
     cyanide.load_tox_and_stuff_pretty_please();
     std::thread tox_thread(init, &cyanide);
 
+    Settings *settings = new Settings();
+    view->rootContext()->setContextProperty("settings", settings);
     view->rootContext()->setContextProperty("cyanide", &cyanide);
     view->setSource(SailfishApp::pathTo("qml/cyanide.qml"));
     view->showFullScreen();
