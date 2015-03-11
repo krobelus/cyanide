@@ -49,6 +49,10 @@
         <source>Opening URL...</source>
         <translation>Öppnar URL...</translation>
     </message>
+    <message>
+        <source> is typing a message</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>FriendList</name>

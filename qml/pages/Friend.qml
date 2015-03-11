@@ -97,8 +97,16 @@ Page {
                                      ,'message_text': cyanide.get_message_rich_text(currentFID, mid)
                                      ,'timestamp': cyanide.get_message_timestamp(currentFID, mid)
                                      })
+                        messageList.scrollToBottom()
                     }
-                    messageList.scrollToBottom()
+                }
+                onSignal_typing_change: {
+                    if(fid == currentFID) {
+                        inputField.label = is_typing
+                            ? friendList.get(currentFID+1).friend_name + qsTr(" is typing...")
+                            : ""
+                        inputField.placeholderText = inputField.label
+                    }
                 }
             }
 

@@ -75,7 +75,7 @@ signals:
     void signal_name_change(int fid, QString previous_name);
     void signal_status_message(int fid);
     void signal_user_status(int fid);
-    void signal_typing_change();
+    void signal_typing_change(int fid, bool is_typing);
     void signal_read_receipt();
     void signal_connection_status(int fid);
     void signal_avatar_info();

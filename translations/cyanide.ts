@@ -37,6 +37,10 @@
         <source>Removing friend</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source> is typing a message</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>FriendList</name>

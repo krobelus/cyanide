@@ -461,10 +461,7 @@ void callback_user_status(Tox *UNUSED(tox), int fid, uint8_t status, void *UNUSE
 void callback_typing_change(Tox *UNUSED(tox), int fid, uint8_t is_typing, void *UNUSED(userdata))
 {
     qDebug() << "was called";
-    return;
-//    postmessage(FRIEND_TYPING, fid, is_typing, NULL);
-//
-//    debug("Friend Typing (%u): %u\n", fid, is_typing);
+    emit cyanide.signal_typing_change(fid, is_typing == 1);
 }
 
 void callback_read_receipt(Tox *UNUSED(tox), int fid, uint32_t receipt, void *UNUSED(userdata))
@@ -926,7 +923,7 @@ QString Cyanide::get_message_rich_text(int fid, int mid)
     /* match either protocol:address or email@domain or example.org */
     QRegExp rx("(\\b[A-Za-z0-9]+:[^\\s]+\\b"
                "|\\b" + email_token + "@" + email_token + "\\b"
-               "|\\b" + url_token  + "\." + email_token + "\\b)");
+               "|\\b" + url_token  + "\\." + email_token + "\\b)");
     QString link;
     int protocol;
     int pos = 0;
