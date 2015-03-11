@@ -26,15 +26,15 @@
 <context>
     <name>Friend</name>
     <message>
+        <source>Opening URL...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Remove friend</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Removing friend</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Opening URL...</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
