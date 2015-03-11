@@ -43,11 +43,11 @@
     </message>
     <message>
         <source>Removing friend</source>
-        <translation type="unfinished"></translation>
+        <translation>Tar bort vän</translation>
     </message>
     <message>
         <source>Opening URL...</source>
-        <translation type="unfinished"></translation>
+        <translation>Öppnar URL...</translation>
     </message>
 </context>
 <context>
