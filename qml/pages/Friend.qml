@@ -73,14 +73,11 @@ Page {
                 id: model
             }
 
-            anchors.fill: parent
-            anchors.topMargin: pageHeader.height
-            /*
             anchors {
-                top: pageHeader.bottom
-                //bottom: parent.bottom
+                fill: parent
+                topMargin: pageHeader.height
+                bottomMargin: pageHeader.height
             }
-            */
 
             Component.onCompleted: {
                 for(var i=0; i<cyanide.get_number_of_messages(currentFID); i++)
@@ -89,6 +86,7 @@ Page {
                                  ,'timestamp': new Date(cyanide.get_message_timestamp(currentFID, i))
                                  })
                 cyanide.set_friend_notification(currentFID, false)
+                //messageList.scrollToBottom()
             }
             Connections {
                 target: cyanide
@@ -100,6 +98,7 @@ Page {
                                      ,'timestamp': cyanide.get_message_timestamp(currentFID, mid)
                                      })
                     }
+                    messageList.scrollToBottom()
                 }
             }
 
