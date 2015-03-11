@@ -35,15 +35,15 @@
     </message>
     <message>
         <source>Opening URL...</source>
-        <translation type="unfinished"></translation>
+        <translation>URL wird geöffnet..</translation>
     </message>
     <message>
         <source>Removing friend</source>
-        <translation type="unfinished"></translation>
+        <translation>Freund wird entfernt</translation>
     </message>
     <message>
         <source> is typing a message</source>
-        <translation type="unfinished"></translation>
+        <translation>schreibt gerade</translation>
     </message>
 </context>
 <context>
@@ -73,15 +73,15 @@
     </message>
     <message>
         <source>Online</source>
-        <translation type="unfinished"></translation>
+        <translation>Online</translation>
     </message>
     <message>
         <source>Away</source>
-        <translation type="unfinished"></translation>
+        <translation>Abwesend</translation>
     </message>
     <message>
         <source>Busy</source>
-        <translation type="unfinished"></translation>
+        <translation>Beschäftigt</translation>
     </message>
 </context>
 <context>
