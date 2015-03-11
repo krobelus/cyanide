@@ -917,20 +917,27 @@ QString Cyanide::get_message_text(int fid, int mid)
 QString Cyanide::get_message_rich_text(int fid, int mid)
 {
     QString text = friends[fid].messages[mid].text;
+
     const QString email_chars = QRegExp::escape("A-Za-z0-9!#$%&'*+-/=?^_`{|}~.");
+    const QString url_chars =   QRegExp::escape("A-Za-z0-9!#$%&'*+-/=?^_`{|}~");
     const QString email_token = "[" + email_chars + "]+";
-    /* match either protocol:address or email@domain */
+    const QString url_token = "[" + url_chars + "]+";
+
+    /* match either protocol:address or email@domain or example.org */
     QRegExp rx("(\\b[A-Za-z0-9]+:[^\\s]+\\b"
-               "|\\b" + email_token + "@" + email_token + "\\b)");
+               "|\\b" + email_token + "@" + email_token + "\\b"
+               "|\\b" + url_token  + "\." + email_token + "\\b)");
     QString link;
-    int tmp;
+    int protocol;
     int pos = 0;
 
      while ((pos = rx.indexIn(text, pos)) != -1) {
          /* check whether the captured text has a protocol identifier */
-         tmp = rx.cap(1).indexOf(QRegExp("^[A-Za-z0-9]+:"), 0);
+         protocol = rx.cap(1).indexOf(QRegExp("^[A-Za-z0-9]+:"), 0);
          link = "<a href=\"" +
-                 QString(tmp == (-1) ? "mailto:" : "")
+                 QString(  (protocol != -1) ? ""
+                         : (rx.cap(1).indexOf("@") != -1) ? "mailto:"
+                         : "https:")
                  + rx.cap(1) + "\">" + rx.cap(1) + "</a>";
          text.replace(pos, rx.matchedLength(), link);
          pos += link.length();
