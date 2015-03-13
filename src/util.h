@@ -1,6 +1,9 @@
 #ifndef UTIL_H
 #define UTIL_H
 
+#include <ctype.h>
+#include <QtCore>
+
 #define countof(x) (sizeof(x)/sizeof(*(x)))
 
 #define MAX(a,b) a > b ? a : b

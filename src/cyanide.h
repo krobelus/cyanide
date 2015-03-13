@@ -42,11 +42,12 @@ public:
     Q_INVOKABLE bool send_friend_message(int fid, QString msg);
     Q_INVOKABLE bool accept_friend_request(int fid);
     Q_INVOKABLE void remove_friend(int fid);
+    Q_INVOKABLE void play_sound(QString file);
 
     /* setters and getters */
     Q_INVOKABLE void set_friend_notification(int fid, bool status);
-    Q_INVOKABLE bool set_self_name(QString name);
-    Q_INVOKABLE bool set_self_status_message(QString status_message);
+    Q_INVOKABLE void set_self_name(QString name);
+    Q_INVOKABLE void set_self_status_message(QString status_message);
     Q_INVOKABLE void set_self_user_status(int status);
 
     Q_INVOKABLE QString get_self_address();
@@ -68,6 +69,7 @@ public:
 
 signals:
     void signal_friend_added(int fid);
+    void signal_notification(int fid);
 
     void signal_friend_request();
     void signal_friend_message(int fid, int mid);

@@ -5,6 +5,7 @@
 #include <thread>
 #include <nemonotifications-qt5/notification.h>
 #include <QtQuick>
+#include <QSound>
 
 #include "cyanide.h"
 #include "tox_bootstrap.h"
@@ -32,6 +33,7 @@ int main(int argc, char *argv[])
     std::thread tox_thread(init, &cyanide);
 
     Settings *settings = new Settings();
+    settings->init();
     view->rootContext()->setContextProperty("settings", settings);
     view->rootContext()->setContextProperty("cyanide", &cyanide);
     view->setSource(SailfishApp::pathTo("qml/cyanide.qml"));
@@ -138,8 +140,8 @@ void Cyanide::tox_thread()
             }
 
             if (save_needed
-                    // || (time - last_save >= (uint)100 * 1000 * 1000 * 1000)
-                ) {
+                    //|| (time - last_save >= (uint)100 * 1000 * 1000 * 1000)
+                    ) {
                 write_save();
             }
         }
@@ -222,7 +224,6 @@ void Cyanide::write_save()
     data = malloc(size);
     tox_save(tox, (uint8_t*)data);
 
-    //TODO use relative paths
     mkdir(CONFIG_PATH, 0755);
     chmod(CONFIG_PATH, 0755);
     sprintf(tmp_path, "%s/tox_save.tmp", CONFIG_PATH);
@@ -247,11 +248,8 @@ void Cyanide::write_save()
         }
     }
     int ch = chmod(save_path, S_IRUSR | S_IWUSR);
-    if(!ch){
-        qDebug() << "CHMOD: success";
-    } else {
+    if(ch)
         qDebug() << "CHMOD: failure";
-    }
 
     save_needed = false;
     free(data);
@@ -410,6 +408,7 @@ void callback_friend_request(Tox *UNUSED(tox), const uint8_t *id, const uint8_t 
     Friend f = *new Friend(id, (const uint8_t*)name, name_length, (const uint8_t*)msg, length);
     f.accepted = false;
     cyanide.add_friend(&f);
+    emit cyanide.signal_friend_request();
 }
 
 void callback_friend_message(Tox *tox, int fid, const uint8_t *message, uint16_t length, void *UNUSED(userdata))
@@ -462,7 +461,6 @@ void callback_user_status(Tox *UNUSED(tox), int fid, uint8_t status, void *UNUSE
 
 void callback_typing_change(Tox *UNUSED(tox), int fid, uint8_t is_typing, void *UNUSED(userdata))
 {
-    qDebug() << "was called";
     emit cyanide.signal_typing_change(fid, is_typing == 1);
 }
 
@@ -470,9 +468,6 @@ void callback_read_receipt(Tox *UNUSED(tox), int fid, uint32_t receipt, void *UN
 {
     qDebug() << "was called";
     return;
-//    //postmessage(FRIEND_RECEIPT, fid, receipt);
-//
-//    debug("Friend Receipt (%u): %u\n", fid, receipt);
 }
 
 void callback_connection_status(Tox *tox, int fid, uint8_t status, void *UNUSED(userdata))
@@ -763,38 +758,50 @@ void Cyanide::remove_friend(int fid)
     friends.erase(friends.begin() + fid);
 }
 
+void Cyanide::play_sound(QString file)
+{
+    //QSound sound(file);
+    //sound.play();
+    if(file == "none")
+        return;
+
+    QSound::play(file);
+}
+
 /* setters and getters */
 
 void Cyanide::set_friend_notification(int fid, bool status)
 {
     friends[fid].notification = status;
-    emit cyanide.signal_connection_status(fid);
+    emit cyanide.signal_notification(fid);
 }
 
-bool Cyanide::set_self_name(QString name)
+void Cyanide::set_self_name(QString name)
 {
     bool success;
     self.name_length = tox_string_length(name);
     to_tox_string(name, self.name);
     success = 0 == tox_set_name(tox, self.name, self.name_length);
+    Q_ASSERT(success);
     save_needed = true;
     emit signal_name_change(self_fid, NULL);
-    return success;
 }
 
-bool Cyanide::set_self_status_message(QString status_message)
+void Cyanide::set_self_status_message(QString status_message)
 {
     bool success;
     self.status_message_length = tox_string_length(status_message);
     to_tox_string(status_message, self.status_message);
     success = 0 == tox_set_status_message(tox, self.status_message, self.status_message_length);
+    Q_ASSERT(success);
     save_needed = true;
     emit signal_status_message(self_fid);
-    return success;
 }
 
 int Cyanide::get_self_user_status()
 {
+    Q_ASSERT(self.user_status != TOX_USERSTATUS_INVALID);
+
     switch(self.user_status) {
         case TOX_USERSTATUS_NONE:
             return 0;
@@ -802,8 +809,8 @@ int Cyanide::get_self_user_status()
             return 1;
         case TOX_USERSTATUS_BUSY:
             return 2;
-        default: //TOX_USERSTATUS_INVALID:
-            return 3;
+        default:
+            return 0;
     }
 }
 
@@ -818,9 +825,6 @@ void Cyanide::set_self_user_status(int status)
             break;
         case 2:
             self.user_status = TOX_USERSTATUS_BUSY;
-            break;
-         default:
-            self.user_status = TOX_USERSTATUS_INVALID;
             break;
     }
     tox_set_user_status(tox, self.user_status);
@@ -855,19 +859,24 @@ QString Cyanide::get_friend_status_icon(int fid)
     Friend f = fid == -1 ? self : friends[fid];
     uint8_t status = f.user_status;
 
-    switch(status) {
-    case TOX_USERSTATUS_NONE:
-        url.append(f.connection_status ? "online" : "offline");
-        break;
-    case TOX_USERSTATUS_AWAY:
-        url.append("away");
-        break;
-    case TOX_USERSTATUS_BUSY:
-        url.append("busy");
-        break;
-    default: //case TOX_USERSTATUS_INVALID:
-        qDebug() << "invalid user status";
+    Q_ASSERT(self.user_status != TOX_USERSTATUS_INVALID);
+
+    if(!f.connection_status) {
         url.append("offline");
+    } else {
+        switch(status) {
+        case TOX_USERSTATUS_NONE:
+            url.append("online");
+            break;
+        case TOX_USERSTATUS_AWAY:
+            url.append("away");
+            break;
+        case TOX_USERSTATUS_BUSY:
+            url.append("busy");
+            break;
+        default: //TOX_USERSTATUS_INVALID:
+            url.append("offline");
+        }
     }
     
     if(f.notification)
