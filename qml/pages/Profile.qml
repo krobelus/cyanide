@@ -3,7 +3,7 @@ import Sailfish.Silica 1.0
 
 Page {
     id: pageProfile
-    allowedOrientations: Orientation.Landscape | Orientation.Portrait
+    allowedOrientations: Orientation.All
     Component.onCompleted: {
         activePage = "Profile.qml"
         currentFID = 0
@@ -22,9 +22,8 @@ Page {
         text: cyanide.get_friend_name(selfID)
 
         EnterKey.onClicked: {
-            if(cyanide.set_self_name(text))
-                focus = false
-            // else TODO
+            cyanide.set_self_name(text)
+            focus = false
         }
     }
     TextField {

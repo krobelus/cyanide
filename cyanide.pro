@@ -14,7 +14,7 @@ TARGET = cyanide
 
 CONFIG += sailfishapp
 
-QT += sql dbus
+QT += sql dbus multimedia
 
 SOURCES += \
     src/cyanide.cpp \
@@ -38,7 +38,8 @@ OTHER_FILES += \
     qml/pages/AddFriend.qml \
     qml/pages/AcceptFriend.qml \
     cyanide.png \
-    rpm/cyanide.changes
+    rpm/cyanide.changes \
+    qml/pages/Settings.qml
 
 # to disable building translations every time, comment out the
 # following CONFIG line

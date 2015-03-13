@@ -86,7 +86,7 @@ Page {
                                  ,'timestamp': new Date(cyanide.get_message_timestamp(currentFID, i))
                                  })
                 cyanide.set_friend_notification(currentFID, false)
-                //messageList.scrollToBottom()
+                messageList.positionViewAtEnd()
             }
             Connections {
                 target: cyanide
@@ -97,7 +97,7 @@ Page {
                                      ,'message_text': cyanide.get_message_rich_text(currentFID, mid)
                                      ,'timestamp': cyanide.get_message_timestamp(currentFID, mid)
                                      })
-                        messageList.scrollToBottom()
+                        messageList.positionViewAtEnd()
                     }
                 }
                 onSignal_typing_change: {
@@ -119,7 +119,7 @@ Page {
                     id: messageText
                     text: message_text
                     width: pageFriend.width*2/3
-                    font.pixelSize: Theme.fontSizeMedium
+                    font.pixelSize: Theme.fontSizeSmall
                     color: author ? Theme.secondaryColor : Theme.primaryColor
                     horizontalAlignment: author ? Text.AlignLeft : Text.AlignRight
 
@@ -164,7 +164,10 @@ Page {
             width: parent.width - Theme.paddingLarge
             inputMethodHints: Qt.ImhNoAutoUppercase
             focus: false
-            y: pageFriend.height - height - Theme.paddingLarge
+            onYChanged: messageList.positionViewAtEnd()
+            anchors {
+                bottom: parent.bottom
+            }
             EnterKey.onClicked: {
                 // TODO split long messages
                 if(cyanide.send_friend_message(currentFID, text)) {

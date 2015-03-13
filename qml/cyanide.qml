@@ -21,10 +21,6 @@ ApplicationWindow
     /* the currently activated page (is there a better way to get this?) */
     property string activePage: ""
 
-    property bool notificationNameChange: true
-    property bool notificationConnectionStatus: false
-    property bool notificationFriendMessage: true
-
     function refreshFriendList() {
         friendList.clear()
         for(var i = -1; i < cyanide.get_number_of_friends(); i++)
@@ -48,14 +44,19 @@ ApplicationWindow
             var i = fid + 1
             var name = cyanide.get_friend_name(fid)
             friendList.setProperty(i, "friend_name", name)
-            if(fid != selfID && notificationNameChange
+            if(fid != selfID && settings.get("notification-friend-name-change")
                 && !(activePage == "Friend.qml" && currentFID == fid))
             {
                 currentFID = fid
-                notify(nNameChange, previous_name + qsTr(" is now known as ") + name, "")
+                if(previous_name !== name)
+                    notify(nNameChange, previous_name + qsTr(" is now known as ") + name, "")
             }
         }
         onSignal_user_status: {
+            var i = fid + 1
+            friendList.setProperty(i, "friend_status_icon", cyanide.get_friend_status_icon(fid))
+        }
+        onSignal_notification: {
             var i = fid + 1
             friendList.setProperty(i, "friend_status_icon", cyanide.get_friend_status_icon(fid))
         }
@@ -64,12 +65,14 @@ ApplicationWindow
             var online = cyanide.get_friend_connection_status(fid)
             friendList.setProperty(i, "friend_connection_status", online)
             friendList.setProperty(i, "friend_status_icon", cyanide.get_friend_status_icon(fid))
-            if(fid != selfID && notificationConnectionStatus
-                && !(activePage == "Friend.qml" && currentFID == fid))
-            {
+            if(fid != selfID) {
                 if(online) {
-                    currentFID = fid
-                    notify(nConnectionStatus, cyanide.get_friend_name(fid), "is now online")
+                    cyanide.play_sound(settings.get("sound-friend-connected"))
+                    var n = settings.get("notification-friend-connected")
+                    if(n === "true") {
+                        currentFID = fid
+                        notify(nConnectionStatus, cyanide.get_friend_name(fid), "is now online")
+                    }
                 }
             }
         }
@@ -79,14 +82,25 @@ ApplicationWindow
         }
         onSignal_friend_message: {
             var i = fid + 1
-            friendList.setProperty(i, "friend_status_icon", cyanide.get_friend_status_icon(fid))
-            if(fid != selfID && notificationFriendMessage
-                && !(activePage == "Friend.qml" && currentFID == fid))
-            {
-                currentFID = fid
-                notify(nFriendMessage, cyanide.get_friend_name(fid), cyanide.get_message_text(fid, mid))
+            if(fid != selfID) {
+                cyanide.play_sound(settings.get("sound-message-received"))
+                if(settings.get("notification-message-received") === "true"
+                    && !(activePage == "Friend.qml" && currentFID == fid))
+                {
+                    currentFID = fid
+                    notify(nFriendMessage, cyanide.get_friend_name(fid), cyanide.get_message_text(fid, mid))
+                }
             }
         }
+        onSignal_friend_request: {
+            cyanide.play_sound(settings.get("sound-friend-request-received"))
+            if(settings.get("notification-friend-request-received"))
+                notify(nDefault, "Friend request received")
+        }
+    }
+
+    Notification {
+        id: nDefault
     }
 
     Notification {
