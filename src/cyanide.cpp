@@ -670,7 +670,7 @@ QString Cyanide::send_friend_request(QString id_string, QString msg_string)
 QString Cyanide::send_friend_request_unboxed(char *name, int length, char *msg, int msg_length)
 {
     if(!length) {
-        return "No name";
+        return tr("No name");
     }
 
     uint8_t id[TOX_FRIEND_ADDRESS_SIZE];
@@ -683,7 +683,7 @@ QString Cyanide::send_friend_request_unboxed(char *name, int length, char *msg, 
         //void *data = dns_request((char*)name_cleaned, length_cleaned);
         void *data = dns_request((char*)name, length);
         if(data == NULL)
-            return "Invalid Tox ID";
+            return tr("Invalid Tox ID");
         memcpy(id, data, TOX_FRIEND_ADDRESS_SIZE);
         free(data);
     }

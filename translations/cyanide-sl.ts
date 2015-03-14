@@ -57,6 +57,14 @@
         <source>Error: No memory</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>No name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Invalid Tox ID</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Friend</name>
