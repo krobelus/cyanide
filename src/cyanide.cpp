@@ -933,7 +933,7 @@ QString Cyanide::get_message_rich_text(int fid, int mid)
     const QString url_token = "[" + url_chars + "]+";
 
     /* match either protocol:address or email@domain or example.org */
-    QRegExp rx("(\\b[A-Za-z0-9]+:[^\\s]+\\b"
+    QRegExp rx("(\\b[A-Za-z][A-Za-z0-9]*:[^\\s]+\\b"
                "|\\b" + email_token + "@" + email_token + "\\b"
                "|\\b" + url_token  + "\\." + email_token + "\\b)");
     QString link;
