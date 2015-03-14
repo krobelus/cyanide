@@ -18,6 +18,8 @@
 
 Cyanide cyanide;
 
+Settings settings;
+
 Tox_Options options;
 
 int main(int argc, char *argv[])
@@ -33,9 +35,8 @@ int main(int argc, char *argv[])
     cyanide.load_tox_and_stuff_pretty_please();
     std::thread tox_thread(init, &cyanide);
 
-    Settings *settings = new Settings();
-    settings->init();
-    view->rootContext()->setContextProperty("settings", settings);
+    settings.init();
+    view->rootContext()->setContextProperty("settings", &settings);
     view->rootContext()->setContextProperty("cyanide", &cyanide);
     view->setSource(SailfishApp::pathTo("qml/cyanide.qml"));
     view->showFullScreen();
@@ -664,7 +665,10 @@ QString Cyanide::send_friend_request(QString id_string, QString msg_string)
     char msg[msg_len];
     to_tox_string(msg_string, (uint8_t*)msg);
 
-    return send_friend_request_unboxed(id, id_len, msg, msg_len);
+    QString error = send_friend_request_unboxed(id, id_len, msg, msg_len);
+    if(error == "")
+        settings.add_friend_address(friends.size()-1, id_string);
+    return error;
 }
 
 QString Cyanide::send_friend_request_unboxed(char *name, int length, char *msg, int msg_length)
@@ -757,6 +761,7 @@ void Cyanide::remove_friend(int fid)
     tox_del_friend(tox, fid);
     save_needed = true;
     friends.erase(friends.begin() + fid);
+    settings.remove_friend(fid);
 }
 
 void Cyanide::play_sound(QString file)

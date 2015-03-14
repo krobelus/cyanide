@@ -74,7 +74,7 @@
     </message>
     <message>
         <source>Copy Tox ID to clipboard</source>
-        <translation type="vanished">Kopiera Tox-ID till Urklipp</translation>
+        <translation>Kopiera Tox-ID till Urklipp</translation>
     </message>
     <message>
         <source>About to remove friend</source>

@@ -35,10 +35,9 @@ public:
     Q_INVOKABLE void set(QString name, QString value);
     Q_INVOKABLE void set_current_index(QString name, int i);
 
-    /*
-    Q_INVOKABLE void add_friend_address(const QVariant fid, const QVariant address);
-    Q_INVOKABLE QString get_friend_address(const QVariant fid);
-    */
+    Q_INVOKABLE void add_friend_address(int fid, QString address);
+    Q_INVOKABLE QString get_friend_address(int fid);
+    void remove_friend(int fid);
 };
 
 #endif // SETTINGS_H

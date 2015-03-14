@@ -187,17 +187,24 @@ QString Settings::db_get(QString name)
 }
 */
 
-/*
-void Settings::add_friend_address(const QVariant fid, const QVariant address)
+void Settings::add_friend_address(int fid, QString address)
 {
     QSqlQuery q;
-    q.prepare("INSERT INTO friends (fid, address) VALUES (?, ?)");
+    q.prepare("INSERT OR REPLACE INTO friends (fid, address) VALUES (?, ?)");
     q.addBindValue(fid);
     q.addBindValue(address);
     execute_sql_query(q);
 }
 
-QString Settings::get_friend_address(const QVariant fid)
+void Settings::remove_friend(int fid)
+{
+    QSqlQuery q;
+    q.prepare("DELETE FROM friends WHERE fid = ?");
+    q.addBindValue(fid);
+    execute_sql_query(q);
+}
+
+QString Settings::get_friend_address(int fid)
 {
     QSqlQuery q;
     q.prepare("SELECT address FROM friends WHERE fid = ?");
@@ -209,4 +216,3 @@ QString Settings::get_friend_address(const QVariant fid)
         return "";
     }
 }
-*/

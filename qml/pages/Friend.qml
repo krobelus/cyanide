@@ -42,14 +42,13 @@ Page {
                     })
                 }
             }
-            /*
             MenuItem {
                 text: qsTr("Copy Tox ID to clipboard")
+                enabled: settings.get_friend_address(currentFID) !== ""
                 onClicked: {
-                    clipboard.setClipboard(cyanide.get_friend_cid(currentFID))
+                    clipboard.setClipboard(settings.get_friend_address(currentFID))
                 }
             }
-            */
         }
 
         PageHeader {
