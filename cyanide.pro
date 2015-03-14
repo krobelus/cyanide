@@ -43,10 +43,13 @@ OTHER_FILES += \
 
 # to disable building translations every time, comment out the
 # following CONFIG line
-CONFIG += sailfishapp_i18n
-TRANSLATIONS += translations/cyanide-de.ts \
+CONFIG +=  sailfishapp_i18n_idbased
+
+TRANSLATIONS += translations/cyanide-en.ts \
+                translations/cyanide-de.ts \
                 translations/cyanide-ru.ts \
-                translations/cyanide-sv.ts
+                translations/cyanide-sv.ts \
+                translations/cyanide-sl.ts
 
 HEADERS += \
     src/cyanide.h \
@@ -66,8 +69,9 @@ DEPENDPATH += $$PWD/res/usr/include
 
 QMAKE_CXXFLAGS += "-std=c++0x -pthread"
 QMAKE_CXXFLAGS += "-Wno-write-strings"
+QMAKE_CXXFLAGS += "-Wno-unused-parameter"
 QMAKE_CXXFLAGS += "-Wno-pointer-arith"
-QMAKE_CXXFLAGS += "-Wno-unused-function -Wno-comment -Wno-unused-parameter"
+#QMAKE_CXXFLAGS += "-Wno-unused-function -Wno-comment
 
 RESOURCES += \
     resources.qrc

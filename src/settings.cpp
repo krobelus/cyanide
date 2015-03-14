@@ -12,19 +12,27 @@ QString create_tables[] = {
 typedef struct {QString display_name; QString type; QString value;} settings_entry;
 
 std::map<QString, settings_entry> entries = {
+        //% "Enable sounds"
         { "enable-sounds", { qtTrId("setting-enable-sounds"), "bool", "true" } }
+        //% "Sound for incoming messages"
       , { "sound-message-received", { qtTrId("setting-sound-message-received")
             , "sound", "/usr/share/sounds/jolla-ringtones/stereo/jolla-imtone.wav" } }
+        //% "Sound for incoming friend requests"
       , { "sound-friend-request-received", { qtTrId("setting-sound-friend-request-received")
             , "sound", "/usr/share/sounds/jolla-ringtones/stereo/jolla-emailtone.wav" } }
+        //% "Sound when a friend comes online"
       , { "sound-friend-connected", { qtTrId("setting-sound-friend-connected")
             , "sound", "/usr/share/sounds/jolla-ringtones/stereo/jolla-imtone.wav" } }
+        //% "Notify when a message is received"
       , { "notification-message-received", { qtTrId("setting-notification-message-received")
             , "bool", "true" } }
+        //% "Notify when a friend request is received"
       , { "notification-friend-request-received", { qtTrId("setting-notification-friend-request-received")
             , "bool", "true" } }
+        //% "Notify when a friend comes online"
       , { "notification-friend-connected", { qtTrId("setting-notification-friend-connected")
             , "bool", "true" } }
+        //% "Notify when a friend changes his name"
       , { "notification-friend-name-change", { qtTrId("setting-notification-friend-name-change")
             , "bool", "true" } }
     };
@@ -32,11 +40,12 @@ std::map<QString, settings_entry> entries = {
 typedef struct {QString display_name; QString value;} type_entry;
 std::map<QString, std::vector<type_entry>> types = {
     { "bool",
-        { { "n/a", "true" }
-        , { "n/a", "false" }
+        { { qtTrId("setting-yes"), "true" }
+        , { qtTrId("setting-no"), "false" }
         }
     },
     { "sound",
+      //% "None"
         { { qtTrId("setting-sound-none"), "none" }
         , { "jolla-alarm", "/usr/share/sounds/jolla-ringtones/stereo/jolla-alarm.wav" }
         , { "jolla-calendar-alarm", "/usr/share/sounds/jolla-ringtones/stereo/jolla-calendar-alarm.wav" }
@@ -89,21 +98,62 @@ void Settings::init()
         q.addBindValue(i->second.value);
     }
     execute_sql_query(q);
+
+    q.setForwardOnly(true);
+    q.prepare("SELECT name, value FROM settings");
+    execute_sql_query(q);
+    while(q.next()) {
+        QString name = q.value("name").toString();
+        QString value = q.value("value").toString();
+        if(name != "db_version")
+            entries.at(name).value = value;
+    }
 }
 
 QString Settings::get(QString name)
 {
-    return entries.find(name)->second.value;
+    return entries.at(name).value;
 }
 
 QString Settings::get_type(QString name)
 {
-    return entries.find(name)->second.type;
+    return entries.at(name).type;
 }
 
 QString Settings::get_display_name(QString name)
 {
-    return entries.find(name)->second.display_name;
+    return entries.at(name).display_name;
+}
+
+int Settings::get_current_index(QString name)
+{
+    QString value = get(name);
+    QString type = get_type(name);
+    std::vector<type_entry> ts = types.at(type);
+    for(size_t i=0; i<ts.size(); i++) {
+        type_entry t = ts[i];
+        if(t.value == value)
+            return i;
+    }
+    return 0;
+}
+
+QStringList Settings::get_names()
+{
+    QStringList sl;
+    for(auto i=entries.begin(); i!=entries.end(); i++) {
+        sl << i->first;
+    }
+    return sl;
+}
+
+QStringList Settings::get_display_names(QString type)
+{
+    QStringList sl;
+    std::vector<type_entry> ts = types.at(type);
+    for(size_t i=0; i<ts.size(); i++)
+        sl << ts[i].display_name;
+    return sl;
 }
 
 void Settings::set(QString name, QString value)
@@ -112,7 +162,7 @@ void Settings::set(QString name, QString value)
     db_set(name, value);
 }
 
-void Settings::set(QString name, int i)
+void Settings::set_current_index(QString name, int i)
 {
     QString type = get_type(name);
     QString value = types.find(type)->second[i].value;

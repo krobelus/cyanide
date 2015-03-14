@@ -6,6 +6,7 @@
 #include <nemonotifications-qt5/notification.h>
 #include <QtQuick>
 #include <QSound>
+#include <QTranslator>
 
 #include "cyanide.h"
 #include "tox_bootstrap.h"

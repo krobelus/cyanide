@@ -18,8 +18,27 @@ ApplicationWindow
     /* the list of friends */
     property ListModel friendList: ListModel { id: friendList }
 
+    property ListModel settingsList: ListModel { id: settingsList }
+
     /* the currently activated page (is there a better way to get this?) */
     property string activePage: ""
+
+    Component.onCompleted: loadSettings()
+    function loadSettings() {
+        var nameList = settings.get_names()
+        for(var i in nameList) {
+            appendSetting(nameList[i])
+        }
+    }
+
+    function appendSetting(name) {
+        settingsList.append({
+                        'name': name,
+                        'type': settings.get_type(name),
+                        'display_name': settings.get_display_name(name),
+                        'current_index': settings.get_current_index(name),
+                            })
+    }
 
     function refreshFriendList() {
         friendList.clear()
