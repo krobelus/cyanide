@@ -24,6 +24,41 @@
     </message>
 </context>
 <context>
+    <name>Cyanide</name>
+    <message>
+        <source>Error: Message is too long</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error: Empty message</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error: Tox ID is self ID</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error: Tox ID is already in friend list</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error: Unknown</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error: Invalid Tox ID (bad checksum)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error: Invalid Tox ID (bad nospam value)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error: No memory</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Friend</name>
     <message>
         <source>Remove friend</source>

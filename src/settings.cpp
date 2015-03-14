@@ -40,7 +40,7 @@ std::map<QString, std::vector<type_entry>> Settings::types = {
         }
     },
     { "sound",
-        { { tr("No sound"), "none" }
+        { { tr("No sound"), "" }
         , { "jolla-alarm", "/usr/share/sounds/jolla-ringtones/stereo/jolla-alarm.wav" }
         , { "jolla-calendar-alarm", "/usr/share/sounds/jolla-ringtones/stereo/jolla-calendar-alarm.wav" }
         , { "jolla-emailtone", "/usr/share/sounds/jolla-ringtones/stereo/jolla-emailtone.wav" }

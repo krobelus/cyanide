@@ -705,21 +705,21 @@ QString Cyanide::send_friend_request_id(const uint8_t *id, const uint8_t *msg, i
     int32_t fid = tox_add_friend(tox, id, msg, msg_length);
     switch(fid) {
         case TOX_FAERR_TOOLONG:
-            return "Error: Message is too long";
+            return tr("Error: Message is too long");
         case TOX_FAERR_NOMESSAGE:
-            return "Error: Empty message";
+            return tr("Error: Empty message");
         case TOX_FAERR_OWNKEY:
-            return "Error: Empty message";
+            return tr("Error: Tox ID is self ID");
         case TOX_FAERR_ALREADYSENT:
-            return "Error: Tox ID is already in friend list";
+            return tr("Error: Tox ID is already in friend list");
         case TOX_FAERR_UNKNOWN:
-            return "Error: Unknown";
+            return tr("Error: Unknown");
         case TOX_FAERR_BADCHECKSUM:
-            return "Error: Invalid Tox ID (bad checksum)";
+            return tr("Error: Invalid Tox ID (bad checksum)");
         case TOX_FAERR_SETNEWNOSPAM:
-            return "Error: Invalid Tox ID (bad nospam value)";
+            return tr("Error: Invalid Tox ID (bad nospam value)");
         case TOX_FAERR_NOMEM:
-            return "Error: No memory";
+            return tr("Error: No memory");
         default:
             return "";
     }
@@ -763,7 +763,7 @@ void Cyanide::play_sound(QString file)
 {
     //QSound sound(file);
     //sound.play();
-    if(file == "none")
+    if(file == "")
         return;
 
     QSound::play(file);
