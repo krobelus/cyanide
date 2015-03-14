@@ -6,12 +6,19 @@
 #include <QSqlError>
 #include <QVariant>
 
+typedef struct {QString display_name; QString type; QString value;} settings_entry;
+
+typedef struct {QString display_name; QString value;} type_entry;
+
 class Settings : public QObject
 {
     Q_OBJECT
 
 private:
     void db_set(QString name, QString value);
+
+    static std::map<QString, settings_entry> entries;
+    static std::map<QString, std::vector<type_entry>> types;
 
     /* QString db_get(QString name); */
 

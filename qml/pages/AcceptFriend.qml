@@ -6,12 +6,11 @@ Page {
     allowedOrientations: Orientation.All
     Component.onCompleted: {
         activePage = "AcceptFriend.qml"
-        currentFID = 0
     }
 
     Text {
         id: cid
-        text: cyanide.get_friend_public_key(currentFID)
+        text: cyanide.get_friend_cid(currentFID)
         color: Theme.primaryColor
         x: Theme.paddingMedium
         y: 2 * Theme.paddingLarge

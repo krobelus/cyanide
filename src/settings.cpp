@@ -9,44 +9,38 @@ QString create_tables[] = {
         "CREATE TABLE IF NOT EXISTS settings (name TEXT PRIMARY KEY, value TEXT)",
         "CREATE TABLE IF NOT EXISTS friends (fid INT PRIMARY KEY, address TEXT)"};
 
-typedef struct {QString display_name; QString type; QString value;} settings_entry;
-
-std::map<QString, settings_entry> entries = {
-        //% "Enable sounds"
-        { "enable-sounds", { qtTrId("setting-enable-sounds"), "bool", "true" } }
-        //% "Sound for incoming messages"
-      , { "sound-message-received", { qtTrId("setting-sound-message-received")
+std::map<QString, settings_entry> Settings::entries = {
+      // { "enable-sounds", { tr("Enable sounds"), "bool", "true" } }
+        { "sound-when", { tr("Play this sound when..."), "none", "" } }
+      , { "sound-message-received", { tr("I receive a message:")
             , "sound", "/usr/share/sounds/jolla-ringtones/stereo/jolla-imtone.wav" } }
-        //% "Sound for incoming friend requests"
-      , { "sound-friend-request-received", { qtTrId("setting-sound-friend-request-received")
+      , { "sound-friend-request-received", { tr("I receive a friend request:")
             , "sound", "/usr/share/sounds/jolla-ringtones/stereo/jolla-emailtone.wav" } }
-        //% "Sound when a friend comes online"
-      , { "sound-friend-connected", { qtTrId("setting-sound-friend-connected")
-            , "sound", "/usr/share/sounds/jolla-ringtones/stereo/jolla-imtone.wav" } }
-        //% "Notify when a message is received"
-      , { "notification-message-received", { qtTrId("setting-notification-message-received")
+      //, { "sound-friend-connected", { tr("a friend comes online:")
+      //      , "sound", "/usr/share/sounds/jolla-ringtones/stereo/jolla-imtone.wav" } }
+      , { "notification-when", { tr("Notify me when..."), "none", "" } }
+      , { "notification-message-received", { tr("I receive a message:")
             , "bool", "true" } }
-        //% "Notify when a friend request is received"
-      , { "notification-friend-request-received", { qtTrId("setting-notification-friend-request-received")
+      , { "notification-friend-request-received", { tr("I receive a friend request:")
             , "bool", "true" } }
-        //% "Notify when a friend comes online"
-      , { "notification-friend-connected", { qtTrId("setting-notification-friend-connected")
+      , { "notification-friend-connected", { tr("a friend comes online")
             , "bool", "true" } }
-        //% "Notify when a friend changes his name"
-      , { "notification-friend-name-change", { qtTrId("setting-notification-friend-name-change")
+      , { "notification-friend-name-change", { tr("a friend changes his name")
             , "bool", "true" } }
     };
 
-typedef struct {QString display_name; QString value;} type_entry;
-std::map<QString, std::vector<type_entry>> types = {
+std::map<QString, std::vector<type_entry>> Settings::types = {
+    { "none",
+        {
+        }
+    },
     { "bool",
-        { { qtTrId("setting-yes"), "true" }
-        , { qtTrId("setting-no"), "false" }
+        { { tr("Yes"), "true" }
+        , { tr("No"), "false" }
         }
     },
     { "sound",
-      //% "None"
-        { { qtTrId("setting-sound-none"), "none" }
+        { { tr("No sound"), "none" }
         , { "jolla-alarm", "/usr/share/sounds/jolla-ringtones/stereo/jolla-alarm.wav" }
         , { "jolla-calendar-alarm", "/usr/share/sounds/jolla-ringtones/stereo/jolla-calendar-alarm.wav" }
         , { "jolla-emailtone", "/usr/share/sounds/jolla-ringtones/stereo/jolla-emailtone.wav" }
@@ -87,12 +81,12 @@ void Settings::init()
 
     db_set("db_version", db_version);
 
-    QString qstr("INSERT OR IGNORE INTO settings (name, value) VALUES (?, ?)");
+    QString str("INSERT OR IGNORE INTO settings (name, value) VALUES (?, ?)");
     for(size_t i=1; i<entries.size(); i++) {
-        qstr.append(",(?,?)");
+            str.append(",(?,?)");
     }
 
-    q.prepare(qstr);
+    q.prepare(str);
     for(auto i=entries.begin(); i!=entries.end(); i++) {
         q.addBindValue(i->first);
         q.addBindValue(i->second.value);

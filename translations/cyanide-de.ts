@@ -15,12 +15,12 @@
 <context>
     <name>AddFriend</name>
     <message>
-        <source>Tox me maybe?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Send friend request</source>
         <translation>Freundschaftsanfrage senden</translation>
+    </message>
+    <message>
+        <source>Tox me maybe?</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -30,20 +30,16 @@
         <translation>Freund entfernen</translation>
     </message>
     <message>
-        <source>About to remove friend</source>
-        <translation type="vanished">Freund wird entfernt</translation>
-    </message>
-    <message>
         <source>Opening URL...</source>
-        <translation>URL wird geöffnet..</translation>
+        <translation>URL wird geöffnet...</translation>
     </message>
     <message>
         <source>Removing friend</source>
         <translation>Freund wird entfernt</translation>
     </message>
     <message>
-        <source> is typing a message</source>
-        <translation>schreibt gerade</translation>
+        <source> is typing...</source>
+        <translation> schreibt gerade...</translation>
     </message>
 </context>
 <context>
@@ -55,6 +51,10 @@
     <message>
         <source>Friends</source>
         <translation>Freunde</translation>
+    </message>
+    <message>
+        <source>Settings</source>
+        <translation>Einstellungen</translation>
     </message>
 </context>
 <context>
@@ -82,6 +82,49 @@
     <message>
         <source>Busy</source>
         <translation>Beschäftigt</translation>
+    </message>
+</context>
+<context>
+    <name>Settings</name>
+    <message>
+        <source>Settings</source>
+        <translation>Einstellungen</translation>
+    </message>
+    <message>
+        <source>Play this sound when...</source>
+        <translation>Diesen Klang spielen, wenn...</translation>
+    </message>
+    <message>
+        <source>I receive a message:</source>
+        <translation>ich eine Nachricht bekomme:</translation>
+    </message>
+    <message>
+        <source>I receive a friend request:</source>
+        <translation>ich eine Freundschaftsanfrage bekomme:</translation>
+    </message>
+    <message>
+        <source>Notify me when...</source>
+        <translation>Benachrichtige mich, wenn...</translation>
+    </message>
+    <message>
+        <source>a friend comes online</source>
+        <translation>ein Freund online erscheint:</translation>
+    </message>
+    <message>
+        <source>a friend changes his name</source>
+        <translation>ein Freund seinen Namen ändert:</translation>
+    </message>
+    <message>
+        <source>Yes</source>
+        <translation>Ja</translation>
+    </message>
+    <message>
+        <source>No</source>
+        <translation>Nein</translation>
+    </message>
+    <message>
+        <source>No sound</source>
+        <translation>Keinen Klang</translation>
     </message>
 </context>
 <context>

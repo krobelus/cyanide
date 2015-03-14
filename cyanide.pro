@@ -43,10 +43,9 @@ OTHER_FILES += \
 
 # to disable building translations every time, comment out the
 # following CONFIG line
-CONFIG +=  sailfishapp_i18n_idbased
+CONFIG +=  sailfishapp_i18n
 
-TRANSLATIONS += translations/cyanide-en.ts \
-                translations/cyanide-de.ts \
+TRANSLATIONS += translations/cyanide-de.ts \
                 translations/cyanide-ru.ts \
                 translations/cyanide-sv.ts \
                 translations/cyanide-sl.ts

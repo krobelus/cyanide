@@ -37,8 +37,8 @@ Page {
                 id: comboBox
                 x: Theme.paddingLarge
                 width: parent.width - 2 * Theme.paddingLarge
-                label: qsTrId(display_name)
-                currentIndex: settings.get_current_index(name)
+                label: qsTr(display_name)
+                currentIndex: name === "" ? 0 : settings.get_current_index(name)
 
                 menu: buildContextMenu(type)
                 onCurrentIndexChanged: settings.set_current_index(name, currentIndex)

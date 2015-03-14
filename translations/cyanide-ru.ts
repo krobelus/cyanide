@@ -52,6 +52,10 @@
         <source>Friends</source>
         <translation>Друзья</translation>
     </message>
+    <message>
+        <source>Settings</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Profile</name>
@@ -78,6 +82,49 @@
     <message>
         <source>Busy</source>
         <translation>Занят</translation>
+    </message>
+</context>
+<context>
+    <name>Settings</name>
+    <message>
+        <source>Settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Play this sound when...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>I receive a message:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>I receive a friend request:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Notify me when...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>a friend comes online</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>a friend changes his name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Yes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No sound</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

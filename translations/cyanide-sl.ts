@@ -1,6 +1,6 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1">
+<TS version="2.1" language="sl_SI">
 <context>
     <name>AcceptFriend</name>
     <message>
@@ -31,11 +31,23 @@
     </message>
     <message>
         <source>About to remove friend</source>
-        <translation type="unfinished">Prijatelj bo odstranjen</translation>
+        <translation type="obsolete">Prijatelj bo odstranjen</translation>
     </message>
     <message>
         <source>Launching web browser...</source>
-        <translation>Odpiram spletni brskalnik</translation>
+        <translation type="vanished">Odpiram spletni brskalnik</translation>
+    </message>
+    <message>
+        <source>Removing friend</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> is typing...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Opening URL...</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -47,6 +59,10 @@
     <message>
         <source>Friends</source>
         <translation>Prijatelji</translation>
+    </message>
+    <message>
+        <source>Settings</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -74,6 +90,49 @@
     <message>
         <source>Busy</source>
         <translation>Zaposlen (ne zaseden)</translation>
+    </message>
+</context>
+<context>
+    <name>Settings</name>
+    <message>
+        <source>Settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Play this sound when...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>I receive a message:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>I receive a friend request:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Notify me when...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>a friend comes online</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>a friend changes his name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Yes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No sound</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

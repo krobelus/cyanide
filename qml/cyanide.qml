@@ -32,11 +32,10 @@ ApplicationWindow
     }
 
     function appendSetting(name) {
-        settingsList.append({
+        settingsList.insert(0, {
                         'name': name,
                         'type': settings.get_type(name),
                         'display_name': settings.get_display_name(name),
-                        'current_index': settings.get_current_index(name),
                             })
     }
 
@@ -86,7 +85,7 @@ ApplicationWindow
             friendList.setProperty(i, "friend_status_icon", cyanide.get_friend_status_icon(fid))
             if(fid != selfID) {
                 if(online) {
-                    cyanide.play_sound(settings.get("sound-friend-connected"))
+                    //cyanide.play_sound(settings.get("sound-friend-connected"))
                     var n = settings.get("notification-friend-connected")
                     if(n === "true") {
                         currentFID = fid

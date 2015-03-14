@@ -26,10 +26,6 @@
 <context>
     <name>Friend</name>
     <message>
-        <source>Opening URL...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Remove friend</source>
         <translation type="unfinished"></translation>
     </message>
@@ -38,12 +34,20 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source> is typing a message</source>
+        <source> is typing...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Opening URL...</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>FriendList</name>
+    <message>
+        <source>Settings</source>
+        <translation type="unfinished"></translation>
+    </message>
     <message>
         <source>Add a friend</source>
         <translation type="unfinished"></translation>
@@ -64,10 +68,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Copy my Tox ID</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Online</source>
         <translation type="unfinished"></translation>
     </message>
@@ -77,6 +77,53 @@
     </message>
     <message>
         <source>Busy</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Copy my Tox ID</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Settings</name>
+    <message>
+        <source>Settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Play this sound when...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>I receive a message:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>I receive a friend request:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Notify me when...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>a friend comes online</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>a friend changes his name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Yes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No sound</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
