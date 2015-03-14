@@ -63,15 +63,18 @@ void execute_sql_query(QSqlQuery q)
 
 void Settings::init()
 {
+    bool success;
     QSqlDatabase db;
     QString dbdir = CONFIG_PATH;
     if (!QDir(dbdir).exists())
         QDir().mkpath(dbdir);
 
     db = QSqlDatabase::addDatabase("QSQLITE");
-    Q_ASSERT(db.isValid());
+    success = db.isValid();
+    Q_ASSERT(success);
     db.setDatabaseName(dbdir + QDir::separator() + "cyanide.sqlite");
-    Q_ASSERT(db.open());
+    success = db.open();
+    Q_ASSERT(success);
 
     QSqlQuery q;
     for(size_t i=0; i<countof(create_tables); i++) {
