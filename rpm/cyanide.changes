@@ -12,6 +12,15 @@
 # - Scrubbed the deck
 # - Hoisted the sails
 
+* Sat Mar 14 2015 Johannes Altmanninger <aclopte@gmail.com> 0.1.8-1
+- automatically scroll to the last message
+- text log stays on top of the keyboard
+- improved link handling
+- show when friend is typing
+- store Tox ID of new friends, can be copied in the menu
+- sound notifications
+- added an experimental settings page
+
 * Tue Mar 10 2015 Johannes Altmanninger <aclopte@gmail.com> 0.1.7-1
 - nemomobile notifications when a message is received
 - allow landscape mode

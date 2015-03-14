@@ -1,12 +1,12 @@
 Name: cyanide
 Summary: Tox client for SailfishOS
-Version: 0.1.7
+Version: 0.1.8
 Release: 1
 # The contents of the Group field should be one of the groups listed here:
 # http://gitorious.org/meego-developer-tools/spectacle/blobs/master/data/GROUPS
 Group: Qt/Qt
 URL: https://github.com/krobelus/cyanide
-License: COPYING
+License: GPLv3
 # This must be generated before uploading a package to a remote build service.
 # Usually this line does not need to be modified.
 Sources:

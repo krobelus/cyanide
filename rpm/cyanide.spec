@@ -13,10 +13,10 @@ Name:       cyanide
 %{!?qtc_make:%define qtc_make make}
 %{?qtc_builddir:%define _builddir %qtc_builddir}
 Summary:    Tox client for SailfishOS
-Version:    0.1.7
+Version:    0.1.8
 Release:    1
 Group:      Qt/Qt
-License:    COPYING
+License:    GPLv3
 URL:        https://github.com/krobelus/cyanide
 Source0:    %{name}-%{version}.tar.bz2
 Source100:  cyanide.yaml
