@@ -76,6 +76,10 @@
         <source> is typing...</source>
         <translation> печатает...</translation>
     </message>
+    <message>
+        <source>Settings</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>FriendList</name>

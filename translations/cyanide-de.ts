@@ -76,6 +76,10 @@
         <source> is typing...</source>
         <translation> schreibt gerade...</translation>
     </message>
+    <message>
+        <source>Settings</source>
+        <translation>Einstellungen</translation>
+    </message>
 </context>
 <context>
     <name>FriendList</name>

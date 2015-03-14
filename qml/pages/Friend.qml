@@ -29,6 +29,10 @@ Page {
 
         PullDownMenu {
             MenuItem {
+                text: qsTr("Settings")
+                onClicked: pageStack.push(Qt.resolvedUrl("Settings.qml"))
+            }
+            MenuItem {
                 text: qsTr("Remove friend")
                 onClicked: {
                     remorsePopup.execute(qsTr("Removing friend"), function() {
