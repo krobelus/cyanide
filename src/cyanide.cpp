@@ -41,6 +41,8 @@ int main(int argc, char *argv[])
     view->setSource(SailfishApp::pathTo("qml/cyanide.qml"));
     view->showFullScreen();
 
+    QSound::play("");
+
     int result = app->exec();
 
     //TODO tox_kill
@@ -766,8 +768,6 @@ void Cyanide::remove_friend(int fid)
 
 void Cyanide::play_sound(QString file)
 {
-    //QSound sound(file);
-    //sound.play();
     if(file == "")
         return;
 
