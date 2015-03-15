@@ -7,7 +7,7 @@ Page {
         var scr = "import QtQuick 2.0; import Sailfish.Silica 1.0; ContextMenu {"
         var values = settings.get_display_names(type)
         for(var i in values)
-            scr += "MenuItem { text:\""+values[i]+"\" } "
+            scr += "MenuItem { text:\""+qsTr(values[i])+"\" } "
         scr += "}"
         var menu = Qt.createQmlObject(scr, pageSettings, "myMenu")
         return menu
