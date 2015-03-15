@@ -27,43 +27,44 @@
     <name>Cyanide</name>
     <message>
         <source>Error: Message is too long</source>
-        <translation type="unfinished"></translation>
+        <translation>Fel: Meddelandet är för långt</translation>
     </message>
     <message>
         <source>Error: Empty message</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>Fel: Tomt meddelande</translatorcomment>
+        <translation></translation>
     </message>
     <message>
         <source>Error: Tox ID is self ID</source>
-        <translation type="unfinished"></translation>
+        <translation>Fel: Tox-ID är eget ID</translation>
     </message>
     <message>
         <source>Error: Tox ID is already in friend list</source>
-        <translation type="unfinished"></translation>
+        <translation>Fel: Tox-ID finns redan i kontaktlistan</translation>
     </message>
     <message>
         <source>Error: Unknown</source>
-        <translation type="unfinished"></translation>
+        <translation>Fel: Okänt</translation>
     </message>
     <message>
         <source>Error: Invalid Tox ID (bad checksum)</source>
-        <translation type="unfinished"></translation>
+        <translation>Fel: Ogiltigt Tox-ID (fel kontrollsumma)</translation>
     </message>
     <message>
         <source>Error: Invalid Tox ID (bad nospam value)</source>
-        <translation type="unfinished"></translation>
+        <translation>Fel: Ogiltigt Tox-ID (fel nospam-värde)</translation>
     </message>
     <message>
         <source>Error: No memory</source>
-        <translation type="unfinished"></translation>
+        <translation>Fel: Minnesbrist</translation>
     </message>
     <message>
         <source>No name</source>
-        <translation type="unfinished"></translation>
+        <translation>Inget namn</translation>
     </message>
     <message>
         <source>Invalid Tox ID</source>
-        <translation type="unfinished"></translation>
+        <translation>Ogiltigt Tox-ID</translation>
     </message>
 </context>
 <context>
@@ -74,11 +75,7 @@
     </message>
     <message>
         <source>Copy Tox ID to clipboard</source>
-        <translation>Kopiera Tox-ID till Urklipp</translation>
-    </message>
-    <message>
-        <source>About to remove friend</source>
-        <translation type="vanished">Om att ta bort en vän</translation>
+        <translation>Kopiera Tox-ID till urklipp</translation>
     </message>
     <message>
         <source>Launching web browser...</source>
@@ -93,16 +90,12 @@
         <translation>Öppnar URL...</translation>
     </message>
     <message>
-        <source> is typing a message</source>
-        <translation type="vanished">skriver ett meddelande</translation>
-    </message>
-    <message>
         <source> is typing...</source>
-        <translation type="unfinished"></translation>
+        <translation>skriver...</translation>
     </message>
     <message>
         <source>Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Inställningar</translation>
     </message>
 </context>
 <context>
@@ -117,7 +110,7 @@
     </message>
     <message>
         <source>Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Inställningar</translation>
     </message>
 </context>
 <context>
@@ -151,50 +144,50 @@
     <name>Settings</name>
     <message>
         <source>Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Inställningar</translation>
     </message>
     <message>
         <source>Play this sound when...</source>
-        <translation type="unfinished"></translation>
+        <translation>Spela upp detta ljud när...</translation>
     </message>
     <message>
         <source>I receive a message:</source>
-        <translation type="unfinished"></translation>
+        <translation>Jag får ett meddelande:</translation>
     </message>
     <message>
         <source>I receive a friend request:</source>
-        <translation type="unfinished"></translation>
+        <translation>Jag får en kontaktförfrågan:</translation>
     </message>
     <message>
         <source>Notify me when...</source>
-        <translation type="unfinished"></translation>
+        <translation>Meddela mig när...</translation>
     </message>
     <message>
         <source>a friend comes online</source>
-        <translation type="unfinished"></translation>
+        <translation>En vän ansluter</translation>
     </message>
     <message>
         <source>a friend changes his name</source>
-        <translation type="unfinished"></translation>
+        <translation>En vän byter namn</translation>
     </message>
     <message>
         <source>Yes</source>
-        <translation type="unfinished"></translation>
+        <translation>Ja</translation>
     </message>
     <message>
         <source>No</source>
-        <translation type="unfinished"></translation>
+        <translation>Nej</translation>
     </message>
     <message>
         <source>No sound</source>
-        <translation type="unfinished"></translation>
+        <translation>Inget ljud</translation>
     </message>
 </context>
 <context>
     <name>cyanide</name>
     <message>
         <source> is now known as </source>
-        <translation>är känd som</translation>
+        <translation>är känd som </translation>
     </message>
 </context>
 </TS>
