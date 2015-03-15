@@ -12,8 +12,6 @@ class Cyanide : public QObject
     Q_OBJECT
 
 private:
-    Tox *tox;
-
     uint8_t self_id[TOX_FRIEND_ADDRESS_SIZE];
 
     char save_path[512];
@@ -22,6 +20,7 @@ private:
     QString send_friend_request_unboxed(char *name, int length, char *msg, int msg_length);
 
 public:
+    Tox *tox;
     Friend self;
     static const int self_fid = -1;
     std::vector<Friend> friends;

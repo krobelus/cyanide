@@ -45,7 +45,8 @@ int main(int argc, char *argv[])
 
     int result = app->exec();
 
-    //TODO tox_kill
+    tox_kill(cyanide.tox);
+
     return result;
 }
 
