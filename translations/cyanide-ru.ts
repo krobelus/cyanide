@@ -27,43 +27,43 @@
     <name>Cyanide</name>
     <message>
         <source>Error: Message is too long</source>
-        <translation type="unfinished"></translation>
+        <translation>Ошибка: сообщение слишком длинное</translation>
     </message>
     <message>
         <source>Error: Empty message</source>
-        <translation type="unfinished"></translation>
+        <translation>Ошибка: пустое сообщение</translation>
     </message>
     <message>
         <source>Error: Tox ID is self ID</source>
-        <translation type="unfinished"></translation>
+        <translation>Ошибка: указан используемый в приложении Tox ID</translation>
     </message>
     <message>
         <source>Error: Tox ID is already in friend list</source>
-        <translation type="unfinished"></translation>
+        <translation>Ошибка: указанный Tox ID уже добавлен</translation>
     </message>
     <message>
         <source>Error: Unknown</source>
-        <translation type="unfinished"></translation>
+        <translation>Неизвестная ошибка</translation>
     </message>
     <message>
         <source>Error: Invalid Tox ID (bad checksum)</source>
-        <translation type="unfinished"></translation>
+        <translation>Ошибка: неправильный Tox ID (плохая контрольная сумма)</translation>
     </message>
     <message>
         <source>Error: Invalid Tox ID (bad nospam value)</source>
-        <translation type="unfinished"></translation>
+        <translation>Ошибка: неправильный Tox ID (плохое значение антиспам)</translation>
     </message>
     <message>
         <source>Error: No memory</source>
-        <translation type="unfinished"></translation>
+        <translation>Ошибка: недостаточно памяти</translation>
     </message>
     <message>
         <source>No name</source>
-        <translation type="unfinished"></translation>
+        <translation>Нет имени</translation>
     </message>
     <message>
         <source>Invalid Tox ID</source>
-        <translation type="unfinished"></translation>
+        <translation>Неправильный Tox ID</translation>
     </message>
 </context>
 <context>
@@ -86,11 +86,11 @@
     </message>
     <message>
         <source>Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Настройки</translation>
     </message>
     <message>
         <source>Copy Tox ID to clipboard</source>
-        <translation type="unfinished"></translation>
+        <translation>Скопировать Tox ID</translation>
     </message>
 </context>
 <context>
@@ -105,7 +105,7 @@
     </message>
     <message>
         <source>Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Настройки</translation>
     </message>
 </context>
 <context>
@@ -139,43 +139,43 @@
     <name>Settings</name>
     <message>
         <source>Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Настройки</translation>
     </message>
     <message>
         <source>Play this sound when...</source>
-        <translation type="unfinished"></translation>
+        <translation>Воспроизводить звук когда...</translation>
     </message>
     <message>
         <source>I receive a message:</source>
-        <translation type="unfinished"></translation>
+        <translation>пришло сообщение:</translation>
     </message>
     <message>
         <source>I receive a friend request:</source>
-        <translation type="unfinished"></translation>
+        <translation>пришел запрос на добавление:</translation>
     </message>
     <message>
         <source>Notify me when...</source>
-        <translation type="unfinished"></translation>
+        <translation>Показывать уведомление когда...</translation>
     </message>
     <message>
         <source>a friend comes online</source>
-        <translation type="unfinished"></translation>
+        <translation>друг появился в сети</translation>
     </message>
     <message>
         <source>a friend changes his name</source>
-        <translation type="unfinished"></translation>
+        <translation>друг изменил имя</translation>
     </message>
     <message>
         <source>Yes</source>
-        <translation type="unfinished"></translation>
+        <translation>Да</translation>
     </message>
     <message>
         <source>No</source>
-        <translation type="unfinished"></translation>
+        <translation>Нет</translation>
     </message>
     <message>
         <source>No sound</source>
-        <translation type="unfinished"></translation>
+        <translation>Без звука</translation>
     </message>
 </context>
 <context>
