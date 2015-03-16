@@ -9,6 +9,10 @@ Page {
     Component.onCompleted: {
         activePage = "Friend.qml"
     }
+    Component.onDestruction: {
+        if(inputField.focus)
+            cyanide.send_typing_notification(currentFID, false)
+    }
 
     RemorsePopup { id: remorsePopup }
 
@@ -167,6 +171,7 @@ Page {
             width: parent.width - Theme.paddingLarge
             inputMethodHints: Qt.ImhNoAutoUppercase
             focus: false
+            onFocusChanged: cyanide.send_typing_notification(currentFID, focus)
             onYChanged: messageList.positionViewAtEnd()
             anchors {
                 bottom: parent.bottom

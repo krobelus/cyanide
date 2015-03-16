@@ -177,6 +177,10 @@
         <source>No sound</source>
         <translation>Keinen Klang</translation>
     </message>
+    <message>
+        <source>Send typing notifications?</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>cyanide</name>

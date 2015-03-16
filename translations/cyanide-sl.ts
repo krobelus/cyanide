@@ -185,6 +185,10 @@
         <source>No sound</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Send typing notifications?</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>cyanide</name>

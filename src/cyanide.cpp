@@ -674,6 +674,12 @@ QString Cyanide::send_friend_request(QString id_string, QString msg_string)
     return error;
 }
 
+void Cyanide::send_typing_notification(int fid, bool typing)
+{
+    if(settings.get("send-typing-notifications") == "true")
+        tox_set_user_is_typing(tox, fid, (uint8_t)typing);
+}
+
 QString Cyanide::send_friend_request_unboxed(char *name, int length, char *msg, int msg_length)
 {
     if(!length) {

@@ -27,6 +27,8 @@ std::map<QString, settings_entry> Settings::entries = {
             , "bool", "true" } }
       , { "notification-friend-name-change", { tr("a friend changes his name")
             , "bool", "true" } }
+      , { "send-typing-notifications", { tr("Send typing notifications?")
+            , "bool", "true" } }
     };
 
 std::map<QString, std::vector<type_entry>> Settings::types = {
