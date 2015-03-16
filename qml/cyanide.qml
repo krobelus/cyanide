@@ -65,7 +65,7 @@ ApplicationWindow
             if(fid != selfID && settings.get("notification-friend-name-change")
                 && !(activePage == "Friend.qml" && currentFID == fid))
             {
-                currentFID = fid
+                nNameChange.fid = fid
                 if(previous_name !== name)
                     notify(nNameChange, previous_name + qsTr(" is now known as ") + name, "")
             }
@@ -86,9 +86,10 @@ ApplicationWindow
             if(fid != selfID) {
                 if(online) {
                     //cyanide.play_sound(settings.get("sound-friend-connected"))
-                    var n = settings.get("notification-friend-connected")
-                    if(n === "true") {
-                        currentFID = fid
+                    if("true" === settings.get("notification-friend-connected")
+                        && !(activePage === "Friend.qml" && currentFID == fid)
+                    ) {
+                        nConnectionStatus.fid = fid
                         notify(nConnectionStatus, cyanide.get_friend_name(fid), "is now online")
                     }
                 }
@@ -105,7 +106,7 @@ ApplicationWindow
                 if(settings.get("notification-message-received") === "true"
                     && !(activePage == "Friend.qml" && currentFID == fid))
                 {
-                    currentFID = fid
+                    nFriendMessage.fid = fid
                     notify(nFriendMessage, cyanide.get_friend_name(fid), cyanide.get_message_text(fid, mid))
                 }
             }
@@ -123,18 +124,21 @@ ApplicationWindow
 
     Notification {
         id: nNameChange
+        property int fid: 0
         onClicked: {
             pageStack.push(Qt.resolvedUrl("pages/Friend.qml"))
         }
     }
     Notification {
         id: nConnectionStatus
+        property int fid: 0
         onClicked: {
             pageStack.push(Qt.resolvedUrl("pages/Friend.qml"))
         }
     }
     Notification {
         id: nFriendMessage
+        property int fid: 0
         onClicked: {
             pageStack.push(Qt.resolvedUrl("pages/Friend.qml"))
         }
