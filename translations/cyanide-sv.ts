@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="sv_SE">
+<TS version="2.0" language="sv_SE">
 <context>
     <name>AcceptFriend</name>
     <message>
@@ -79,7 +79,7 @@
     </message>
     <message>
         <source>Launching web browser...</source>
-        <translation type="vanished">Startar webläsaren...</translation>
+        <translation>Startar webläsaren...</translation>
     </message>
     <message>
         <source>Removing friend</source>
@@ -184,14 +184,14 @@
     </message>
     <message>
         <source>Send typing notifications?</source>
-        <translation type="unfinished"></translation>
+        <translation>Meddela vännen att du skriver?</translation>
     </message>
 </context>
 <context>
     <name>cyanide</name>
     <message>
         <source> is now known as </source>
-        <translation>är känd som </translation>
+        <translation>är nu känd som </translation>
     </message>
 </context>
 </TS>
