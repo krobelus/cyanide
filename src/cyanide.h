@@ -2,6 +2,7 @@
 #define CYANIDE_H
 
 #include <QObject>
+#include <QtQuick>
 #include <tox/tox.h>
 
 #include "friend.h"
@@ -21,6 +22,7 @@ private:
 
 public:
     Tox *tox;
+    QQuickView *view;
     Friend self;
     static const int self_fid = -1;
     std::vector<Friend> friends;
@@ -43,6 +45,7 @@ public:
     Q_INVOKABLE bool accept_friend_request(int fid);
     Q_INVOKABLE void remove_friend(int fid);
     Q_INVOKABLE void play_sound(QString file);
+    Q_INVOKABLE void raise();
 
     /* setters and getters */
     Q_INVOKABLE void set_friend_notification(int fid, bool status);

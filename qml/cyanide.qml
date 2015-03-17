@@ -126,6 +126,7 @@ ApplicationWindow
         id: nNameChange
         property int fid: 0
         onClicked: {
+            cyanide.raise();
             pageStack.push(Qt.resolvedUrl("pages/Friend.qml"))
         }
     }
@@ -133,6 +134,7 @@ ApplicationWindow
         id: nConnectionStatus
         property int fid: 0
         onClicked: {
+            cyanide.raise();
             pageStack.push(Qt.resolvedUrl("pages/Friend.qml"))
         }
     }
@@ -140,6 +142,7 @@ ApplicationWindow
         id: nFriendMessage
         property int fid: 0
         onClicked: {
+            cyanide.raise();
             pageStack.push(Qt.resolvedUrl("pages/Friend.qml"))
         }
     }

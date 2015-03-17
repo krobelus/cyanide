@@ -30,16 +30,16 @@ int main(int argc, char *argv[])
     app->setOrganizationName("Tox");
     app->setOrganizationDomain("Tox");
     app->setApplicationName("Cyanide");
-    QQuickView *view = SailfishApp::createView();
+    cyanide.view = SailfishApp::createView();
 
     cyanide.load_tox_and_stuff_pretty_please();
     std::thread tox_thread(init, &cyanide);
 
     settings.init();
-    view->rootContext()->setContextProperty("settings", &settings);
-    view->rootContext()->setContextProperty("cyanide", &cyanide);
-    view->setSource(SailfishApp::pathTo("qml/cyanide.qml"));
-    view->showFullScreen();
+    cyanide.view->rootContext()->setContextProperty("settings", &settings);
+    cyanide.view->rootContext()->setContextProperty("cyanide", &cyanide);
+    cyanide.view->setSource(SailfishApp::pathTo("qml/cyanide.qml"));
+    cyanide.view->showFullScreen();
 
     QSound::play("");
 
@@ -53,6 +53,12 @@ int main(int argc, char *argv[])
 void init(Cyanide *cyanide)
 {
     cyanide->tox_thread();
+}
+
+void Cyanide::raise()
+{
+    view->raise();
+    view->requestActivate();
 }
 
 void Cyanide::load_tox_and_stuff_pretty_please()
