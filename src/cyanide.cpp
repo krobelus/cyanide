@@ -57,8 +57,15 @@ void init(Cyanide *cyanide)
 
 void Cyanide::raise()
 {
-    view->raise();
-    view->requestActivate();
+    if(!is_visible()) {
+        view->raise();
+        view->requestActivate();
+    }
+}
+
+bool Cyanide::is_visible()
+{
+    return view->visibility() == QWindow::FullScreen;
 }
 
 void Cyanide::load_tox_and_stuff_pretty_please()

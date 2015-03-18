@@ -15,8 +15,11 @@ Page {
     id: pageSettings
     allowedOrientations: Orientation.All
     Component.onCompleted: {
-        activePage = "Settings.qml"
+        pages.push("Settings.qml")
         currentFID = 0
+    }
+    Component.onDestruction: {
+        pages.pop()
     }
 
     SilicaListView {

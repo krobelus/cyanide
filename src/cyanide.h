@@ -46,6 +46,7 @@ public:
     Q_INVOKABLE void remove_friend(int fid);
     Q_INVOKABLE void play_sound(QString file);
     Q_INVOKABLE void raise();
+    Q_INVOKABLE bool is_visible();
 
     /* setters and getters */
     Q_INVOKABLE void set_friend_notification(int fid, bool status);

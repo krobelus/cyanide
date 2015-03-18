@@ -5,8 +5,11 @@ Page {
     id: pageAddFriend
     allowedOrientations: Orientation.All
     Component.onCompleted: {
-        activePage = "AddFriend.qml"
+        pages.push("AddFriend.qml")
         currentFID = 0
+    }
+    Component.onDestruction: {
+        pages.pop()
     }
 
     TextField {

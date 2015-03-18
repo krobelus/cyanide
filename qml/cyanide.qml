@@ -21,7 +21,15 @@ ApplicationWindow
     property ListModel settingsList: ListModel { id: settingsList }
 
     /* the currently activated page (is there a better way to get this?) */
-    property string activePage: ""
+    property var pages: new Array
+
+    function activePage() {
+        return pages[pages.length-1]
+    }
+
+    function chattingWith(fid) {
+        return activePage() === "Friend.qml" && currentFID == fid
+    }
 
     Component.onCompleted: loadSettings()
     function loadSettings() {
@@ -63,7 +71,7 @@ ApplicationWindow
             var name = cyanide.get_friend_name(fid)
             friendList.setProperty(i, "friend_name", name)
             if(fid != selfID && settings.get("notification-friend-name-change")
-                && !(activePage == "Friend.qml" && currentFID == fid))
+                && !(cyanide.is_visible() && chattingWith(fid)))
             {
                 nNameChange.fid = fid
                 if(previous_name !== name)
@@ -87,8 +95,8 @@ ApplicationWindow
                 if(online) {
                     //cyanide.play_sound(settings.get("sound-friend-connected"))
                     if("true" === settings.get("notification-friend-connected")
-                        && !(activePage === "Friend.qml" && currentFID == fid)
-                    ) {
+                        && !(cyanide.is_visible() && chattingWith(fid)))
+                    {
                         nConnectionStatus.fid = fid
                         notify(nConnectionStatus, cyanide.get_friend_name(fid), "is now online")
                     }
@@ -104,7 +112,7 @@ ApplicationWindow
             if(fid != selfID) {
                 cyanide.play_sound(settings.get("sound-message-received"))
                 if(settings.get("notification-message-received") === "true"
-                    && !(activePage == "Friend.qml" && currentFID == fid))
+                    && !(cyanide.is_visible() && chattingWith(fid)))
                 {
                     nFriendMessage.fid = fid
                     notify(nFriendMessage, cyanide.get_friend_name(fid), cyanide.get_message_text(fid, mid))
@@ -127,7 +135,10 @@ ApplicationWindow
         property int fid: 0
         onClicked: {
             cyanide.raise();
-            pageStack.push(Qt.resolvedUrl("pages/Friend.qml"))
+            if(!chattingWith(fid)) {
+                currentFID = fid
+                pageStack.push(Qt.resolvedUrl("pages/Friend.qml"))
+            }
         }
     }
     Notification {
@@ -135,7 +146,10 @@ ApplicationWindow
         property int fid: 0
         onClicked: {
             cyanide.raise();
-            pageStack.push(Qt.resolvedUrl("pages/Friend.qml"))
+            if(!chattingWith(fid)) {
+                currentFID = fid
+                pageStack.push(Qt.resolvedUrl("pages/Friend.qml"))
+            }
         }
     }
     Notification {
@@ -143,7 +157,10 @@ ApplicationWindow
         property int fid: 0
         onClicked: {
             cyanide.raise();
-            pageStack.push(Qt.resolvedUrl("pages/Friend.qml"))
+            if(!chattingWith(fid)) {
+                currentFID = fid
+                pageStack.push(Qt.resolvedUrl("pages/Friend.qml"))
+            }
         }
     }
     function notify(n, summary, body) {

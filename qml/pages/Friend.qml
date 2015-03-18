@@ -7,9 +7,10 @@ Page {
     id: pageFriend
     allowedOrientations: Orientation.All
     Component.onCompleted: {
-        activePage = "Friend.qml"
+        pages.push("Friend.qml")
     }
     Component.onDestruction: {
+        pages.pop()
         if(inputField.focus)
             cyanide.send_typing_notification(currentFID, false)
     }

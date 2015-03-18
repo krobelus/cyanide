@@ -6,8 +6,11 @@ Page {
     id: pageFriendList
     allowedOrientations: Orientation.All
     Component.onCompleted: {
-        activePage = "FriendList.qml"
+        pages.push("FriendList.qml")
         currentFID = 0
+    }
+    Component.onDestruction: {
+        pages.pop()
     }
 
     RemorsePopup { id: remorsePopup }

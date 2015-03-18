@@ -5,7 +5,10 @@ Page {
     id: pageAcceptFriend
     allowedOrientations: Orientation.All
     Component.onCompleted: {
-        activePage = "AcceptFriend.qml"
+        pages.push("AcceptFriend.qml")
+    }
+    Component.onDestruction: {
+        pages.pop()
     }
 
     Text {

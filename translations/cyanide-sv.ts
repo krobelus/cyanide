@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="sv_SE">
+<TS version="2.1" language="sv_SE">
 <context>
     <name>AcceptFriend</name>
     <message>
@@ -79,7 +79,7 @@
     </message>
     <message>
         <source>Launching web browser...</source>
-        <translation>Startar webläsaren...</translation>
+        <translation type="vanished">Startar webläsaren...</translation>
     </message>
     <message>
         <source>Removing friend</source>
