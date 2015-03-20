@@ -56,11 +56,12 @@ rm -rf %{buildroot}
 %qmake5_install
 
 # >> install post
+# TODO use variables for sanity
+install -d -m755 %{buildroot}%{_datadir}/lipstick/notificationcategories
+install -m644 \
+    /home/mersdk/share/git/cyanide/notificationcategories/x-nemo.social.tox.message.conf \
+    %{buildroot}%{_datadir}/lipstick/notificationcategories
 # << install post
-
-desktop-file-install --delete-original       \
-  --dir %{buildroot}%{_datadir}/applications             \
-   %{buildroot}%{_datadir}/applications/*.desktop
 
 %files
 %defattr(-,root,root,-)
@@ -69,4 +70,5 @@ desktop-file-install --delete-original       \
 %{_datadir}/applications/%{name}.desktop
 %{_datadir}/icons/hicolor/86x86/apps/%{name}.png
 # >> files
+%{_datadir}/lipstick/notificationcategories/*.conf
 # << files

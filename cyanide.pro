@@ -39,7 +39,8 @@ OTHER_FILES += \
     qml/pages/AcceptFriend.qml \
     cyanide.png \
     rpm/cyanide.changes \
-    qml/pages/Settings.qml
+    qml/pages/Settings.qml \
+    notificationcategories/x-nemo.social.tox.message.conf
 
 # to disable building translations every time, comment out the
 # following CONFIG line
