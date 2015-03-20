@@ -158,14 +158,6 @@
         <translation>Показывать уведомление когда...</translation>
     </message>
     <message>
-        <source>a friend comes online</source>
-        <translation type="vanished">друг появился в сети</translation>
-    </message>
-    <message>
-        <source>a friend changes his name</source>
-        <translation type="vanished">друг изменил имя</translation>
-    </message>
-    <message>
         <source>Yes</source>
         <translation>Да</translation>
     </message>
@@ -179,26 +171,22 @@
     </message>
     <message>
         <source>Send typing notifications?</source>
-        <translation type="unfinished"></translation>
+        <translation>Отсылать уведомления о наборе?</translation>
     </message>
 </context>
 <context>
     <name>cyanide</name>
     <message>
-        <source> is now known as </source>
-        <translation type="vanished"> сменил имя на </translation>
-    </message>
-    <message>
         <source>New message</source>
-        <translation type="unfinished"></translation>
+        <translation>Новое сообщение</translation>
     </message>
     <message>
         <source>New messages</source>
-        <translation type="unfinished"></translation>
+        <translation>Новые сообщения</translation>
     </message>
     <message>
         <source>Friend request received!</source>
-        <translation type="unfinished"></translation>
+        <translation>Запрос на добавление в друзья!</translation>
     </message>
 </context>
 </TS>
