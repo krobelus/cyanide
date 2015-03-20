@@ -138,6 +138,7 @@ ApplicationWindow
     Notification {
         id: nDefault
         category: "x-nemo.messaging.im"
+        onSignal_kill: close()
     }
 
     /*
@@ -176,6 +177,7 @@ ApplicationWindow
             }
         }
         onClosed: console.log("Closed notification, reason: " + reason)
+        onSignal_kill: close()
     }
     function notify(n, summary, body) {
         n.previewSummary = summary

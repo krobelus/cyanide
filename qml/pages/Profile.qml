@@ -6,7 +6,6 @@ Page {
     allowedOrientations: Orientation.All
     Component.onCompleted: {
         pages.push("Profile.qml")
-        currentFID = 0
     }
     Component.onDestruction: {
         pages.pop()

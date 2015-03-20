@@ -164,11 +164,11 @@
     </message>
     <message>
         <source>a friend comes online</source>
-        <translation>En vän ansluter</translation>
+        <translation type="vanished">En vän ansluter</translation>
     </message>
     <message>
         <source>a friend changes his name</source>
-        <translation>En vän byter namn</translation>
+        <translation type="vanished">En vän byter namn</translation>
     </message>
     <message>
         <source>Yes</source>
@@ -191,7 +191,15 @@
     <name>cyanide</name>
     <message>
         <source> is now known as </source>
-        <translation>är nu känd som </translation>
+        <translation type="vanished">är nu känd som </translation>
+    </message>
+    <message>
+        <source>New message</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New messages</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

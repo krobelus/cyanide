@@ -13,14 +13,14 @@ Page {
 
     Text {
         id: cid
-        text: cyanide.get_friend_cid(currentFID)
+        text: cyanide.get_friend_cid(activeFriend())
         color: Theme.primaryColor
         x: Theme.paddingMedium
         y: 2 * Theme.paddingLarge
     }
     Text {
         id: msg
-        text: cyanide.get_friend_status_message(currentFID)
+        text: cyanide.get_friend_status_message(activeFriend())
         color: Theme.primaryColor
         x: Theme.paddingMedium
         anchors {
@@ -40,7 +40,7 @@ Page {
         Button {
             text: qsTr("Accept")
             onClicked: {
-                if(cyanide.accept_friend_request(currentFID)) {
+                if(cyanide.accept_friend_request(activeFriend())) {
                     refreshFriendList()
                     pageStack.pop()
                 } else {
@@ -51,7 +51,7 @@ Page {
         Button {
             text: qsTr("Ignore")
             onClicked: {
-                cyanide.remove_friend(currentFID)
+                cyanide.remove_friend(activeFriend())
                 refreshFriendList()
                 pageStack.pop()
             }

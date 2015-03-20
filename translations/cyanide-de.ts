@@ -159,11 +159,11 @@
     </message>
     <message>
         <source>a friend comes online</source>
-        <translation>ein Freund online erscheint:</translation>
+        <translation type="vanished">ein Freund online erscheint:</translation>
     </message>
     <message>
         <source>a friend changes his name</source>
-        <translation>ein Freund seinen Namen ändert:</translation>
+        <translation type="vanished">ein Freund seinen Namen ändert:</translation>
     </message>
     <message>
         <source>Yes</source>
@@ -186,7 +186,15 @@
     <name>cyanide</name>
     <message>
         <source> is now known as </source>
-        <translation> heißt jetzt </translation>
+        <translation type="vanished"> heißt jetzt </translation>
+    </message>
+    <message>
+        <source>New message</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New messages</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

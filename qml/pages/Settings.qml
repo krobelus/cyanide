@@ -16,7 +16,6 @@ Page {
     allowedOrientations: Orientation.All
     Component.onCompleted: {
         pages.push("Settings.qml")
-        currentFID = 0
     }
     Component.onDestruction: {
         pages.pop()

@@ -23,10 +23,10 @@ std::map<QString, settings_entry> Settings::entries = {
             , "bool", "true" } }
       , { "notification-friend-request-received", { tr("I receive a friend request:")
             , "bool", "true" } }
-      , { "notification-friend-connected", { tr("a friend comes online")
-            , "bool", "true" } }
-      , { "notification-friend-name-change", { tr("a friend changes his name")
-            , "bool", "true" } }
+      //, { "notification-friend-connected", { tr("a friend comes online")
+      //      , "bool", "true" } }
+      //, { "notification-friend-name-change", { tr("a friend changes his name")
+      //      , "bool", "true" } }
       , { "send-typing-notifications", { tr("Send typing notifications?")
             , "bool", "true" } }
     };
@@ -104,8 +104,11 @@ void Settings::init()
     while(q.next()) {
         QString name = q.value("name").toString();
         QString value = q.value("value").toString();
-        if(name != "db_version")
-            entries.at(name).value = value;
+        if(name == "db_version")
+            continue;
+        auto it = entries.find(name);
+        if(it != entries.end())
+            it->second.value = value;
     }
 }
 

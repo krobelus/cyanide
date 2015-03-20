@@ -11,8 +11,9 @@ Page {
     }
     Component.onDestruction: {
         pages.pop()
+        friends.pop()
         if(inputField.focus)
-            cyanide.send_typing_notification(currentFID, false)
+            cyanide.send_typing_notification(activeFriend(), false)
     }
 
     RemorsePopup { id: remorsePopup }
@@ -41,7 +42,7 @@ Page {
                 text: qsTr("Remove friend")
                 onClicked: {
                     remorsePopup.execute(qsTr("Removing friend"), function() {
-                        cyanide.remove_friend(currentFID)
+                        cyanide.remove_friend(activeFriend())
                         refreshFriendList()
                         pageStack.pop()
                     })
@@ -49,16 +50,16 @@ Page {
             }
             MenuItem {
                 text: qsTr("Copy Tox ID to clipboard")
-                enabled: settings.get_friend_address(currentFID) !== ""
+                enabled: settings.get_friend_address(activeFriend()) !== ""
                 onClicked: {
-                    clipboard.setClipboard(settings.get_friend_address(currentFID))
+                    clipboard.setClipboard(settings.get_friend_address(activeFriend()))
                 }
             }
         }
 
         PageHeader {
             id: pageHeader
-            title: friendList.get(currentFID+1).friend_name
+            title: friendList.get(activeFriend()+1).friend_name
             anchors {
                 right: parent.right
                 rightMargin: 2 * Theme.paddingLarge + friendStatusIcon.width
@@ -66,7 +67,7 @@ Page {
         }
         Image {
             id: friendStatusIcon
-            source: friendList.get(currentFID+1).friend_status_icon
+            source: friendList.get(activeFriend()+1).friend_status_icon
             y: pageHeader.height / 2 - height / 2
             anchors {
                 right: parent.right
@@ -88,30 +89,30 @@ Page {
             }
 
             Component.onCompleted: {
-                for(var i=0; i<cyanide.get_number_of_messages(currentFID); i++)
-                    model.append({'author': cyanide.get_message_author(currentFID, i)
-                                 ,'message_text': cyanide.get_message_rich_text(currentFID, i)
-                                 ,'timestamp': new Date(cyanide.get_message_timestamp(currentFID, i))
+                for(var i=0; i<cyanide.get_number_of_messages(activeFriend()); i++)
+                    model.append({'author': cyanide.get_message_author(activeFriend(), i)
+                                 ,'message_text': cyanide.get_message_rich_text(activeFriend(), i)
+                                 ,'timestamp': new Date(cyanide.get_message_timestamp(activeFriend(), i))
                                  })
-                cyanide.set_friend_notification(currentFID, false)
+                cyanide.set_friend_notification(activeFriend(), false)
                 messageList.positionViewAtEnd()
             }
             Connections {
                 target: cyanide
                 onSignal_friend_message: {
-                    if(fid == currentFID || fid == selfID) {
+                    if(fid == activeFriend() || fid == selfID) {
                         cyanide.set_friend_notification(fid, false)
-                        model.append({'author': cyanide.get_message_author(currentFID, mid)
-                                     ,'message_text': cyanide.get_message_rich_text(currentFID, mid)
-                                     ,'timestamp': cyanide.get_message_timestamp(currentFID, mid)
+                        model.append({'author': cyanide.get_message_author(activeFriend(), mid)
+                                     ,'message_text': cyanide.get_message_rich_text(activeFriend(), mid)
+                                     ,'timestamp': cyanide.get_message_timestamp(activeFriend(), mid)
                                      })
                         messageList.positionViewAtEnd()
                     }
                 }
                 onSignal_typing_change: {
-                    if(fid == currentFID) {
+                    if(fid == activeFriend()) {
                         inputField.label = is_typing
-                            ? friendList.get(currentFID+1).friend_name + qsTr(" is typing...")
+                            ? friendList.get(activeFriend()+1).friend_name + qsTr(" is typing...")
                             : ""
                         inputField.placeholderText = inputField.label
                     }
@@ -172,14 +173,14 @@ Page {
             width: parent.width - Theme.paddingLarge
             inputMethodHints: Qt.ImhNoAutoUppercase
             focus: false
-            onFocusChanged: cyanide.send_typing_notification(currentFID, focus)
+            onFocusChanged: cyanide.send_typing_notification(activeFriend(), focus)
             onYChanged: messageList.positionViewAtEnd()
             anchors {
                 bottom: parent.bottom
             }
             EnterKey.onClicked: {
                 // TODO split long messages
-                if(cyanide.send_friend_message(currentFID, text)) {
+                if(cyanide.send_friend_message(activeFriend(), text)) {
                     text = ""
                     parent.focus = true;
                 } else {

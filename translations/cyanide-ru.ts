@@ -159,11 +159,11 @@
     </message>
     <message>
         <source>a friend comes online</source>
-        <translation>друг появился в сети</translation>
+        <translation type="vanished">друг появился в сети</translation>
     </message>
     <message>
         <source>a friend changes his name</source>
-        <translation>друг изменил имя</translation>
+        <translation type="vanished">друг изменил имя</translation>
     </message>
     <message>
         <source>Yes</source>
@@ -186,7 +186,15 @@
     <name>cyanide</name>
     <message>
         <source> is now known as </source>
-        <translation> сменил имя на </translation>
+        <translation type="vanished"> сменил имя на </translation>
+    </message>
+    <message>
+        <source>New message</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New messages</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

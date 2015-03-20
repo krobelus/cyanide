@@ -166,14 +166,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>a friend comes online</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>a friend changes his name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Yes</source>
         <translation type="unfinished"></translation>
     </message>
@@ -194,7 +186,15 @@
     <name>cyanide</name>
     <message>
         <source> is now known as </source>
-        <translation type="unfinished"> je sedaj znan kot </translation>
+        <translation type="obsolete"> je sedaj znan kot </translation>
+    </message>
+    <message>
+        <source>New message</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New messages</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

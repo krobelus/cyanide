@@ -7,7 +7,6 @@ Page {
     allowedOrientations: Orientation.All
     Component.onCompleted: {
         pages.push("FriendList.qml")
-        currentFID = 0
     }
     Component.onDestruction: {
         pages.pop()
@@ -107,11 +106,10 @@ Page {
                     if(fid == selfID) {
                         pageStack.push(Qt.resolvedUrl("Profile.qml"))
                     } else if (!cyanide.get_friend_accepted(fid)) {
-                        currentFID = index - 1
+                        friends.push(fid)
                         pageStack.push(Qt.resolvedUrl("AcceptFriend.qml"))
                     } else {
-                        currentFID = index - 1
-                        pageStack.push(Qt.resolvedUrl("Friend.qml"), {})
+                        chatWith(fid)
                     }
                 }
             }
