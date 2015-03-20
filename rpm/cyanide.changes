@@ -12,6 +12,12 @@
 # - Scrubbed the deck
 # - Hoisted the sails
 
+* Sat Mar 14 2015 Johannes Altmanninger <aclopte@gmail.com> 0.1.9-1
+- updated translations
+- typing notification
+- LED & lockscreen notifications
+- various small fixes
+
 * Sat Mar 14 2015 Johannes Altmanninger <aclopte@gmail.com> 0.1.8-1
 - automatically scroll to the last message
 - text log stays on top of the keyboard

@@ -13,7 +13,7 @@ Name:       cyanide
 %{!?qtc_make:%define qtc_make make}
 %{?qtc_builddir:%define _builddir %qtc_builddir}
 Summary:    Tox client for SailfishOS
-Version:    0.1.8
+Version:    0.1.9
 Release:    1
 Group:      Qt/Qt
 License:    GPLv3
@@ -59,9 +59,13 @@ rm -rf %{buildroot}
 # TODO use variables for sanity
 install -d -m755 %{buildroot}%{_datadir}/lipstick/notificationcategories
 install -m644 \
-    /home/mersdk/share/git/cyanide/notificationcategories/x-nemo.social.tox.message.conf \
-    %{buildroot}%{_datadir}/lipstick/notificationcategories
+/home/mersdk/share/git/cyanide/notificationcategories/x-nemo.social.tox.message.conf \
+%{buildroot}%{_datadir}/lipstick/notificationcategories
 # << install post
+
+desktop-file-install --delete-original       \
+  --dir %{buildroot}%{_datadir}/applications             \
+   %{buildroot}%{_datadir}/applications/*.desktop
 
 %files
 %defattr(-,root,root,-)
