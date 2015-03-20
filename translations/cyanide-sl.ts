@@ -196,5 +196,9 @@
         <source>New messages</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Friend request received!</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 </TS>

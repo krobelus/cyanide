@@ -74,8 +74,9 @@ public:
 signals:
     void signal_friend_added(int fid);
     void signal_notification(int fid);
+    void signal_kill();
 
-    void signal_friend_request();
+    void signal_friend_request(int fid);
     void signal_friend_message(int fid, int mid);
     void signal_friend_action();
     void signal_name_change(int fid, QString previous_name);

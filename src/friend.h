@@ -15,7 +15,7 @@ public:
     uint8_t name[TOX_MAX_NAME_LENGTH];
     int name_length;
 
-    // TODO malloc/free this manually
+    // TODO store as QString
     uint8_t status_message[TOX_MAX_STATUSMESSAGE_LENGTH];
     int status_message_length;
 

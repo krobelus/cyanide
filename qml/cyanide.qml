@@ -131,15 +131,19 @@ ApplicationWindow
         onSignal_friend_request: {
             cyanide.play_sound(settings.get("sound-friend-request-received"))
             if(settings.get("notification-friend-request-received") === "true")
-                notify(nDefault, "Friend request received")
+                nFriendRequest.fid = fid
+                nFriendRequest.summary = qsTr("Friend request received!")
+                nFriendRequest.body = cyanide.get_friend_status_message(fid)
+                nFriendRequest.previewSummary = nFriendRequest.summary
+                nFriendRequest.previewBody = nFriendRequest.body
+                nFriendRequest.itemCount++
+                nFriendRequest.publish()
         }
     }
 
     Notification {
         id: nDefault
-        category: "x-nemo.messaging.im"
     }
-
     /*
     Notification {
         id: nNameChange
@@ -163,6 +167,18 @@ ApplicationWindow
     }
     */
     Notification {
+        id: nFriendRequest
+        property int fid: 0
+        category: "x-nemo.social.tox.message"
+        onClicked: {
+            itemCount = 0
+            cyanide.raise()
+            friends.push(fid)
+            pageStack.push(Qt.resolvedUrl("pages/AcceptFriend.qml"))
+        }
+        onClosed: console.log("Closed friend request notification, reason: " + reason)
+    }
+    Notification {
         id: nFriendMessage
         property int fid: 0
         category: "x-nemo.social.tox.message"
@@ -170,17 +186,24 @@ ApplicationWindow
         itemCount: 0
         onClicked: {
             itemCount = 0
-            cyanide.raise();
+            cyanide.raise()
             if(!chattingWith(fid)) {
                 chatWith(fid)
             }
         }
-        onClosed: console.log("Closed notification, reason: " + reason)
+        onClosed: console.log("Closed message notification, reason: " + reason)
     }
     function notify(n, summary, body) {
         n.previewSummary = summary
         n.previewBody = body
         n.itemCount++
         n.publish()
+    }
+    Connections {
+        target: cyanide
+        onSignal_kill: {
+            nFriendMessage.close()
+            nFriendRequest.close()
+        }
     }
 }

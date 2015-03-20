@@ -45,6 +45,7 @@ int main(int argc, char *argv[])
 
     int result = app->exec();
 
+    emit cyanide.signal_kill();
     tox_kill(cyanide.tox);
 
     return result;
@@ -426,7 +427,7 @@ void callback_friend_request(Tox *UNUSED(tox), const uint8_t *id, const uint8_t 
     Friend f = *new Friend(id, (const uint8_t*)name, name_length, (const uint8_t*)msg, length);
     f.accepted = false;
     cyanide.add_friend(&f);
-    emit cyanide.signal_friend_request();
+    emit cyanide.signal_friend_request(cyanide.friends.size()-1);
 }
 
 void callback_friend_message(Tox *tox, int fid, const uint8_t *message, uint16_t length, void *UNUSED(userdata))
