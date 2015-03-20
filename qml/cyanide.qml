@@ -201,7 +201,7 @@ ApplicationWindow
     }
     Connections {
         target: cyanide
-        onSignal_kill: {
+        onSignal_close_notifications: {
             nFriendMessage.close()
             nFriendRequest.close()
         }

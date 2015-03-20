@@ -41,14 +41,23 @@ int main(int argc, char *argv[])
     cyanide.view->setSource(SailfishApp::pathTo("qml/cyanide.qml"));
     cyanide.view->showFullScreen();
 
+    QObject::connect(cyanide.view, SIGNAL(visibilityChanged(QWindow::Visibility)),
+                    &cyanide, SLOT(visibility_changed(QWindow::Visibility)));
+
     QSound::play("");
 
     int result = app->exec();
 
-    emit cyanide.signal_kill();
+    emit cyanide.signal_close_notifications();
     tox_kill(cyanide.tox);
 
     return result;
+}
+
+void Cyanide::visibility_changed(QWindow::Visibility visibility)
+{
+    if(visibility == QWindow::FullScreen)
+        emit signal_close_notifications();
 }
 
 void init(Cyanide *cyanide)

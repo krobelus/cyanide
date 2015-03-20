@@ -47,6 +47,7 @@ public:
     Q_INVOKABLE void play_sound(QString file);
     Q_INVOKABLE void raise();
     Q_INVOKABLE bool is_visible();
+    Q_INVOKABLE void visibility_changed(QWindow::Visibility visibility);
 
     /* setters and getters */
     Q_INVOKABLE void set_friend_notification(int fid, bool status);
@@ -74,7 +75,7 @@ public:
 signals:
     void signal_friend_added(int fid);
     void signal_notification(int fid);
-    void signal_kill();
+    void signal_close_notifications();
 
     void signal_friend_request(int fid);
     void signal_friend_message(int fid, int mid);
