@@ -10,6 +10,8 @@ Features
 
 - 1v1 messaging
 - DNS discovery
+- Typing notification
+- Sound, LED & lockscreen notifications
 
 Building
 --------
