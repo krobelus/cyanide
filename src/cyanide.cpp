@@ -680,6 +680,9 @@ void callback_file_data(Tox *UNUSED(tox), int32_t fid, uint8_t filenumber, const
 
 QString Cyanide::send_friend_request(QString id_string, QString msg_string)
 {
+    if(id_string.startsWith("tox:"))
+        id_string = id_string.remove(0,3);
+
     int id_len = tox_string_length(id_string);
     char id[id_len];
     to_tox_string(id_string, (uint8_t*)id);
