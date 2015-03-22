@@ -49,7 +49,9 @@ int main(int argc, char *argv[])
     int result = app->exec();
 
     emit cyanide.signal_close_notifications();
-    tox_kill(cyanide.tox);
+
+    cyanide.run_tox_loop = false;
+    tox_thread.join();
 
     return result;
 }
@@ -80,6 +82,7 @@ bool Cyanide::is_visible()
 
 void Cyanide::load_tox_and_stuff_pretty_please()
 {
+    run_tox_loop = true;
     save_needed = false;
     self.user_status = TOX_USERSTATUS_NONE;
 
@@ -145,7 +148,7 @@ void Cyanide::tox_thread()
 
     uint64_t last_save = get_time(), time;
     bool connected = false;
-    while(true) {
+    while(run_tox_loop) {
         // Put toxcore to work
         tox_do(tox);
 
@@ -199,9 +202,9 @@ void Cyanide::tox_thread()
         usleep(1000 * ((interval > 20) ? 20 : interval));
     }
 
-    write_save();
+    qDebug() << "exiting....";
 
-    //TODO wait for threads to return or something
+    write_save();
 
     //toxav_kill(av);
     tox_kill(tox);

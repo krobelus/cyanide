@@ -26,7 +26,7 @@ public:
     Friend self;
     static const int self_fid = -1;
     std::vector<Friend> friends;
-    bool save_needed;
+    bool run_tox_loop, save_needed;
     void add_friend(Friend *p);
 
     void load_defaults();
