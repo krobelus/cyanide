@@ -13,12 +13,12 @@ class Cyanide : public QObject
     Q_OBJECT
 
 private:
-    uint8_t self_id[TOX_FRIEND_ADDRESS_SIZE];
+    uint8_t self_id[TOX_ADDRESS_SIZE];
 
-    char save_path[512];
+    char save_path[TOX_MAX_FILENAME_LENGTH];
 
-    QString send_friend_request_id(const uint8_t *id, const uint8_t *msg, int msg_length);
-    QString send_friend_request_unboxed(char *name, int length, char *msg, int msg_length);
+    QString send_friend_request_id(const uint8_t *id, const uint8_t *msg, size_t msg_length);
+    QString send_friend_request_unboxed(char *name, size_t length, char *msg, size_t msg_length);
 
 public:
     Tox *tox;
@@ -29,13 +29,17 @@ public:
     bool run_tox_loop, save_needed;
     void add_friend(Friend *p);
 
+    void load_tox_and_stuff_pretty_please();
+    /* reads the tox save file into memory and stores the length in *size */
+    const uint8_t *get_save_data(size_t *size);
+    /* loads default name, status, ... */
     void load_defaults();
-    bool load_save();
+    /* load name, status, friends from the tox object */
+    void load_tox_data();
     void write_save();
     void set_callbacks();
     void do_bootstrap();
 
-    void load_tox_and_stuff_pretty_please();
     void tox_thread();
 
     /* */
@@ -80,12 +84,12 @@ signals:
     void signal_friend_request(int fid);
     void signal_friend_message(int fid, int mid);
     void signal_friend_action();
-    void signal_name_change(int fid, QString previous_name);
-    void signal_status_message(int fid);
-    void signal_user_status(int fid);
-    void signal_typing_change(int fid, bool is_typing);
-    void signal_read_receipt();
-    void signal_connection_status(int fid);
+    void signal_friend_name(int fid, QString previous_name);
+    void signal_friend_status_message(int fid);
+    void signal_friend_status(int fid);
+    void signal_friend_typing(int fid, bool is_typing);
+    void signal_friend_read_receipt();
+    void signal_friend_connection_status(int fid);
     void signal_avatar_info();
     void signal_avatar_data();
     void signal_group_invite();
@@ -98,6 +102,6 @@ signals:
     void signal_file_data();
 };
 
-void init(Cyanide *cyanide);
+void start_tox_thread(Cyanide *cyanide);
 
 #endif // CYANIDE_H

@@ -20,7 +20,7 @@ Cyanide cyanide;
 
 Settings settings;
 
-Tox_Options options;
+struct Tox_Options tox_options;
 
 int main(int argc, char *argv[])
 {
@@ -33,7 +33,7 @@ int main(int argc, char *argv[])
     cyanide.view = SailfishApp::createView();
 
     cyanide.load_tox_and_stuff_pretty_please();
-    std::thread tox_thread(init, &cyanide);
+    std::thread tox_thread(start_tox_thread, &cyanide);
 
     settings.init();
     cyanide.view->rootContext()->setContextProperty("settings", &settings);
@@ -62,11 +62,6 @@ void Cyanide::visibility_changed(QWindow::Visibility visibility)
         emit signal_close_notifications();
 }
 
-void init(Cyanide *cyanide)
-{
-    cyanide->tox_thread();
-}
-
 void Cyanide::raise()
 {
     if(!is_visible()) {
@@ -82,82 +77,59 @@ bool Cyanide::is_visible()
 
 void Cyanide::load_tox_and_stuff_pretty_please()
 {
+    int error;
+
     run_tox_loop = true;
     save_needed = false;
-    self.user_status = TOX_USERSTATUS_NONE;
+    self.user_status = TOX_USER_STATUS_NONE;
 
-    if((tox = tox_new(&options)) == NULL) {
-        qDebug() << "tox_new() failed";
-        exit(1);
-    }
+    tox_options = *tox_options_new((TOX_ERR_OPTIONS_NEW*)&error);
+    // TODO
 
     sprintf(save_path, "%s/.config/tox/tox_save.tox", getenv("HOME"));
 
-    if(!load_save())
-        load_defaults();
+    size_t save_data_size;
+    const uint8_t *save_data = get_save_data(&save_data_size);
+    tox = tox_new(&tox_options, save_data, save_data_size, (TOX_ERR_NEW*)&error);
 
-    tox_get_address(tox, self_id);
-    char hex_id[2 * TOX_FRIEND_ADDRESS_SIZE];
+    if(save_data_size == 0)
+        load_defaults();
+    else
+        load_tox_data();
+
+    tox_self_get_address(tox, self_id);
+    char hex_id[2 * TOX_ADDRESS_SIZE];
     id_to_string(hex_id, (char*)self_id);
     qDebug() << "Name:" << to_QString(self.name, self.name_length);
     qDebug() << "Status" << to_QString(self.status_message, self.status_message_length);
-    qDebug() << "Tox ID" << to_QString(hex_id, 2 * TOX_FRIEND_ADDRESS_SIZE);
+    qDebug() << "Tox ID" << to_QString(hex_id, 2 * TOX_ADDRESS_SIZE);
+}
+
+void start_tox_thread(Cyanide *cyanide)
+{
+    cyanide->tox_thread();
 }
 
 void Cyanide::tox_thread()
 {
-    /*
-    uint8_t avatar_data[TOX_AVATAR_MAX_DATA_LENGTH];
-    uint32_t avatar_size;
-    if (init_avatar(&self.avatar, self.id, avatar_data, &avatar_size)) {
-        tox_set_avatar(tox, TOX_AVATAR_FORMAT_PNG, avatar_data, avatar_size); // set avatar before connecting
-
-        char_t hash_string[TOX_HASH_LENGTH * 2];
-        hash_to_string(hash_string, self.avatar.hash);
-        debug("Tox Avatar Hash: %.*s\n", (int)sizeof(hash_string), hash_string);
-    }
-
-    // Give toxcore the functions to call
     set_callbacks();
-
-    */
-
-    set_callbacks();
-
-    //return; // asdf
 
     // Connect to bootstraped nodes in "tox_bootstrap.h"
 
     do_bootstrap();
 
-    /*
-    // Start the tox av session.
-    av = toxav_new(tox, MAX_CALLS);
-
-    // Give toxcore the av functions to call
-    set_av_callbacks(av);
-
-    global_av = av;
-    tox_thread_init = 1;
-
-    // Start the treads
-    thread(audio_thread, av);
-    thread(video_thread, av);
-    thread(toxav_thread, av);
-    */
-
     uint64_t last_save = get_time(), time;
-    bool connected = false;
+    TOX_CONNECTION connection, c;
+    c = connection = TOX_CONNECTION_NONE;
     while(run_tox_loop) {
         // Put toxcore to work
-        tox_do(tox);
+        tox_iterate(tox);
 
         // Check current connection
-        if(tox_isconnected(tox) != connected) {
-            connected = !connected;
-            self.connection_status = connected;
-            emit cyanide.signal_connection_status(self_fid);
-            qDebug() << (connected ? "Connected to DHT" : "Disconnected from DHT");
+        if((c = tox_self_get_connection_status(tox)) != connection) {
+            self.connection_status = connection = c;
+            emit cyanide.signal_friend_connection_status(self_fid);
+            qDebug() << (c != TOX_CONNECTION_NONE ? "Connected to DHT" : "Disconnected from DHT");
         }
 
         time = get_time();
@@ -166,40 +138,14 @@ void Cyanide::tox_thread()
         if(time - last_save >= (uint64_t)10 * 1000 * 1000 * 1000) {
             last_save = time;
 
-            if(!connected) {
+            if(connection == TOX_CONNECTION_NONE) {
                 do_bootstrap();
             }
 
-            if (save_needed
-                    //|| (time - last_save >= (uint)100 * 1000 * 1000 * 1000)
-                    ) {
+            if (save_needed || (time - last_save >= (uint)100 * 1000 * 1000 * 1000)) {
                 write_save();
             }
         }
-
-        /*
-        // If there's a message, load it, and send to the tox message thread
-        if(tox_thread_msg) {
-            TOX_MSG *msg = &tox_msg;
-            // If msg->msg is 0, reconfig if needed and break from tox_do
-            if(!msg->msg) {
-                reconfig = msg->param1;
-                tox_thread_msg = 0;
-                break;
-            }
-            tox_thread_message(tox, av, time, msg->msg, msg->param1, msg->param2, msg->data);
-            tox_thread_msg = 0;
-        }
-        */
-
-        /*
-        // Thread active transfers and check if friend is typing
-        utox_thread_work_for_transfers(tox, time);
-        utox_thread_work_for_typing_notifications(tox, time);
-        */
-
-        uint32_t interval = tox_do_interval(tox);
-        usleep(1000 * ((interval > 20) ? 20 : interval));
     }
 
     qDebug() << "exiting....";
@@ -209,9 +155,11 @@ void Cyanide::tox_thread()
     //toxav_kill(av);
     tox_kill(tox);
 }
+
 /* bootstrap to dht with bootstrap_nodes */
 void Cyanide::do_bootstrap()
 {
+    TOX_ERR_BOOTSTRAP error;
     static unsigned int j = 0;
 
     if (j == 0)
@@ -220,7 +168,7 @@ void Cyanide::do_bootstrap()
     int i = 0;
     while(i < 4) {
         struct bootstrap_node *d = &bootstrap_nodes[j % countof(bootstrap_nodes)];
-        tox_bootstrap_from_address(tox, d->address, d->port, d->key);
+        tox_bootstrap(tox, d->address, d->port, d->key, &error);
         i++;
         j++;
     }
@@ -228,6 +176,8 @@ void Cyanide::do_bootstrap()
 
 void Cyanide::load_defaults()
 {
+    TOX_ERR_SET_INFO error;
+
     uint8_t *name = (uint8_t*)DEFAULT_NAME, *status = (uint8_t*)DEFAULT_STATUS;
     uint16_t name_len = sizeof(DEFAULT_NAME) - 1, status_len = sizeof(DEFAULT_STATUS) - 1;
 
@@ -236,11 +186,11 @@ void Cyanide::load_defaults()
     memcpy(self.status_message, status, status_len);
     self.status_message_length = status_len;
 
-    tox_set_name(tox, name, name_len);
-    tox_set_status_message(tox, status, status_len);
+    tox_self_set_name(tox, name, name_len, &error);
+    tox_self_set_status_message(tox, status, status_len, &error);
 
-    emit cyanide.signal_name_change(self_fid, NULL);
-    emit cyanide.signal_status_message(self_fid);
+    emit cyanide.signal_friend_name(self_fid, NULL);
+    emit cyanide.signal_friend_status_message(self_fid);
     save_needed = true;
 }
 
@@ -251,9 +201,9 @@ void Cyanide::write_save()
     char tmp_path[512];
     FILE *file;
 
-    size = tox_size(tox);
+    size = tox_get_savedata_size(tox);
     data = malloc(size);
-    tox_save(tox, (uint8_t*)data);
+    tox_get_savedata(tox, (uint8_t*)data);
 
     mkdir(CONFIG_PATH, 0755);
     chmod(CONFIG_PATH, 0755);
@@ -286,65 +236,56 @@ void Cyanide::write_save()
     free(data);
 }
 
-bool Cyanide::load_save()
+const uint8_t* Cyanide::get_save_data(size_t *size)
 {
-    uint32_t size;
     void *data;
 
     qDebug() << "save_path" << save_path;
 
-    data = file_raw(save_path, &size);
+    data = file_raw(save_path, size);
     if(!data)
-        return false;
+        size = 0;
 
-    switch(tox_load(tox, (const uint8_t*)data, size)) {
-        case  1: /* >found encrypted data
-                  * we should probably tell the user at some point
-                  */
-            return false;
-        case -1: /* TODO maybe check whether its sane to continue with this data
-                  * for now we just assume that
-                  */
-            break;
-    }
+    return (const uint8_t*)data;
+}
 
-    uint32_t nfriends = tox_count_friendlist(tox);
+void Cyanide::load_tox_data()
+{
+    TOX_ERR_FRIEND_QUERY error;
+    bool success;
+    size_t nfriends = tox_self_get_friend_list_size(tox);
     qDebug() << "Loading" << nfriends << "friends...";
 
-    for(uint32_t i = 0; i < nfriends; i++) {
-        Friend *f = new Friend();
+    for(size_t i = 0; i < nfriends; i++) {
+        Friend f = *new Friend();
 
-        tox_get_client_id(tox, i, f->cid);
-        f->name_length = tox_get_name(tox, i, f->name);
+        if(!tox_friend_get_public_key(tox, i, f.cid, (TOX_ERR_FRIEND_GET_PUBLIC_KEY*)&error))
+            qDebug() << "Failed to get public key for friend " << i;
 
-        f->status_message_length = tox_get_status_message_size(tox, i);
-        tox_get_status_message(tox, i, f->status_message, TOX_MAX_STATUSMESSAGE_LENGTH);
+        f.name_length = tox_friend_get_name_size(tox, i, &error);
+        success = tox_friend_get_name(tox, i, f.name, &error);
+        Q_ASSERT(success);
 
-        friends.push_back(*f);
+        f.status_message_length = tox_friend_get_status_message_size(tox, i, &error);
+        success = tox_friend_get_status_message(tox, i, f.status_message, &error);
+        Q_ASSERT(success);
+
+        friends.push_back(f);
     }
 
-    self.name_length = tox_get_self_name(tox, self.name);
-    self.status_message_length = tox_get_self_status_message_size(tox);
-    tox_get_self_status_message(tox, self.status_message, self.status_message_length);
+    self.name_length = tox_self_get_name_size(tox);
+    tox_self_get_name(tox, self.name);
+    self.status_message_length = tox_self_get_status_message_size(tox);
+    tox_self_get_status_message(tox, self.status_message);
 
-    emit cyanide.signal_name_change(self_fid, NULL);
-    emit cyanide.signal_status_message(self_fid);
+    emit cyanide.signal_friend_name(self_fid, NULL);
+    emit cyanide.signal_friend_status_message(self_fid);
     save_needed = true;
-
-    //char new_save_path[512];
-    //sprintf(new_save_path, "%s/.config/tox/%s.tox", getenv("HOME"), to_const_char(self_name));
-    //if(rename(save_path, new_save_path) != 0) {
-    //    qDebug() << "renaming" << save_path << "to" << new_save_path << "failed";
-    //}
-
-    free(data);
-    return true;
 }
 
 void Cyanide::add_friend(Friend *f)
 {
     friends.push_back(*f);
-    qDebug() << "added friend number" << friends.size() - 1 << "to the list view";
     emit cyanide.signal_friend_added(friends.size() - 1);
 }
 
@@ -352,88 +293,27 @@ void Cyanide::set_callbacks()
 {
     tox_callback_friend_request(tox, callback_friend_request, NULL);
     tox_callback_friend_message(tox, callback_friend_message, NULL);
-    tox_callback_friend_action(tox, callback_friend_action, NULL);
-    tox_callback_name_change(tox, callback_name_change, NULL);
-    tox_callback_status_message(tox, callback_status_message, NULL);
-    tox_callback_user_status(tox, callback_user_status, NULL);
-    tox_callback_typing_change(tox, callback_typing_change, NULL);
-    tox_callback_read_receipt(tox, callback_read_receipt, NULL);
-    tox_callback_connection_status(tox, callback_connection_status, NULL);
+    tox_callback_friend_name(tox, callback_friend_name, NULL);
+    tox_callback_friend_status_message(tox, callback_friend_status_message, NULL);
+    tox_callback_friend_status(tox, callback_friend_status, NULL);
+    tox_callback_friend_typing(tox, callback_friend_typing, NULL);
+    tox_callback_friend_read_receipt(tox, callback_friend_read_receipt, NULL);
+    tox_callback_friend_connection_status(tox, callback_friend_connection_status, NULL);
 
+    /*
     tox_callback_group_invite(tox, callback_group_invite, NULL);
     tox_callback_group_message(tox, callback_group_message, NULL);
     tox_callback_group_action(tox, callback_group_action, NULL);
     tox_callback_group_title(tox, callback_group_title, NULL);
     tox_callback_group_namelist_change(tox, callback_group_namelist_change, NULL);
-
-    tox_callback_avatar_info(tox, callback_avatar_info, NULL);
-    tox_callback_avatar_data(tox, callback_avatar_data, NULL);
-
-    tox_callback_file_send_request(tox, callback_file_send_request, NULL);
-    tox_callback_file_control(tox, callback_file_control, NULL);
-    tox_callback_file_data(tox, callback_file_data, NULL);
-
-    /*
-    toxav_register_callstate_callback(toxav, onAvInvite, av_OnInvite, this);
-    toxav_register_callstate_callback(toxav, onAvStart, av_OnStart, this);
-    toxav_register_callstate_callback(toxav, onAvCancel, av_OnCancel, this);
-    toxav_register_callstate_callback(toxav, onAvReject, av_OnReject, this);
-    toxav_register_callstate_callback(toxav, onAvEnd, av_OnEnd, this);
-    toxav_register_callstate_callback(toxav, onAvRinging, av_OnRinging, this);
-    toxav_register_callstate_callback(toxav, onAvMediaChange, av_OnPeerCSChange, this);
-    toxav_register_callstate_callback(toxav, onAvMediaChange, av_OnSelfCSChange, this);
-    toxav_register_callstate_callback(toxav, onAvRequestTimeout, av_OnRequestTimeout, this);
-    toxav_register_callstate_callback(toxav, onAvPeerTimeout, av_OnPeerTimeout, this);
-
-    toxav_register_audio_callback(toxav, playCallAudio, this);
-    toxav_register_video_callback(toxav, playCallVideo, this);
     */
+
 }
 
-//void* Cyanide::copy_message(const uint8_t *str, uint16_t length, uint8_t msg_type)
-//{
-//    return NULL;
-//    length = utf8_validate(str, length);
-//
-//    MESSAGE *msg = malloc(sizeof(MESSAGE) + length);
-//    msg->author = 0;
-//    msg->msg_type = msg_type;
-//    msg->length = length;
-//    memcpy(msg->msg, str, length);
-//
-//    return msg;
-//}
-
-//void* Cyanide::copy_groupmessage(Tox *tox, const uint8_t *str, uint16_t length, uint8_t msg_type, int gid, int pid)
-//{
-//    return NULL;
-//    uint8_t name[TOX_MAX_NAME_LENGTH];
-//    int namelen = tox_group_peername(tox, gid, pid, name);
-//    if(namelen == 0 || namelen == -1) {
-//        memcpy(name, "<unknown>", 9);
-//        namelen = 9;
-//    }
-//
-//    length = utf8_validate(str, length);
-//    namelen = utf8_validate(name, namelen);
-//
-//
-//    MESSAGE *msg = malloc(sizeof(MESSAGE) + 1 + length + namelen);
-//    msg->author = 0;
-//    msg->msg_type = msg_type;
-//    msg->length = length;
-//    memcpy(msg->msg, str, length);
-//
-//    msg->msg[length] = (char_t)namelen;
-//    memcpy(&msg->msg[length] + 1, name, namelen);
-//
-//    return msg;
-//}
-
-void callback_friend_request(Tox *UNUSED(tox), const uint8_t *id, const uint8_t *msg, uint16_t length, void *UNUSED(userdata))
+void callback_friend_request(Tox *UNUSED(tox), const uint8_t *id, const uint8_t *msg, size_t length, void *UNUSED(userdata))
 {
     qDebug() << "was called";
-    int name_length = 2 * TOX_FRIEND_ADDRESS_SIZE * sizeof(char);
+    int name_length = 2 * TOX_ADDRESS_SIZE * sizeof(char);
     void *name = malloc(name_length);
     id_to_string((char*)name, (char*)id);
     Friend f = *new Friend(id, (const uint8_t*)name, name_length, (const uint8_t*)msg, length);
@@ -442,107 +322,61 @@ void callback_friend_request(Tox *UNUSED(tox), const uint8_t *id, const uint8_t 
     emit cyanide.signal_friend_request(cyanide.friends.size()-1);
 }
 
-void callback_friend_message(Tox *tox, int fid, const uint8_t *message, uint16_t length, void *UNUSED(userdata))
+void callback_friend_message(Tox *UNUSED(tox), uint32_t fid, TOX_MESSAGE_TYPE type, const uint8_t *message, size_t length, void *UNUSED(userdata))
 {
+    //TODO honor type
     std::vector<Message> *tmp = &cyanide.friends[fid].messages;
     tmp->push_back(Message(message, length, false));
     cyanide.friends[fid].notification = true;
     emit cyanide.signal_friend_message(fid, tmp->size() - 1);
+    qDebug() << "received message" << fid << length;
 }
 
-void callback_friend_action(Tox *tox, int fid, const uint8_t *action, uint16_t length, void *UNUSED(userdata))
-{
-    qDebug() << "was called";
-    return;
-//    /* send action/emote to UI */
-//    postmessage(FRIEND_MESSAGE, fid, 0, copy_message(action, length, MSG_TYPE_ACTION_TEXT));
-//
-//    debug("Friend Action (%u): %.*s\n", fid, length, action);
-//
-//    /* write action/emote to logfile */
-//    log_write(tox, fid, action, length, 0, LOG_FILE_MSG_TYPE_ACTION);
-}
-
-void callback_name_change(Tox *UNUSED(tox), int fid, const uint8_t *newname, uint16_t length, void *UNUSED(userdata))
+void callback_friend_name(Tox *UNUSED(tox), uint32_t fid, const uint8_t *newname, size_t length, void *UNUSED(userdata))
 {
     qDebug() << "was called";
     Friend *f = &cyanide.friends[fid];
     QString previous_name = to_QString(f->name, f->name_length);
     memcpy(f->name, newname, length);
     f->name_length = length;
-    emit cyanide.signal_name_change(fid, previous_name);
+    emit cyanide.signal_friend_name(fid, previous_name);
     cyanide.save_needed = true;
 }
 
-void callback_status_message(Tox *UNUSED(tox), int fid, const uint8_t *newstatus, uint16_t length, void *UNUSED(userdata))
+void callback_friend_status_message(Tox *UNUSED(tox), uint32_t fid, const uint8_t *newstatus, size_t length, void *UNUSED(userdata))
 {
     qDebug() << "was called";
     memcpy(cyanide.friends[fid].status_message, newstatus, length);
     cyanide.friends[fid].status_message_length = length;
-    emit cyanide.signal_status_message(fid);
+    emit cyanide.signal_friend_status_message(fid);
     cyanide.save_needed = true;
 }
 
-void callback_user_status(Tox *UNUSED(tox), int fid, uint8_t status, void *UNUSED(userdata))
+void callback_friend_status(Tox *UNUSED(tox), uint32_t fid, TOX_USER_STATUS status, void *UNUSED(userdata))
 {
     qDebug() << "was called";
     cyanide.friends[fid].user_status = status;
-    emit cyanide.signal_user_status(fid);
+    emit cyanide.signal_friend_status(fid);
 }
 
-void callback_typing_change(Tox *UNUSED(tox), int fid, uint8_t is_typing, void *UNUSED(userdata))
+void callback_friend_typing(Tox *UNUSED(tox), uint32_t fid, bool is_typing, void *UNUSED(userdata))
 {
-    emit cyanide.signal_typing_change(fid, is_typing == 1);
+    emit cyanide.signal_friend_typing(fid, is_typing);
 }
 
-void callback_read_receipt(Tox *UNUSED(tox), int fid, uint32_t receipt, void *UNUSED(userdata))
+void callback_friend_read_receipt(Tox *UNUSED(tox), uint32_t fid, uint32_t receipt, void *UNUSED(userdata))
 {
     qDebug() << "was called";
     return;
 }
 
-void callback_connection_status(Tox *tox, int fid, uint8_t status, void *UNUSED(userdata))
+void callback_friend_connection_status(Tox *tox, uint32_t fid, TOX_CONNECTION status, void *UNUSED(userdata))
 {
-    if(fid > -1)
-        qDebug() << "Friend " << fid << "now" << (status ? "online" : "offline");
-    //if(status)
-        //tox_request_avatar_info(tox, fid);
     cyanide.friends[fid].connection_status = status;
-    emit cyanide.signal_connection_status(fid);
-//    FRIEND *f = &friend[fid];
-//    int i;
-//
-//    postmessage(FRIEND_ONLINE, fid, status, NULL);
-//
-//    if(!status) {
-//        /* break all file transfers */
-//        for(i = 0; i != countof(f->incoming); i++) {
-//            if(f->incoming[i].status) {
-//                f->incoming[i].status = FT_BROKE;
-//                postmessage(FRIEND_FILE_IN_STATUS, fid, i, (void*)FILE_BROKEN);
-//            }
-//        }
-//        for(i = 0; i != countof(f->outgoing); i++) {
-//            if(f->outgoing[i].status) {
-//                f->outgoing[i].status = FT_BROKE;
-//                postmessage(FRIEND_FILE_OUT_STATUS, fid, i, (void*)FILE_BROKEN);
-//            }
-//        }
-//    } else {
-//        /* resume any broken file transfers */
-//        for(i = 0; i != countof(f->incoming); i++) {
-//            if(f->incoming[i].status == FT_BROKE) {
-//                tox_file_send_control(tox, fid, 1, i, TOX_FILECONTROL_RESUME_BROKEN, (void*)&f->incoming[i].bytes, sizeof(uint64_t));
-//            }
-//        }
-//        /* request avatar info (in case it changed) */
-//        tox_request_avatar_info(tox, fid);
-//    }
-//
-//    debug("Friend Online/Offline (%u): %u\n", fid, status);
+    emit cyanide.signal_friend_connection_status(fid);
 }
 
-void callback_avatar_info(Tox *tox, int fid, uint8_t format, uint8_t *hash, void *UNUSED(userdata))
+void callback_avatar_info(Tox *tox, uint32_t fid, uint8_t format, uint8_t *hash, void *UNUSED(userdata))
 {
     qDebug() << "was called";
     return;
@@ -563,7 +397,7 @@ void callback_avatar_info(Tox *tox, int fid, uint8_t format, uint8_t *hash, void
 //    }
 }
 
-void callback_avatar_data(Tox *tox, int fid, uint8_t format, uint8_t *hash, uint8_t *data, uint32_t datalen, void *UNUSED(userdata))
+void callback_avatar_data(Tox *tox, uint32_t fid, uint8_t format, uint8_t *hash, uint8_t *data, uint32_t datalen, void *UNUSED(userdata))
 {
     qDebug() << "was called";
     return;
@@ -576,7 +410,7 @@ void callback_avatar_data(Tox *tox, int fid, uint8_t format, uint8_t *hash, uint
 //    }
 }
 
-void callback_group_invite(Tox *tox, int fid, uint8_t type, const uint8_t *data, uint16_t length, void *UNUSED(userdata))
+void callback_group_invite(Tox *tox, uint32_t fid, uint8_t type, const uint8_t *data, uint16_t length, void *UNUSED(userdata))
 {
     qDebug() << "was called";
     return;
@@ -681,96 +515,101 @@ void callback_file_data(Tox *UNUSED(tox), int32_t fid, uint8_t filenumber, const
     return;
 }
 
+void Cyanide::send_typing_notification(int fid, bool typing)
+{
+    TOX_ERR_SET_TYPING error;
+    if(settings.get("send-typing-notifications") == "true")
+        tox_self_set_typing(tox, (uint32_t)fid, typing, &error);
+}
+
 QString Cyanide::send_friend_request(QString id_string, QString msg_string)
 {
-    int id_len = tox_string_length(id_string);
+    size_t id_len = tox_string_length(id_string);
     char id[id_len];
     to_tox_string(id_string, (uint8_t*)id);
 
     if(msg_string.isEmpty())
         msg_string = QString(DEFAULT_FRIEND_REQUEST_MESSAGE);
 
-    int msg_len = tox_string_length(msg_string);
+    size_t msg_len = tox_string_length(msg_string);
     char msg[msg_len];
     to_tox_string(msg_string, (uint8_t*)msg);
 
-    QString error = send_friend_request_unboxed(id, id_len, msg, msg_len);
-    if(error == "")
+    QString errmsg = send_friend_request_unboxed(id, id_len, msg, msg_len);
+    if(errmsg == "")
         settings.add_friend_address(friends.size()-1, id_string);
-    return error;
+
+    return errmsg;
 }
 
-void Cyanide::send_typing_notification(int fid, bool typing)
-{
-    if(settings.get("send-typing-notifications") == "true")
-        tox_set_user_is_typing(tox, fid, (uint8_t)typing);
-}
-
-QString Cyanide::send_friend_request_unboxed(char *name, int length, char *msg, int msg_length)
+QString Cyanide::send_friend_request_unboxed(char *name, size_t length, char *msg, size_t msg_length)
 {
     if(!length) {
         return tr("No name");
     }
 
-    uint8_t id[TOX_FRIEND_ADDRESS_SIZE];
-    //if(length_cleaned == TOX_FRIEND_ADDRESS_SIZE * 2 && string_to_id((char*)id, (char*)name_cleaned)) {
-    if(string_to_id((char*)id, (char*)name)) {
-        //return friend_addid(id, msg, msg_length);
-    } else {
+    uint8_t id[TOX_ADDRESS_SIZE];
+    if(!string_to_id((char*)id, (char*)name)) {
         /* not a regular id, try DNS discovery */
-        // addfriend_status = ADDF_DISCOVER;
-        //void *data = dns_request((char*)name_cleaned, length_cleaned);
         void *data = dns_request((char*)name, length);
         if(data == NULL)
             return tr("Invalid Tox ID");
-        memcpy(id, data, TOX_FRIEND_ADDRESS_SIZE);
+        memcpy(id, data, TOX_ADDRESS_SIZE);
         free(data);
     }
 
-    QString error = send_friend_request_id(id, (const uint8_t*)msg, msg_length);
+    QString errmsg = send_friend_request_id(id, (const uint8_t*)msg, msg_length);
 
-    if(error == "") {
+    if(errmsg == "") {
         Friend *f = new Friend((const uint8_t*)id, (const uint8_t*)name, length, NULL, 0);
         add_friend(f);
     }
 
-    return error;
+    return errmsg;
 }
 
 
 /* */
-QString Cyanide::send_friend_request_id(const uint8_t *id, const uint8_t *msg, int msg_length)
+QString Cyanide::send_friend_request_id(const uint8_t *id, const uint8_t *msg, size_t msg_length)
 {
-    int32_t fid = tox_add_friend(tox, id, msg, msg_length);
-    switch(fid) {
-        case TOX_FAERR_TOOLONG:
+    TOX_ERR_FRIEND_ADD error;
+    uint32_t fid = tox_friend_add(tox, id, msg, msg_length, &error);
+    switch(error) {
+        case TOX_ERR_FRIEND_ADD_OK:
+            return "";
+        case TOX_ERR_FRIEND_ADD_NULL:
+            return ""; // TODO
+        case TOX_ERR_FRIEND_ADD_TOO_LONG:
             return tr("Error: Message is too long");
-        case TOX_FAERR_NOMESSAGE:
+        case TOX_ERR_FRIEND_ADD_NO_MESSAGE:
             return tr("Error: Empty message");
-        case TOX_FAERR_OWNKEY:
+        case TOX_ERR_FRIEND_ADD_OWN_KEY:
             return tr("Error: Tox ID is self ID");
-        case TOX_FAERR_ALREADYSENT:
+        case TOX_ERR_FRIEND_ADD_ALREADY_SENT:
             return tr("Error: Tox ID is already in friend list");
-        case TOX_FAERR_UNKNOWN:
-            return tr("Error: Unknown");
-        case TOX_FAERR_BADCHECKSUM:
+        case TOX_ERR_FRIEND_ADD_BAD_CHECKSUM:
             return tr("Error: Invalid Tox ID (bad checksum)");
-        case TOX_FAERR_SETNEWNOSPAM:
+        case TOX_ERR_FRIEND_ADD_SET_NEW_NOSPAM:
             return tr("Error: Invalid Tox ID (bad nospam value)");
-        case TOX_FAERR_NOMEM:
+        case TOX_ERR_FRIEND_ADD_MALLOC:
             return tr("Error: No memory");
         default:
+            Q_ASSERT(fid != UINT32_MAX);
+            Q_ASSERT(fid == friends.size()-1);
             return "";
     }
 }
 
 bool Cyanide::send_friend_message(int fid, QString msg)
 {
+    TOX_ERR_FRIEND_SEND_MESSAGE error;
+    TOX_MESSAGE_TYPE type = TOX_MESSAGE_TYPE_NORMAL;
     Friend *f = &friends[fid];
-    if(!f->connection_status)
+    if(f->connection_status == TOX_CONNECTION_NONE)
         return false;
 
-    uint32_t message_id = tox_send_message(tox, fid, to_tox_string(msg), tox_string_length(msg));
+
+    uint32_t message_id = tox_friend_send_message(tox, fid, type, to_tox_string(msg), tox_string_length(msg), &error);
     qDebug() << "message id:" << message_id;
 
     f->messages.push_back(Message(msg, true));
@@ -781,7 +620,8 @@ bool Cyanide::send_friend_message(int fid, QString msg)
 
 bool Cyanide::accept_friend_request(int fid)
 {
-    if(tox_add_friend_norequest(tox, friends[fid].cid) == -1) {
+    TOX_ERR_FRIEND_ADD error;
+    if(tox_friend_add_norequest(tox, friends[fid].cid, &error) == UINT32_MAX) {
         qDebug() << "could not add friend";
         return false;
     }
@@ -793,10 +633,14 @@ bool Cyanide::accept_friend_request(int fid)
 
 void Cyanide::remove_friend(int fid)
 {
-    tox_del_friend(tox, fid);
-    save_needed = true;
-    friends.erase(friends.begin() + fid);
-    settings.remove_friend(fid);
+    TOX_ERR_FRIEND_DELETE error;
+    if(tox_friend_delete(tox, fid, &error)) {
+        save_needed = true;
+        friends.erase(friends.begin() + fid);
+        settings.remove_friend(fid);
+    } else {
+        qDebug() << "Failed to remove friend";
+    }
 }
 
 void Cyanide::play_sound(QString file)
@@ -818,37 +662,38 @@ void Cyanide::set_friend_notification(int fid, bool status)
 void Cyanide::set_self_name(QString name)
 {
     bool success;
+    TOX_ERR_SET_INFO error;
     self.name_length = tox_string_length(name);
     to_tox_string(name, self.name);
-    success = 0 == tox_set_name(tox, self.name, self.name_length);
+    success = tox_self_set_name(tox, self.name, self.name_length, &error);
     Q_ASSERT(success);
     save_needed = true;
-    emit signal_name_change(self_fid, NULL);
+    emit signal_friend_name(self_fid, NULL);
 }
 
 void Cyanide::set_self_status_message(QString status_message)
 {
     bool success;
+    TOX_ERR_SET_INFO error;
     self.status_message_length = tox_string_length(status_message);
     to_tox_string(status_message, self.status_message);
-    success = 0 == tox_set_status_message(tox, self.status_message, self.status_message_length);
+    success = tox_self_set_status_message(tox, self.status_message, self.status_message_length, &error);
     Q_ASSERT(success);
     save_needed = true;
-    emit signal_status_message(self_fid);
+    emit signal_friend_status_message(self_fid);
 }
 
 int Cyanide::get_self_user_status()
 {
-    Q_ASSERT(self.user_status != TOX_USERSTATUS_INVALID);
-
     switch(self.user_status) {
-        case TOX_USERSTATUS_NONE:
+        case TOX_USER_STATUS_NONE:
             return 0;
-        case TOX_USERSTATUS_AWAY:
+        case TOX_USER_STATUS_AWAY:
             return 1;
-        case TOX_USERSTATUS_BUSY:
+        case TOX_USER_STATUS_BUSY:
             return 2;
         default:
+            Q_ASSERT(false);
             return 0;
     }
 }
@@ -857,17 +702,17 @@ void Cyanide::set_self_user_status(int status)
 {
     switch(status) {
         case 0:
-            self.user_status = TOX_USERSTATUS_NONE;
+            self.user_status = TOX_USER_STATUS_NONE;
             break;
         case 1:
-            self.user_status = TOX_USERSTATUS_AWAY;
+            self.user_status = TOX_USER_STATUS_AWAY;
             break;
         case 2:
-            self.user_status = TOX_USERSTATUS_BUSY;
+            self.user_status = TOX_USER_STATUS_BUSY;
             break;
     }
-    tox_set_user_status(tox, self.user_status);
-    emit cyanide.signal_user_status(self_fid);
+    tox_self_set_status(tox, self.user_status);
+    emit cyanide.signal_friend_status(self_fid);
 }
 
 int Cyanide::get_number_of_friends()
@@ -896,24 +741,22 @@ QString Cyanide::get_friend_status_icon(int fid)
 {
     QString url = "qrc:/images/";
     Friend f = fid == -1 ? self : friends[fid];
-    uint8_t status = f.user_status;
 
-    Q_ASSERT(self.user_status != TOX_USERSTATUS_INVALID);
-
-    if(!f.connection_status) {
+    if(f.connection_status == TOX_CONNECTION_NONE) {
         url.append("offline");
     } else {
-        switch(status) {
-        case TOX_USERSTATUS_NONE:
+        switch(f.user_status) {
+        case TOX_USER_STATUS_NONE:
             url.append("online");
             break;
-        case TOX_USERSTATUS_AWAY:
+        case TOX_USER_STATUS_AWAY:
             url.append("away");
             break;
-        case TOX_USERSTATUS_BUSY:
+        case TOX_USER_STATUS_BUSY:
             url.append("busy");
             break;
-        default: //TOX_USERSTATUS_INVALID:
+        default:
+            Q_ASSERT(false);
             url.append("offline");
         }
     }
@@ -929,7 +772,7 @@ QString Cyanide::get_friend_status_icon(int fid)
 bool Cyanide::get_friend_connection_status(int fid)
 {
     Friend f = fid == -1 ? self : friends[fid];
-    return f.connection_status;
+    return f.connection_status != TOX_CONNECTION_NONE;
 }
 
 bool Cyanide::get_friend_accepted(int fid)
@@ -946,9 +789,9 @@ QString Cyanide::get_friend_cid(int fid)
 
 QString Cyanide::get_self_address()
 {
-    char hex_id[2 * TOX_FRIEND_ADDRESS_SIZE];
+    char hex_id[2 * TOX_ADDRESS_SIZE];
     id_to_string((char*)hex_id, (char*)self_id);
-    return to_QString(hex_id, 2 * TOX_FRIEND_ADDRESS_SIZE);
+    return to_QString(hex_id, 2 * TOX_ADDRESS_SIZE);
 }
 
 int Cyanide::get_number_of_messages(int fid)

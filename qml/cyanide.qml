@@ -70,7 +70,7 @@ ApplicationWindow
         onSignal_friend_added: {
             appendFriend(fid)
         }
-        onSignal_name_change: {
+        onSignal_friend_name: {
             var i = fid + 1
             var name = cyanide.get_friend_name(fid)
             friendList.setProperty(i, "friend_name", name)
@@ -84,7 +84,7 @@ ApplicationWindow
             }
             */
         }
-        onSignal_user_status: {
+        onSignal_friend_status: {
             var i = fid + 1
             friendList.setProperty(i, "friend_status_icon", cyanide.get_friend_status_icon(fid))
         }
@@ -92,7 +92,7 @@ ApplicationWindow
             var i = fid + 1
             friendList.setProperty(i, "friend_status_icon", cyanide.get_friend_status_icon(fid))
         }
-        onSignal_connection_status: {
+        onSignal_friend_connection_status: {
             var i = fid + 1
             var online = cyanide.get_friend_connection_status(fid)
             friendList.setProperty(i, "friend_connection_status", online)
@@ -111,7 +111,7 @@ ApplicationWindow
                 }
             }
         }
-        onSignal_status_message: {
+        onSignal_friend_status_message: {
             var i = fid + 1
             friendList.setProperty(i, "friend_status_message", cyanide.get_friend_status_message(fid))
         }

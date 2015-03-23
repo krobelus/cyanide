@@ -109,7 +109,7 @@ void to_hex(char *a, char *p, int size)
 
 void id_to_string(char *dest, char *src)
 {
-    to_hex(dest, src, TOX_FRIEND_ADDRESS_SIZE);
+    to_hex(dest, src, TOX_ADDRESS_SIZE);
 }
 
 void cid_to_string(char *dest, char *src)
@@ -124,7 +124,7 @@ void hash_to_string(char *dest, char *src)
 
 bool string_to_id(char *w, char *a)
 {
-    char *end = w + TOX_FRIEND_ADDRESS_SIZE;
+    char *end = w + TOX_ADDRESS_SIZE;
     while(w != end) {
         char c, v;
 
@@ -186,7 +186,7 @@ int to_tox_string(QString str, uint8_t *dest)
     return bytes.size();
 }
 
-int tox_string_length(QString str)
+size_t tox_string_length(QString str)
 {
     return str.toUtf8().length();
 }

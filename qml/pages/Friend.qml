@@ -109,7 +109,7 @@ Page {
                         messageList.positionViewAtEnd()
                     }
                 }
-                onSignal_typing_change: {
+                onSignal_friend_typing: {
                     if(fid == activeFriend()) {
                         inputField.label = is_typing
                             ? friendList.get(activeFriend()+1).friend_name + qsTr(" is typing...")
