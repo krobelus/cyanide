@@ -21,23 +21,17 @@ void* file_text(char *path);
 
 void to_hex(char *a, char *p, int size);
 
-void id_to_string(char *dest, char *src);
+void address_to_string(char *dest, char *src);
 
-void cid_to_string(char *dest, char *src);
+void public_key_to_string(char *dest, char *src);
 
 void hash_to_string(char *dest, char *src);
 
-bool string_to_id(char *w, char *a);
+bool string_to_address(char *w, char *a);
 
-QString to_QString(const void *ptr, int length);
-
-const uint8_t *to_tox_string(QString str);
-int to_tox_string(QString str, uint8_t *dest);
-//TODO rename
-size_t tox_string_length(QString str);
-
-const char *to_const_char(QString str);
-int to_const_char(QString str, char *dest);
+QString utf8_to_qstr(const void *src, size_t length);
+size_t qstrlen(QString str);
+void qstr_to_utf8(uint8_t *dest, QString src);
 
 uint64_t get_time();
 int get_time_ms();

@@ -27,7 +27,7 @@ void init_db()
 Message::Message(const uint8_t *message, uint16_t length, bool from_me)
 {
     author = from_me;
-    text = to_QString(message, length);
+    text = utf8_to_qstr(message, length);
     timestamp = QDateTime::currentDateTime();
 }
 

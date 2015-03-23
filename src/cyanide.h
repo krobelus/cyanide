@@ -13,7 +13,7 @@ class Cyanide : public QObject
     Q_OBJECT
 
 private:
-    uint8_t self_id[TOX_ADDRESS_SIZE];
+    uint8_t self_address[TOX_ADDRESS_SIZE];
 
     char save_path[TOX_MAX_FILENAME_LENGTH];
 
@@ -61,7 +61,7 @@ public:
 
     Q_INVOKABLE QString get_self_address();
     Q_INVOKABLE int get_self_user_status();
-    Q_INVOKABLE QString get_friend_cid(int fid);
+    Q_INVOKABLE QString get_friend_public_key(int fid);
     Q_INVOKABLE int get_number_of_friends();
     Q_INVOKABLE QString get_friend_name(int fid);
     Q_INVOKABLE QString get_friend_avatar(int fid);

@@ -10,8 +10,7 @@ Friend::Friend()
     notification = false;
 }
 
-Friend::Friend(const uint8_t *cid, const uint8_t *name, size_t name_length,
-               const uint8_t *status_message, size_t status_message_length)
+Friend::Friend(const uint8_t *public_key, QString name, QString status_message)
 {
     //TODO use the default constructor for this
     connection_status = TOX_CONNECTION_NONE;
@@ -19,9 +18,7 @@ Friend::Friend(const uint8_t *cid, const uint8_t *name, size_t name_length,
     accepted = true;
     notification = false;
 
-    memcpy(this->cid, cid, TOX_PUBLIC_KEY_SIZE);
-    this->name_length = name_length;
-    memcpy(this->name, name, name_length);
-    this->status_message_length = status_message_length;
-    memcpy(this->status_message, status_message, status_message_length);
+    memcpy(this->public_key, public_key, TOX_PUBLIC_KEY_SIZE);
+    this->name = name;
+    this->status_message = status_message;
 }

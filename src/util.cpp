@@ -107,12 +107,12 @@ void to_hex(char *a, char *p, int size)
     }
 }
 
-void id_to_string(char *dest, char *src)
+void address_to_string(char *dest, char *src)
 {
     to_hex(dest, src, TOX_ADDRESS_SIZE);
 }
 
-void cid_to_string(char *dest, char *src)
+void public_key_to_string(char *dest, char *src)
 {
     to_hex(dest, src, TOX_PUBLIC_KEY_SIZE);
 }
@@ -122,7 +122,7 @@ void hash_to_string(char *dest, char *src)
     to_hex(dest, src, TOX_HASH_LENGTH);
 }
 
-bool string_to_id(char *w, char *a)
+bool string_to_address(char *w, char *a)
 {
     char *end = w + TOX_ADDRESS_SIZE;
     while(w != end) {
@@ -156,39 +156,22 @@ bool string_to_id(char *w, char *a)
     return 1;
 }
 
-QString to_QString(const void *ptr, int length)
+QString utf8_to_qstr(const void *src, size_t length)
 {
-    return QString(QByteArray((const char*)ptr, length));
+    return QString(QByteArray((const char*)src, length));
 }
 
 
-const char *to_const_char(QString str)
-{
-    return str.toUtf8().constData();
-}
-
-
-int to_const_char(QString str, void *dest)
-{
-    return -1;
-}
-
-const uint8_t *to_tox_string(QString str)
-{
-    return (const uint8_t*)str.toUtf8().constData();
-}
-
-int to_tox_string(QString str, uint8_t *dest)
-{
-    QByteArray bytes = str.toUtf8();
-    const char *charp = bytes.constData();
-    memcpy(dest, charp, bytes.size());
-    return bytes.size();
-}
-
-size_t tox_string_length(QString str)
+size_t qstrlen(QString str)
 {
     return str.toUtf8().length();
+}
+
+void qstr_to_utf8(uint8_t *dest, QString src)
+{
+    QByteArray bytes = src.toUtf8();
+    const char *charp = bytes.constData();
+    memcpy(dest, charp, bytes.size());
 }
 
 uint64_t get_time()

@@ -9,17 +9,12 @@ class Friend
 
 public:
     Friend();
-    Friend(const uint8_t *cid, const uint8_t *name, size_t name_length
-                             , const uint8_t *status_message, size_t status_message_length);
+    Friend(const uint8_t *public_key, QString name, QString status_message);
 
-    uint8_t name[TOX_MAX_NAME_LENGTH];
-    size_t name_length;
+    QString name;
+    QString status_message;
 
-    // TODO store as QString
-    uint8_t status_message[TOX_MAX_STATUS_MESSAGE_LENGTH];
-    size_t status_message_length;
-
-    uint8_t cid[TOX_PUBLIC_KEY_SIZE];
+    uint8_t public_key[TOX_PUBLIC_KEY_SIZE];
 
     TOX_CONNECTION connection_status;
     TOX_USER_STATUS user_status;
