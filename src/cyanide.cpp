@@ -255,7 +255,6 @@ void Cyanide::load_tox_data()
 
     for(size_t i = 0; i < nfriends; i++) {
         Friend f = *new Friend();
-
         if(!tox_friend_get_public_key(tox, i, f.public_key, (TOX_ERR_FRIEND_GET_PUBLIC_KEY*)&error))
             qDebug() << "Failed to get public key for friend " << i;
 
@@ -271,7 +270,7 @@ void Cyanide::load_tox_data()
         f.status_message = utf8_to_qstr(status_message, length);
         Q_ASSERT(success);
 
-        friends.push_back(f);
+        add_friend(&f);
     }
 
     length = tox_self_get_name_size(tox);
@@ -291,6 +290,17 @@ void Cyanide::load_tox_data()
 
 void Cyanide::add_friend(Friend *f)
 {
+    /* find out the friend id that toxcore will assign to that friend */
+    uint32_t fid = 0;
+    for(auto i=friends.begin(); i!=friends.end(); i++) {
+        if(i->fid != fid) {
+            /* fid shoud be unused, use it */
+            break;
+        }
+        fid++;
+    }
+    qDebug() << "setting fid to" << friends.size();
+    f->fid = fid;
     friends.push_back(*f);
     emit cyanide.signal_friend_added(friends.size() - 1);
 }
@@ -519,11 +529,16 @@ void callback_file_data(Tox *UNUSED(tox), int32_t fid, uint8_t filenumber, const
     return;
 }
 
+uint32_t Cyanide::fid_at(int fid)
+{
+    return friends[fid].fid;
+}
+
 void Cyanide::send_typing_notification(int fid, bool typing)
 {
     TOX_ERR_SET_TYPING error;
     if(settings.get("send-typing-notifications") == "true")
-        tox_self_set_typing(tox, (uint32_t)fid, typing, &error);
+        tox_self_set_typing(tox, fid_at(fid), typing, &error);
 }
 
 QString Cyanide::send_friend_request(QString id_str, QString msg_str)
@@ -601,7 +616,7 @@ bool Cyanide::send_friend_message(int fid, QString msg_str)
     size_t msg_len = qstrlen(msg_str);
     uint8_t msg[msg_len];
     qstr_to_utf8(msg, msg_str);
-    uint32_t message_id = tox_friend_send_message(tox, fid, type, msg, msg_len, &error);
+    uint32_t message_id = tox_friend_send_message(tox, fid_at(fid), type, msg, msg_len, &error);
     qDebug() << "message id:" << message_id;
 
     f->messages.push_back(Message(msg_str, true));
@@ -729,6 +744,7 @@ QString Cyanide::get_friend_name(int fid)
 
 QString Cyanide::get_friend_avatar(int fid)
 {
+    //TODO
     return QString("qrc:/images/blankavatar");
 }
 

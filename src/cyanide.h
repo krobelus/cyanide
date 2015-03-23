@@ -25,6 +25,7 @@ public:
     QQuickView *view;
     Friend self;
     static const int self_fid = -1;
+    uint32_t fid_at(int fid);
     std::vector<Friend> friends;
     bool run_tox_loop, save_needed;
     void add_friend(Friend *p);
