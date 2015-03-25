@@ -44,7 +44,7 @@ OTHER_FILES += \
 
 # to disable building translations every time, comment out the
 # following CONFIG line
-CONFIG +=  sailfishapp_i18n
+# CONFIG +=  sailfishapp_i18n
 
 TRANSLATIONS += translations/cyanide-de.ts \
                 translations/cyanide-ru.ts \
@@ -60,7 +60,8 @@ HEADERS += \
     src/tox_callbacks.h \
     src/message.h \
     src/settings.h \
-    src/config.h
+    src/config.h \
+    src/file_transfers.h
 
 unix:!macx: LIBS += -L$$PWD/res/usr/lib/ -ltoxcore -ltoxdns -lsodium -lrt -lresolv -lnemonotifications-qt5
 
