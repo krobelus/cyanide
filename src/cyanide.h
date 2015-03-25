@@ -16,13 +16,12 @@ class Cyanide : public QObject
 private:
     uint8_t self_address[TOX_ADDRESS_SIZE];
 
-    char save_path[TOX_MAX_FILENAME_LENGTH];
-
     QString send_friend_request_id(const uint8_t *id, const uint8_t *msg, size_t msg_length);
     QString send_friend_request_unboxed(char *name, size_t length, char *msg, size_t msg_length);
 
 public:
     Tox *tox;
+    char save_path[TOX_MAX_FILENAME_LENGTH];
     QQuickView *view;
     Friend self;
     static const int self_fid = -1;

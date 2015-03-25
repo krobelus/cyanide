@@ -32,6 +32,12 @@ int main(int argc, char *argv[])
     app->setApplicationName("Cyanide");
     cyanide.view = SailfishApp::createView();
 
+    if(argc != 1) {
+        sprintf(cyanide.save_path, "%s", argv[1]);
+    } else {
+        sprintf(cyanide.save_path, "%s/tox_save.tox", CONFIG_PATH);
+    }
+
     cyanide.load_tox_and_stuff_pretty_please();
     std::thread tox_thread(start_tox_thread, &cyanide);
 
@@ -86,13 +92,11 @@ void Cyanide::load_tox_and_stuff_pretty_please()
     tox_options = *tox_options_new((TOX_ERR_OPTIONS_NEW*)&error);
     // TODO
 
-    sprintf(save_path, "%s/.config/tox/tox_save.tox", getenv("HOME"));
-
     size_t save_data_size;
     const uint8_t *save_data = get_save_data(&save_data_size);
     tox = tox_new(&tox_options, save_data, save_data_size, (TOX_ERR_NEW*)&error);
 
-    if(save_data_size == 0)
+    if(save_data_size == 0 || save_data == NULL)
         load_defaults();
     else
         load_tox_data();
@@ -202,8 +206,7 @@ void Cyanide::write_save()
     tox_get_savedata(tox, (uint8_t*)data);
 
     mkdir(CONFIG_PATH, 0755);
-    chmod(CONFIG_PATH, 0755);
-    sprintf(tmp_path, "%s/tox_save.tmp", CONFIG_PATH);
+    sprintf(tmp_path, "%s.tmp", save_path);
 
     file = fopen(tmp_path, "wb");
     if(file) {
@@ -240,7 +243,7 @@ const uint8_t* Cyanide::get_save_data(size_t *size)
 
     data = file_raw(save_path, size);
     if(!data)
-        size = 0;
+        *size = 0;
 
     return (const uint8_t*)data;
 }
@@ -414,6 +417,16 @@ void callback_file_recv(Tox *tox, uint32_t fid, uint32_t file_number, uint32_t k
     if(!tox_file_get_file_id(tox, ft.friend_number, ft.file_number
                             , ft.file_id, &error)) {
         qDebug() << "Failed to get file id";
+        switch(error) {
+            case TOX_ERR_FILE_GET_OK:
+                break;
+            case TOX_ERR_FILE_GET_FRIEND_NOT_FOUND:
+                qDebug() << "Error: file not found";
+                break;
+            case TOX_ERR_FILE_GET_NOT_FOUND:
+                qDebug() << "Error: file transfer not found";
+                break;
+        }
         return;
     }
 
@@ -515,6 +528,16 @@ bool Cyanide::send_file(int fid, QString path)
     if(!tox_file_get_file_id(tox, ft.friend_number, ft.file_number
                             , ft.file_id, (TOX_ERR_FILE_GET*)&error)) {
         qDebug() << "Failed to get file id";
+        switch(error) {
+            case TOX_ERR_FILE_GET_OK:
+                break;
+            case TOX_ERR_FILE_GET_FRIEND_NOT_FOUND:
+                qDebug() << "Error: file not found";
+                break;
+            case TOX_ERR_FILE_GET_NOT_FOUND:
+                qDebug() << "Error: file transfer not found";
+                break;
+        }
         return false;
     }
 
