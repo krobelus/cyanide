@@ -1,24 +1,3 @@
-/*
-#include <QGuiApplication>
-#include <QStandardPaths>
-#include <QSqlError>
-#include <QDebug>
-#include <QSqlDatabase>
-
-void init_db()
-{
-    QSqlDatabase db;
-    QString dbdir = QStandardPaths::writableLocation((QStandardPaths::DataLocation));
-    if (!QDir(dbdir).exists())
-        QDir().mkpath(dbdir);
-    db = QSqlDatabase::addDatabase("QSQLITE");
-    Q_ASSERT(db.isValid());
-    db.setDatabaseName(dbdir + QDir::separator() + kApplicationDBFileName);
-    qDebug() << "Application database path: " <<
-                dbdir + QDir::separator() + kApplicationDBFileName;
-
-*/
-
 #include <time.h>
 
 #include "message.h"

@@ -7,6 +7,7 @@
 
 #include "friend.h"
 #include "message.h"
+#include "file_transfers.h"
 
 class Cyanide : public QObject
 {
@@ -27,8 +28,11 @@ public:
     static const int self_fid = -1;
     uint32_t fid_at(int fid);
     std::vector<Friend> friends;
+    std::map<uint64_t, File_Transfer> file_transfers;
     bool run_tox_loop, save_needed;
-    void add_friend(Friend *p);
+    void add_friend(Friend *f);
+    void add_file_transfer(File_Transfer *ft);
+    File_Transfer *get_file_transfer(uint32_t friend_number, uint32_t file_number);
 
     void load_tox_and_stuff_pretty_please();
     /* reads the tox save file into memory and stores the length in *size */
@@ -53,6 +57,7 @@ public:
     Q_INVOKABLE void raise();
     Q_INVOKABLE bool is_visible();
     Q_INVOKABLE void visibility_changed(QWindow::Visibility visibility);
+    Q_INVOKABLE bool send_file(int fid, QString path);
 
     /* setters and getters */
     Q_INVOKABLE void set_friend_notification(int fid, bool status);

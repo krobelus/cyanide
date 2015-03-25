@@ -316,14 +316,9 @@ void Cyanide::set_callbacks()
     tox_callback_friend_read_receipt(tox, callback_friend_read_receipt, NULL);
     tox_callback_friend_connection_status(tox, callback_friend_connection_status, NULL);
 
-    /*
-    tox_callback_group_invite(tox, callback_group_invite, NULL);
-    tox_callback_group_message(tox, callback_group_message, NULL);
-    tox_callback_group_action(tox, callback_group_action, NULL);
-    tox_callback_group_title(tox, callback_group_title, NULL);
-    tox_callback_group_namelist_change(tox, callback_group_namelist_change, NULL);
-    */
-
+    tox_callback_file_recv(tox, callback_file_recv, NULL);
+    tox_callback_file_recv_chunk(tox, callback_file_recv_chunk, NULL);
+    tox_callback_file_chunk_request(tox, callback_file_chunk_request, NULL);
 }
 
 void callback_friend_request(Tox *UNUSED(tox), const uint8_t *id, const uint8_t *msg, size_t length, void *UNUSED(userdata))
@@ -390,143 +385,154 @@ void callback_friend_connection_status(Tox *tox, uint32_t fid, TOX_CONNECTION st
     emit cyanide.signal_friend_connection_status(fid);
 }
 
-void callback_avatar_info(Tox *tox, uint32_t fid, uint8_t format, uint8_t *hash, void *UNUSED(userdata))
+void callback_file_recv(Tox *tox, uint32_t fid, uint32_t file_number, uint32_t kind,
+                        uint64_t file_size, const uint8_t *filename, size_t filename_length, void *UNUSED(user_data))
 {
     qDebug() << "was called";
-    return;
-//    FRIEND *f = &friend[fid];
-//
-//    if (format != TOX_AVATAR_FORMAT_NONE) {
-//        if (!friend_has_avatar(f) || memcmp(f->avatar.hash, hash, TOX_HASH_LENGTH) != 0) { // check if avatar has changed
-//            memcpy(f->avatar.hash, hash, TOX_HASH_LENGTH); // set hash pre-emptively so we don't request data twice
-//
-//            char_t hash_string[TOX_HASH_LENGTH * 2];
-//            hash_to_string(hash_string, hash);
-//            debug("Friend Avatar Hash (%u): %.*s\n", fid, (int)sizeof(hash_string), hash_string);
-//
-//            tox_request_avatar_data(tox, fid);
-//        }
-//    } else if (friend_has_avatar(f)) {
-//        postmessage(FRIEND_UNSETAVATAR, fid, 0, NULL); // unset avatar if we had one
-//    }
+    qDebug() << "File transfer request received";
+    TOX_ERR_FILE_GET error;
+
+    File_Transfer ft;
+    ft.friend_number = fid;
+    ft.kind = kind;
+    ft.incoming = true;
+
+    ft.file_size = file_size;
+    ft.position = 0;
+
+    ft.filename_length = filename_length;
+    ft.filename = (uint8_t*)malloc(filename_length);
+    memcpy(ft.filename, filename, filename_length);
+
+    char p[sizeof(DOWNLOAD_PATH) + filename_length];
+    sprintf(p, "%s/%s", DOWNLOAD_PATH, filename);
+    if((ft.file = fopen(p, "wb")) == NULL) {
+        qDebug() << "Failed to open file " << p;
+        return;
+    }
+
+    if(!tox_file_get_file_id(tox, ft.friend_number, ft.file_number
+                            , ft.file_id, &error)) {
+        qDebug() << "Failed to get file id";
+        return;
+    }
+
+    cyanide.add_file_transfer(&ft);
 }
 
-void callback_avatar_data(Tox *tox, uint32_t fid, uint8_t format, uint8_t *hash, uint8_t *data, uint32_t datalen, void *UNUSED(userdata))
+void callback_file_recv_chunk(Tox *tox, uint32_t fid, uint32_t file_number, uint64_t position,
+                              const uint8_t *data, size_t length, void *UNUSED(user_data))
 {
     qDebug() << "was called";
-    return;
-//    FRIEND *f = &friend[fid];
-//
-//    if (memcmp(f->avatar.hash, hash, TOX_HASH_LENGTH) == 0) { // same hash as in last avatar_info
-//        uint8_t *data_out = malloc(datalen);
-//        memcpy(data_out, data, datalen);
-//        postmessage(FRIEND_SETAVATAR, fid, datalen, data_out);
-//    }
+
+    File_Transfer *ft = cyanide.get_file_transfer(fid, file_number);
+    Q_ASSERT(ft);
+
+    FILE *file = ft->file;
+    uint64_t pos = ftell(file);
+    Q_ASSERT(pos == position);
+
+    if(fwrite(data, 1, length, file) != length) {
+        qDebug() << "fwrite failed";
+        return;
+    }
 }
 
-void callback_group_invite(Tox *tox, uint32_t fid, uint8_t type, const uint8_t *data, uint16_t length, void *UNUSED(userdata))
+void callback_file_chunk_request(Tox *tox, uint32_t friend_number, uint32_t file_number, uint64_t position, size_t length, void *UNUSED(user_data))
 {
     qDebug() << "was called";
-    return;
-//    int gid = -1;
-//    if (type == TOX_GROUPCHAT_TYPE_TEXT) {
-//        gid = tox_join_groupchat(tox, fid, data, length);
-//    } else if (type == TOX_GROUPCHAT_TYPE_AV) {
-//        gid = toxav_join_av_groupchat(tox, fid, data, length, &callback_av_group_audio, NULL);
-//    }
-//
-//    if(gid != -1) {
-//        postmessage(GROUP_ADD, gid, 0, tox);
-//    }
-//
-//    debug("Group Invite (%i,f:%i) type %u\n", gid, fid, type);
+
+    bool success;
+    TOX_ERR_FILE_SEND_CHUNK error;
+    uint8_t *chunk;
+
+    File_Transfer *ft = cyanide.get_file_transfer(friend_number, file_number);
+    Q_ASSERT(ft);
+
+    if(ft->file_size - position < length)
+        length = ft->file_size - position;
+
+    chunk = (uint8_t*)malloc(length);
+    FILE *file = ft->file;
+    if(fread(chunk, 1, length, file) != length) {
+        qDebug() << "fread failed";
+        return;
+    }
+
+    success = tox_file_send_chunk(tox, friend_number, file_number, position,
+            (const uint8_t*)chunk, length, &error);
+    Q_ASSERT(success);
+    free(chunk);
 }
 
-void callback_group_message(Tox *tox, int gid, int pid, const uint8_t *message, uint16_t length, void *UNUSED(userdata))
+bool Cyanide::send_file(int fid, QString path)
 {
-    qDebug() << "was called";
-    return;
-//    postmessage(GROUP_MESSAGE, gid, 0, copy_groupmessage(tox, message, length, MSG_TYPE_TEXT, gid, pid));
-//
-//    debug("Group Message (%u, %u): %.*s\n", gid, pid, length, message);
+    int error;
+    TOX_FILE_KIND kind = TOX_FILE_KIND_DATA;
+
+    File_Transfer ft;
+    ft.friend_number = fid;
+    ft.kind = kind;
+    ft.incoming = false;
+
+    ft.filename_length = qstrlen(path);
+    ft.filename = (uint8_t*)malloc(ft.filename_length);
+    qstr_to_utf8(ft.filename, path);
+
+    char p[qstrlen(path)];
+    qstr_to_utf8((uint8_t*)p, path);
+    if((ft.file = fopen(p, "rb")) == NULL) {
+        qDebug() << "Failed to open file" << path;
+        return false;
+    }
+    fseek(ft.file, 0L, SEEK_END);
+    ft.file_size = ftell(ft.file);
+    rewind(ft.file);
+    ft.position = 0;
+
+    ft.file_number = tox_file_send(tox, ft.friend_number, ft.kind, ft.file_size,
+                                    NULL, ft.filename, ft.filename_length,
+                                    (TOX_ERR_FILE_SEND*)&error);
+    switch(error) {
+        case TOX_ERR_FILE_SEND_OK:
+            break;
+        case TOX_ERR_FILE_SEND_FRIEND_NOT_FOUND:
+            qDebug() << "Error: friend not found.";
+            return false;
+        case TOX_ERR_FILE_SEND_FRIEND_NOT_CONNECTED:
+            qDebug() << "Error: friend not connected.";
+            return false;
+        case TOX_ERR_FILE_SEND_NAME_TOO_LONG:
+            qDebug() << "Error: filename too long.";
+            return false;
+        case TOX_ERR_FILE_SEND_TOO_MANY:
+            qDebug() << "Error: Too many ongoing transfers.";
+            return false;
+        default:
+            Q_ASSERT(false);
+    }
+
+    if(!tox_file_get_file_id(tox, ft.friend_number, ft.file_number
+                            , ft.file_id, (TOX_ERR_FILE_GET*)&error)) {
+        qDebug() << "Failed to get file id";
+        return false;
+    }
+
+    add_file_transfer(&ft);
+    return true;
 }
 
-void callback_group_action(Tox *tox, int gid, int pid, const uint8_t *action, uint16_t length, void *UNUSED(userdata))
+void Cyanide::add_file_transfer(File_Transfer *ft)
 {
-    qDebug() << "was called";
-    return;
-//    postmessage(GROUP_MESSAGE, gid, 0, copy_groupmessage(tox, action, length, MSG_TYPE_ACTION_TEXT, gid, pid));
-//
-//    debug("Group Action (%u, %u): %.*s\n", gid, pid, length, action);
+    uint64_t id = (uint64_t)ft->friend_number << 32 | ft->file_number;
+    file_transfers[id] = *ft;
 }
 
-void callback_group_namelist_change(Tox *tox, int gid, int pid, uint8_t change, void *UNUSED(userdata))
+File_Transfer* Cyanide::get_file_transfer(uint32_t friend_number, uint32_t file_number)
 {
-    qDebug() << "was called";
-    return;
-//    switch(change) {
-//    case TOX_CHAT_CHANGE_PEER_ADD: {
-//        postmessage(GROUP_PEER_ADD, gid, pid, tox);
-//        break;
-//    }
-//
-//    case TOX_CHAT_CHANGE_PEER_DEL: {
-//        postmessage(GROUP_PEER_DEL, gid, pid, tox);
-//        break;
-//    }
-//
-//    case TOX_CHAT_CHANGE_PEER_NAME: {
-//        uint8_t name[TOX_MAX_NAME_LENGTH];
-//        int len = tox_group_peername(tox, gid, pid, name);
-//
-//        len = utf8_validate(name, len);
-//
-//        uint8_t *data = malloc(len + 1);
-//        data[0] = len;
-//        memcpy(data + 1, name, len);
-//
-//        postmessage(GROUP_PEER_NAME, gid, pid, data);
-//        break;
-//    }
-//    }
-//    debug("Group Namelist Change (%u, %u): %u\n", gid, pid, change);
-}
-
-void callback_group_title(Tox *tox, int gid, int pid, const uint8_t *title, uint8_t length, void *UNUSED(userdata))
-{
-    qDebug() << "was called";
-    return;
-//    length = utf8_validate(title, length);
-//    if (!length)
-//        return;
-//
-//    uint8_t *copy_title = malloc(length);
-//    if (!copy_title)
-//        return;
-//
-//    memcpy(copy_title, title, length);
-//    postmessage(GROUP_TITLE, gid, length, copy_title);
-//
-//    debug("Group Title (%u, %u): %.*s\n", gid, pid, length, title);
-}
-
-void callback_file_send_request(Tox *tox, int32_t fid, uint8_t filenumber, uint64_t filesize, const uint8_t *filename,
-                                       uint16_t filename_length, void *UNUSED(userdata))
-{
-    qDebug() << "was called";
-    return;
-}
-void callback_file_control(Tox *tox, int32_t fid, uint8_t receive_send, uint8_t filenumber, uint8_t control,
-                                  const uint8_t *data, uint16_t length, void *UNUSED(userdata))
-{
-    qDebug() << "was called";
-    return;
-}
-void callback_file_data(Tox *UNUSED(tox), int32_t fid, uint8_t filenumber, const uint8_t *data, uint16_t length,
-                               void *UNUSED(userdata))
-{
-    qDebug() << "was called";
-    return;
+    uint64_t id = (uint64_t)friend_number << 32 | file_number;
+    // TODO bounds checking :)
+    return &file_transfers[id];
 }
 
 uint32_t Cyanide::fid_at(int fid)
