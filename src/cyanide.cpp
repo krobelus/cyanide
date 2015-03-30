@@ -38,10 +38,10 @@ int main(int argc, char *argv[])
         sprintf(cyanide.save_path, "%s/tox_save.tox", CONFIG_PATH);
     }
 
+    settings.init();
     cyanide.load_tox_and_stuff_pretty_please();
     std::thread tox_thread(start_tox_thread, &cyanide);
 
-    settings.init();
     cyanide.view->rootContext()->setContextProperty("settings", &settings);
     cyanide.view->rootContext()->setContextProperty("cyanide", &cyanide);
     cyanide.view->setSource(SailfishApp::pathTo("qml/cyanide.qml"));
@@ -263,17 +263,11 @@ void Cyanide::load_tox_data()
 
         tox_friend_get_public_key(tox, i, f.public_key, (TOX_ERR_FRIEND_GET_PUBLIC_KEY*)&error);
 
-        char hex_pkey[2 * TOX_PUBLIC_KEY_SIZE + 1];
-        public_key_to_string(hex_pkey, (char*)f.public_key);
-        hex_pkey[2 * TOX_PUBLIC_KEY_SIZE] = '\0';
-        char p[sizeof(AVATAR_PATH) + 2 * TOX_PUBLIC_KEY_SIZE + 5];
-        sprintf(p, "%s/%s.png", AVATAR_PATH, hex_pkey);
-        uint32_t avatar_size;
-        uint8_t *avatar_data = (uint8_t*)file_raw(p, &avatar_size);
-        if(avatar_data != NULL) {
-            tox_hash(f.avatar_hash, avatar_data, avatar_size);
-            free(avatar_data);
-        }
+        char hex_pubkey[2 * TOX_PUBLIC_KEY_SIZE + 1];
+        public_key_to_string(hex_pubkey, (char*)f.public_key);
+        hex_pubkey[2 * TOX_PUBLIC_KEY_SIZE] = '\0';
+        QByteArray saved_hash = settings.get_friend_avatar_hash(hex_pubkey);
+        memcpy(f.avatar_hash, saved_hash.constData(), TOX_HASH_LENGTH);
 
         length = tox_friend_get_name_size(tox, i, &error);
         uint8_t name[length];
@@ -477,6 +471,8 @@ void callback_file_recv_chunk(Tox *tox, uint32_t fid, uint32_t file_number, uint
                      << "file" << ft->file_number;
             Friend *f = &cyanide.friends[ft->friend_number];
             success = tox_hash(f->avatar_hash, ft->data, ft->file_size);
+            QByteArray hash((const char*)f->avatar_hash, TOX_HASH_LENGTH);
+            settings.set_friend_avatar_hash(cyanide.get_friend_public_key(ft->friend_number), hash);
             Q_ASSERT(success);
             n = fwrite(ft->data, 1, ft->file_size, file);
             Q_ASSERT(n == ft->file_size);
@@ -774,7 +770,7 @@ QString Cyanide::send_friend_request(QString id_str, QString msg_str)
         char hex_address[2 * TOX_ADDRESS_SIZE + 1];
         address_to_string(hex_address, (char*)address);
         hex_address[2 * TOX_ADDRESS_SIZE] = '\0';
-        settings.add_friend_address(get_friend_public_key(fid), hex_address);
+        settings.add_friend(hex_address);
     }
 
     return errmsg;

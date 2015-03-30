@@ -10,7 +10,7 @@ QString db_version = "0002";
 QString tables[] = {
         "CREATE TABLE IF NOT EXISTS settings (name TEXT PRIMARY KEY, value TEXT)",
         //"CREATE TABLE IF NOT EXISTS friends (fid INT PRIMARY KEY, address TEXT)"
-        "CREATE TABLE IF NOT EXISTS friends (public_key TEXT PRIMARY KEY, address TEXT)"
+        "CREATE TABLE IF NOT EXISTS friends (public_key TEXT PRIMARY KEY, address TEXT, avatar_hash BLOB)"
         };
 
 std::map<QString, settings_entry> Settings::entries = {
@@ -192,11 +192,11 @@ QString Settings::db_get(QString name)
     }
 }
 
-void Settings::add_friend_address(QString public_key, QString address)
+void Settings::add_friend(QString address)
 {
     QSqlQuery q;
     q.prepare("INSERT OR REPLACE INTO friends (public_key, address) VALUES (?, ?)");
-    q.addBindValue(public_key);
+    q.addBindValue(address.left(2 * TOX_PUBLIC_KEY_SIZE));
     q.addBindValue(address);
     execute_sql_query(q);
 }
@@ -219,6 +219,28 @@ QString Settings::get_friend_address(QString public_key)
         return q.value("address").toString();
     } else {
         return "";
+    }
+}
+
+void Settings::set_friend_avatar_hash(QString public_key, QByteArray hash)
+{
+    QSqlQuery q;
+    q.prepare("UPDATE friends SET avatar_hash = ? WHERE public_key = ?");
+    q.addBindValue(hash);
+    q.addBindValue(public_key);
+    execute_sql_query(q);
+}
+
+QByteArray Settings::get_friend_avatar_hash(QString public_key)
+{
+    QSqlQuery q;
+    q.prepare("SELECT avatar_hash FROM friends WHERE public_key = ?");
+    q.addBindValue(public_key);
+    execute_sql_query(q);
+    if(q.first()) {
+        return q.value("avatar_hash").toByteArray();
+    } else {
+        return QByteArray(TOX_HASH_LENGTH, '\0');
     }
 }
 
