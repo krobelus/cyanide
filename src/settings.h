@@ -15,12 +15,14 @@ class Settings : public QObject
     Q_OBJECT
 
 private:
-    void db_set(QString name, QString value);
-
     static std::map<QString, settings_entry> entries;
     static std::map<QString, std::vector<type_entry>> types;
 
-    /* QString db_get(QString name); */
+    void update_db_version();
+    void create_tables();
+
+    void db_set(QString name, QString value);
+    QString db_get(QString name);
 
 public:
     Settings();
@@ -35,9 +37,9 @@ public:
     Q_INVOKABLE void set(QString name, QString value);
     Q_INVOKABLE void set_current_index(QString name, int i);
 
-    Q_INVOKABLE void add_friend_address(int fid, QString address);
-    Q_INVOKABLE QString get_friend_address(int fid);
-    void remove_friend(int fid);
+    Q_INVOKABLE void add_friend_address(QString public_key, QString address);
+    Q_INVOKABLE QString get_friend_address(QString public_key);
+    void remove_friend(QString public_key);
 };
 
 #endif // SETTINGS_H

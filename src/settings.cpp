@@ -1,13 +1,17 @@
+#include <tox/tox.h>
+
 #include "config.h"
 #include "util.h"
 
 #include "settings.h"
 
-QString db_version = "0001";
+QString db_version = "0002";
 
-QString create_tables[] = {
+QString tables[] = {
         "CREATE TABLE IF NOT EXISTS settings (name TEXT PRIMARY KEY, value TEXT)",
-        "CREATE TABLE IF NOT EXISTS friends (fid INT PRIMARY KEY, address TEXT)"};
+        //"CREATE TABLE IF NOT EXISTS friends (fid INT PRIMARY KEY, address TEXT)"
+        "CREATE TABLE IF NOT EXISTS friends (public_key TEXT PRIMARY KEY, address TEXT)"
+        };
 
 std::map<QString, settings_entry> Settings::entries = {
       // { "enable-sounds", { tr("Enable sounds"), "bool", "true" } }
@@ -78,19 +82,14 @@ void Settings::init()
     success = db.open();
     Q_ASSERT(success);
 
-    QSqlQuery q;
-    for(size_t i=0; i<countof(create_tables); i++) {
-        q.prepare(create_tables[i]);
-        execute_sql_query(q);
-    }
-
-    db_set("db_version", db_version);
+    update_db_version();
 
     QString str("INSERT OR IGNORE INTO settings (name, value) VALUES (?, ?)");
     for(size_t i=1; i<entries.size(); i++) {
             str.append(",(?,?)");
     }
 
+    QSqlQuery q;
     q.prepare(str);
     for(auto i=entries.begin(); i!=entries.end(); i++) {
         q.addBindValue(i->first);
@@ -180,7 +179,6 @@ void Settings::db_set(QString name, QString value)
     execute_sql_query(q);
 }
 
-/*
 QString Settings::db_get(QString name)
 {
     QSqlQuery q;
@@ -193,34 +191,74 @@ QString Settings::db_get(QString name)
         return "";
     }
 }
-*/
 
-void Settings::add_friend_address(int fid, QString address)
+void Settings::add_friend_address(QString public_key, QString address)
 {
     QSqlQuery q;
-    q.prepare("INSERT OR REPLACE INTO friends (fid, address) VALUES (?, ?)");
-    q.addBindValue(fid);
+    q.prepare("INSERT OR REPLACE INTO friends (public_key, address) VALUES (?, ?)");
+    q.addBindValue(public_key);
     q.addBindValue(address);
     execute_sql_query(q);
 }
 
-void Settings::remove_friend(int fid)
+void Settings::remove_friend(QString public_key)
 {
     QSqlQuery q;
-    q.prepare("DELETE FROM friends WHERE fid = ?");
-    q.addBindValue(fid);
+    q.prepare("DELETE FROM friends WHERE public_key = ?");
+    q.addBindValue(public_key);
     execute_sql_query(q);
 }
 
-QString Settings::get_friend_address(int fid)
+QString Settings::get_friend_address(QString public_key)
 {
     QSqlQuery q;
-    q.prepare("SELECT address FROM friends WHERE fid = ?");
-    q.addBindValue(fid);
+    q.prepare("SELECT address FROM friends WHERE public_key = ?");
+    q.addBindValue(public_key);
     execute_sql_query(q);
     if(q.first()) {
         return q.value("address").toString();
     } else {
         return "";
+    }
+}
+
+void Settings::update_db_version()
+{
+    QString current_version = db_get("db_version");
+
+    if(current_version == db_version) {
+        ;
+    } else if(current_version == "0001") {
+        QSqlQuery q, i;
+        q.prepare("CREATE TABLE old_friends (fid INT PRIMARY KEY, address TEXT)"); execute_sql_query(q);
+        q.prepare("INSERT INTO old_friends SELECT * FROM friends"); execute_sql_query(q);
+        q.prepare("DROP TABLE friends"); execute_sql_query(q);
+        create_tables();
+        q.setForwardOnly(true);
+        q.prepare("SELECT * FROM old_friends");
+        execute_sql_query(q);
+        while(q.next()) {
+            QString address = q.value("address").toString();
+            if(address.length() == 2 * TOX_ADDRESS_SIZE) {
+                QString public_key = address.left(2 * TOX_PUBLIC_KEY_SIZE);
+                i.prepare("INSERT INTO friends (public_key, address) VALUES (?, ?)");
+                i.addBindValue(public_key);
+                i.addBindValue(address);
+                execute_sql_query(i);
+            }
+        }
+        q.prepare("DROP TABLE old_friends"); execute_sql_query(q);
+    } else {
+        create_tables();
+    }
+    db_set("db_version", db_version);
+}
+
+void Settings::create_tables()
+{
+    QSqlQuery q;
+    for(size_t i=0; i<countof(tables); i++) {
+        q.prepare(tables[i]);
+        execute_sql_query(q);
     }
 }

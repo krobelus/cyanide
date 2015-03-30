@@ -854,8 +854,8 @@ void Cyanide::remove_friend(int fid)
     TOX_ERR_FRIEND_DELETE error;
     if(tox_friend_delete(tox, fid, &error)) {
         save_needed = true;
+        settings.remove_friend(get_friend_public_key(fid));
         friends.erase(fid);
-        settings.remove_friend(fid);
     } else {
         qDebug() << "Failed to remove friend";
     }
