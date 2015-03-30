@@ -50,9 +50,9 @@ Page {
             }
             MenuItem {
                 text: qsTr("Copy Tox ID to clipboard")
-                enabled: friend_address !== ""
+                enabled: friendList.get(activeFriend()+1).friend_address !== ""
                 onClicked: {
-                    clipboard.setClipboard(friend_address)
+                    clipboard.setClipboard(friendList.get(activeFriend()+1).friend_address)
                 }
             }
         }

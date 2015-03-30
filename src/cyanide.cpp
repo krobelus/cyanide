@@ -268,15 +268,10 @@ void Cyanide::load_tox_data()
         hex_pkey[2 * TOX_PUBLIC_KEY_SIZE] = '\0';
         char p[sizeof(AVATAR_PATH) + 2 * TOX_PUBLIC_KEY_SIZE + 5];
         sprintf(p, "%s/%s.png", AVATAR_PATH, hex_pkey);
-        FILE *avatar = fopen(p, "rb");
-        if(avatar != NULL) {
-            fseek(avatar, 0, SEEK_END);
-            uint32_t avatar_length = ftell(avatar);
-            uint8_t *avatar_data = (uint8_t*)malloc(avatar_length);
-            length = fread(avatar_data, 1, avatar_length, avatar);
-            qDebug() << "avatar length" << avatar_length << "read" << length;
-            tox_hash(f.avatar_hash, avatar_data, avatar_length);
-            fclose(avatar);
+        uint32_t avatar_size;
+        uint8_t *avatar_data = (uint8_t*)file_raw(p, &avatar_size);
+        if(avatar_data != NULL) {
+            tox_hash(f.avatar_hash, avatar_data, avatar_size);
             free(avatar_data);
         }
 
@@ -357,12 +352,12 @@ void callback_friend_request(Tox *UNUSED(tox), const uint8_t *id, const uint8_t 
 
 void callback_friend_message(Tox *UNUSED(tox), uint32_t fid, TOX_MESSAGE_TYPE type, const uint8_t *message, size_t length, void *UNUSED(userdata))
 {
+    qDebug() << "was called";
     //TODO honor type
     std::vector<Message> *tmp = &cyanide.friends[fid].messages;
     tmp->push_back(Message(message, length, false));
     cyanide.friends[fid].notification = true;
     emit cyanide.signal_friend_message(fid, tmp->size() - 1);
-    qDebug() << "received message" << fid << length;
 }
 
 void callback_friend_name(Tox *UNUSED(tox), uint32_t fid, const uint8_t *newname, size_t length, void *UNUSED(userdata))
