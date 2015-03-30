@@ -26,6 +26,10 @@ void callback_file_recv(Tox *tox, uint32_t fid, uint32_t file_number, uint32_t k
 void callback_file_recv_chunk(Tox *tox, uint32_t fid, uint32_t file_number, uint64_t position,
                               const uint8_t *data, size_t length, void *UNUSED(user_data));
 
+void callback_file_recv_control(Tox *UNUSED(tox), uint32_t friend_number, uint32_t file_number, TOX_FILE_CONTROL control,
+                                void *UNUSED(userdata));
+
+
 void callback_file_chunk_request(Tox *tox, uint32_t friend_number, uint32_t file_number, uint64_t position, size_t length, void *UNUSED(user_data));
 
 #endif // TOX_CALLBACKS_H

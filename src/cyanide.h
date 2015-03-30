@@ -18,6 +18,7 @@ private:
 
     QString send_friend_request_id(const uint8_t *id, const uint8_t *msg, size_t msg_length);
     QString send_friend_request_unboxed(char *name, size_t length, char *msg, size_t msg_length);
+    bool send_file_control(File_Transfer *ft, TOX_FILE_CONTROL file_control);
 
 public:
     Tox *tox;
@@ -25,13 +26,15 @@ public:
     QQuickView *view;
     Friend self;
     static const int self_fid = -1;
-    uint32_t fid_at(int fid);
     std::vector<Friend> friends;
+    uint32_t fid_at(int fid);
     std::map<uint64_t, File_Transfer> file_transfers;
     bool run_tox_loop, save_needed;
-    void add_friend(Friend *f);
+    uint32_t add_friend(Friend *f);
     void add_file_transfer(File_Transfer *ft);
+    void remove_file_transfer(File_Transfer *ft);
     File_Transfer *get_file_transfer(uint32_t friend_number, uint32_t file_number);
+    bool get_file_id(File_Transfer *ft);
 
     void load_tox_and_stuff_pretty_please();
     /* reads the tox save file into memory and stores the length in *size */
@@ -56,6 +59,9 @@ public:
     Q_INVOKABLE void raise();
     Q_INVOKABLE bool is_visible();
     Q_INVOKABLE void visibility_changed(QWindow::Visibility visibility);
+    Q_INVOKABLE bool resume_transfer(File_Transfer *ft);
+    Q_INVOKABLE bool pause_transfer(File_Transfer *ft);
+    Q_INVOKABLE bool cancel_transfer(File_Transfer *ft);
     Q_INVOKABLE bool send_file(int fid, QString path);
 
     /* setters and getters */
@@ -95,6 +101,8 @@ signals:
     void signal_friend_typing(int fid, bool is_typing);
     void signal_friend_read_receipt();
     void signal_friend_connection_status(int fid);
+    void signal_avatar_change(int fid);
+
     void signal_avatar_info();
     void signal_avatar_data();
     void signal_group_invite();

@@ -56,8 +56,8 @@ Page {
                     text: friend_name
                     anchors {
                         top: parent.top
-                        left: friendAvatar.right
-                        leftMargin: Theme.paddingMedium
+                        left: parent.left
+                        leftMargin: Theme.paddingSmall + friendAvatar.height
                         right: friendStatusIcon.left
                         rightMargin: Theme.paddingMedium
                     }
@@ -68,9 +68,10 @@ Page {
                     id: friendAvatar
                     fillMode: Image.PreserveAspectFit
                     source: friend_avatar
+                    width: implicitWidth > height ? height : implicitWidth
                     anchors {
                         left: parent.left
-                        leftMargin: Theme.paddingMedium
+                        leftMargin: (height - width) / 2
                         top: parent.top
                         bottom: parent.bottom
                     }
@@ -88,8 +89,8 @@ Page {
                     id: friendStatusMessage
                     text: friend_status_message
                     anchors {
-                        left: friendAvatar.right
-                        leftMargin: Theme.paddingMedium
+                        left: parent.left
+                        leftMargin: Theme.paddingSmall + friendAvatar.height
                         top: friendName.bottom
                         topMargin: 2
                         right: friendStatusIcon.left

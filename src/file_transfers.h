@@ -14,6 +14,7 @@ typedef struct {
     uint64_t position;
 
     FILE *file;
+    uint8_t *data;
 
     uint8_t file_id[TOX_FILE_ID_LENGTH];
 } File_Transfer;
