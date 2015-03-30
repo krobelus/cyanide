@@ -37,9 +37,9 @@ public:
     Q_INVOKABLE void set(QString name, QString value);
     Q_INVOKABLE void set_current_index(QString name, int i);
 
-    void add_friend_address(QString public_key, QString address);
+    void add_friend(QString address);
     Q_INVOKABLE QString get_friend_address(QString public_key);
-    void add_friend_avatar_hash(QString public_key, QByteArray hash);
+    void set_friend_avatar_hash(QString public_key, QByteArray hash);
     QByteArray get_friend_avatar_hash(QString public_key);
     void remove_friend(QString public_key);
 };

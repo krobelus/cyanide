@@ -766,7 +766,7 @@ QString Cyanide::send_friend_request(QString id_str, QString msg_str)
     QString errmsg = send_friend_request_id(address, msg, msg_len);
     if(errmsg == "") {
         Friend *f = new Friend((const uint8_t*)address, id_str, "");
-        uint32_t fid = add_friend(f);
+        add_friend(f);
         char hex_address[2 * TOX_ADDRESS_SIZE + 1];
         address_to_string(hex_address, (char*)address);
         hex_address[2 * TOX_ADDRESS_SIZE] = '\0';
