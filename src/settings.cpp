@@ -15,14 +15,14 @@ QString tables[] = {
 
 std::map<QString, settings_entry> Settings::entries = {
       // { "enable-sounds", { tr("Enable sounds"), "bool", "true" } }
-        { "sound-when", { tr("Play this sound when..."), "none", "" } }
-      , { "sound-message-received", { tr("I receive a message:")
-            , "sound", "/usr/share/sounds/jolla-ringtones/stereo/jolla-imtone.wav" } }
-      , { "sound-friend-request-received", { tr("I receive a friend request:")
-            , "sound", "/usr/share/sounds/jolla-ringtones/stereo/jolla-emailtone.wav" } }
+      //  { "sound-when", { tr("Play this sound when..."), "none", "" } }
+      //, { "sound-message-received", { tr("I receive a message:")
+      //      , "sound", "/usr/share/sounds/jolla-ringtones/stereo/jolla-imtone.wav" } }
+      //, { "sound-friend-request-received", { tr("I receive a friend request:")
+      //      , "sound", "/usr/share/sounds/jolla-ringtones/stereo/jolla-emailtone.wav" } }
       //, { "sound-friend-connected", { tr("a friend comes online:")
       //      , "sound", "/usr/share/sounds/jolla-ringtones/stereo/jolla-imtone.wav" } }
-      , { "notification-when", { tr("Notify me when..."), "none", "" } }
+        { "notification-when", { tr("Notify me when..."), "none", "" } }
       , { "notification-message-received", { tr("I receive a message:")
             , "bool", "true" } }
       , { "notification-friend-request-received", { tr("I receive a friend request:")

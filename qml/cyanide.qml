@@ -70,7 +70,8 @@ ApplicationWindow
                         'friend_avatar': cyanide.get_friend_avatar(i),
                         'friend_connection_status': cyanide.get_friend_connection_status(i),
                         'friend_status_icon': cyanide.get_friend_status_icon(i),
-                        'friend_status_message': cyanide.get_friend_status_message(i)
+                        'friend_status_message': cyanide.get_friend_status_message(i),
+                        'friend_address': settings.get_friend_address(cyanide.get_friend_public_key(i))
                          })
     }
     Connections {
@@ -132,7 +133,7 @@ ApplicationWindow
         onSignal_friend_message: {
             var i = fid + 1
             if(fid != self_friend_number) {
-                cyanide.play_sound(settings.get("sound-message-received"))
+                // cyanide.play_sound(settings.get("sound-message-received"))
                 cyanide.set_friend_notification(fid, true)
                 if(settings.get("notification-message-received") === "true"
                     && !(cyanide.is_visible() && chattingWith(fid)))
@@ -143,7 +144,7 @@ ApplicationWindow
             }
         }
         onSignal_friend_request: {
-            cyanide.play_sound(settings.get("sound-friend-request-received"))
+            // cyanide.play_sound(settings.get("sound-friend-request-received"))
             if(settings.get("notification-friend-request-received") === "true")
                 nFriendRequest.fid = fid
                 nFriendRequest.summary = qsTr("Friend request received!")
