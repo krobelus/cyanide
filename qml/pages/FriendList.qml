@@ -104,10 +104,10 @@ Page {
                 }
                 onClicked: {
                     var fid = index - 1
-                    if(fid == selfID) {
+                    if(fid == self_friend_number) {
                         pageStack.push(Qt.resolvedUrl("Profile.qml"))
                     } else if (!cyanide.get_friend_accepted(fid)) {
-                        friends.push(fid)
+                        friendNumberStack.push(fid)
                         pageStack.push(Qt.resolvedUrl("AcceptFriend.qml"))
                     } else {
                         chatWith(fid)

@@ -11,12 +11,6 @@ public:
     Friend();
     Friend(const uint8_t *public_key, QString name, QString status_message);
 
-    /* tox friend ids are immutable whereas the friend index can change when a
-     * friend is deleted
-     * stores the tox friend id - use this fid only for tox functions
-     * */
-    uint32_t fid;
-
     QString name;
     QString status_message;
 

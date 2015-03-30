@@ -21,7 +21,7 @@ Page {
         color: Theme.primaryColor
 
         inputMethodHints: Qt.ImhNoPredictiveText + Qt.ImhNoAutoUppercase
-        text: cyanide.get_friend_name(selfID)
+        text: cyanide.get_friend_name(self_friend_number)
 
         EnterKey.onClicked: {
             cyanide.set_self_name(text)
@@ -38,7 +38,7 @@ Page {
         color: Theme.primaryColor
 
         inputMethodHints: Qt.ImhNoAutoUppercase
-        text: cyanide.get_friend_status_message(selfID)
+        text: cyanide.get_friend_status_message(self_friend_number)
         EnterKey.onClicked: {
             cyanide.set_self_status_message(text)
             focus = false

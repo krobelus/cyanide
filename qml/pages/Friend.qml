@@ -11,7 +11,7 @@ Page {
     }
     Component.onDestruction: {
         pages.pop()
-        friends.pop()
+        friendNumberStack.pop()
         if(inputField.focus)
             cyanide.send_typing_notification(activeFriend(), false)
     }
@@ -100,7 +100,7 @@ Page {
             Connections {
                 target: cyanide
                 onSignal_friend_message: {
-                    if(fid == activeFriend() || fid == selfID) {
+                    if(fid == activeFriend() || fid == self_friend_number) {
                         cyanide.set_friend_notification(fid, false)
                         model.append({'author': cyanide.get_message_author(activeFriend(), mid)
                                      ,'message_text': cyanide.get_message_rich_text(activeFriend(), mid)

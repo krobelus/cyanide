@@ -20,13 +20,13 @@ CoverBackground {
     Connections {
         target: cyanide
         onSignal_connection_status: {
-            statusIcon.source = cyanide.get_friend_status_icon(selfID)
+            statusIcon.source = cyanide.get_friend_status_icon(self_friend_number)
         }
     }
 
     Image {
         id: statusIcon
-        source: cyanide.get_friend_status_icon(selfID)
+        source: cyanide.get_friend_status_icon(self_friend_number)
         fillMode: Image.Pad
         anchors {
             //leftMargin: 2*Theme.paddingLarge

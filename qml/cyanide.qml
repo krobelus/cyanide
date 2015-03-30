@@ -9,7 +9,7 @@ ApplicationWindow
     cover: Qt.resolvedUrl("cover/CoverPage.qml")
 
     /* pass this to functions that take a friend ID to refer to self */
-    property int selfID: -1
+    property int self_friend_number: -1
 
     /* the list of friends */
     property ListModel friendList: ListModel { id: friendList }
@@ -17,15 +17,20 @@ ApplicationWindow
     property ListModel settingsList: ListModel { id: settingsList }
 
     /* stack of friend IDs */
-    property var friends: new Array
+    property var friendNumberStack: new Array
     /*  stack of pages */
     property var pages: new Array
 
     function activeFriend() {
-        return friends[friends.length-1]
+        if(friendNumberStack.length == 0) {
+            console.log("activeFriend() called with empty friend stack")
+            return -2;
+        } else {
+            return friendNumberStack[friendNumberStack.length-1]
+        }
     }
     function chatWith(fid) {
-        friends.push(fid)
+        friendNumberStack.push(fid)
         pageStack.push(Qt.resolvedUrl("pages/Friend.qml"))
     }
     function activePage() {
@@ -53,8 +58,11 @@ ApplicationWindow
 
     function refreshFriendList() {
         friendList.clear()
-        for(var i = -1; i < cyanide.get_number_of_friends(); i++)
-            appendFriend(i)
+        appendFriend(-1)
+        var fids = cyanide.get_friend_numbers()
+        for(var i in fids) {
+            appendFriend(fids[i])
+        }
     }
     function appendFriend(i) {
             friendList.append({
@@ -75,7 +83,7 @@ ApplicationWindow
             var name = cyanide.get_friend_name(fid)
             friendList.setProperty(i, "friend_name", name)
             /*
-            if(fid != selfID && settings.get("notification-friend-name-change")
+            if(fid != self_friend_number && settings.get("notification-friend-name-change")
                 && !(cyanide.is_visible() && chattingWith(fid)))
             {
                 nNameChange.fid = fid
@@ -103,7 +111,7 @@ ApplicationWindow
             var online = cyanide.get_friend_connection_status(fid)
             friendList.setProperty(i, "friend_connection_status", online)
             friendList.setProperty(i, "friend_status_icon", cyanide.get_friend_status_icon(fid))
-            if(fid != selfID) {
+            if(fid != self_friend_number) {
                 if(online) {
                     //cyanide.play_sound(settings.get("sound-friend-connected"))
                     /*
@@ -123,7 +131,7 @@ ApplicationWindow
         }
         onSignal_friend_message: {
             var i = fid + 1
-            if(fid != selfID) {
+            if(fid != self_friend_number) {
                 cyanide.play_sound(settings.get("sound-message-received"))
                 cyanide.set_friend_notification(fid, true)
                 if(settings.get("notification-message-received") === "true"
@@ -179,7 +187,7 @@ ApplicationWindow
         onClicked: {
             itemCount = 0
             cyanide.raise()
-            friends.push(fid)
+            friendNumberStack.push(fid)
             pageStack.push(Qt.resolvedUrl("pages/AcceptFriend.qml"))
         }
         onClosed: console.log("Closed friend request notification, reason: " + reason)

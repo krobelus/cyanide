@@ -25,9 +25,8 @@ public:
     char save_path[TOX_MAX_FILENAME_LENGTH];
     QQuickView *view;
     Friend self;
-    static const int self_fid = -1;
-    std::vector<Friend> friends;
-    uint32_t fid_at(int fid);
+    static const int SELF_FRIEND_NUMBER = -1;
+    std::map<uint32_t, Friend> friends;
     std::map<uint64_t, File_Transfer> file_transfers;
     bool run_tox_loop, save_needed;
     uint32_t add_friend(Friend *f);
@@ -65,6 +64,7 @@ public:
     Q_INVOKABLE bool send_file(int fid, QString path);
 
     /* setters and getters */
+    Q_INVOKABLE QList<int> get_friend_numbers();
     Q_INVOKABLE void set_friend_notification(int fid, bool status);
     Q_INVOKABLE void set_self_name(QString name);
     Q_INVOKABLE void set_self_status_message(QString status_message);

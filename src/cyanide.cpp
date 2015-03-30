@@ -129,7 +129,7 @@ void Cyanide::tox_thread()
         // Check current connection
         if((c = tox_self_get_connection_status(tox)) != connection) {
             self.connection_status = connection = c;
-            emit cyanide.signal_friend_connection_status(self_fid);
+            emit cyanide.signal_friend_connection_status(SELF_FRIEND_NUMBER);
             qDebug() << (c != TOX_CONNECTION_NONE ? "Connected to DHT" : "Disconnected from DHT");
         }
 
@@ -191,8 +191,8 @@ void Cyanide::load_defaults()
     tox_self_set_name(tox, name, name_len, &error);
     tox_self_set_status_message(tox, status, status_len, &error);
 
-    emit cyanide.signal_friend_name(self_fid, NULL);
-    emit cyanide.signal_friend_status_message(self_fid);
+    emit cyanide.signal_friend_name(SELF_FRIEND_NUMBER, NULL);
+    emit cyanide.signal_friend_status_message(SELF_FRIEND_NUMBER);
     save_needed = true;
 }
 
@@ -309,25 +309,20 @@ void Cyanide::load_tox_data()
     tox_self_get_status_message(tox, status_message);
     self.status_message = utf8_to_qstr(status_message, length);
 
-    emit cyanide.signal_friend_name(self_fid, NULL);
-    emit cyanide.signal_friend_status_message(self_fid);
+    emit cyanide.signal_friend_name(SELF_FRIEND_NUMBER, NULL);
+    emit cyanide.signal_friend_status_message(SELF_FRIEND_NUMBER);
     save_needed = true;
 }
 
 uint32_t Cyanide::add_friend(Friend *f)
 {
-    /* find out the friend id that toxcore will assign to that friend */
-    uint32_t fid = 0;
-    for(auto i=friends.begin(); i!=friends.end(); i++) {
-        if(i->fid != fid) {
-            /* fid shoud be unused, use it */
+    uint32_t fid;
+    for(fid = 0; fid < UINT32_MAX; fid++) {
+        if(friends.count(fid) == 0)
             break;
-        }
-        fid++;
     }
-    f->fid = fid;
-    friends.push_back(*f);
-    emit cyanide.signal_friend_added(friends.size() - 1);
+    friends[fid] = *f;
+    emit cyanide.signal_friend_added(fid);
     return fid;
 }
 
@@ -356,8 +351,8 @@ void callback_friend_request(Tox *UNUSED(tox), const uint8_t *id, const uint8_t 
     address_to_string((char*)name, (char*)id);
     Friend *f = new Friend(id, utf8_to_qstr(name, name_length), utf8_to_qstr(msg, length));
     f->accepted = false;
-    cyanide.add_friend(f);
-    emit cyanide.signal_friend_request(cyanide.friends.size()-1);
+    uint32_t friend_number = cyanide.add_friend(f);
+    emit cyanide.signal_friend_request(friend_number);
 }
 
 void callback_friend_message(Tox *UNUSED(tox), uint32_t fid, TOX_MESSAGE_TYPE type, const uint8_t *message, size_t length, void *UNUSED(userdata))
@@ -747,16 +742,11 @@ File_Transfer* Cyanide::get_file_transfer(uint32_t friend_number, uint32_t file_
     return &file_transfers[id];
 }
 
-uint32_t Cyanide::fid_at(int fid)
-{
-    return friends[fid].fid;
-}
-
 void Cyanide::send_typing_notification(int fid, bool typing)
 {
     TOX_ERR_SET_TYPING error;
     if(settings.get("send-typing-notifications") == "true")
-        tox_self_set_typing(tox, fid_at(fid), typing, &error);
+        tox_self_set_typing(tox, fid, typing, &error);
 }
 
 QString Cyanide::send_friend_request(QString id_str, QString msg_str)
@@ -789,7 +779,7 @@ QString Cyanide::send_friend_request(QString id_str, QString msg_str)
         char hex_address[2 * TOX_ADDRESS_SIZE + 1];
         address_to_string(hex_address, (char*)address);
         hex_address[2 * TOX_ADDRESS_SIZE] = '\0';
-        settings.add_friend_address(fid, hex_address);
+        settings.add_friend_address(get_friend_public_key(fid), hex_address);
     }
 
     return errmsg;
@@ -837,11 +827,11 @@ bool Cyanide::send_friend_message(int fid, QString msg_str)
     size_t msg_len = qstrlen(msg_str);
     uint8_t msg[msg_len];
     qstr_to_utf8(msg, msg_str);
-    uint32_t message_id = tox_friend_send_message(tox, fid_at(fid), type, msg, msg_len, &error);
+    uint32_t message_id = tox_friend_send_message(tox, fid, type, msg, msg_len, &error);
     qDebug() << "message id:" << message_id;
 
     f->messages.push_back(Message(msg_str, true));
-    emit cyanide.signal_friend_message(self_fid, f->messages.size() - 1);
+    emit cyanide.signal_friend_message(SELF_FRIEND_NUMBER, f->messages.size() - 1);
 
     return true;
 }
@@ -864,7 +854,7 @@ void Cyanide::remove_friend(int fid)
     TOX_ERR_FRIEND_DELETE error;
     if(tox_friend_delete(tox, fid, &error)) {
         save_needed = true;
-        friends.erase(friends.begin() + fid);
+        friends.erase(fid);
         settings.remove_friend(fid);
     } else {
         qDebug() << "Failed to remove friend";
@@ -881,8 +871,18 @@ void Cyanide::play_sound(QString file)
 
 /* setters and getters */
 
+QList<int> Cyanide::get_friend_numbers()
+{
+    QList<int> friend_numbers;
+    for(auto it = friends.begin(); it != friends.end(); it++) {
+        friend_numbers.append(it->first);
+    }
+    return friend_numbers;
+}
+
 void Cyanide::set_friend_notification(int fid, bool status)
 {
+    Q_ASSERT(fid != SELF_FRIEND_NUMBER);
     friends[fid].notification = status;
     emit cyanide.signal_notification(fid);
 }
@@ -900,7 +900,7 @@ void Cyanide::set_self_name(QString name)
     Q_ASSERT(success);
 
     save_needed = true;
-    emit signal_friend_name(self_fid, NULL);
+    emit signal_friend_name(SELF_FRIEND_NUMBER, NULL);
 }
 
 void Cyanide::set_self_status_message(QString status_message)
@@ -917,7 +917,7 @@ void Cyanide::set_self_status_message(QString status_message)
     Q_ASSERT(success);
 
     save_needed = true;
-    emit signal_friend_status_message(self_fid);
+    emit signal_friend_status_message(SELF_FRIEND_NUMBER);
 }
 
 int Cyanide::get_self_user_status()
@@ -949,7 +949,7 @@ void Cyanide::set_self_user_status(int status)
             break;
     }
     tox_self_set_status(tox, self.user_status);
-    emit cyanide.signal_friend_status(self_fid);
+    emit cyanide.signal_friend_status(SELF_FRIEND_NUMBER);
 }
 
 int Cyanide::get_number_of_friends()
@@ -959,7 +959,7 @@ int Cyanide::get_number_of_friends()
 
 QString Cyanide::get_friend_name(int fid)
 {
-    Friend f = fid == -1 ? self : friends[fid];
+    Friend f = fid == SELF_FRIEND_NUMBER ? self : friends[fid];
     return f.name;
 }
 
@@ -971,14 +971,14 @@ QString Cyanide::get_friend_avatar(int fid)
 
 QString Cyanide::get_friend_status_message(int fid)
 {
-    Friend f = fid == -1 ? self : friends[fid];
+    Friend f = fid == SELF_FRIEND_NUMBER ? self : friends[fid];
     return f.status_message;
 }
 
 QString Cyanide::get_friend_status_icon(int fid)
 {
     QString url = "qrc:/images/";
-    Friend f = fid == -1 ? self : friends[fid];
+    Friend f = fid == SELF_FRIEND_NUMBER ? self : friends[fid];
 
     if(f.connection_status == TOX_CONNECTION_NONE) {
         url.append("offline");
@@ -1009,19 +1009,21 @@ QString Cyanide::get_friend_status_icon(int fid)
 
 bool Cyanide::get_friend_connection_status(int fid)
 {
-    Friend f = fid == -1 ? self : friends[fid];
+    Friend f = fid == SELF_FRIEND_NUMBER ? self : friends[fid];
     return f.connection_status != TOX_CONNECTION_NONE;
 }
 
 bool Cyanide::get_friend_accepted(int fid)
 {
+    Q_ASSERT(fid != SELF_FRIEND_NUMBER);
     return friends[fid].accepted;
 }
 
 QString Cyanide::get_friend_public_key(int fid)
 {
+    Friend f = fid == SELF_FRIEND_NUMBER ? self : friends[fid];
     uint8_t hex_id[2 * TOX_PUBLIC_KEY_SIZE];
-    public_key_to_string((char*)hex_id, (char*)friends[fid].public_key);
+    public_key_to_string((char*)hex_id, (char*)f.public_key);
     return utf8_to_qstr(hex_id, 2 * TOX_PUBLIC_KEY_SIZE);
 }
 
@@ -1034,16 +1036,19 @@ QString Cyanide::get_self_address()
 
 int Cyanide::get_number_of_messages(int fid)
 {
+    Q_ASSERT(fid != SELF_FRIEND_NUMBER);
     return friends[fid].messages.size();
 }
 
 QString Cyanide::get_message_text(int fid, int mid)
 {
+    Q_ASSERT(fid != SELF_FRIEND_NUMBER);
     return friends[fid].messages[mid].text;
 }
 
 QString Cyanide::get_message_rich_text(int fid, int mid)
 {
+    Q_ASSERT(fid != SELF_FRIEND_NUMBER);
     QString text = friends[fid].messages[mid].text;
 
     const QString email_chars = QRegExp::escape("A-Za-z0-9!#$%&'*+-/=?^_`{|}~.");
@@ -1076,10 +1081,12 @@ QString Cyanide::get_message_rich_text(int fid, int mid)
 
 QDateTime Cyanide::get_message_timestamp(int fid, int mid)
 {
+    Q_ASSERT(fid != SELF_FRIEND_NUMBER);
     return friends[fid].messages[mid].timestamp;
 }
 
 bool Cyanide::get_message_author(int fid, int mid)
 {
+    Q_ASSERT(fid != SELF_FRIEND_NUMBER);
     return friends[fid].messages[mid].author;
 }
