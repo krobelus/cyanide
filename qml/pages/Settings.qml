@@ -9,10 +9,10 @@ Page {
         for(var i in values)
             scr += "MenuItem { text:\""+qsTr(values[i])+"\" } "
         scr += "}"
-        var menu = Qt.createQmlObject(scr, pageSettings, "myMenu")
+        var menu = Qt.createQmlObject(scr, page, "myMenu")
         return menu
     }
-    id: pageSettings
+    id: page
     allowedOrientations: Orientation.All
     Component.onCompleted: {
         pages.push("Settings.qml")

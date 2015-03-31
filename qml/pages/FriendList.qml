@@ -3,7 +3,7 @@ import Sailfish.Silica 1.0
 
 
 Page {
-    id: pageFriendList
+    id: page
     allowedOrientations: Orientation.All
     Component.onCompleted: {
         pages.push("FriendList.qml")

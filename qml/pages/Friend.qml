@@ -4,7 +4,8 @@ import nemonotifications 1.0
 import "../js/Misc.js" as Misc
 
 Page {
-    id: pageFriend
+    id: page
+    property string name: "friend"
     allowedOrientations: Orientation.All
     Component.onCompleted: {
         pages.push("Friend.qml")
@@ -53,6 +54,16 @@ Page {
                 enabled: friendList.get(activeFriend()+1).friend_address !== ""
                 onClicked: {
                     clipboard.setClipboard(friendList.get(activeFriend()+1).friend_address)
+                }
+            }
+            MenuItem {
+                text: qsTr("Send a file")
+                onClicked: {
+                    fileChooserProperties = {
+                        target: "fileToSend",
+                        nameFilters: []
+                    }
+                    pageStack.push(Qt.resolvedUrl("FileChooser.qml"), { "folder": "/home/nemo/" } )
                 }
             }
         }
@@ -123,12 +134,12 @@ Page {
             delegate: Item {
                 id: delegate
                 height: messageText.height + Theme.paddingMedium
-                x: author ? Theme.paddingLarge : pageFriend.width/3 - Theme.paddingLarge
+                x: author ? Theme.paddingLarge : page.width/3 - Theme.paddingLarge
 
                 Label {
                     id: messageText
                     text: message_text
-                    width: pageFriend.width*2/3
+                    width: page.width*2/3
                     font.pixelSize: Theme.fontSizeSmall
                     color: author ? Theme.secondaryColor : Theme.primaryColor
                     horizontalAlignment: author ? Text.AlignLeft : Text.AlignRight
@@ -155,7 +166,7 @@ Page {
                     id: timestampLabel
                     text: qsTr(Misc.elapsedTime(timestamp))
                     wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-                    width: pageFriend.width/3 - 3*Theme.paddingMedium
+                    width: page.width/3 - 3*Theme.paddingMedium
                     font.pixelSize: Theme.fontSizeExtraSmall
                     color: Theme.secondaryColor
                     horizontalAlignment: author ? Text.AlignRight : Text.AlignLeft

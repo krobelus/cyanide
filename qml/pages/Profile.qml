@@ -2,7 +2,8 @@ import QtQuick 2.0
 import Sailfish.Silica 1.0
 
 Page {
-    id: pageProfile
+    id: page
+    property string name: "profile"
     allowedOrientations: Orientation.All
     Component.onCompleted: {
         pages.push("Profile.qml")
@@ -10,7 +11,6 @@ Page {
     Component.onDestruction: {
         pages.pop()
     }
-    property string name: "profile"
 
     IconButton {
         id: avatar

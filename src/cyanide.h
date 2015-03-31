@@ -63,9 +63,9 @@ public:
     Q_INVOKABLE bool resume_transfer(File_Transfer *ft);
     Q_INVOKABLE bool pause_transfer(File_Transfer *ft);
     Q_INVOKABLE bool cancel_transfer(File_Transfer *ft);
-    Q_INVOKABLE bool send_file(int fid, QString path);
-    Q_INVOKABLE bool send_avatar(int fid);
-    Q_INVOKABLE bool send_file(TOX_FILE_KIND kind, int fid, QString path);
+    Q_INVOKABLE QString send_file(int fid, QString path);
+    Q_INVOKABLE QString send_avatar(int fid);
+    Q_INVOKABLE QString send_file(TOX_FILE_KIND kind, int fid, QString path, uint8_t *file_id);
 
     /* setters and getters */
     Q_INVOKABLE QList<int> get_friend_numbers();

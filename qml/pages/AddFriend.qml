@@ -1,8 +1,9 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
+import nemonotifications 1.0
 
 Page {
-    id: pageAddFriend
+    id: page
     allowedOrientations: Orientation.All
     Component.onCompleted: {
         pages.push("AddFriend.qml")
@@ -10,6 +11,8 @@ Page {
     Component.onDestruction: {
         pages.pop()
     }
+
+    Notification { id: notification }
 
     TextField {
         id: toxID
@@ -54,6 +57,7 @@ Page {
         if(err === "") {
             pageStack.pop()
         } else {
+            notify(notification, qsTr("Failed to add ") )
             button.text = err;
         }
     }

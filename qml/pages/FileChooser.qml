@@ -4,7 +4,7 @@ import nemonotifications 1.0
 import Qt.labs.folderlistmodel 2.1
 
 Page {
-    id: pageFileChooser
+    id: page
     allowedOrientations: Orientation.All
     Component.onCompleted: {
         pages.push("Friend.qml")
@@ -18,12 +18,6 @@ Page {
     property string folder: ""
 
     Notification { id: notification }
-
-    function notify(summary, body) {
-        notification.previewSummary = summary
-        notification.previewBody = body
-        notification.publish()
-    }
 
     FolderListModel {
         id: folderListModel
@@ -46,7 +40,21 @@ Page {
                             }))
             }
             MenuItem {
+                text: qsTr("Remove my avatar")
+                onClicked: {
+                    var errmsg = cyanide.set_self_avatar("")
+                    if(errmsg === "") {
+                            pageStack.pop(pageStack.find(function(page) {
+                                return page.name === "profile"
+                            }))
+                    } else {
+                        notify(notification, qsTr("Failed to set avatar"), qsTr(errmsg))
+                    }
+                }
+            }
+            MenuItem {
                 text:  filter + enabled
+                visible: fileChooserProperties.target === "selfAvatar"
                 property string filter: qsTr("Filter by extension")
                 property string enabled: fileChooserProperties.nameFilters === [] ? no : yes
                 property string yes: " ☑"
@@ -79,6 +87,7 @@ Page {
             width: parent.width
 
             onClicked: {
+                var errmsg;
                 if(folderListModel.isFolder(index)) {
                     if(fileName == ".") {
                         ;
@@ -89,18 +98,24 @@ Page {
                         pageStack.push(Qt.resolvedUrl("FileChooser.qml"),
                                           { "folder": folder+fileName+"/"})
                     }
-                } else {
-                    if(fileChooserProperties.target === "selfAvatar") {
-                        var errmsg = cyanide.set_self_avatar(folder+fileName)
+                } else if(fileChooserProperties.target === "fileToSend") {
+                    errmsg = cyanide.send_file(activeFriend(), folder+fileName)
+                    if(errmsg === "") {
+                        pageStack.pop(pageStack.find(function(page) {
+                            return page.name === "friend"
+                        }))
+                    } else {
+                        notify(notification, qsTr("Failed to send file"), errmsg)
+                    }
+                } else if(fileChooserProperties.target === "selfAvatar") {
+                        errmsg = cyanide.set_self_avatar(folder+fileName)
                         if(errmsg === "") {
                                 pageStack.pop(pageStack.find(function(page) {
                                     return page.name === "profile"
                                 }))
                         } else {
-                            notify(qsTr("Failed to set avatar"), qsTr(errmsg))
+                            notify(notification, qsTr("Failed to set avatar"), qsTr(errmsg))
                         }
-                    } else {
-                    }
                 }
             }
 
