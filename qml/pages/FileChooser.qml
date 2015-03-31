@@ -105,7 +105,7 @@ Page {
                             return page.name === "friend"
                         }))
                     } else {
-                        notify(notification, qsTr("Failed to send file"), errmsg)
+                        notify(notification, qsTr("Failed to send file"), qsTr(errmsg))
                     }
                 } else if(fileChooserProperties.target === "selfAvatar") {
                         errmsg = cyanide.set_self_avatar(folder+fileName)

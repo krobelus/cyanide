@@ -57,7 +57,7 @@ Page {
         if(errmsg === "") {
             pageStack.pop()
         } else {
-            notify(notification, qsTr("Failed send friend request"), errmsg )
+            notify(notification, qsTr("Failed to send friend request"), qsTr(errmsg) )
         }
     }
 }
