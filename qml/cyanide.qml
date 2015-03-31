@@ -21,6 +21,9 @@ ApplicationWindow
     /*  stack of pages */
     property var pages: new Array
 
+    property string folder: ""
+    property var fileChooserProperties: new Object
+
     function activeFriend() {
         if(friendNumberStack.length == 0) {
             console.log("activeFriend() called with empty friend stack")

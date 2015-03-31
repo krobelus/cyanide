@@ -48,6 +48,8 @@ public:
 
     void tox_thread();
 
+    void send_new_avatar();
+
     /* */
     Q_INVOKABLE QString send_friend_request(QString id_string, QString msg_string);
     Q_INVOKABLE void send_typing_notification(int fid, bool typing);
@@ -62,6 +64,8 @@ public:
     Q_INVOKABLE bool pause_transfer(File_Transfer *ft);
     Q_INVOKABLE bool cancel_transfer(File_Transfer *ft);
     Q_INVOKABLE bool send_file(int fid, QString path);
+    Q_INVOKABLE bool send_avatar(int fid);
+    Q_INVOKABLE bool send_file(TOX_FILE_KIND kind, int fid, QString path);
 
     /* setters and getters */
     Q_INVOKABLE QList<int> get_friend_numbers();
@@ -69,6 +73,7 @@ public:
     Q_INVOKABLE void set_self_name(QString name);
     Q_INVOKABLE void set_self_status_message(QString status_message);
     Q_INVOKABLE void set_self_user_status(int status);
+    Q_INVOKABLE QString set_self_avatar(QString path);
 
     Q_INVOKABLE QString get_self_address();
     Q_INVOKABLE int get_self_user_status();
@@ -102,17 +107,6 @@ signals:
     void signal_friend_read_receipt();
     void signal_friend_connection_status(int fid);
     void signal_avatar_change(int fid);
-
-    void signal_avatar_info();
-    void signal_avatar_data();
-    void signal_group_invite();
-    void signal_group_message();
-    void signal_group_action();
-    void signal_group_namelist_change();
-    void signal_group_title();
-    void signal_file_send_request();
-    void signal_file_control();
-    void signal_file_data();
 };
 
 void start_tox_thread(Cyanide *cyanide);

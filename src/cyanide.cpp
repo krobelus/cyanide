@@ -100,6 +100,7 @@ void Cyanide::load_tox_and_stuff_pretty_please()
     else
         load_tox_data();
 
+    tox_self_get_public_key(tox, self.public_key);
     tox_self_get_address(tox, self_address);
     qDebug() << "Name:" << self.name;
     qDebug() << "Status" << self.status_message;
@@ -299,6 +300,12 @@ void Cyanide::load_tox_data()
     tox_self_get_status_message(tox, status_message);
     self.status_message = utf8_to_qstr(status_message, length);
 
+    QString public_key = get_friend_public_key(SELF_FRIEND_NUMBER);
+    settings.add_friend_if_not_exists(public_key);
+
+    QByteArray saved_hash = settings.get_friend_avatar_hash(public_key);
+    memcpy(self.avatar_hash, saved_hash.constData(), TOX_HASH_LENGTH);
+
     emit cyanide.signal_friend_name(SELF_FRIEND_NUMBER, NULL);
     emit cyanide.signal_friend_status_message(SELF_FRIEND_NUMBER);
     save_needed = true;
@@ -393,7 +400,15 @@ void callback_friend_read_receipt(Tox *UNUSED(tox), uint32_t fid, uint32_t recei
 
 void callback_friend_connection_status(Tox *tox, uint32_t fid, TOX_CONNECTION status, void *UNUSED(userdata))
 {
-    cyanide.friends[fid].connection_status = status;
+    Friend *f = &cyanide.friends[fid];
+    f->connection_status = status;
+    if(status != TOX_CONNECTION_NONE && f->needs_avatar) {
+        qDebug() << "Sending avatar to friend" << fid;
+        if(cyanide.send_avatar(fid))
+            f->needs_avatar = false;
+        else
+            qDebug() << "Failed to send avatar";
+    }
     emit cyanide.signal_friend_connection_status(fid);
 }
 
@@ -660,13 +675,27 @@ bool Cyanide::get_file_id(File_Transfer *ft)
 
 bool Cyanide::send_file(int fid, QString path)
 {
+    return send_file(TOX_FILE_KIND_DATA, fid, path);
+}
+
+bool Cyanide::send_avatar(int fid)
+{
+    QString avatar = AVATAR_PATH + QString("/")
+            + get_friend_public_key(SELF_FRIEND_NUMBER) + QString(".png");
+
+    return send_file(TOX_FILE_KIND_AVATAR, fid, avatar);
+}
+
+bool Cyanide::send_file(TOX_FILE_KIND kind, int fid, QString path)
+{
     int error;
-    TOX_FILE_KIND kind = TOX_FILE_KIND_DATA;
+    bool success;
 
     File_Transfer ft;
     ft.friend_number = fid;
     ft.kind = kind;
     ft.incoming = false;
+    ft.position = 0;
 
     ft.filename_length = qstrlen(path);
     ft.filename = (uint8_t*)malloc(ft.filename_length);
@@ -681,7 +710,6 @@ bool Cyanide::send_file(int fid, QString path)
     fseek(ft.file, 0L, SEEK_END);
     ft.file_size = ftell(ft.file);
     rewind(ft.file);
-    ft.position = 0;
 
     ft.file_number = tox_file_send(tox, ft.friend_number, ft.kind, ft.file_size,
                                     NULL, ft.filename, ft.filename_length,
@@ -708,8 +736,8 @@ bool Cyanide::send_file(int fid, QString path)
             Q_ASSERT(false);
     }
 
-    //success = get_file_id(&ft);
-    //Q_ASSERT(success);
+    success = get_file_id(&ft);
+    Q_ASSERT(success);
     add_file_transfer(&ft);
 
     return true;
@@ -942,6 +970,73 @@ void Cyanide::set_self_user_status(int status)
     }
     tox_self_set_status(tox, self.user_status);
     emit cyanide.signal_friend_status(SELF_FRIEND_NUMBER);
+}
+
+QString Cyanide::set_self_avatar(QString new_avatar)
+{
+    bool success;
+    QString public_key = get_friend_public_key(SELF_FRIEND_NUMBER);
+    QString old_avatar = AVATAR_PATH + QString("/") + public_key + QString(".png");
+
+    if(new_avatar == "") {
+        /* remove the avatar */
+        success = QFile::remove(old_avatar);
+        if(!success)
+            qDebug() << "Failed to remove avatar file";
+        else
+            send_new_avatar();
+        return "";
+    }
+
+    uint32_t size;
+    uint8_t *data = (uint8_t*)file_raw(new_avatar.toUtf8().data(), &size);
+    if(data == NULL) {
+        return tr("File not found: ") + new_avatar;
+    }
+
+    if(size > 16 * 1024) {
+        free(data);
+        return tr("Avatar too large. Maximum size: 16KiB");
+    }
+    uint8_t previous_hash[TOX_HASH_LENGTH];
+    memcpy(previous_hash, self.avatar_hash, TOX_HASH_LENGTH);
+    success = tox_hash(self.avatar_hash, data, size);
+    FILE* out = fopen(old_avatar.toUtf8().data(), "wb");
+    fwrite(data, size, 1, out);
+    fclose(out);
+    free(data);
+    Q_ASSERT(success);
+    if(0 != memcmp(previous_hash, self.avatar_hash, TOX_HASH_LENGTH)) {
+        emit cyanide.signal_avatar_change(SELF_FRIEND_NUMBER);
+
+        QByteArray hash((const char*)self.avatar_hash, TOX_HASH_LENGTH);
+        settings.set_friend_avatar_hash(public_key, hash);
+    } else {
+        /* friend avatar data is the same as before
+         * maybe skip sending it?
+         */
+    }
+
+    send_new_avatar();
+
+    return "";
+}
+
+void Cyanide::send_new_avatar()
+{
+    /* send the avatar to each connected friend */
+    for(auto i=friends.begin(); i!=friends.end(); i++) {
+        Friend *f = &i->second;
+        if(f->connection_status == TOX_CONNECTION_NONE) {
+            /* send it when he comes online */
+            f->needs_avatar = true;
+        } else {
+            if(send_avatar(i->first))
+                f->needs_avatar = false;
+            else
+                qDebug() << "Failed to send avatar";
+        }
+    }
 }
 
 int Cyanide::get_number_of_friends()

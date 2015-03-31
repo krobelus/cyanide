@@ -100,8 +100,9 @@ Page {
             Connections {
                 target: cyanide
                 onSignal_friend_message: {
-                    if(fid == activeFriend() || fid == self_friend_number) {
+                    if(fid == activeFriend())
                         cyanide.set_friend_notification(fid, false)
+                    if(fid == activeFriend() || fid == self_friend_number) {
                         model.append({'author': cyanide.get_message_author(activeFriend(), mid)
                                      ,'message_text': cyanide.get_message_rich_text(activeFriend(), mid)
                                      ,'timestamp': cyanide.get_message_timestamp(activeFriend(), mid)

@@ -10,11 +10,37 @@ Page {
     Component.onDestruction: {
         pages.pop()
     }
+    property string name: "profile"
+
+    IconButton {
+        id: avatar
+        visible: true
+        icon.source: friendList.get(0).friend_avatar
+        property int errorCount: 0
+        onErrorCountChanged: {
+            source = "qrc:/images/blankavatar"
+        }
+        Connections {
+            target: cyanide
+            onSignal_avatar_change: avatar.icon.source = friendList.get(0).friend_avatar
+        }
+
+        onClicked: {
+            fileChooserProperties = {
+                target: "selfAvatar",
+                nameFilters: ["*.png", ".gif"]
+            }
+            pageStack.push(Qt.resolvedUrl("FileChooser.qml"), { "folder": "/home/nemo/" } )
+        }
+        width: 1/4 * parent.width - Theme.paddingMedium
+        y: Theme.paddingLarge
+        x: name.x + name.width + Theme.paddingSmall
+    }
 
     TextField {
         id: name
         label: qsTr("Name")
-        width: parent.width - 2 * Theme.paddingLarge
+        width: 3/4 * parent.width - Theme.paddingLarge
         height: implicitHeight
         y: Theme.paddingLarge
         x: Theme.paddingMedium
