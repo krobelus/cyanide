@@ -201,6 +201,14 @@ void Settings::add_friend(QString address)
     execute_sql_query(q);
 }
 
+void Settings::add_friend_if_not_exists(QString public_key)
+{
+    QSqlQuery q;
+    q.prepare("INSERT OR IGNORE INTO FRIENDS (public_key) VALUES (?)");
+    q.addBindValue(public_key);
+    execute_sql_query(q);
+}
+
 void Settings::remove_friend(QString public_key)
 {
     QSqlQuery q;

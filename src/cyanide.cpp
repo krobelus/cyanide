@@ -266,6 +266,7 @@ void Cyanide::load_tox_data()
         char hex_pubkey[2 * TOX_PUBLIC_KEY_SIZE + 1];
         public_key_to_string(hex_pubkey, (char*)f.public_key);
         hex_pubkey[2 * TOX_PUBLIC_KEY_SIZE] = '\0';
+        settings.add_friend_if_not_exists(hex_pubkey);
         QByteArray saved_hash = settings.get_friend_avatar_hash(hex_pubkey);
         memcpy(f.avatar_hash, saved_hash.constData(), TOX_HASH_LENGTH);
 
