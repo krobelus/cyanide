@@ -22,6 +22,10 @@
         <source>Tox me maybe?</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Failed send friend request</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Cyanide</name>
@@ -42,10 +46,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Error: Unknown</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Error: Invalid Tox ID (bad checksum)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -58,11 +58,58 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>No name</source>
+        <source>Error: Friend not found</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Invalid Tox ID</source>
+        <source>Error: Friend not connected</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error: Filename too long</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error: Too many ongoing transfers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error: Invalid Tox ID</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>File not found: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Avatar too large. Maximum size: 16KiB</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error: Failed to open file: </source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>FileChooser</name>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove my avatar</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Failed to set avatar</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Filter by filename extension</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Failed to send file</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -90,6 +137,10 @@
     </message>
     <message>
         <source>Copy Tox ID to clipboard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Send a file</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -143,7 +194,7 @@
     </message>
     <message>
         <source>Play this sound when...</source>
-        <translation>Diesen Klang spielen, wenn...</translation>
+        <translation type="vanished">Diesen Klang spielen, wenn...</translation>
     </message>
     <message>
         <source>I receive a message:</source>

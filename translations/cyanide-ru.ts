@@ -22,6 +22,10 @@
         <source>Send friend request</source>
         <translation>Отправить запрос</translation>
     </message>
+    <message>
+        <source>Failed send friend request</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Cyanide</name>
@@ -55,7 +59,7 @@
     </message>
     <message>
         <source>Invalid Tox ID</source>
-        <translation>Неправильный Tox ID</translation>
+        <translation type="vanished">Неправильный Tox ID</translation>
     </message>
     <message>
         <source>File not found: </source>
@@ -64,6 +68,30 @@
     <message>
         <source>Avatar too large. Maximum size: 16KiB</source>
         <translation>Изображение слишком большое. Максимальный размер 16 KB</translation>
+    </message>
+    <message>
+        <source>Error: Friend not found</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error: Friend not connected</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error: Filename too long</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error: Too many ongoing transfers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error: Invalid Tox ID</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error: Failed to open file: </source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -74,11 +102,23 @@
     </message>
     <message>
         <source>Filter by extension</source>
-        <translation>Фильтр по расширению</translation>
+        <translation type="vanished">Фильтр по расширению</translation>
     </message>
     <message>
         <source>Failed to set avatar</source>
         <translation>Не удалось установить аватар</translation>
+    </message>
+    <message>
+        <source>Remove my avatar</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Filter by filename extension</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Failed to send file</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -106,6 +146,10 @@
     <message>
         <source>Copy Tox ID to clipboard</source>
         <translation>Скопировать Tox ID</translation>
+    </message>
+    <message>
+        <source>Send a file</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

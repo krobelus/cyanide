@@ -711,7 +711,7 @@ QString Cyanide::send_file(TOX_FILE_KIND kind, int fid, QString path, uint8_t *f
             ft.file_size = 0;
         } else {
             free(ft.filename);
-            return tr("Error: Failed to open file '") + path + "'";
+            return tr("Error: Failed to open file: ") + path;
         }
     } else {
         fseek(ft.file, 0L, SEEK_END);
