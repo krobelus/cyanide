@@ -21,7 +21,6 @@ public:
     TOX_USER_STATUS user_status;
     bool accepted;
     bool notification;
-    bool needs_avatar;
 
     std::vector<Message> messages;
 

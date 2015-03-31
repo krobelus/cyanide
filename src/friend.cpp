@@ -8,7 +8,6 @@ Friend::Friend()
     user_status = TOX_USER_STATUS_NONE;
     accepted = true;
     notification = false;
-    needs_avatar = true;
     memset(this->avatar_hash, 0, TOX_HASH_LENGTH);
 }
 
@@ -19,7 +18,6 @@ Friend::Friend(const uint8_t *public_key, QString name, QString status_message)
     user_status = TOX_USER_STATUS_NONE;
     accepted = true;
     notification = false;
-    needs_avatar = true;
     memset(this->avatar_hash, 0, TOX_HASH_LENGTH);
 
     memcpy(this->public_key, public_key, TOX_PUBLIC_KEY_SIZE);

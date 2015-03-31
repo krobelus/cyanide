@@ -403,12 +403,10 @@ void callback_friend_connection_status(Tox *tox, uint32_t fid, TOX_CONNECTION st
 {
     Friend *f = &cyanide.friends[fid];
     f->connection_status = status;
-    if(status != TOX_CONNECTION_NONE && f->needs_avatar) {
+    if(status != TOX_CONNECTION_NONE) {
         qDebug() << "Sending avatar to friend" << fid;
         QString errmsg = cyanide.send_avatar(fid);
-        if(errmsg == "")
-            f->needs_avatar = false;
-        else
+        if(errmsg != "")
             qDebug() << "Failed to send avatar. " << errmsg;
     }
     emit cyanide.signal_friend_connection_status(fid);
@@ -1032,13 +1030,8 @@ void Cyanide::send_new_avatar()
     for(auto i=friends.begin(); i!=friends.end(); i++) {
         Friend *f = &i->second;
         if(f->connection_status == TOX_CONNECTION_NONE) {
-            /* send it when he comes online */
-            f->needs_avatar = true;
-        } else {
             QString errmsg = cyanide.send_avatar(i->first);
-            if(errmsg == "")
-                f->needs_avatar = false;
-            else
+            if(errmsg != "")
                 qDebug() << "Failed to send avatar. " << errmsg;
         }
     }
