@@ -42,10 +42,6 @@
         <translation>Ошибка: указанный Tox ID уже добавлен</translation>
     </message>
     <message>
-        <source>Error: Unknown</source>
-        <translation>Неизвестная ошибка</translation>
-    </message>
-    <message>
         <source>Error: Invalid Tox ID (bad checksum)</source>
         <translation>Ошибка: неправильный Tox ID (плохая контрольная сумма)</translation>
     </message>
@@ -58,12 +54,31 @@
         <translation>Ошибка: недостаточно памяти</translation>
     </message>
     <message>
-        <source>No name</source>
-        <translation>Нет имени</translation>
-    </message>
-    <message>
         <source>Invalid Tox ID</source>
         <translation>Неправильный Tox ID</translation>
+    </message>
+    <message>
+        <source>File not found: </source>
+        <translation>Файл не найден: </translation>
+    </message>
+    <message>
+        <source>Avatar too large. Maximum size: 16KiB</source>
+        <translation>Изображение слишком большое. Максимальный размер 16 KB</translation>
+    </message>
+</context>
+<context>
+    <name>FileChooser</name>
+    <message>
+        <source>Cancel</source>
+        <translation>Отмена</translation>
+    </message>
+    <message>
+        <source>Filter by extension</source>
+        <translation>Фильтр по расширению</translation>
+    </message>
+    <message>
+        <source>Failed to set avatar</source>
+        <translation>Не удалось установить аватар</translation>
     </message>
 </context>
 <context>
@@ -140,10 +155,6 @@
     <message>
         <source>Settings</source>
         <translation>Настройки</translation>
-    </message>
-    <message>
-        <source>Play this sound when...</source>
-        <translation>Воспроизводить звук когда...</translation>
     </message>
     <message>
         <source>I receive a message:</source>
