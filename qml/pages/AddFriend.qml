@@ -53,12 +53,11 @@ Page {
         anchors.topMargin: Theme.paddingLarge
     }
     function submit() {
-        var err = cyanide.send_friend_request(toxID.text, message.text)
-        if(err === "") {
+        var errmsg = cyanide.send_friend_request(toxID.text, message.text)
+        if(errmsg === "") {
             pageStack.pop()
         } else {
-            notify(notification, qsTr("Failed to add ") )
-            button.text = err;
+            notify(notification, qsTr("Failed send friend request"), errmsg )
         }
     }
 }

@@ -55,7 +55,7 @@ Page {
             MenuItem {
                 text:  filter + enabled
                 visible: fileChooserProperties.target === "selfAvatar"
-                property string filter: qsTr("Filter by extension")
+                property string filter: qsTr("Filter by filename extension")
                 property string enabled: fileChooserProperties.nameFilters === [] ? no : yes
                 property string yes: " ☑"
                 property string no:  " ☐"
