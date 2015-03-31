@@ -23,94 +23,94 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Failed send friend request</source>
-        <translation type="unfinished"></translation>
+        <source>Failed to send friend request</source>
+        <translation>Fehler beim Senden der Freundschaftsanfrage</translation>
     </message>
 </context>
 <context>
     <name>Cyanide</name>
     <message>
         <source>Error: Message is too long</source>
-        <translation type="unfinished"></translation>
+        <translation>Fehler: Nachricht ist zu lang</translation>
     </message>
     <message>
         <source>Error: Empty message</source>
-        <translation type="unfinished"></translation>
+        <translation>Fehler: Keine Nachricht</translation>
     </message>
     <message>
         <source>Error: Tox ID is self ID</source>
-        <translation type="unfinished"></translation>
+        <translation>Fehler: Tox ID ist eigene ID</translation>
     </message>
     <message>
         <source>Error: Tox ID is already in friend list</source>
-        <translation type="unfinished"></translation>
+        <translation>Fehler: Tox ID ist bereits in der Freundesliste</translation>
     </message>
     <message>
         <source>Error: Invalid Tox ID (bad checksum)</source>
-        <translation type="unfinished"></translation>
+        <translation>Fehler: Ungültige Tox ID (ungültige Prüfsumme)</translation>
     </message>
     <message>
         <source>Error: Invalid Tox ID (bad nospam value)</source>
-        <translation type="unfinished"></translation>
+        <translation>Fehler: Ungültige Tox ID (ungültiger NoSpam-Wert)</translation>
     </message>
     <message>
         <source>Error: No memory</source>
-        <translation type="unfinished"></translation>
+        <translation>Fehler: Kein Speicher</translation>
     </message>
     <message>
         <source>Error: Friend not found</source>
-        <translation type="unfinished"></translation>
+        <translation>Fehler: Freund konnte nicht gefunden werden</translation>
     </message>
     <message>
         <source>Error: Friend not connected</source>
-        <translation type="unfinished"></translation>
+        <translation>Fehler: Freund ist nicht verbunden</translation>
     </message>
     <message>
         <source>Error: Filename too long</source>
-        <translation type="unfinished"></translation>
+        <translation>Fehler: Dateiname ist zu lang</translation>
     </message>
     <message>
         <source>Error: Too many ongoing transfers</source>
-        <translation type="unfinished"></translation>
+        <translation>Fehler: Zu viele laufende Dateiübertragungen</translation>
     </message>
     <message>
         <source>Error: Invalid Tox ID</source>
-        <translation type="unfinished"></translation>
+        <translation>Fehler: Ungültige Tox ID</translation>
     </message>
     <message>
         <source>File not found: </source>
-        <translation type="unfinished"></translation>
+        <translation>Datei nicht gefunden:</translation>
     </message>
     <message>
         <source>Avatar too large. Maximum size: 16KiB</source>
-        <translation type="unfinished"></translation>
+        <translation>Avatar ist zu groß. Maximale Größe: 16KiB</translation>
     </message>
     <message>
         <source>Error: Failed to open file: </source>
-        <translation type="unfinished"></translation>
+        <translation>Fehler: Datei konnte nicht geöffnet werden: </translation>
     </message>
 </context>
 <context>
     <name>FileChooser</name>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Abbruch</translation>
     </message>
     <message>
         <source>Remove my avatar</source>
-        <translation type="unfinished"></translation>
+        <translation>Meinen Avatar entfernen</translation>
     </message>
     <message>
         <source>Failed to set avatar</source>
-        <translation type="unfinished"></translation>
+        <translation>Fehler beim Setzen des Avatars</translation>
     </message>
     <message>
         <source>Filter by filename extension</source>
-        <translation type="unfinished"></translation>
+        <translation>Nach Dateierweiterung filtern</translation>
     </message>
     <message>
         <source>Failed to send file</source>
-        <translation type="unfinished"></translation>
+        <translation>Fehler beim Schicken der Datei</translation>
     </message>
 </context>
 <context>
@@ -137,11 +137,11 @@
     </message>
     <message>
         <source>Copy Tox ID to clipboard</source>
-        <translation type="unfinished"></translation>
+        <translation>Tox ID in die Zwischenablage kopieren</translation>
     </message>
     <message>
         <source>Send a file</source>
-        <translation type="unfinished"></translation>
+        <translation>Eine Datei schicken</translation>
     </message>
 </context>
 <context>
@@ -230,7 +230,7 @@
     </message>
     <message>
         <source>Send typing notifications?</source>
-        <translation type="unfinished"></translation>
+        <translation>Tippen anzeigen?</translation>
     </message>
 </context>
 <context>
@@ -241,15 +241,15 @@
     </message>
     <message>
         <source>New message</source>
-        <translation type="unfinished"></translation>
+        <translation>Neue Nachricht</translation>
     </message>
     <message>
         <source>New messages</source>
-        <translation type="unfinished"></translation>
+        <translation>Neue Nachrichten</translation>
     </message>
     <message>
         <source>Friend request received!</source>
-        <translation type="unfinished"></translation>
+        <translation>Freundschaftsanfrage empfagen!</translation>
     </message>
 </context>
 </TS>

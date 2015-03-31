@@ -23,7 +23,7 @@
         <translation>Pošlji zahtevo za prijateljstvo</translation>
     </message>
     <message>
-        <source>Failed send friend request</source>
+        <source>Failed to send friend request</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
