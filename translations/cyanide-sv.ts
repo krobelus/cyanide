@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="sv_SE">
+<TS version="2.0" language="sv_SE">
 <context>
     <name>AcceptFriend</name>
     <message>
@@ -24,7 +24,7 @@
     </message>
     <message>
         <source>Failed to send friend request</source>
-        <translation type="unfinished"></translation>
+        <translation>Kunde inte skicka kontaktförfrågan</translation>
     </message>
 </context>
 <context>
@@ -48,7 +48,7 @@
     </message>
     <message>
         <source>Error: Unknown</source>
-        <translation type="vanished">Fel: Okänt</translation>
+        <translation>Fel: Okänt</translation>
     </message>
     <message>
         <source>Error: Invalid Tox ID (bad checksum)</source>
@@ -64,66 +64,66 @@
     </message>
     <message>
         <source>No name</source>
-        <translation type="vanished">Inget namn</translation>
+        <translation>Inget namn</translation>
     </message>
     <message>
         <source>Invalid Tox ID</source>
-        <translation type="vanished">Ogiltigt Tox-ID</translation>
+        <translation>Ogiltigt Tox-ID</translation>
     </message>
     <message>
         <source>Error: Friend not found</source>
-        <translation type="unfinished"></translation>
+        <translation>Fel: Vännen kunde inte hittas</translation>
     </message>
     <message>
         <source>Error: Friend not connected</source>
-        <translation type="unfinished"></translation>
+        <translation>Fel: Vännen inte ansluten</translation>
     </message>
     <message>
         <source>Error: Filename too long</source>
-        <translation type="unfinished"></translation>
+        <translation>Fel: För långt filnamn</translation>
     </message>
     <message>
         <source>Error: Too many ongoing transfers</source>
-        <translation type="unfinished"></translation>
+        <translation>Fel: För många pågående överföringar</translation>
     </message>
     <message>
         <source>Error: Invalid Tox ID</source>
-        <translation type="unfinished"></translation>
+        <translation>Fel: Ogiltigt Tox-ID</translation>
     </message>
     <message>
         <source>File not found: </source>
-        <translation type="unfinished"></translation>
+        <translation>Filen kunde inte hittas:</translation>
     </message>
     <message>
         <source>Avatar too large. Maximum size: 16KiB</source>
-        <translation type="unfinished"></translation>
+        <translation>För stor avatar. Maxstorlek: 16KiB</translation>
     </message>
     <message>
         <source>Error: Failed to open file: </source>
-        <translation type="unfinished"></translation>
+        <translation>Fel: Kunde inte öppna filen: </translation>
     </message>
 </context>
 <context>
     <name>FileChooser</name>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Avbryt</translation>
     </message>
     <message>
         <source>Remove my avatar</source>
-        <translation type="unfinished"></translation>
+        <translation>Ta bort min avatar</translation>
     </message>
     <message>
         <source>Failed to set avatar</source>
-        <translation type="unfinished"></translation>
+        <translation>Kunde inte ange avatar</translation>
     </message>
     <message>
         <source>Filter by filename extension</source>
-        <translation type="unfinished"></translation>
+        <translation>Filtrera efter filnamnstillägg</translation>
     </message>
     <message>
         <source>Failed to send file</source>
-        <translation type="unfinished"></translation>
+        <translation>Kunde inte skicka filen</translation>
     </message>
 </context>
 <context>
@@ -138,7 +138,7 @@
     </message>
     <message>
         <source>Launching web browser...</source>
-        <translation type="vanished">Startar webläsaren...</translation>
+        <translation>Startar webläsaren...</translation>
     </message>
     <message>
         <source>Removing friend</source>
@@ -158,7 +158,7 @@
     </message>
     <message>
         <source>Send a file</source>
-        <translation type="unfinished"></translation>
+        <translation>Skicka en fil</translation>
     </message>
 </context>
 <context>
@@ -211,7 +211,7 @@
     </message>
     <message>
         <source>Play this sound when...</source>
-        <translation type="vanished">Spela upp detta ljud när...</translation>
+        <translation>Spela upp detta ljud när...</translation>
     </message>
     <message>
         <source>I receive a message:</source>
@@ -227,11 +227,11 @@
     </message>
     <message>
         <source>a friend comes online</source>
-        <translation type="vanished">En vän ansluter</translation>
+        <translation>En vän ansluter</translation>
     </message>
     <message>
         <source>a friend changes his name</source>
-        <translation type="vanished">En vän byter namn</translation>
+        <translation>En vän byter namn</translation>
     </message>
     <message>
         <source>Yes</source>
@@ -254,7 +254,7 @@
     <name>cyanide</name>
     <message>
         <source> is now known as </source>
-        <translation type="vanished">är nu känd som </translation>
+        <translation>är nu känd som </translation>
     </message>
     <message>
         <source>New message</source>
