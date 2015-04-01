@@ -21,16 +21,6 @@ Page {
 
     Notification { id: notification }
 
-    TextEdit {
-        id: clipboard
-        visible: false
-        function setClipboard(value) {
-        text = value
-            selectAll()
-            copy()
-        }
-    }
-
     SilicaFlickable {
         anchors.fill: parent
 
@@ -199,6 +189,15 @@ Page {
                     // failed to send the message, keep it for now
                 }
             }
+        }
+    }
+    TextEdit {
+        id: clipboard
+        visible: false
+        function setClipboard(value) {
+        text = value
+            selectAll()
+            copy()
         }
     }
 }

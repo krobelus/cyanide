@@ -8,7 +8,7 @@ ApplicationWindow
     initialPage: Component { FriendList { } }
     cover: Qt.resolvedUrl("cover/CoverPage.qml")
 
-    /* pass this to functions that take a friend ID to refer to self */
+    /* pass this to functions that takes a friend ID to refer to self */
     property int self_friend_number: -1
 
     /* the list of friends */
