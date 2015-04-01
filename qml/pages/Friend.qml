@@ -184,7 +184,7 @@ Page {
             id: inputField
             width: parent.width - Theme.paddingLarge
             inputMethodHints: Qt.ImhNoAutoUppercase
-            focus: false
+            focus: true
             onFocusChanged: cyanide.send_typing_notification(activeFriend(), focus)
             onYChanged: messageList.positionViewAtEnd()
             anchors {
