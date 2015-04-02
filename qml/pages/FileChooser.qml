@@ -35,9 +35,17 @@ Page {
         PullDownMenu {
             MenuItem {
                 text: qsTr("Cancel")
-                onClicked: pageStack.pop(pageStack.find(function(page) {
-                                return page.name === "profile"
-                            }))
+                onClicked: {
+                    var name
+                    if(fileChooserProperties.target === "selfAvatar") {
+                        name = "profile"
+                    } else if(fileChooserProperties.target === "fileToSend") {
+                        name = "friend"
+                    }
+                    pageStack.pop(pageStack.find(function(page) {
+                            return page.name === name
+                        }))
+                }
             }
             MenuItem {
                 text: qsTr("Remove my avatar")
