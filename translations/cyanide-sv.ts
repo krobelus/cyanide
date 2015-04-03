@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="sv_SE">
+<TS version="2.0" language="sv_SE">
 <context>
     <name>AcceptFriend</name>
     <message>
@@ -64,11 +64,11 @@
     </message>
     <message>
         <source>No name</source>
-        <translation type="vanished">Inget namn</translation>
+        <translation>Inget namn</translation>
     </message>
     <message>
         <source>Invalid Tox ID</source>
-        <translation type="vanished">Ogiltigt Tox-ID</translation>
+        <translation>Ogiltigt Tox-ID</translation>
     </message>
     <message>
         <source>Error: Friend not found</source>
@@ -104,19 +104,19 @@
     </message>
     <message>
         <source>Error: File transfer not found</source>
-        <translation type="unfinished"></translation>
+        <translation>Fel: Filöverföring kan inte hittas</translation>
     </message>
     <message>
         <source>Error: Not paused</source>
-        <translation type="unfinished"></translation>
+        <translation>Fel: Inte pausad</translation>
     </message>
     <message>
         <source>Error: Already paused</source>
-        <translation type="unfinished"></translation>
+        <translation>Fel: Redan pausad</translation>
     </message>
     <message>
         <source>Error: Packet queue is full</source>
-        <translation type="unfinished"></translation>
+        <translation>Fel: Paketkön är full</translation>
     </message>
 </context>
 <context>
@@ -154,7 +154,7 @@
     </message>
     <message>
         <source>Launching web browser...</source>
-        <translation type="vanished">Startar webläsaren...</translation>
+        <translation>Startar webläsaren...</translation>
     </message>
     <message>
         <source>Removing friend</source>
@@ -178,23 +178,23 @@
     </message>
     <message>
         <source>Failed to pause transfer</source>
-        <translation type="unfinished"></translation>
+        <translation>Kunde inte pausa överföringen</translation>
     </message>
     <message>
         <source>Failed to resume transfer</source>
-        <translation type="unfinished"></translation>
+        <translation>Kunde inte återuppta överföringen</translation>
     </message>
     <message>
         <source>Failed to cancel transfer</source>
-        <translation type="unfinished"></translation>
+        <translation>Kunde inte avbryta överföringen</translation>
     </message>
     <message>
         <source>Opening file...</source>
-        <translation type="unfinished"></translation>
+        <translation>Öppnar fil...</translation>
     </message>
     <message>
         <source>Failed to send message</source>
-        <translation type="unfinished"></translation>
+        <translation>Kunde inte skicka meddelande</translation>
     </message>
 </context>
 <context>
@@ -247,7 +247,7 @@
     </message>
     <message>
         <source>Play this sound when...</source>
-        <translation type="vanished">Spela upp detta ljud när...</translation>
+        <translation>Spela upp detta ljud när...</translation>
     </message>
     <message>
         <source>I receive a message:</source>
@@ -263,11 +263,11 @@
     </message>
     <message>
         <source>a friend comes online</source>
-        <translation type="vanished">En vän ansluter</translation>
+        <translation>En vän ansluter</translation>
     </message>
     <message>
         <source>a friend changes his name</source>
-        <translation type="vanished">En vän byter namn</translation>
+        <translation>En vän byter namn</translation>
     </message>
     <message>
         <source>Yes</source>
@@ -290,7 +290,7 @@
     <name>cyanide</name>
     <message>
         <source> is now known as </source>
-        <translation type="vanished">är nu känd som </translation>
+        <translation>är nu känd som </translation>
     </message>
     <message>
         <source>New message</source>
