@@ -89,6 +89,26 @@
         <source>Error: Failed to open file: </source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Error: File transfer not found</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error: Not paused</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error: Already paused</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error: Packet queue is full</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error: Unknown</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>FileChooser</name>
@@ -149,6 +169,26 @@
     </message>
     <message>
         <source>Send a file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Failed to pause transfer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Failed to resume transfer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Failed to cancel transfer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Opening file...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Failed to send message</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

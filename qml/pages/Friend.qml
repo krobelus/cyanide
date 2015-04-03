@@ -43,14 +43,14 @@ Page {
                 if(errmsg === "") {
                     console.log("paused successfully, closing panel")
                 } else {
-                    notify(notification, qsTr("Failed to pause transfer"), errmsg)
+                    notify(notification, qsTr("Failed to pause transfer"), qsTr(errmsg))
                 }
             } else if(file_status == -1 || file_status == -3) {
                 errmsg = cyanide.resume_transfer(f, m)
                 if(errmsg === "") {
                     console.log("paused successfully, closing panel")
                 } else {
-                    notify(notification, qsTr("Failed to resume transfer"), errmsg)
+                    notify(notification, qsTr("Failed to resume transfer"), qsTr(errmsg))
                 }
             } else if(file_status == 0) {
                 console.log("attempted to pause/resume a cancelled transfer")
