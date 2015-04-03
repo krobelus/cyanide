@@ -12,6 +12,8 @@ Features
 - DNS discovery
 - Typing notification
 - Sound, LED & lockscreen notifications
+- Avatars
+- File Transfers
 
 Building
 --------

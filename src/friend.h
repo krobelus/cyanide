@@ -20,9 +20,10 @@ public:
     TOX_CONNECTION connection_status;
     TOX_USER_STATUS user_status;
     bool accepted;
-    bool notification;
+    bool notification; //TODO rename > activity
 
-    std::vector<Message> messages;
+    File_Transfer avatar_transfer;
+    QList<Message> messages;
 
 
 signals:

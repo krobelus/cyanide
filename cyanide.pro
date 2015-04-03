@@ -20,7 +20,6 @@ SOURCES += \
     src/cyanide.cpp \
     src/util.cpp \
     src/friend.cpp \
-    src/message.cpp \
     src/dns.cpp \
     src/settings.cpp
 
@@ -61,8 +60,7 @@ HEADERS += \
     src/tox_callbacks.h \
     src/message.h \
     src/settings.h \
-    src/config.h \
-    src/file_transfers.h
+    src/config.h
 
 unix:!macx: LIBS += -L$$PWD/res/usr/lib/ -ltoxcore -ltoxdns -lsodium -lrt -lresolv -lnemonotifications-qt5
 

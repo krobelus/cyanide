@@ -16,6 +16,11 @@ ApplicationWindow
 
     property ListModel settingsList: ListModel { id: settingsList }
 
+    property int msgtype_normal: 1
+    property int msgtype_action: 2
+    property int msgtype_image : 3
+    property int msgtype_file  : 4
+
     /* stack of friend IDs */
     property var friendNumberStack: new Array
     /*  stack of pages */
@@ -80,7 +85,7 @@ ApplicationWindow
     Connections {
         target: cyanide
         onSignal_friend_added: {
-            appendFriend(fid)
+            refreshFriendList()
         }
         onSignal_friend_name: {
             var i = fid + 1

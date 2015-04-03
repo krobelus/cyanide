@@ -324,6 +324,15 @@ uint32_t Cyanide::add_friend(Friend *f)
     return fid;
 }
 
+uint32_t Cyanide::add_message(uint32_t fid, Message message)
+{
+    friends[fid].messages.append(message);
+    uint32_t mid = friends[fid].messages.size() - 1;
+    qDebug() << "added message number" << mid;
+    emit signal_friend_message(fid, mid);
+    return mid;
+}
+
 void Cyanide::set_callbacks()
 {
     tox_callback_friend_request(tox, callback_friend_request, NULL);
@@ -353,14 +362,17 @@ void callback_friend_request(Tox *UNUSED(tox), const uint8_t *id, const uint8_t 
     emit cyanide.signal_friend_request(friend_number);
 }
 
-void callback_friend_message(Tox *UNUSED(tox), uint32_t fid, TOX_MESSAGE_TYPE type, const uint8_t *message, size_t length, void *UNUSED(userdata))
+void callback_friend_message(Tox *UNUSED(tox), uint32_t fid, TOX_MESSAGE_TYPE type, const uint8_t *msg, size_t length, void *UNUSED(userdata))
 {
     qDebug() << "was called";
-    //TODO honor type
-    std::vector<Message> *tmp = &cyanide.friends[fid].messages;
-    tmp->push_back(Message(message, length, false));
+    Message m;
+    m.type = type == TOX_MESSAGE_TYPE_ACTION ? MSGTYPE_ACTION : MSGTYPE_NORMAL;
+    m.author = false;
+    m.text = utf8_to_qstr(msg, length);
+    m.timestamp = QDateTime::currentDateTime();
+    m.ft = NULL;
     cyanide.friends[fid].notification = true;
-    emit cyanide.signal_friend_message(fid, tmp->size() - 1);
+    cyanide.add_message(fid, m);
 }
 
 void callback_friend_name(Tox *UNUSED(tox), uint32_t fid, const uint8_t *newname, size_t length, void *UNUSED(userdata))
@@ -395,8 +407,8 @@ void callback_friend_typing(Tox *UNUSED(tox), uint32_t fid, bool is_typing, void
 
 void callback_friend_read_receipt(Tox *UNUSED(tox), uint32_t fid, uint32_t receipt, void *UNUSED(userdata))
 {
+    // TODO
     qDebug() << "was called";
-    return;
 }
 
 void callback_friend_connection_status(Tox *tox, uint32_t fid, TOX_CONNECTION status, void *UNUSED(userdata))
@@ -415,59 +427,136 @@ void callback_friend_connection_status(Tox *tox, uint32_t fid, TOX_CONNECTION st
 void callback_file_recv(Tox *tox, uint32_t fid, uint32_t file_number, uint32_t kind,
                         uint64_t file_size, const uint8_t *filename, size_t filename_length, void *UNUSED(user_data))
 {
+    if(kind == TOX_FILE_KIND_AVATAR)
+        return cyanide.incoming_avatar(fid, file_number, file_size, filename, filename_length);
+
+    qDebug() << "Received file transfer request: friend" << fid << "file" << file_number
+             << "size" << file_size;
+
+    Message m;
+    m.type = MSGTYPE_FILE;
+
+    m.timestamp = QDateTime::currentDateTime();
+    m.author = false;
+
+    File_Transfer *ft = m.ft = (File_Transfer*)malloc(sizeof(File_Transfer));
+    if(ft == NULL) {
+        qDebug() << "Failed to allocate memory for the file transfer";
+        return;
+    }
+
     if(file_size == 0) {
+        free(m.ft);
         qDebug() << "ignoring transfer request of size 0";
         return;
     }
 
-    File_Transfer ft;
-    ft.friend_number = fid;
-    ft.file_number = file_number;
-    ft.kind = kind;
-    ft.incoming = true;
+    ft->file_number = file_number;
+    ft->file_size = file_size;
+    ft->position = 0;
+    ft->filename_length = filename_length;
+    ft->status = -1;
+    memcpy(ft->filename, filename, filename_length);
 
-    ft.file_size = file_size;
-    ft.position = 0;
+    m.text = DOWNLOAD_PATH + utf8_to_qstr(filename, filename_length);
 
-    if(ft.kind == TOX_FILE_KIND_AVATAR) {
-        qDebug() << "Received avatar transfer request: friend" << fid << "file" << file_number
-                 << "size" << file_size;
-        /* check if the hash is the same as the one of the cached avatar */
-        cyanide.get_file_id(&ft);
-        if(0 == memcmp(cyanide.friends[ft.friend_number].avatar_hash, ft.file_id,
-                TOX_HASH_LENGTH)) {
-            qDebug() << "avatar already present";
-            cyanide.cancel_transfer(&ft);
+    if((ft->file = fopen(m.text.toUtf8().constData(), "wb")) == NULL)
+        qDebug() << "Failed to open file " << m.text;
+
+    qDebug() << "adding message";
+    cyanide.add_message(fid, m);
+}
+
+void Cyanide::incoming_avatar(uint32_t fid, uint32_t file_number, uint64_t file_size,
+                              const uint8_t *filename, size_t filename_length)
+{
+    qDebug() << "Received avatar transfer request: friend" << fid
+             << "file" << file_number << "size" << file_size;
+
+    File_Transfer *ft = &friends[fid].avatar_transfer;
+    ft->file_number = file_number;
+    ft->file_size = file_size;
+    ft->position = 0;
+    ft->file = NULL;
+    ft->data = NULL;
+
+    /* check if the hash is the same as the one of the cached avatar */
+    cyanide.get_file_id(fid, ft);
+    if(0 == memcmp(cyanide.friends[fid].avatar_hash, ft->file_id,
+            TOX_HASH_LENGTH)) {
+        qDebug() << "avatar already present";
+        goto cancel;
+    }
+
+    ft->filename_length = filename_length;
+    ft->filename = (uint8_t*)malloc(filename_length);
+    memcpy(ft->filename, filename, filename_length);
+    char p[sizeof(AVATAR_PATH) + 2 * TOX_PUBLIC_KEY_SIZE + 5];
+    char hex_pubkey[2 * TOX_PUBLIC_KEY_SIZE + 1];
+    public_key_to_string(hex_pubkey, (char*)cyanide.friends[fid].public_key);
+    hex_pubkey[2 * TOX_PUBLIC_KEY_SIZE] = '\0';
+    sprintf(p, "%s/%s.png", AVATAR_PATH, hex_pubkey);
+
+    if(file_size == 0) {
+        unlink(p);
+        memset(friends[fid].avatar_hash, 0, TOX_HASH_LENGTH);
+        QByteArray hash((const char*)friends[fid].avatar_hash, TOX_HASH_LENGTH);
+        settings.set_friend_avatar_hash(cyanide.get_friend_public_key(fid), hash);
+        emit cyanide.signal_avatar_change(fid);
+qDebug() << "c";
+        goto cancel;
+    } else if(file_size > 16 * 1024) {
+        qDebug() << "avatar too large, rejecting";
+        goto cancel;
+    } else if((ft->file = fopen(p, "wb")) == NULL) {
+        qDebug() << "Failed to open file " << p;
+        goto cancel;
+    } else if((ft->data = (uint8_t*)malloc(ft->file_size)) == NULL) {
+        qDebug() << "Failed to allocate memory for the avatar";
+        goto cancel;
+    } else {
+        QString errmsg = cyanide.send_file_control(fid, -1, TOX_FILE_CONTROL_RESUME);
+        if(errmsg == "")
             return;
-        }
-        qDebug() << "accepting avatar";
-        char p[sizeof(AVATAR_PATH) + 2 * TOX_PUBLIC_KEY_SIZE + 5];
-        char hex_pubkey[2 * TOX_PUBLIC_KEY_SIZE + 1];
-        public_key_to_string(hex_pubkey, (char*)cyanide.friends[ft.friend_number].public_key);
-        hex_pubkey[2 * TOX_PUBLIC_KEY_SIZE] = '\0';
-        sprintf(p, "%s/%s.png", AVATAR_PATH, hex_pubkey);
-        if((ft.file = fopen(p, "wb")) == NULL) {
-            qDebug() << "Failed to open file " << p;
-            cyanide.cancel_transfer(&ft);
-        } else if((ft.data = (uint8_t*)malloc(ft.file_size)) == NULL) { //TODO sanitize file_size
-            qDebug() << "Failed to allocate memory for the avatar";
-            fclose(ft.file);
-            cyanide.cancel_transfer(&ft);
-        } else {
-            cyanide.add_file_transfer(&ft);
-            cyanide.resume_transfer(&ft);
-        }
-    } else { // normal transfer
-        qDebug() << "Received file transfer request: friend" << fid << "file" << file_number
-                 << "size" << file_size;
-        ft.filename_length = filename_length;
-        ft.filename = (uint8_t*)malloc(filename_length);
-        memcpy(ft.filename, filename, filename_length);
+        else
+            qDebug() << "failed to resume avatar transfer: " << errmsg;
+    }
+cancel:
+    QString errmsg = cyanide.send_file_control(fid, -1, TOX_FILE_CONTROL_CANCEL);
+    if(errmsg == "")
+        return;
+    else
+        qDebug() << "failed to cancel avatar transfer: " << errmsg;
+    free(ft->data);
+    if(ft->file != NULL)
+        fclose(ft->file);
+}
 
-        char p[sizeof(DOWNLOAD_PATH) + filename_length];
-        sprintf(p, "%s/%s", DOWNLOAD_PATH, filename);
-        if((ft.file = fopen(p, "wb")) == NULL)
-            qDebug() << "Failed to open file " << p;
+void Cyanide::incoming_avatar_chunk(uint32_t fid, uint64_t position,
+                                    const uint8_t *data, size_t length)
+{
+    bool success;
+    size_t n;
+
+    Friend *f = &cyanide.friends[fid];
+    File_Transfer ft = f->avatar_transfer;
+
+    if(length == 0) {
+        qDebug() << "avatar transfer finished: friend" << fid
+                 << "file" << ft.file_number;
+        success = tox_hash(f->avatar_hash, ft.data, ft.file_size);
+        QByteArray hash((const char*)f->avatar_hash, TOX_HASH_LENGTH);
+        settings.set_friend_avatar_hash(cyanide.get_friend_public_key(fid), hash);
+        Q_ASSERT(success);
+        n = fwrite(ft.data, 1, ft.file_size, ft.file);
+        Q_ASSERT(n == ft.file_size);
+        fclose(ft.file);
+        free(ft.data);
+        ft.file_number = 0;
+        emit cyanide.signal_avatar_change(fid);
+    } else {
+        qDebug() << "copying avatar chunk to memory, offset" << position;
+        memcpy(ft.data + position, data, length);
     }
 }
 
@@ -476,62 +565,108 @@ void callback_file_recv_chunk(Tox *tox, uint32_t fid, uint32_t file_number, uint
 {
     qDebug() << "was called";
 
-    bool success;
-    size_t n;
-    File_Transfer *ft = cyanide.get_file_transfer(fid, file_number);
+    Friend *f = &cyanide.friends[fid];
+
+    if(f->avatar_transfer.file_number == file_number)
+        return cyanide.incoming_avatar_chunk(fid, position, data, length);
+
+    Message m;
+    QList<Message> ms = cyanide.friends[fid].messages;
+
+    int mid = ms.size() - 1;
+    for( ; mid >= 0; mid--) {
+        m = ms[mid];
+        if(m.ft != NULL && m.ft->file_number == file_number)
+            break;
+        else if(mid == 0)
+            qDebug() << "file transfer not found";
+    }
+
+    File_Transfer *ft = m.ft;
+
     FILE *file = ft->file;
 
-    if(ft->kind == TOX_FILE_KIND_AVATAR) {
-        if(length == 0) {
-            qDebug() << "avatar transfer finished: friend" << ft->friend_number
-                     << "file" << ft->file_number;
-            Friend *f = &cyanide.friends[ft->friend_number];
-            success = tox_hash(f->avatar_hash, ft->data, ft->file_size);
-            QByteArray hash((const char*)f->avatar_hash, TOX_HASH_LENGTH);
-            settings.set_friend_avatar_hash(cyanide.get_friend_public_key(ft->friend_number), hash);
-            Q_ASSERT(success);
-            n = fwrite(ft->data, 1, ft->file_size, file);
-            Q_ASSERT(n == ft->file_size);
-            fclose(ft->file);
-            free(ft->data);
-            cyanide.remove_file_transfer(ft);
-            emit cyanide.signal_avatar_change(ft->friend_number);
-        } else {
-            qDebug() << "copying avatar chunk to memory, offset" << position;
-            memcpy(ft->data + position, data, length);
-        }
+    if(length == 0) {
+        qDebug() << "file transfer finished";
+        fclose(ft->file);
+        ft->status = 2;
+        emit cyanide.signal_file_status(fid, mid, 0);
+        emit cyanide.signal_file_progress(fid, mid, 100);
+    } else if(fwrite(data, 1, length, file) != length) {
+        qDebug() << "fwrite failed";
     } else {
-        if(length == 0) {
-            qDebug() << "file transfer finished";
-            free(ft->filename);
-            fclose(ft->file);
-            cyanide.remove_file_transfer(ft);
-        } else if(fwrite(data, 1, length, file) != length) {
-            qDebug() << "fwrite failed";
+        if(ft->file_size == 0) {
+            qDebug() << "receiving file with size 0";
+            qDebug() << "lol";
+        } else {
+            emit cyanide.signal_file_progress(fid, mid, cyanide.get_file_progress(fid, mid));
         }
     }
 }
 
-void callback_file_recv_control(Tox *UNUSED(tox), uint32_t friend_number, uint32_t file_number,
+void callback_file_recv_control(Tox *UNUSED(tox), uint32_t fid, uint32_t file_number,
                                 TOX_FILE_CONTROL action, void *UNUSED(userdata))
 {
     qDebug() << "was called";
-    File_Transfer *ft = cyanide.get_file_transfer(friend_number, file_number);
+
+    bool avatar;
+    Message m;
+    int mid = 0;
+    QList<Message> ms = cyanide.friends[fid].messages;
+    Friend *f = &cyanide.friends[fid];
+    File_Transfer *ft;
+
+    if(f->avatar_transfer.file_number == file_number) {
+        avatar = true;
+        ft = &cyanide.self.avatar_transfer;
+    } else {
+        mid = ms.size() - 1;
+        for( ; mid >= 0; mid--) {
+            m = ms[mid];
+            if(m.ft != NULL && m.ft->file_number == file_number) {
+                break;
+            } else if(mid == 0) {
+                qDebug() << "file transfer not found";
+                return;
+            }
+        }
+        ft = m.ft;
+    }
+
+    if(avatar)
+        return;
 
     switch(action){
         case TOX_FILE_CONTROL_RESUME:
-            qDebug() << "Resuming transfer";
+            qDebug() << "Resuming transfer, status:" << ft->status;
+            if(ft->status == -2) {
+                ft->status = 1;
+            } else if(ft->status == -3) {
+                ft->status = -1;
+            } else {
+                qDebug() << "unexpected status ^";
+            }
             break;
         case TOX_FILE_CONTROL_PAUSE:
-            qDebug() << "Pausing transfer";
+            qDebug() << "Pausing transfer, status:" << ft->status;
+            if(ft->status == -1) {
+                ft->status = -3;
+            } else if(ft->status == 1) {
+                ft->status = -2;
+            } else {
+                qDebug() << "unexpected status ^";
+            }
             break;
         case TOX_FILE_CONTROL_CANCEL:
             qDebug() << "Aborting transfer";
+            ft->status = 0;
             break;
     }
+    emit cyanide.signal_file_status(fid, mid, ft->status);
 }
 
-void callback_file_chunk_request(Tox *tox, uint32_t friend_number, uint32_t file_number, uint64_t position, size_t length, void *UNUSED(user_data))
+void callback_file_chunk_request(Tox *tox, uint32_t fid, uint32_t file_number,
+                                 uint64_t position, size_t length, void *UNUSED(user_data))
 {
     qDebug() << "was called";
 
@@ -539,8 +674,35 @@ void callback_file_chunk_request(Tox *tox, uint32_t friend_number, uint32_t file
     TOX_ERR_FILE_SEND_CHUNK error;
     uint8_t *chunk = NULL;
 
-    File_Transfer *ft = cyanide.get_file_transfer(friend_number, file_number);
+    bool avatar;
+    Message m;
+    int mid = 0;
+    QList<Message> ms = cyanide.friends[fid].messages;
+    Friend *f = &cyanide.friends[fid];
+    File_Transfer *ft;
+
+    if(f->avatar_transfer.file_number == file_number) {
+        avatar = true;
+        ft = &cyanide.self.avatar_transfer;
+    } else {
+        mid = ms.size() - 1;
+        for( ; mid >= 0; mid--) {
+            m = ms[mid];
+            if(m.ft != NULL && m.ft->file_number == file_number) {
+                break;
+            } else if(mid == 0) {
+                qDebug() << "file transfer not found";
+                return;
+            }
+        }
+        ft = m.ft;
+    }
+
     FILE *file = ft->file;
+
+    if(ft->file_size == 0) {
+        qDebug() << "sending file with size 0?";
+    }
 
     if(length != 0) {
         chunk = (uint8_t*)malloc(length);
@@ -549,14 +711,16 @@ void callback_file_chunk_request(Tox *tox, uint32_t friend_number, uint32_t file
             return;
         }
     } else {
-        if(!(ft->file_size == 0 && ft->kind == TOX_FILE_KIND_AVATAR))
+        if(!(ft->file_size == 0 && avatar))
             fclose(file);
-        cyanide.remove_file_transfer(ft);
     }
 
-    success = tox_file_send_chunk(tox, friend_number, file_number, position,
+    success = tox_file_send_chunk(tox, fid, file_number, position,
             (const uint8_t*)chunk, length, &error);
-    if(!success) {
+    if(success) {
+        ft->position += length;
+        emit cyanide.signal_file_progress(fid, mid, cyanide.get_file_progress(fid, mid));
+    } else {
         qDebug() << "Failed to send file chunk";
         switch(error) {
             case TOX_ERR_FILE_SEND_CHUNK_OK:
@@ -593,81 +757,94 @@ void callback_file_chunk_request(Tox *tox, uint32_t friend_number, uint32_t file
     free(chunk);
 }
 
-bool Cyanide::resume_transfer(File_Transfer *ft)
+QString Cyanide::resume_transfer(int fid, int mid)
 {
-    qDebug() << "resuming transfer, friend_number:" << ft->friend_number << "file_number" << ft->file_number;
-    return send_file_control(ft, TOX_FILE_CONTROL_RESUME);
+    qDebug() << "resuming transfer" << fid << mid;
+    return send_file_control(fid, mid, TOX_FILE_CONTROL_RESUME);
 }
 
-bool Cyanide::pause_transfer(File_Transfer *ft)
+QString Cyanide::pause_transfer(int fid, int mid)
 {
-    qDebug() << "pausing transfer, friend_number:" << ft->friend_number << "file_number" << ft->file_number;
-    return send_file_control(ft, TOX_FILE_CONTROL_PAUSE);
+    qDebug() << "pausing transfer" << fid << mid;
+    return send_file_control(fid, mid, TOX_FILE_CONTROL_PAUSE);
 }
 
-bool Cyanide::cancel_transfer(File_Transfer *ft)
+QString Cyanide::cancel_transfer(int fid, int mid)
 {
-    qDebug() << "aborting transfer, friend_number:" << ft->friend_number << "file_number" << ft->file_number;
-    return send_file_control(ft, TOX_FILE_CONTROL_CANCEL);
+    qDebug() << "aborting transfer" << fid << mid;
+    return send_file_control(fid, mid, TOX_FILE_CONTROL_CANCEL);
 }
 
-bool Cyanide::send_file_control(File_Transfer *ft, TOX_FILE_CONTROL action)
+QString Cyanide::send_file_control(int fid, int mid, TOX_FILE_CONTROL action)
 {
     bool success = true;
     TOX_ERR_FILE_CONTROL error;
 
-    success = tox_file_control(tox, ft->friend_number, ft->file_number,
+    File_Transfer *ft;
+    if(mid == -1) {
+        ft = &friends[fid].avatar_transfer;
+    } else {
+        ft = friends[fid].messages[mid].ft;
+    }
+
+    success = tox_file_control(tox, fid, ft->file_number,
                                     action, &error);
-    if(!success) {
+    if(success) {
+        switch(action) {
+        case TOX_FILE_CONTROL_PAUSE:
+            ft->status *= -1;
+            break;
+        case TOX_FILE_CONTROL_RESUME:
+            ft->status *= -1;
+            break;
+        case TOX_FILE_CONTROL_CANCEL:
+            ft->status = 0;
+            break;
+        }
+        qDebug() << "sent file control, new status:" << ft->status;
+        emit cyanide.signal_file_status(fid, mid, ft->status);
+        return "";
+    } else {
         qDebug() << "File control failed";
         switch(error) {
             case TOX_ERR_FILE_CONTROL_OK:
-                break;
+                return "";
             case TOX_ERR_FILE_CONTROL_FRIEND_NOT_FOUND:
-                qDebug() << "Error: friend not found";
-                break;
+                return tr("Error: Friend not found");
             case TOX_ERR_FILE_CONTROL_FRIEND_NOT_CONNECTED:
-                qDebug() << "Error: friend not connected";
-                break;
+                return tr("Error: Friend not connected");
             case TOX_ERR_FILE_CONTROL_NOT_FOUND:
-                qDebug() << "Error: file transfer not found";
-                break;
+                return tr("Error: File transfer not found");
             case TOX_ERR_FILE_CONTROL_NOT_PAUSED:
-                qDebug() << "Error: not paused";
-                break;
+                return tr("Error: Not paused");
             case TOX_ERR_FILE_CONTROL_DENIED:
-                qDebug() << "Error: transfer is paused by peer";
-                break;
+                return tr("Error: Transfer is paused by peer");
             case TOX_ERR_FILE_CONTROL_ALREADY_PAUSED:
-                qDebug() << "Error: already paused";
-                break;
+                return tr("Error: Already paused");
             case TOX_ERR_FILE_CONTROL_SENDQ:
-                qDebug() << "Error: packet queue is full";
-                break;
+                return tr("Error: Packet queue is full");
             default:
                 Q_ASSERT(false);
+                return tr("Error: Unknown");
         }
-        return false;
     }
-
-    return success;
 }
 
-bool Cyanide::get_file_id(File_Transfer *ft)
+bool Cyanide::get_file_id(uint32_t fid, File_Transfer *ft)
 {
     TOX_ERR_FILE_GET error;
 
-    if(!tox_file_get_file_id(tox, ft->friend_number, ft->file_number
+    if(!tox_file_get_file_id(tox, fid, ft->file_number
                             , ft->file_id, &error)) {
         qDebug() << "Failed to get file id";
         switch(error) {
             case TOX_ERR_FILE_GET_OK:
                 break;
             case TOX_ERR_FILE_GET_FRIEND_NOT_FOUND:
-                qDebug() << "Error: file not found";
+                qDebug() << "Error: File not found";
                 break;
             case TOX_ERR_FILE_GET_NOT_FOUND:
-                qDebug() << "Error: file transfer not found";
+                qDebug() << "Error: File transfer not found";
                 break;
         }
         return false;
@@ -692,36 +869,50 @@ QString Cyanide::send_file(TOX_FILE_KIND kind, int fid, QString path, uint8_t *f
 {
     int error;
 
-    File_Transfer ft;
-    ft.friend_number = fid;
-    ft.kind = kind;
-    ft.incoming = false;
-    ft.position = 0;
+    Message m;
+    File_Transfer *ft;
 
-    QString basename = path.right(path.size() + 1 - path.lastIndexOf("/"));
-    ft.filename_length = qstrlen(basename);
-    ft.filename = (uint8_t*)malloc(ft.filename_length);
-    qstr_to_utf8(ft.filename, basename);
+    if(kind == TOX_FILE_KIND_AVATAR) {
+        ft = &self.avatar_transfer;
+    } else {
+        ft = (File_Transfer*)malloc(sizeof(File_Transfer));
+        if(ft == NULL) {
+            qDebug() << "Failed to allocate memory for the file transfer";
+            return "no memory";
+        }
+        m.type = MSGTYPE_FILE; //TODO inline images?
+        m.timestamp = QDateTime::currentDateTime();
+        m.author = true;
+        m.text = path;
+        m.ft = ft;
+    }
 
-    ft.file = fopen(path.toUtf8().constData(), "rb");
-    if(ft.file == NULL) {
+    ft->position = 0;
+    ft->status = 1;
+
+    QString basename = path.right(path.size() - 1 - path.lastIndexOf("/"));
+    ft->filename_length = qstrlen(basename);
+    ft->filename = (uint8_t*)malloc(ft->filename_length + 1);
+    qstr_to_utf8(ft->filename, basename);
+
+    ft->file = fopen(path.toUtf8().constData(), "rb");
+    if(ft->file == NULL) {
         if(kind == TOX_FILE_KIND_AVATAR) {
-            ft.file_size = 0;
+            ft->file_size = 0;
         } else {
-            free(ft.filename);
             return tr("Error: Failed to open file: ") + path;
         }
     } else {
-        fseek(ft.file, 0L, SEEK_END);
-        ft.file_size = ftell(ft.file);
-        rewind(ft.file);
+        fseek(ft->file, 0L, SEEK_END);
+        ft->file_size = ftell(ft->file);
+        rewind(ft->file);
     }
 
-    ft.file_number = tox_file_send(tox, ft.friend_number, ft.kind, ft.file_size,
-                                    file_id, ft.filename, ft.filename_length,
+    ft->file_number = tox_file_send(tox, fid, kind, ft->file_size,
+                                    file_id, ft->filename, ft->filename_length,
                                     (TOX_ERR_FILE_SEND*)&error);
-    qDebug() << "sending file, friend number" << ft.friend_number
-             << "file number" << ft.file_number;
+    qDebug() << "sending file, friend number" << fid
+             << "file number" << ft->file_number;
 
     switch(error) {
         case TOX_ERR_FILE_SEND_OK:
@@ -738,28 +929,10 @@ QString Cyanide::send_file(TOX_FILE_KIND kind, int fid, QString path, uint8_t *f
             Q_ASSERT(false);
     }
 
-    add_file_transfer(&ft);
+    if(kind != TOX_FILE_KIND_AVATAR)
+        add_message(fid, m);
 
     return "";
-}
-
-void Cyanide::add_file_transfer(File_Transfer *ft)
-{
-    uint64_t id = (uint64_t)ft->friend_number << 32 | ft->file_number;
-    file_transfers[id] = *ft;
-}
-
-void Cyanide::remove_file_transfer(File_Transfer *ft)
-{
-    uint64_t id = (uint64_t)ft->friend_number << 32 | ft->file_number;
-    file_transfers.erase(id);
-}
-
-File_Transfer* Cyanide::get_file_transfer(uint32_t friend_number, uint32_t file_number)
-{
-    uint64_t id = (uint64_t)friend_number << 32 | file_number;
-    // TODO bounds checking :)
-    return &file_transfers[id];
 }
 
 void Cyanide::send_typing_notification(int fid, bool typing)
@@ -850,8 +1023,13 @@ bool Cyanide::send_friend_message(int fid, QString msg_str)
     uint32_t message_id = tox_friend_send_message(tox, fid, type, msg, msg_len, &error);
     qDebug() << "message id:" << message_id;
 
-    f->messages.push_back(Message(msg_str, true));
-    emit cyanide.signal_friend_message(SELF_FRIEND_NUMBER, f->messages.size() - 1);
+    Message m;
+    m.type = MSGTYPE_NORMAL; //TODO implement /me
+    m.author = true;
+    m.text = msg_str;
+    m.timestamp = QDateTime::currentDateTime();
+
+    add_message(fid, m);
 
     return true;
 }
@@ -898,6 +1076,17 @@ QList<int> Cyanide::get_friend_numbers()
         friend_numbers.append(it->first);
     }
     return friend_numbers;
+}
+
+QList<int> Cyanide::get_message_numbers(int fid)
+{
+    QList<int> message_numbers;
+    auto messages = friends[fid].messages;
+    int i = 0;
+    for(auto it = messages.begin(); it != messages.end(); it++) {
+        message_numbers.append(i++);
+    }
+    return message_numbers;
 }
 
 void Cyanide::set_friend_notification(int fid, bool status)
@@ -1037,11 +1226,6 @@ void Cyanide::send_new_avatar()
     }
 }
 
-int Cyanide::get_number_of_friends()
-{
-    return friends.size();
-}
-
 QString Cyanide::get_friend_name(int fid)
 {
     Friend f = fid == SELF_FRIEND_NUMBER ? self : friends[fid];
@@ -1119,10 +1303,10 @@ QString Cyanide::get_self_address()
     return utf8_to_qstr(hex_address, 2 * TOX_ADDRESS_SIZE);
 }
 
-int Cyanide::get_number_of_messages(int fid)
+int Cyanide::get_message_type(int fid, int mid)
 {
     Q_ASSERT(fid != SELF_FRIEND_NUMBER);
-    return friends[fid].messages.size();
+    return friends[fid].messages[mid].type;
 }
 
 QString Cyanide::get_message_text(int fid, int mid)
@@ -1174,4 +1358,31 @@ bool Cyanide::get_message_author(int fid, int mid)
 {
     Q_ASSERT(fid != SELF_FRIEND_NUMBER);
     return friends[fid].messages[mid].author;
+}
+
+int Cyanide::get_file_status(int fid, int mid)
+{
+    Q_ASSERT(fid != SELF_FRIEND_NUMBER);
+    return friends[fid].messages[mid].ft->status;
+}
+
+QString Cyanide::get_file_link(int fid, int mid)
+{
+    QString filename = get_message_text(fid, mid);
+    QString fullpath = "file:/" + filename;
+    return "<a href=\"" + fullpath + "\">"
+            + filename.right(filename.size() - 1 - filename.lastIndexOf("/"))
+            + "</a>";
+}
+
+int Cyanide::get_file_progress(int fid, int mid)
+{
+    Q_ASSERT(fid != SELF_FRIEND_NUMBER);
+    File_Transfer *ft = friends[fid].messages[mid].ft;
+
+    qDebug() << "position" << ft->position
+             << "file_size" << ft->file_size;
+
+    return ft->file_size == 0 ? 100
+                              : 100 * ft->position / ft->file_size;
 }

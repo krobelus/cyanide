@@ -13,7 +13,7 @@ Page {
 
     Text {
         id: cid
-        text: cyanide.get_friend_cid(activeFriend())
+        text: cyanide.get_friend_public_key(activeFriend())
         color: Theme.primaryColor
         x: Theme.paddingMedium
         y: 2 * Theme.paddingLarge

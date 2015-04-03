@@ -9,11 +9,12 @@ Friend::Friend()
     accepted = true;
     notification = false;
     memset(this->avatar_hash, 0, TOX_HASH_LENGTH);
+    // avatar_transfer unititialised
 }
 
 Friend::Friend(const uint8_t *public_key, QString name, QString status_message)
 {
-    //TODO use the default constructor for this
+    // TODO use the default constructor for this
     connection_status = TOX_CONNECTION_NONE;
     user_status = TOX_USER_STATUS_NONE;
     accepted = true;
