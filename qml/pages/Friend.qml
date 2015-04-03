@@ -36,6 +36,7 @@ Page {
         property bool incoming: false
 
         function togglePaused() {
+            togglePaused.enabled = false
             console.log("togglePaused() was called")
             var errmsg
             if(file_status == 1 || file_status == -2) {
@@ -57,12 +58,12 @@ Page {
             } else if(file_status == 2) {
                 console.log("attempted to pause/resume a finished transfer")
             }
-            console.log("file_status was: "+file_status)
-            console.log("setting to: "+cyanide.get_file_status(f, m))
             file_status = cyanide.get_file_status(f, m)
             open = false
+            togglePaused.enabled = true
         }
         function cancel() {
+            cancel.enabled = false
             console.log("cancel() was called")
             if(file_status == 2 || file_status == 0) {
                 console.log("attempted to cancel a finished/cancelled transfer")
@@ -74,6 +75,7 @@ Page {
                     notify(notification, qsTr("Failed to cancel transfer"), qsTr(errmsg))
             }
             open = false
+            cancel.enabled = true
         }
 
         function toggleIcons() {
@@ -92,7 +94,6 @@ Page {
         }
 
         onFile_statusChanged: {
-            console.log("file status changed")
             toggleIcons()
         }
 
@@ -172,9 +173,9 @@ Page {
         }
 
         SilicaListView {
-            id: messageList
+            id: messageListView
 
-            model: ListModel { id: model }
+            model: messageList
 
             anchors {
                 fill: parent
@@ -182,47 +183,16 @@ Page {
                 bottomMargin: pageHeader.height
             }
 
-            function appendMessage(mid) {
-                var fid = f
-                var m_type = cyanide.get_message_type(fid, mid)
-                var m_author = cyanide.get_message_author(fid, mid)
-                var m_text = cyanide.get_message_text(fid, mid)
-                var m_timestamp = new Date(cyanide.get_message_timestamp(fid, mid))
-                var isFile = m_type == msgtype_file || m_type == msgtype_image
-
-                if(!isFile) {
-                    model.append({"m_type": m_type
-                                 ,"m_author": m_author
-                                 ,"m_text": m_text
-                                 })
-                } else if(isFile) {
-                    model.append({"m_type": m_type
-                                 ,"m_author": m_author
-                                 ,"m_text": m_text
-                                 ,"mid": mid
-                                 ,"f_link": cyanide.get_file_link(fid, mid)
-                                 ,"f_status": cyanide.get_file_status(fid, mid)
-                                 ,"f_progress": cyanide.get_file_progress(fid, mid)
-                                 })
-                }
-            }
             Component.onCompleted: {
-                var mids = cyanide.get_message_numbers(f)
-                for(var mid in mids) {
-                    messageList.appendMessage(mid)
-                }
+                refreshMessageList()
+                messageListView.positionViewAtEnd()
                 cyanide.set_friend_notification(f, false)
-                messageList.positionViewAtEnd()
             }
+
             Connections {
                 target: cyanide
                 onSignal_friend_message: {
-                    if(fid == f)
-                        cyanide.set_friend_notification(fid, false)
-                    if(fid == f || fid == self_friend_number) {
-                        messageList.appendMessage(mid)
-                        messageList.positionViewAtEnd()
-                    }
+                    messageListView.positionViewAtEnd()
                 }
                 onSignal_friend_typing: {
                     if(fid == f) {
@@ -233,16 +203,13 @@ Page {
                     }
                 }
                 onSignal_file_status: {
-                    if(fid == f && fileControlPanel.m == mid) {
-                        console.log("signal status: "+status)
-                        model.setProperty(mid, "f_status", status)
-                    }
-
-                }
-                onSignal_file_progress: {
-                    if(fid == f) {
-                        console.log("signal progress: "+progress)
-                        model.setProperty(mid, "f_progress", progress)
+                    if(fileControlPanel.open
+                            && fid == f
+                            && mid == fileControlPanel.m
+                            && (status == 2 || status == 0))
+                    {
+                        console.log("transfer finished, closing panel")
+                        fileControlPanel.open = false
                     }
                 }
             }
@@ -275,7 +242,6 @@ Page {
 
                     linkColor: Theme.highlightColor
                     onLinkActivated: {
-                        console.log("text:"+text)
                         if(!file) {
                             notify(notification, qsTr("Opening URL..."), "")
                             Misc.openUrl(link)
@@ -284,18 +250,19 @@ Page {
                                 fileControlPanel.open = false
                             } else if(f_status == 1 /* active  */
                                     ||f_status < 0) /* paused  */ {
-                                openFileControlPanel(mid, f_status)
+                                openFileControlPanel(m_id, f_status)
                             } else if(f_status == 0) /* cancelled */ {
                                 ;
-                            } else if(f_status == 4) /* finished */ {
-                                notify(notification, qsTr("Opening file..."), "")
+                            } else if(f_status == 2) /* finished */ {
+                                notify(notification, qsTr("Opening file..."), m_text)
+                                console.log(link)
                                 Misc.openUrl(link)
                             }
                         }
                     }
                 }
-                function openFileControlPanel(mid, f_status) {
-                    fileControlPanel.m = mid
+                function openFileControlPanel(m, f_status) {
+                    fileControlPanel.m = m
                     fileControlPanel.incoming = !m_author
                     fileControlPanel.file_status = f_status
                     fileControlPanel.open = true
@@ -325,9 +292,9 @@ Page {
             id: inputField
             width: parent.width - Theme.paddingLarge
             inputMethodHints: Qt.ImhNoAutoUppercase
-            focus: model.count == 0
+            focus: false
             onFocusChanged: cyanide.send_typing_notification(f, focus)
-            onYChanged: messageList.positionViewAtEnd()
+            onYChanged: messageListView.positionViewAtEnd()
             anchors {
                 bottom: parent.bottom
             }

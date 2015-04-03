@@ -49,6 +49,7 @@ Page {
             }
             MenuItem {
                 text: qsTr("Remove my avatar")
+                visible: fileChooserProperties.target === "selfAvatar"
                 onClicked: {
                     var errmsg = cyanide.set_self_avatar("")
                     if(errmsg === "") {

@@ -16,6 +16,8 @@ ApplicationWindow
 
     property ListModel settingsList: ListModel { id: settingsList }
 
+    property ListModel messageList: ListModel { id: messageList }
+
     property int msgtype_normal: 1
     property int msgtype_action: 2
     property int msgtype_image : 3
@@ -82,6 +84,41 @@ ApplicationWindow
                         'friend_address': settings.get_friend_address(cyanide.get_friend_public_key(i))
                          })
     }
+    function refreshMessageList() {
+        messageList.clear()
+        var mids = cyanide.get_message_numbers(activeFriend())
+        for(var mid in mids) {
+            appendMessage(mid)
+        }
+    }
+    function appendMessage(mid) {
+        console.log("appending mid "+mid)
+        var fid = activeFriend()
+        var m_type = cyanide.get_message_type(fid, mid)
+        var m_author = cyanide.get_message_author(fid, mid)
+        var m_text = cyanide.get_message_text(fid, mid)
+        var m_timestamp = new Date(cyanide.get_message_timestamp(fid, mid))
+        var isFile = m_type == msgtype_file || m_type == msgtype_image
+
+        if(!isFile) {
+            messageList.append({"m_type": m_type
+                         ,"m_author": m_author
+                         ,"m_text": m_text
+                         })
+        } else if(isFile) {
+            console.log("f_link: "+cyanide.get_file_link(fid, mid))
+            console.log("f_status: "+cyanide.get_file_status(fid, mid))
+            console.log("f_progress: "+cyanide.get_file_progress(fid, mid))
+            messageList.append({"m_type": m_type
+                         ,"m_author": m_author
+                         ,"m_text": m_text
+                         ,"m_id": mid
+                         ,"f_link": cyanide.get_file_link(fid, mid)
+                         ,"f_status": cyanide.get_file_status(fid, mid)
+                         ,"f_progress": cyanide.get_file_progress(fid, mid)
+                         })
+        }
+    }
     Connections {
         target: cyanide
         onSignal_friend_added: {
@@ -142,13 +179,33 @@ ApplicationWindow
             var i = fid + 1
             if(fid != self_friend_number) {
                 // cyanide.play_sound(settings.get("sound-message-received"))
-                cyanide.set_friend_notification(fid, true)
+                if(activeFriend() != fid)
+                    cyanide.set_friend_notification(fid, true)
                 if(settings.get("notification-message-received") === "true"
                     && !(cyanide.is_visible() && chattingWith(fid)))
                 {
                     nFriendMessage.fid = fid
                     notify(nFriendMessage, cyanide.get_friend_name(fid), cyanide.get_message_text(fid, mid))
                 }
+                /* doesn't work reliably with append for some reason... */
+                refreshMessageList()
+                /*
+                if(fid == f || fid == self_friend_number) {
+                    appendMessage(mid)
+                    messageListView.positionViewAtEnd()
+                }
+                */
+            }
+        }
+        onSignal_file_status: {
+            if(fid == activeFriend()) {
+                console.log("signal status: "+status)
+                messageList.setProperty(mid, "f_status", status)
+            }
+        }
+        onSignal_file_progress: {
+            if(fid == activeFriend()) {
+                messageList.setProperty(mid, "f_progress", progress)
             }
         }
         onSignal_friend_request: {

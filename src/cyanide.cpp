@@ -463,7 +463,6 @@ void callback_file_recv(Tox *tox, uint32_t fid, uint32_t file_number, uint32_t k
     if((ft->file = fopen(m.text.toUtf8().constData(), "wb")) == NULL)
         qDebug() << "Failed to open file " << m.text;
 
-    qDebug() << "adding message";
     cyanide.add_message(fid, m);
 }
 
@@ -590,7 +589,7 @@ void callback_file_recv_chunk(Tox *tox, uint32_t fid, uint32_t file_number, uint
         qDebug() << "file transfer finished";
         fclose(ft->file);
         ft->status = 2;
-        emit cyanide.signal_file_status(fid, mid, 0);
+        emit cyanide.signal_file_status(fid, mid, ft->status);
         emit cyanide.signal_file_progress(fid, mid, 100);
     } else if(fwrite(data, 1, length, file) != length) {
         qDebug() << "fwrite failed";
@@ -638,7 +637,7 @@ void callback_file_recv_control(Tox *UNUSED(tox), uint32_t fid, uint32_t file_nu
 
     switch(action){
         case TOX_FILE_CONTROL_RESUME:
-            qDebug() << "Resuming transfer, status:" << ft->status;
+            qDebug() << "resuming transfer, status:" << ft->status;
             if(ft->status == -2) {
                 ft->status = 1;
             } else if(ft->status == -3) {
@@ -648,7 +647,7 @@ void callback_file_recv_control(Tox *UNUSED(tox), uint32_t fid, uint32_t file_nu
             }
             break;
         case TOX_FILE_CONTROL_PAUSE:
-            qDebug() << "Pausing transfer, status:" << ft->status;
+            qDebug() << "pausing transfer, status:" << ft->status;
             if(ft->status == -1) {
                 ft->status = -3;
             } else if(ft->status == 1) {
@@ -658,7 +657,7 @@ void callback_file_recv_control(Tox *UNUSED(tox), uint32_t fid, uint32_t file_nu
             }
             break;
         case TOX_FILE_CONTROL_CANCEL:
-            qDebug() << "Aborting transfer";
+            qDebug() << "aborting transfer";
             ft->status = 0;
             break;
     }
@@ -670,7 +669,7 @@ void callback_file_chunk_request(Tox *tox, uint32_t fid, uint32_t file_number,
 {
     qDebug() << "was called";
 
-    bool success;
+    bool success = false;
     TOX_ERR_FILE_SEND_CHUNK error;
     uint8_t *chunk = NULL;
 
@@ -704,19 +703,23 @@ void callback_file_chunk_request(Tox *tox, uint32_t fid, uint32_t file_number,
         qDebug() << "sending file with size 0?";
     }
 
-    if(length != 0) {
+    if(length == 0) {
+        if(!(ft->file_size == 0 && avatar))
+            fclose(file);
+        qDebug() << "file sending done";
+        ft->status = 2;
+        emit cyanide.signal_file_status(fid, mid, ft->status);
+        success = true;
+    } else {
         chunk = (uint8_t*)malloc(length);
         if(fread(chunk, 1, length, file) != length) {
             qDebug() << "fread failed";
             return;
         }
-    } else {
-        if(!(ft->file_size == 0 && avatar))
-            fclose(file);
+        success = tox_file_send_chunk(tox, fid, file_number, position,
+                (const uint8_t*)chunk, length, &error);
     }
 
-    success = tox_file_send_chunk(tox, fid, file_number, position,
-            (const uint8_t*)chunk, length, &error);
     if(success) {
         ft->position += length;
         emit cyanide.signal_file_progress(fid, mid, cyanide.get_file_progress(fid, mid));
@@ -791,13 +794,28 @@ QString Cyanide::send_file_control(int fid, int mid, TOX_FILE_CONTROL action)
                                     action, &error);
     if(success) {
         switch(action) {
-        case TOX_FILE_CONTROL_PAUSE:
-            ft->status *= -1;
-            break;
         case TOX_FILE_CONTROL_RESUME:
-            ft->status *= -1;
+            qDebug() << "resuming transfer, status:" << ft->status;
+            if(ft->status == -1) {
+                ft->status = 1;
+            } else if(ft->status == -3) {
+                ft->status = -2;
+            } else {
+                qDebug() << "unexpected status ^";
+            }
+            break;
+        case TOX_FILE_CONTROL_PAUSE:
+            qDebug() << "pausing transfer, status:" << ft->status;
+            if(ft->status == 1) {
+                ft->status = -1;
+            } else if(ft->status == -2) {
+                ft->status = -3;
+            } else {
+                qDebug() << "unexpected status ^";
+            }
             break;
         case TOX_FILE_CONTROL_CANCEL:
+            qDebug() << "aborting transfer";
             ft->status = 0;
             break;
         }
@@ -888,7 +906,7 @@ QString Cyanide::send_file(TOX_FILE_KIND kind, int fid, QString path, uint8_t *f
     }
 
     ft->position = 0;
-    ft->status = 1;
+    ft->status = -2;
 
     QString basename = path.right(path.size() - 1 - path.lastIndexOf("/"));
     ft->filename_length = qstrlen(basename);
@@ -1369,7 +1387,7 @@ int Cyanide::get_file_status(int fid, int mid)
 QString Cyanide::get_file_link(int fid, int mid)
 {
     QString filename = get_message_text(fid, mid);
-    QString fullpath = "file:/" + filename;
+    QString fullpath = "file://" + filename;
     return "<a href=\"" + fullpath + "\">"
             + filename.right(filename.size() - 1 - filename.lastIndexOf("/"))
             + "</a>";
@@ -1379,9 +1397,6 @@ int Cyanide::get_file_progress(int fid, int mid)
 {
     Q_ASSERT(fid != SELF_FRIEND_NUMBER);
     File_Transfer *ft = friends[fid].messages[mid].ft;
-
-    qDebug() << "position" << ft->position
-             << "file_size" << ft->file_size;
 
     return ft->file_size == 0 ? 100
                               : 100 * ft->position / ft->file_size;
