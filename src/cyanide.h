@@ -32,7 +32,7 @@ public:
     bool run_tox_loop, save_needed;
 
     uint32_t add_friend(Friend *f);
-    uint32_t add_message(uint32_t fid, Message message);
+    void add_message(uint32_t fid, Message message);
     void incoming_avatar(uint32_t fid, uint32_t file_number, uint64_t file_size,
                          const uint8_t *filename, size_t filename_length);
     void incoming_avatar_chunk(uint32_t fid, uint64_t position,

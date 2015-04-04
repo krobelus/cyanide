@@ -324,13 +324,19 @@ uint32_t Cyanide::add_friend(Friend *f)
     return fid;
 }
 
-uint32_t Cyanide::add_message(uint32_t fid, Message message)
+void Cyanide::add_message(uint32_t fid, Message message)
 {
     friends[fid].messages.append(message);
     uint32_t mid = friends[fid].messages.size() - 1;
     qDebug() << "added message number" << mid;
+
+    if(message.ft != NULL)
+        friends[fid].files[message.ft->file_number] = mid;
+
+    // TODO use signal parameter, no need to store this
+    friends[fid].notification = true;
+
     emit signal_friend_message(fid, mid);
-    return mid;
 }
 
 void Cyanide::set_callbacks()
@@ -371,7 +377,6 @@ void callback_friend_message(Tox *UNUSED(tox), uint32_t fid, TOX_MESSAGE_TYPE ty
     m.text = utf8_to_qstr(msg, length);
     m.timestamp = QDateTime::currentDateTime();
     m.ft = NULL;
-    cyanide.friends[fid].notification = true;
     cyanide.add_message(fid, m);
 }
 
@@ -473,6 +478,8 @@ void Cyanide::incoming_avatar(uint32_t fid, uint32_t file_number, uint64_t file_
     qDebug() << "Received avatar transfer request: friend" << fid
              << "file" << file_number << "size" << file_size;
 
+    friends[fid].files[file_number] = -1;
+
     File_Transfer *ft = &friends[fid].avatar_transfer;
     ft->file_number = file_number;
     ft->file_size = file_size;
@@ -527,7 +534,6 @@ cancel:
     free(ft->data);
     if(ft->file != NULL)
         fclose(ft->file);
-    ft->file_number = 0;
 }
 
 void Cyanide::incoming_avatar_chunk(uint32_t fid, uint64_t position,
@@ -550,7 +556,6 @@ void Cyanide::incoming_avatar_chunk(uint32_t fid, uint64_t position,
         Q_ASSERT(n == ft.file_size);
         fclose(ft.file);
         free(ft.data);
-        ft.file_number = 0;
         emit cyanide.signal_avatar_change(fid);
     } else {
         qDebug() << "copying avatar chunk to memory, offset" << position;
@@ -564,24 +569,12 @@ void callback_file_recv_chunk(Tox *tox, uint32_t fid, uint32_t file_number, uint
     qDebug() << "was called";
 
     Friend *f = &cyanide.friends[fid];
+    int mid = f->files[file_number];
 
-    if(f->avatar_transfer.file_number == file_number)
+    if(mid == -1)
         return cyanide.incoming_avatar_chunk(fid, position, data, length);
 
-    Message m;
-    QList<Message> ms = cyanide.friends[fid].messages;
-
-    int mid = ms.size() - 1;
-    for( ; mid >= 0; mid--) {
-        m = ms[mid];
-        if(m.ft != NULL && m.ft->file_number == file_number)
-            break;
-        else if(mid == 0)
-            qDebug() << "file transfer not found";
-    }
-
-    File_Transfer *ft = m.ft;
-
+    File_Transfer *ft = f->messages[mid].ft;
     FILE *file = ft->file;
 
     if(length == 0) {
@@ -608,36 +601,23 @@ void callback_file_recv_control(Tox *UNUSED(tox), uint32_t fid, uint32_t file_nu
 {
     qDebug() << "was called";
 
-    bool avatar;
-    Message m;
-    int mid = 0;
-    QList<Message> ms = cyanide.friends[fid].messages;
     Friend *f = &cyanide.friends[fid];
+    int mid  = f->files[file_number];
+    qDebug() << "message id is" << mid << "file number is" << file_number;
+
     File_Transfer *ft;
 
-    if(f->avatar_transfer.file_number == file_number) {
-        avatar = true;
-        ft = &cyanide.self.avatar_transfer;
+    if(mid == -1) {
+        qDebug() << "(avatar transfer)";
+        ft = &f->avatar_transfer;
     } else {
-        mid = ms.size() - 1;
-        for( ; mid >= 0; mid--) {
-            m = ms[mid];
-            if(m.ft != NULL && m.ft->file_number == file_number) {
-                break;
-            } else if(mid == 0) {
-                qDebug() << "file transfer not found";
-                return;
-            }
-        }
-        ft = m.ft;
+        qDebug() << "(normal transfer)";
+        ft = f->messages[mid].ft;
     }
-
-    if(avatar)
-        return;
 
     switch(action){
         case TOX_FILE_CONTROL_RESUME:
-            qDebug() << "resuming transfer, status:" << ft->status;
+            qDebug() << "transfer was resumed, status:" << ft->status;
             if(ft->status == -2) {
                 ft->status = 1;
             } else if(ft->status == -3) {
@@ -647,7 +627,7 @@ void callback_file_recv_control(Tox *UNUSED(tox), uint32_t fid, uint32_t file_nu
             }
             break;
         case TOX_FILE_CONTROL_PAUSE:
-            qDebug() << "pausing transfer, status:" << ft->status;
+            qDebug() << "transfer was paused, status:" << ft->status;
             if(ft->status == -1) {
                 ft->status = -3;
             } else if(ft->status == 1) {
@@ -657,9 +637,11 @@ void callback_file_recv_control(Tox *UNUSED(tox), uint32_t fid, uint32_t file_nu
             }
             break;
         case TOX_FILE_CONTROL_CANCEL:
-            qDebug() << "aborting transfer";
+            qDebug() << "transfer was cancelled, status:" << ft->status;
             ft->status = 0;
             break;
+        default:
+            Q_ASSERT(false);
     }
     emit cyanide.signal_file_status(fid, mid, ft->status);
 }
@@ -673,39 +655,21 @@ void callback_file_chunk_request(Tox *tox, uint32_t fid, uint32_t file_number,
     TOX_ERR_FILE_SEND_CHUNK error;
     uint8_t *chunk = NULL;
 
-    bool avatar;
-    Message m;
-    int mid = 0;
-    QList<Message> ms = cyanide.friends[fid].messages;
     Friend *f = &cyanide.friends[fid];
+    int mid = f->files[file_number];
+
     File_Transfer *ft;
 
-    if(f->avatar_transfer.file_number == file_number) {
-        avatar = true;
+    if(mid == -1) {
         ft = &cyanide.self.avatar_transfer;
     } else {
-        mid = ms.size() - 1;
-        for( ; mid >= 0; mid--) {
-            m = ms[mid];
-            if(m.ft != NULL && m.ft->file_number == file_number) {
-                break;
-            } else if(mid == 0) {
-                qDebug() << "file transfer not found";
-                return;
-            }
-        }
-        ft = m.ft;
+        ft = f->messages[mid].ft;
     }
 
     FILE *file = ft->file;
 
-    if(ft->file_size == 0) {
-        qDebug() << "sending file with size 0?";
-    }
-
     if(length == 0) {
-        if(!(ft->file_size == 0 && avatar))
-            fclose(file);
+        fclose(file);
         qDebug() << "file sending done";
         ft->status = 2;
         emit cyanide.signal_file_status(fid, mid, ft->status);
@@ -762,43 +726,35 @@ void callback_file_chunk_request(Tox *tox, uint32_t fid, uint32_t file_number,
 
 QString Cyanide::resume_transfer(int fid, int mid)
 {
-    qDebug() << "resuming transfer" << fid << mid;
     return send_file_control(fid, mid, TOX_FILE_CONTROL_RESUME);
 }
 
 QString Cyanide::pause_transfer(int fid, int mid)
 {
-    qDebug() << "pausing transfer" << fid << mid;
     return send_file_control(fid, mid, TOX_FILE_CONTROL_PAUSE);
 }
 
 QString Cyanide::cancel_transfer(int fid, int mid)
 {
-    qDebug() << "aborting transfer" << fid << mid;
     return send_file_control(fid, mid, TOX_FILE_CONTROL_CANCEL);
 }
 
 QString Cyanide::send_file_control(int fid, int mid, TOX_FILE_CONTROL action)
 {
-    bool success = true;
+    bool success;
     TOX_ERR_FILE_CONTROL error;
 
     File_Transfer *ft;
+
     if(mid == -1) {
         ft = &friends[fid].avatar_transfer;
     } else {
         ft = friends[fid].messages[mid].ft;
     }
 
-    success = tox_file_control(tox, fid, ft->file_number,
-                                    action, &error);
-    /* also succeed on already paused because that's what toxcore returns
-     * when pausing a just sent transfer, but we need to set the status from
-     * "paused by them" to paused by both
-     * I'm not sure if this makes sense
-     * the UI should make pausing impossible otherwise if it's already paused
-     */
-    if(success || error == TOX_ERR_FILE_CONTROL_ALREADY_PAUSED) {
+    success = tox_file_control(tox, fid, ft->file_number, action, &error);
+
+    if(success) {
         switch(action) {
         case TOX_FILE_CONTROL_RESUME:
             qDebug() << "resuming transfer, status:" << ft->status;
@@ -821,7 +777,7 @@ QString Cyanide::send_file_control(int fid, int mid, TOX_FILE_CONTROL action)
             }
             break;
         case TOX_FILE_CONTROL_CANCEL:
-            qDebug() << "aborting transfer";
+            qDebug() << "cancelling transfer, status:" << ft->status;
             ft->status = 0;
             break;
         }
@@ -934,6 +890,7 @@ QString Cyanide::send_file(TOX_FILE_KIND kind, int fid, QString path, uint8_t *f
     ft->file_number = tox_file_send(tox, fid, kind, ft->file_size,
                                     file_id, ft->filename, ft->filename_length,
                                     (TOX_ERR_FILE_SEND*)&error);
+    friends[fid].files[ft->file_number] = -1;
     qDebug() << "sending file, friend number" << fid
              << "file number" << ft->file_number;
 
