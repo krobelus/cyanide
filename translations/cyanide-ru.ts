@@ -24,7 +24,7 @@
     </message>
     <message>
         <source>Failed to send friend request</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось отправить запрос на добавление в друзья</translation>
     </message>
 </context>
 <context>
@@ -58,10 +58,6 @@
         <translation>Ошибка: недостаточно памяти</translation>
     </message>
     <message>
-        <source>Invalid Tox ID</source>
-        <translation type="vanished">Неправильный Tox ID</translation>
-    </message>
-    <message>
         <source>File not found: </source>
         <translation>Файл не найден: </translation>
     </message>
@@ -71,47 +67,47 @@
     </message>
     <message>
         <source>Error: Friend not found</source>
-        <translation type="unfinished"></translation>
+        <translation>Ошибка: контакт не найден</translation>
     </message>
     <message>
         <source>Error: Friend not connected</source>
-        <translation type="unfinished"></translation>
+        <translation>Ошибка: контакт не в сети</translation>
     </message>
     <message>
         <source>Error: Filename too long</source>
-        <translation type="unfinished"></translation>
+        <translation>Ошибка: имя файла слишком длинное</translation>
     </message>
     <message>
         <source>Error: Too many ongoing transfers</source>
-        <translation type="unfinished"></translation>
+        <translation>Ошибка: слишком много активных передач</translation>
     </message>
     <message>
         <source>Error: Invalid Tox ID</source>
-        <translation type="unfinished"></translation>
+        <translation>Ошибка: неправильный Tox ID</translation>
     </message>
     <message>
         <source>Error: Failed to open file: </source>
-        <translation type="unfinished"></translation>
+        <translation>Ошибка: не удалось открыть файл: </translation>
     </message>
     <message>
         <source>Error: File transfer not found</source>
-        <translation type="unfinished"></translation>
+        <translation>Ошибка: передача не найдена</translation>
     </message>
     <message>
         <source>Error: Not paused</source>
-        <translation type="unfinished"></translation>
+        <translation>Ошибка: не остановлено</translation>
     </message>
     <message>
         <source>Error: Already paused</source>
-        <translation type="unfinished"></translation>
+        <translation>Ошибка: уже остановлено</translation>
     </message>
     <message>
         <source>Error: Packet queue is full</source>
-        <translation type="unfinished"></translation>
+        <translation>Ошибка: очередь заполнена</translation>
     </message>
     <message>
         <source>Error: Unknown</source>
-        <translation type="unfinished"></translation>
+        <translation>Ошибка: неизвестная</translation>
     </message>
 </context>
 <context>
@@ -121,24 +117,20 @@
         <translation>Отмена</translation>
     </message>
     <message>
-        <source>Filter by extension</source>
-        <translation type="vanished">Фильтр по расширению</translation>
-    </message>
-    <message>
         <source>Failed to set avatar</source>
         <translation>Не удалось установить аватар</translation>
     </message>
     <message>
         <source>Remove my avatar</source>
-        <translation type="unfinished"></translation>
+        <translation>Удалить аватар</translation>
     </message>
     <message>
         <source>Filter by filename extension</source>
-        <translation type="unfinished"></translation>
+        <translation>Фильтровать по расширению</translation>
     </message>
     <message>
         <source>Failed to send file</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось передать файл</translation>
     </message>
 </context>
 <context>
@@ -169,27 +161,27 @@
     </message>
     <message>
         <source>Send a file</source>
-        <translation type="unfinished"></translation>
+        <translation>Передать файл</translation>
     </message>
     <message>
         <source>Failed to pause transfer</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось остановить передачу</translation>
     </message>
     <message>
         <source>Failed to resume transfer</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось возобновить передачу</translation>
     </message>
     <message>
         <source>Failed to cancel transfer</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось отменить передачу</translation>
     </message>
     <message>
         <source>Opening file...</source>
-        <translation type="unfinished"></translation>
+        <translation>Файл открывается...</translation>
     </message>
     <message>
         <source>Failed to send message</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось отправить сообщение</translation>
     </message>
 </context>
 <context>
