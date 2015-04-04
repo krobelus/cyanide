@@ -20,13 +20,12 @@ public:
     TOX_CONNECTION connection_status;
     TOX_USER_STATUS user_status;
     bool accepted;
-    bool notification; //TODO use signals only for this
+    bool activity;
 
     File_Transfer avatar_transfer;
 
     /* maps file_number to mid (message id)
-     * mid == -1 means it is the avatar transfer
-     */
+     * mid == -1 means it is the avatar transfer */
     std::map<uint32_t, int> files;
 
     QList<Message> messages;

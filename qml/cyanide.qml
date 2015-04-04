@@ -148,7 +148,7 @@ ApplicationWindow
             var i = fid + 1
             friendList.setProperty(i, "friend_status_icon", cyanide.get_friend_status_icon(fid))
         }
-        onSignal_notification: {
+        onSignal_friend_activity: {
             var i = fid + 1
             friendList.setProperty(i, "friend_status_icon", cyanide.get_friend_status_icon(fid))
         }
@@ -178,9 +178,9 @@ ApplicationWindow
         onSignal_friend_message: {
             var i = fid + 1
             if(fid != self_friend_number) {
+                if(fid == activeFriend())
+                    cyanide.set_friend_activity(fid, false)
                 // cyanide.play_sound(settings.get("sound-message-received"))
-                if(activeFriend() != fid)
-                    cyanide.set_friend_notification(fid, true)
                 if(settings.get("notification-message-received") === "true"
                     && !(cyanide.is_visible() && chattingWith(fid)))
                 {

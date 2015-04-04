@@ -333,8 +333,8 @@ void Cyanide::add_message(uint32_t fid, Message message)
     if(message.ft != NULL)
         friends[fid].files[message.ft->file_number] = mid;
 
-    // TODO use signal parameter, no need to store this
-    friends[fid].notification = true;
+    if(!message.author)
+        set_friend_activity(fid, true);
 
     emit signal_friend_message(fid, mid);
 }
@@ -478,7 +478,7 @@ void Cyanide::incoming_avatar(uint32_t fid, uint32_t file_number, uint64_t file_
     qDebug() << "Received avatar transfer request: friend" << fid
              << "file" << file_number << "size" << file_size;
 
-    friends[fid].files[file_number] = -1;
+    friends[fid].files[file_number] = -2;
 
     File_Transfer *ft = &friends[fid].avatar_transfer;
     ft->file_number = file_number;
@@ -486,6 +486,7 @@ void Cyanide::incoming_avatar(uint32_t fid, uint32_t file_number, uint64_t file_
     ft->position = 0;
     ft->file = NULL;
     ft->data = NULL;
+    ft->status = -2;
 
     /* check if the hash is the same as the one of the cached avatar */
     cyanide.get_file_id(fid, ft);
@@ -521,14 +522,14 @@ void Cyanide::incoming_avatar(uint32_t fid, uint32_t file_number, uint64_t file_
         qDebug() << "Failed to allocate memory for the avatar";
         goto cancel;
     } else {
-        QString errmsg = cyanide.send_file_control(fid, -1, TOX_FILE_CONTROL_RESUME);
+        QString errmsg = cyanide.send_file_control(fid, -2, TOX_FILE_CONTROL_RESUME);
         if(errmsg == "")
             return;
         else
             qDebug() << "failed to resume avatar transfer: " << errmsg;
     }
 cancel:
-    QString errmsg = cyanide.send_file_control(fid, -1, TOX_FILE_CONTROL_CANCEL);
+    QString errmsg = cyanide.send_file_control(fid, -2, TOX_FILE_CONTROL_CANCEL);
     if(errmsg != "")
         qDebug() << "failed to cancel avatar transfer: " << errmsg;
     free(ft->data);
@@ -558,7 +559,6 @@ void Cyanide::incoming_avatar_chunk(uint32_t fid, uint64_t position,
         free(ft.data);
         emit cyanide.signal_avatar_change(fid);
     } else {
-        qDebug() << "copying avatar chunk to memory, offset" << position;
         memcpy(ft.data + position, data, length);
     }
 }
@@ -571,8 +571,11 @@ void callback_file_recv_chunk(Tox *tox, uint32_t fid, uint32_t file_number, uint
     Friend *f = &cyanide.friends[fid];
     int mid = f->files[file_number];
 
-    if(mid == -1)
+    if(mid == -1) {
+        Q_ASSERT(false);
+    } else if(mid == -2) {
         return cyanide.incoming_avatar_chunk(fid, position, data, length);
+    }
 
     File_Transfer *ft = f->messages[mid].ft;
     FILE *file = ft->file;
@@ -608,10 +611,13 @@ void callback_file_recv_control(Tox *UNUSED(tox), uint32_t fid, uint32_t file_nu
     File_Transfer *ft;
 
     if(mid == -1) {
-        qDebug() << "(avatar transfer)";
+        qDebug() << "outgoing avatar transfer";
+        ft = &cyanide.self.avatar_transfer;
+    } else if(mid == -2) {
+        qDebug() << "incoming avatar transfer";
         ft = &f->avatar_transfer;
     } else {
-        qDebug() << "(normal transfer)";
+        qDebug() << "normal transfer";
         ft = f->messages[mid].ft;
     }
 
@@ -658,10 +664,15 @@ void callback_file_chunk_request(Tox *tox, uint32_t fid, uint32_t file_number,
     Friend *f = &cyanide.friends[fid];
     int mid = f->files[file_number];
 
+    qDebug() << "mid" << mid << "fid" << fid
+             << "file_number" << file_number;
+
     File_Transfer *ft;
 
     if(mid == -1) {
         ft = &cyanide.self.avatar_transfer;
+    } else if(mid == -2) {
+        Q_ASSERT(false);
     } else {
         ft = f->messages[mid].ft;
     }
@@ -686,7 +697,8 @@ void callback_file_chunk_request(Tox *tox, uint32_t fid, uint32_t file_number,
 
     if(success) {
         ft->position += length;
-        emit cyanide.signal_file_progress(fid, mid, cyanide.get_file_progress(fid, mid));
+        if(mid >= 0)
+            emit cyanide.signal_file_progress(fid, mid, cyanide.get_file_progress(fid, mid));
     } else {
         qDebug() << "Failed to send file chunk";
         switch(error) {
@@ -747,6 +759,8 @@ QString Cyanide::send_file_control(int fid, int mid, TOX_FILE_CONTROL action)
     File_Transfer *ft;
 
     if(mid == -1) {
+        ft = &self.avatar_transfer;
+    } else if(mid == -2) {
         ft = &friends[fid].avatar_transfer;
     } else {
         ft = friends[fid].messages[mid].ft;
@@ -782,7 +796,8 @@ QString Cyanide::send_file_control(int fid, int mid, TOX_FILE_CONTROL action)
             break;
         }
         qDebug() << "sent file control, new status:" << ft->status;
-        emit cyanide.signal_file_status(fid, mid, ft->status);
+        if(mid >= 0)
+            emit cyanide.signal_file_status(fid, mid, ft->status);
         return "";
     } else {
         qDebug() << "File control failed";
@@ -1069,11 +1084,11 @@ QList<int> Cyanide::get_message_numbers(int fid)
     return message_numbers;
 }
 
-void Cyanide::set_friend_notification(int fid, bool status)
+void Cyanide::set_friend_activity(int fid, bool status)
 {
     Q_ASSERT(fid != SELF_FRIEND_NUMBER);
-    friends[fid].notification = status;
-    emit cyanide.signal_notification(fid);
+    friends[fid].activity = status;
+    emit cyanide.signal_friend_activity(fid);
 }
 
 void Cyanide::set_self_name(QString name)
@@ -1198,7 +1213,7 @@ void Cyanide::send_new_avatar()
     /* send the avatar to each connected friend */
     for(auto i=friends.begin(); i!=friends.end(); i++) {
         Friend *f = &i->second;
-        if(f->connection_status == TOX_CONNECTION_NONE) {
+        if(f->connection_status != TOX_CONNECTION_NONE) {
             QString errmsg = cyanide.send_avatar(i->first);
             if(errmsg != "")
                 qDebug() << "Failed to send avatar. " << errmsg;
@@ -1248,7 +1263,7 @@ QString Cyanide::get_friend_status_icon(int fid)
         }
     }
     
-    if(f.notification)
+    if(f.activity)
         url.append("_notification");
 
     url.append("_2x");

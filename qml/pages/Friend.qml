@@ -186,7 +186,7 @@ Page {
             Component.onCompleted: {
                 refreshMessageList()
                 messageListView.positionViewAtEnd()
-                cyanide.set_friend_notification(f, false)
+                cyanide.set_friend_activity(f, false)
             }
 
             Connections {

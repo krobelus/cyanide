@@ -78,7 +78,7 @@ public:
     Q_INVOKABLE QList<int> get_friend_numbers();
     Q_INVOKABLE QList<int> get_message_numbers(int fid);
 
-    Q_INVOKABLE void set_friend_notification(int fid, bool status);
+    Q_INVOKABLE void set_friend_activity(int fid, bool status);
     Q_INVOKABLE void set_self_name(QString name);
     Q_INVOKABLE void set_self_status_message(QString status_message);
     Q_INVOKABLE void set_self_user_status(int status);
@@ -106,7 +106,7 @@ public:
 
 signals:
     void signal_friend_added(int fid);
-    void signal_notification(int fid);
+    void signal_friend_activity(int fid);
     void signal_close_notifications();
 
     void signal_friend_request(int fid);
