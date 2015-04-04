@@ -792,7 +792,13 @@ QString Cyanide::send_file_control(int fid, int mid, TOX_FILE_CONTROL action)
 
     success = tox_file_control(tox, fid, ft->file_number,
                                     action, &error);
-    if(success) {
+    /* also succeed on already paused because that's what toxcore returns
+     * when pausing a just sent transfer, but we need to set the status from
+     * "paused by them" to paused by both
+     * I'm not sure if this makes sense
+     * the UI should make pausing impossible otherwise if it's already paused
+     */
+    if(success || error == TOX_ERR_FILE_CONTROL_ALREADY_PAUSED) {
         switch(action) {
         case TOX_FILE_CONTROL_RESUME:
             qDebug() << "resuming transfer, status:" << ft->status;

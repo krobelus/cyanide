@@ -188,13 +188,10 @@ ApplicationWindow
                     notify(nFriendMessage, cyanide.get_friend_name(fid), cyanide.get_message_text(fid, mid))
                 }
                 /* doesn't work reliably with append for some reason... */
-                refreshMessageList()
-                /*
-                if(fid == f || fid == self_friend_number) {
+                // refreshMessageList()
+                if(fid == activeFriend() || fid == self_friend_number) {
                     appendMessage(mid)
-                    messageListView.positionViewAtEnd()
                 }
-                */
             }
         }
         onSignal_file_status: {
