@@ -35,7 +35,7 @@ int main(int argc, char *argv[])
     if(argc != 1) {
         sprintf(cyanide.save_path, "%s", argv[1]);
     } else {
-        sprintf(cyanide.save_path, "%s/tox_save.tox", CONFIG_PATH);
+        sprintf(cyanide.save_path, "%stox_save.tox", CONFIG_PATH);
     }
 
     settings.init();
@@ -456,6 +456,7 @@ void callback_file_recv(Tox *tox, uint32_t fid, uint32_t file_number, uint32_t k
     ft->position = 0;
     ft->filename_length = filename_length;
     ft->status = -1;
+    ft->filename = (uint8_t*)malloc(filename_length);
     memcpy(ft->filename, filename, filename_length);
 
     m.text = DOWNLOAD_PATH + utf8_to_qstr(filename, filename_length);
@@ -490,11 +491,11 @@ void Cyanide::incoming_avatar(uint32_t fid, uint32_t file_number, uint64_t file_
     ft->filename_length = filename_length;
     ft->filename = (uint8_t*)malloc(filename_length);
     memcpy(ft->filename, filename, filename_length);
-    char p[sizeof(AVATAR_PATH) + 2 * TOX_PUBLIC_KEY_SIZE + 5];
+    char p[sizeof(AVATAR_PATH) + 2 * TOX_PUBLIC_KEY_SIZE + 4];
     char hex_pubkey[2 * TOX_PUBLIC_KEY_SIZE + 1];
     public_key_to_string(hex_pubkey, (char*)cyanide.friends[fid].public_key);
     hex_pubkey[2 * TOX_PUBLIC_KEY_SIZE] = '\0';
-    sprintf(p, "%s/%s.png", AVATAR_PATH, hex_pubkey);
+    sprintf(p, "%s%s.png", AVATAR_PATH, hex_pubkey);
 
     if(file_size == 0) {
         unlink(p);
@@ -502,7 +503,6 @@ void Cyanide::incoming_avatar(uint32_t fid, uint32_t file_number, uint64_t file_
         QByteArray hash((const char*)friends[fid].avatar_hash, TOX_HASH_LENGTH);
         settings.set_friend_avatar_hash(cyanide.get_friend_public_key(fid), hash);
         emit cyanide.signal_avatar_change(fid);
-qDebug() << "c";
         goto cancel;
     } else if(file_size > 16 * 1024) {
         qDebug() << "avatar too large, rejecting";
@@ -522,13 +522,12 @@ qDebug() << "c";
     }
 cancel:
     QString errmsg = cyanide.send_file_control(fid, -1, TOX_FILE_CONTROL_CANCEL);
-    if(errmsg == "")
-        return;
-    else
+    if(errmsg != "")
         qDebug() << "failed to cancel avatar transfer: " << errmsg;
     free(ft->data);
     if(ft->file != NULL)
         fclose(ft->file);
+    ft->file_number = 0;
 }
 
 void Cyanide::incoming_avatar_chunk(uint32_t fid, uint64_t position,
@@ -598,6 +597,7 @@ void callback_file_recv_chunk(Tox *tox, uint32_t fid, uint32_t file_number, uint
             qDebug() << "receiving file with size 0";
             qDebug() << "lol";
         } else {
+            ft->position += length;
             emit cyanide.signal_file_progress(fid, mid, cyanide.get_file_progress(fid, mid));
         }
     }
@@ -877,8 +877,7 @@ QString Cyanide::send_file(int fid, QString path)
 
 QString Cyanide::send_avatar(int fid)
 {
-    QString avatar = AVATAR_PATH + QString("/")
-            + get_friend_public_key(SELF_FRIEND_NUMBER) + QString(".png");
+    QString avatar = AVATAR_PATH + get_friend_public_key(SELF_FRIEND_NUMBER) + QString(".png");
 
     return send_file(TOX_FILE_KIND_AVATAR, fid, avatar, self.avatar_hash);
 }
@@ -1183,7 +1182,7 @@ QString Cyanide::set_self_avatar(QString new_avatar)
 {
     bool success;
     QString public_key = get_friend_public_key(SELF_FRIEND_NUMBER);
-    QString old_avatar = AVATAR_PATH + QString("/") + public_key + QString(".png");
+    QString old_avatar = AVATAR_PATH + public_key + QString(".png");
 
     if(new_avatar == "") {
         /* remove the avatar */
@@ -1252,7 +1251,7 @@ QString Cyanide::get_friend_name(int fid)
 
 QString Cyanide::get_friend_avatar(int fid)
 {
-    QString avatar = AVATAR_PATH + QString("/") + get_friend_public_key(fid) + QString(".png");
+    QString avatar = AVATAR_PATH + get_friend_public_key(fid) + QString(".png");
     return QFile::exists(avatar) ? avatar : "qrc:/images/blankavatar";
 }
 

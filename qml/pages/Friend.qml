@@ -217,13 +217,13 @@ Page {
             delegate: Item {
                 id: delegate
                 height: Theme.paddingMedium + message.height
-                x: m_author ? Theme.paddingLarge : page.width/3 - Theme.paddingLarge
 
                 Image {
                     id: attach
                     visible: message.file
                     y: message.y
                     source: "image://theme/icon-s-attach"
+                    x: message.x - width
                 }
                 Label {
                     id: message
@@ -232,8 +232,14 @@ Page {
                               "<s>(" + f_progress + "%) " + m_text.replace(/.*\//, "") + "</s>"
                                : "(" + f_progress + "%) " + f_link
                                : m_text
-                    width: page.width * 2/3
-                    x: file ? attach.x + attach.width : attach.x
+                    Component.onCompleted: {
+                        var limit = page.width * 2/3 // - file ? attach.width : 0
+                        if(width > limit)
+                            width = limit
+                    }
+
+                    x: m_author ? Theme.paddingSmall + attach.width
+                                : page.width - width - Theme.paddingLarge
                     font.pixelSize: Theme.fontSizeSmall
                     color: m_author ? Theme.secondaryColor : Theme.primaryColor
                     horizontalAlignment: m_author ? Text.AlignLeft : Text.AlignRight

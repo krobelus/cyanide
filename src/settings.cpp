@@ -78,7 +78,7 @@ void Settings::init()
     db = QSqlDatabase::addDatabase("QSQLITE");
     success = db.isValid();
     Q_ASSERT(success);
-    db.setDatabaseName(dbdir + QDir::separator() + "cyanide.sqlite");
+    db.setDatabaseName(dbdir + "cyanide.sqlite");
     success = db.open();
     Q_ASSERT(success);
 
