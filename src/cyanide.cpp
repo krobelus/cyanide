@@ -1362,7 +1362,7 @@ int Cyanide::get_message_type(int fid, int mid)
 QString Cyanide::get_message_text(int fid, int mid)
 {
     Q_ASSERT(fid != SELF_FRIEND_NUMBER);
-    return friends[fid].messages[mid].text;
+    return friends[fid].messages[mid].text.toHtmlEscaped();
 }
 
 QString Cyanide::get_message_rich_text(int fid, int mid)
@@ -1418,10 +1418,11 @@ int Cyanide::get_file_status(int fid, int mid)
 
 QString Cyanide::get_file_link(int fid, int mid)
 {
-    QString filename = get_message_text(fid, mid);
+    Q_ASSERT(fid != SELF_FRIEND_NUMBER);
+    QString filename = friends[fid].messages[mid].text;
     QString fullpath = "file://" + filename;
-    return "<a href=\"" + fullpath + "\">"
-            + filename.right(filename.size() - 1 - filename.lastIndexOf("/"))
+    return "<a href=\"" + fullpath.toHtmlEscaped() + "\">"
+            + filename.right(filename.size() - 1 - filename.lastIndexOf("/")).toHtmlEscaped()
             + "</a>";
 }
 
