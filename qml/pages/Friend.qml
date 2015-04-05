@@ -242,7 +242,7 @@ Page {
                                 : page.width - width - Theme.paddingLarge
                     font.pixelSize: Theme.fontSizeSmall
                     color: m_author ? Theme.secondaryColor : Theme.primaryColor
-                    horizontalAlignment: m_author ? Text.AlignLeft : Text.AlignRight
+                    horizontalAlignment: Text.AlignLeft
                     wrapMode: Text.Wrap
                     textFormat: file && f_status == 0 ? Text.RichText : Text.StyledText
 
@@ -305,14 +305,14 @@ Page {
                 bottom: parent.bottom
             }
             EnterKey.onClicked: {
-                // TODO split long messages
                 if(text === "")
                     return
-                if(text !== "" && cyanide.send_friend_message(f, text)) {
+                var errmsg = cyanide.send_friend_message(f, text)
+                if(errmsg === "") {
                     text = ""
                     parent.focus = true;
                 } else {
-                    notify(notification, qsTr("Failed to send message"), "")
+                    notify(notification, qsTr("Failed to send message"), errmsg)
                 }
             }
         }

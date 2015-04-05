@@ -60,7 +60,7 @@ public:
     /* */
     Q_INVOKABLE QString send_friend_request(QString id_string, QString msg_string);
     Q_INVOKABLE void send_typing_notification(int fid, bool typing);
-    Q_INVOKABLE bool send_friend_message(int fid, QString msg);
+    Q_INVOKABLE QString send_friend_message(int fid, QString msg);
     Q_INVOKABLE bool accept_friend_request(int fid);
     Q_INVOKABLE void remove_friend(int fid);
     Q_INVOKABLE void play_sound(QString file);

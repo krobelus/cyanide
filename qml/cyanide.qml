@@ -92,7 +92,6 @@ ApplicationWindow
         }
     }
     function appendMessage(mid) {
-        console.log("appending mid "+mid)
         var fid = activeFriend()
         var m_type = cyanide.get_message_type(fid, mid)
         var m_author = cyanide.get_message_author(fid, mid)

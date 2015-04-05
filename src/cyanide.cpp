@@ -1004,29 +1004,84 @@ QString Cyanide::send_friend_request_id(const uint8_t *id, const uint8_t *msg, s
     }
 }
 
-bool Cyanide::send_friend_message(int fid, QString msg_str)
+std::vector<QString> split_message(QString rest)
+{
+    std::vector<QString> messages;
+    QString chunk;
+    int last_space;
+
+    while(rest != "") {
+        chunk = rest.left(TOX_MAX_MESSAGE_LENGTH);
+        last_space = chunk.lastIndexOf(" ");
+
+        if(chunk.size() == TOX_MAX_MESSAGE_LENGTH) {
+            if(last_space > 0) {
+                chunk = rest.left(last_space);
+            }
+        }
+        rest = rest.right(rest.size() - chunk.size());
+
+        messages.push_back(chunk);
+    }
+    return messages;
+}
+
+QString Cyanide::send_friend_message(int fid, QString message)
 {
     TOX_ERR_FRIEND_SEND_MESSAGE error;
+    QString errmsg = "";
+
     TOX_MESSAGE_TYPE type = TOX_MESSAGE_TYPE_NORMAL;
-    Friend *f = &friends[fid];
-    if(f->connection_status == TOX_CONNECTION_NONE)
-        return false;
 
-    size_t msg_len = qstrlen(msg_str);
-    uint8_t msg[msg_len];
-    qstr_to_utf8(msg, msg_str);
-    uint32_t message_id = tox_friend_send_message(tox, fid, type, msg, msg_len, &error);
-    qDebug() << "message id:" << message_id;
+    std::vector<QString> messages = split_message(message);
 
-    Message m;
-    m.type = MSGTYPE_NORMAL; //TODO implement /me
-    m.author = true;
-    m.text = msg_str;
-    m.timestamp = QDateTime::currentDateTime();
+    for(size_t i = 0; i < messages.size(); i++) {
+        QString msg_str = messages[i];
 
-    add_message(fid, m);
+        size_t msg_len = qstrlen(msg_str);
+        uint8_t msg[msg_len];
+        qstr_to_utf8(msg, msg_str);
 
-    return true;
+        uint32_t message_id = tox_friend_send_message(tox, fid, type, msg, msg_len, &error);
+        qDebug() << "message id:" << message_id;
+
+        switch(error) {
+            case TOX_ERR_FRIEND_SEND_MESSAGE_OK:
+                break;
+            case TOX_ERR_FRIEND_SEND_MESSAGE_NULL:
+                Q_ASSERT(false);
+                break;
+            case TOX_ERR_FRIEND_SEND_MESSAGE_FRIEND_NOT_FOUND:
+                Q_ASSERT(false);
+                break;
+            case TOX_ERR_FRIEND_SEND_MESSAGE_FRIEND_NOT_CONNECTED:
+                errmsg = tr("Error: Friend not connected");
+                break;
+            case TOX_ERR_FRIEND_SEND_MESSAGE_SENDQ:
+                Q_ASSERT(false);
+                break;
+            case TOX_ERR_FRIEND_SEND_MESSAGE_TOO_LONG:
+                qDebug() << "message too long";
+                break;
+            case TOX_ERR_FRIEND_SEND_MESSAGE_EMPTY:
+                Q_ASSERT(false);
+                break;
+        }
+
+        if(errmsg != "")
+            return errmsg;
+
+        Message m;
+        m.type = MSGTYPE_NORMAL; //TODO implement /me
+        m.author = true;
+        m.text = msg_str;
+        m.timestamp = QDateTime::currentDateTime();
+        m.ft = NULL;
+
+        add_message(fid, m);
+    }
+
+    return errmsg;
 }
 
 bool Cyanide::accept_friend_request(int fid)

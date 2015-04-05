@@ -25,7 +25,9 @@ public:
     File_Transfer avatar_transfer;
 
     /* maps file_number to mid (message id)
-     * mid == -1 means it is the avatar transfer */
+     * mid == -1 is outgoing avatar
+     * mid == -2 is incoming avatar
+     */
     std::map<uint32_t, int> files;
 
     QList<Message> messages;
