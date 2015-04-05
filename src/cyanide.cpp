@@ -608,6 +608,7 @@ void callback_file_recv_control(Tox *UNUSED(tox), uint32_t fid, uint32_t file_nu
     int mid  = f->files[file_number];
     qDebug() << "message id is" << mid << "file number is" << file_number;
 
+    Message *m = NULL;
     File_Transfer *ft;
 
     if(mid == -1) {
@@ -618,7 +619,8 @@ void callback_file_recv_control(Tox *UNUSED(tox), uint32_t fid, uint32_t file_nu
         ft = &f->avatar_transfer;
     } else {
         qDebug() << "normal transfer";
-        ft = f->messages[mid].ft;
+        m = &f->messages[mid];
+        ft = m->ft;
     }
 
     switch(action){
@@ -645,6 +647,11 @@ void callback_file_recv_control(Tox *UNUSED(tox), uint32_t fid, uint32_t file_nu
         case TOX_FILE_CONTROL_CANCEL:
             qDebug() << "transfer was cancelled, status:" << ft->status;
             ft->status = 0;
+            /* if it's an incoming file, delete the file */
+            if(m != NULL && !m->author) {
+                if(!QFile::remove(m->text))
+                    qDebug() << "Failed to remove file" << m->text;
+            }
             break;
         default:
             Q_ASSERT(false);
@@ -756,6 +763,7 @@ QString Cyanide::send_file_control(int fid, int mid, TOX_FILE_CONTROL action)
     bool success;
     TOX_ERR_FILE_CONTROL error;
 
+    Message *m = NULL;
     File_Transfer *ft;
 
     if(mid == -1) {
@@ -763,7 +771,8 @@ QString Cyanide::send_file_control(int fid, int mid, TOX_FILE_CONTROL action)
     } else if(mid == -2) {
         ft = &friends[fid].avatar_transfer;
     } else {
-        ft = friends[fid].messages[mid].ft;
+        m = &friends[fid].messages[mid];
+        ft = m->ft;
     }
 
     success = tox_file_control(tox, fid, ft->file_number, action, &error);
@@ -793,6 +802,11 @@ QString Cyanide::send_file_control(int fid, int mid, TOX_FILE_CONTROL action)
         case TOX_FILE_CONTROL_CANCEL:
             qDebug() << "cancelling transfer, status:" << ft->status;
             ft->status = 0;
+            /* if it's an incoming file, delete the file */
+            if(m != NULL && !m->author) {
+                if(!QFile::remove(m->text))
+                    qDebug() << "Failed to remove file" << m->text;
+            }
             break;
         }
         qDebug() << "sent file control, new status:" << ft->status;
