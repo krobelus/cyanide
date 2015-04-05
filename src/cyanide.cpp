@@ -39,7 +39,6 @@ int main(int argc, char *argv[])
     }
 
     settings.init();
-    cyanide.load_tox_and_stuff_pretty_please();
     std::thread tox_thread(start_tox_thread, &cyanide);
 
     cyanide.view->rootContext()->setContextProperty("settings", &settings);
@@ -54,7 +53,7 @@ int main(int argc, char *argv[])
 
     emit cyanide.signal_close_notifications();
 
-    cyanide.run_tox_loop = false;
+    cyanide.loop = LOOP_FINISH;
     tox_thread.join();
 
     return result;
@@ -83,9 +82,16 @@ void Cyanide::load_tox_and_stuff_pretty_please()
 {
     int error;
 
-    run_tox_loop = true;
-    save_needed = false;
     self.user_status = TOX_USER_STATUS_NONE;
+    self.connection_status = TOX_CONNECTION_NONE;
+    memset(&self.avatar_transfer, 0, sizeof(File_Transfer));
+    //FIXME free files;
+    //FIXME free messages;
+
+    // delete friends;
+
+    loop = LOOP_RUN;
+    save_needed = false;
 
     tox_options = *tox_options_new((TOX_ERR_OPTIONS_NEW*)&error);
     // TODO switch(error)
@@ -121,16 +127,25 @@ void start_tox_thread(Cyanide *cyanide)
 
 void Cyanide::tox_thread()
 {
+    load_tox_and_stuff_pretty_please();
+
     set_callbacks();
 
     // Connect to bootstraped nodes in "tox_bootstrap.h"
 
     do_bootstrap();
 
+    // Start the tox av session.
+    toxav = toxav_new(tox, MAX_CALLS);
+
+    // Give toxcore the av functions to call
+    set_av_callbacks();
+
     uint64_t last_save = get_time(), time;
     TOX_CONNECTION connection, c;
     c = connection = TOX_CONNECTION_NONE;
-    while(run_tox_loop) {
+
+    while(loop == LOOP_RUN) {
         // Put toxcore to work
         tox_iterate(tox);
 
@@ -160,12 +175,27 @@ void Cyanide::tox_thread()
         usleep(1000 * ((interval > 20) ? 20 : interval));
     }
 
-    qDebug() << "exiting....";
+    switch(loop) {
+        case LOOP_FINISH:
+            qDebug() << "exiting...";
 
-    write_save();
+            write_save();
 
-    //toxav_kill(av);
-    tox_kill(tox);
+            toxav_kill(toxav);
+            tox_kill(tox);
+            break;
+        case LOOP_RELOAD:
+            qDebug() << "reloading...";
+            write_save();
+
+            toxav_kill(toxav);
+            tox_kill(tox);
+
+            // emit cyanide.signal_reloading(whatever)
+
+            tox_thread();
+            break;
+    }
 }
 
 /* bootstrap to dht with bootstrap_nodes */
@@ -354,6 +384,25 @@ void Cyanide::set_callbacks()
     tox_callback_file_recv_chunk(tox, callback_file_recv_chunk, NULL);
     tox_callback_file_recv_control(tox, callback_file_recv_control, NULL);
     tox_callback_file_chunk_request(tox, callback_file_chunk_request, NULL);
+}
+
+void Cyanide::set_av_callbacks()
+{
+    //toxav_register_callstate_callback(toxav, callback_av_invite, av_OnInvite, NULL);
+    //toxav_register_callstate_callback(toxav, callback_av_start, av_OnStart, NULL);
+    //toxav_register_callstate_callback(toxav, callback_av_cancel, av_OnCancel, NULL);
+    //toxav_register_callstate_callback(toxav, callback_av_reject, av_OnReject, NULL);
+    //toxav_register_callstate_callback(toxav, callback_av_end, av_OnEnd, NULL);
+
+    //toxav_register_callstate_callback(toxav, callback_av_ringing, av_OnRinging, NULL);
+
+    //toxav_register_callstate_callback(toxav, callback_av_requesttimeout, av_OnRequestTimeout, NULL);
+    //toxav_register_callstate_callback(toxav, callback_av_peertimeout, av_OnPeerTimeout, NULL);
+    //toxav_register_callstate_callback(toxav, callback_av_selfmediachange, av_OnSelfCSChange, NULL);
+    //toxav_register_callstate_callback(toxav, callback_av_peermediachange, av_OnPeerCSChange, NULL);
+
+    //toxav_register_audio_callback(toxav, callback_av_audio, NULL);
+    //toxav_register_video_callback(toxav, callback_av_video, NULL);
 }
 
 void callback_friend_request(Tox *UNUSED(tox), const uint8_t *id, const uint8_t *msg, size_t length, void *UNUSED(userdata))

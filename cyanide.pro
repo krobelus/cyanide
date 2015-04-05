@@ -62,7 +62,10 @@ HEADERS += \
     src/settings.h \
     src/config.h
 
-unix:!macx: LIBS += -L$$PWD/res/usr/lib/ -ltoxcore -ltoxdns -lsodium -lrt -lresolv -lnemonotifications-qt5
+unix:!macx: LIBS += -L$$PWD/res/usr/lib/ \
+                -ltoxcore -ltoxdns -ltoxav \
+                -lsodium -lopus -lvpx \
+                -lrt -lresolv -lnemonotifications-qt5
 
 INCLUDEPATH += $$PWD/res/usr/include
 DEPENDPATH += $$PWD/res/usr/include

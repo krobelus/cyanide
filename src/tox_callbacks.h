@@ -32,4 +32,8 @@ void callback_file_recv_control(Tox *UNUSED(tox), uint32_t friend_number, uint32
 
 void callback_file_chunk_request(Tox *tox, uint32_t friend_number, uint32_t file_number, uint64_t position, size_t length, void *UNUSED(user_data));
 
+
+void callback_av_audio(void *agent, int32_t call_idx, const int16_t *PCM, uint16_t size, void *UNUSED(user_data));
+void callback_av_video(void *agent, int32_t call_idx, const vpx_image_t *img, void *UNUSED(user_data));
+
 #endif // TOX_CALLBACKS_H

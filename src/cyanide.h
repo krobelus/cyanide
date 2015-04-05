@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QtQuick>
 #include <tox/tox.h>
+#include <tox/toxav.h>
 
 #include "friend.h"
 #include "message.h"
@@ -21,6 +22,7 @@ private:
 
 public:
     Tox *tox;
+    ToxAv *toxav;
     char save_path[TOX_MAX_FILENAME_LENGTH];
     QQuickView *view;
 
@@ -29,7 +31,8 @@ public:
 
     std::map<uint32_t, Friend> friends;
 
-    bool run_tox_loop, save_needed;
+    bool save_needed;
+    int loop;
 
     uint32_t add_friend(Friend *f);
     void add_message(uint32_t fid, Message message);
@@ -51,6 +54,7 @@ public:
     void load_tox_data();
     void write_save();
     void set_callbacks();
+    void set_av_callbacks();
     void do_bootstrap();
 
     void tox_thread();
@@ -105,9 +109,10 @@ public:
     Q_INVOKABLE int get_file_progress(int fid, int mid);
 
 signals:
+    void signal_cyanide_reload();
+    void signal_close_notifications();
     void signal_friend_added(int fid);
     void signal_friend_activity(int fid);
-    void signal_close_notifications();
 
     void signal_friend_request(int fid);
     void signal_friend_message(int fid, int mid);
