@@ -8,6 +8,7 @@
 #define AVATAR_PATH "/home/nemo/.config/tox/avatars/"
 #define DOWNLOAD_PATH "/home/nemo/Downloads/"
 
+#define MAX_AVATAR_SIZE 64 * 1024
 #define MAX_CALLS 16
 
 enum { LOOP_RUN = 0

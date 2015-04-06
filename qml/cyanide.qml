@@ -33,7 +33,6 @@ ApplicationWindow
 
     function activeFriend() {
         if(friendNumberStack.length == 0) {
-            console.log("activeFriend() called with empty friend stack")
             return -2;
         } else {
             return friendNumberStack[friendNumberStack.length-1]

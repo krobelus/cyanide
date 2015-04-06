@@ -614,7 +614,7 @@ void Cyanide::incoming_avatar(uint32_t fid, uint32_t file_number, uint64_t file_
         settings.set_friend_avatar_hash(cyanide.get_friend_public_key(fid), hash);
         emit cyanide.signal_avatar_change(fid);
         goto cancel;
-    } else if(file_size > 16 * 1024) {
+    } else if(file_size > MAX_AVATAR_SIZE) {
         qDebug() << "avatar too large, rejecting";
         goto cancel;
     } else if((ft->file = fopen(p, "wb")) == NULL) {
@@ -1385,9 +1385,9 @@ QString Cyanide::set_self_avatar(QString new_avatar)
         return tr("File not found: ") + new_avatar;
     }
 
-    if(size > 16 * 1024) {
+    if(size > MAX_AVATAR_SIZE) {
         free(data);
-        return tr("Avatar too large. Maximum size: 16KiB");
+        return tr("Avatar too large. Maximum size: 64KiB");
     }
     uint8_t previous_hash[TOX_HASH_LENGTH];
     memcpy(previous_hash, self.avatar_hash, TOX_HASH_LENGTH);
