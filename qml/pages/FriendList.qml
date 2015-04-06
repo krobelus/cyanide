@@ -4,6 +4,7 @@ import Sailfish.Silica 1.0
 
 Page {
     id: page
+    property string name: "friendlist"
     allowedOrientations: Orientation.All
     Component.onCompleted: {
         pages.push("FriendList.qml")
@@ -106,7 +107,7 @@ Page {
                     var fid = index - 1
                     if(fid == self_friend_number) {
                         pageStack.push(Qt.resolvedUrl("Profile.qml"))
-                    } else if (!cyanide.get_friend_accepted(fid)) {
+                    } else if(!cyanide.get_friend_accepted(fid)) {
                         friendNumberStack.push(fid)
                         pageStack.push(Qt.resolvedUrl("AcceptFriend.qml"))
                     } else {

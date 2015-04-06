@@ -179,23 +179,44 @@ void Cyanide::tox_thread()
         case LOOP_FINISH:
             qDebug() << "exiting...";
 
-            write_save();
+            killall_tox();
 
-            toxav_kill(toxav);
-            tox_kill(tox);
             break;
         case LOOP_RELOAD:
             qDebug() << "reloading...";
-            write_save();
 
-            toxav_kill(toxav);
-            tox_kill(tox);
+            killall_tox();
 
             // emit cyanide.signal_reloading(whatever)
 
             tox_thread();
             break;
     }
+}
+
+void Cyanide::killall_tox()
+{
+    TOX_ERR_FRIEND_ADD error;
+
+    toxav_kill(toxav);
+
+    for(auto it = friends.begin(); it != friends.end(); it++) {
+        Friend *f = &it->second;
+
+        if(f->blocked) {
+            tox_friend_add_norequest(tox, f->public_key, &error);
+
+            if(error == TOX_ERR_FRIEND_ADD_MALLOC) {
+                qDebug() << "memory allocation failure";
+            } else {
+                f->blocked = false;
+            }
+        }
+    }
+
+    write_save();
+
+    tox_kill(tox);
 }
 
 /* bootstrap to dht with bootstrap_nodes */
@@ -304,6 +325,7 @@ void Cyanide::load_tox_data()
         uint8_t hex_id[2 * TOX_PUBLIC_KEY_SIZE];
         public_key_to_string((char*)hex_id, (char*)f.public_key);
         QString public_key = utf8_to_qstr(hex_id, 2 * TOX_PUBLIC_KEY_SIZE);
+        qDebug() << public_key;
         settings.add_friend_if_not_exists(public_key);
         QByteArray saved_hash = settings.get_friend_avatar_hash(public_key);
         memcpy(f.avatar_hash, saved_hash.constData(), TOX_HASH_LENGTH);
@@ -344,14 +366,45 @@ void Cyanide::load_tox_data()
 
 uint32_t Cyanide::add_friend(Friend *f)
 {
-    uint32_t fid;
-    for(fid = 0; fid < UINT32_MAX; fid++) {
-        if(friends.count(fid) == 0)
-            break;
-    }
+    uint32_t fid = next_friend_number();
     friends[fid] = *f;
     emit cyanide.signal_friend_added(fid);
     return fid;
+}
+
+/* find out the friend number that toxcore will assign when using
+ * tox_friend_add() and tox_friend_add_norequest() */
+uint32_t Cyanide::next_friend_number()
+{
+    uint32_t fid;
+    for(fid = 0; fid < UINT32_MAX; fid++) {
+        if(friends.count(fid) == 0 || friends[fid].blocked)
+            break;
+    }
+    return fid;
+}
+
+uint32_t Cyanide::next_but_one_unoccupied_friend_number()
+{
+    int count = 0;
+    uint32_t fid;
+    for(fid = 0; fid < UINT32_MAX; fid++) {
+        if(friends.count(fid) == 0 && count++)
+            break;
+    }
+    return fid;
+}
+
+void Cyanide::relocate_blocked_friend()
+{
+    uint32_t from = next_friend_number();
+
+    if(friends.count(from) == 1 && friends[from].blocked) {
+        uint32_t to = next_but_one_unoccupied_friend_number();
+        friends[to] = friends[from];
+        friends.erase(from);
+        emit cyanide.signal_friend_added(to);
+    }
 }
 
 void Cyanide::add_message(uint32_t fid, Message message)
@@ -1040,6 +1093,7 @@ QString Cyanide::send_friend_request(QString id_str, QString msg_str)
 QString Cyanide::send_friend_request_id(const uint8_t *id, const uint8_t *msg, size_t msg_length)
 {
     TOX_ERR_FRIEND_ADD error;
+    relocate_blocked_friend();
     uint32_t fid = tox_friend_add(tox, id, msg, msg_length, &error);
     switch(error) {
         case TOX_ERR_FRIEND_ADD_OK:
@@ -1093,6 +1147,9 @@ QString Cyanide::send_friend_message(int fid, QString message)
 {
     TOX_ERR_FRIEND_SEND_MESSAGE error;
     QString errmsg = "";
+
+    if(friends[fid].blocked)
+        return "Friend is blocked, unblock to connect";
 
     TOX_MESSAGE_TYPE type = TOX_MESSAGE_TYPE_NORMAL;
 
@@ -1150,6 +1207,7 @@ QString Cyanide::send_friend_message(int fid, QString message)
 bool Cyanide::accept_friend_request(int fid)
 {
     TOX_ERR_FRIEND_ADD error;
+    relocate_blocked_friend();
     if(tox_friend_add_norequest(tox, friends[fid].public_key, &error) == UINT32_MAX) {
         qDebug() << "could not add friend";
         return false;
@@ -1207,6 +1265,34 @@ void Cyanide::set_friend_activity(int fid, bool status)
     Q_ASSERT(fid != SELF_FRIEND_NUMBER);
     friends[fid].activity = status;
     emit cyanide.signal_friend_activity(fid);
+}
+
+bool Cyanide::get_friend_blocked(int fid)
+{
+    Friend f = fid == SELF_FRIEND_NUMBER ? self : friends[fid];
+    return f.blocked;
+}
+
+void Cyanide::set_friend_blocked(int fid, bool block)
+{
+    Q_ASSERT(fid != SELF_FRIEND_NUMBER);
+    int error;
+
+    Friend *f = &friends[fid];
+
+    if(block) {
+        if(tox_friend_delete(tox, fid, (TOX_ERR_FRIEND_DELETE*)&error)) {
+            friends[fid].connection_status = TOX_CONNECTION_NONE;
+        } else {
+            qDebug() << "Failed to remove friend";
+        }
+    } else {
+        int friend_number = tox_friend_add_norequest(tox, f->public_key, (TOX_ERR_FRIEND_ADD*)&error);
+        Q_ASSERT(friend_number == fid);
+    }
+    friends[fid].blocked = block;
+    emit cyanide.signal_friend_blocked(fid, block);
+    emit cyanide.signal_friend_status(fid);
 }
 
 void Cyanide::set_self_name(QString name)

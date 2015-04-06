@@ -16,6 +16,7 @@ class Cyanide : public QObject
 private:
     uint8_t self_address[TOX_ADDRESS_SIZE];
 
+    void killall_tox();
     QString send_friend_request_id(const uint8_t *id, const uint8_t *msg, size_t msg_length);
     QString send_friend_request_unboxed(char *name, size_t length, char *msg, size_t msg_length);
     QString send_file_control(int fid, int mid, TOX_FILE_CONTROL file_control);
@@ -35,6 +36,8 @@ public:
     int loop;
 
     uint32_t add_friend(Friend *f);
+    uint32_t next_friend_number();
+    uint32_t next_but_one_unoccupied_friend_number();
     void add_message(uint32_t fid, Message message);
     void incoming_avatar(uint32_t fid, uint32_t file_number, uint64_t file_size,
                          const uint8_t *filename, size_t filename_length);
@@ -59,6 +62,7 @@ public:
 
     void tox_thread();
 
+    void relocate_blocked_friend();
     void send_new_avatar();
 
     /* */
@@ -83,6 +87,7 @@ public:
     Q_INVOKABLE QList<int> get_message_numbers(int fid);
 
     Q_INVOKABLE void set_friend_activity(int fid, bool status);
+    Q_INVOKABLE void set_friend_blocked(int fid, bool block);
     Q_INVOKABLE void set_self_name(QString name);
     Q_INVOKABLE void set_self_status_message(QString status_message);
     Q_INVOKABLE void set_self_user_status(int status);
@@ -98,6 +103,7 @@ public:
     Q_INVOKABLE QString get_friend_status_icon(int fid);
     Q_INVOKABLE bool get_friend_connection_status(int fid);
     Q_INVOKABLE bool get_friend_accepted(int fid);
+    Q_INVOKABLE bool get_friend_blocked(int fid);
 
     Q_INVOKABLE int get_message_type(int fid, int mid);
     Q_INVOKABLE bool get_message_author(int fid, int mid);
@@ -113,6 +119,7 @@ signals:
     void signal_close_notifications();
     void signal_friend_added(int fid);
     void signal_friend_activity(int fid);
+    void signal_friend_blocked(int fid, bool blocked);
 
     void signal_friend_request(int fid);
     void signal_friend_message(int fid, int mid);

@@ -122,8 +122,11 @@ Page {
 
         PullDownMenu {
             MenuItem {
-                text: qsTr("Settings")
-                onClicked: pageStack.push(Qt.resolvedUrl("Settings.qml"))
+                property bool blocked: friendList.get(f+1).friend_blocked
+                text: blocked ? qsTr("Unblock friend") : qsTr("Block friend")
+                onClicked: {
+                    cyanide.set_friend_blocked(f, !blocked)
+                }
             }
             MenuItem {
                 text: qsTr("Remove friend")

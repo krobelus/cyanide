@@ -21,6 +21,7 @@ public:
     TOX_USER_STATUS user_status;
     bool accepted;
     bool activity;
+    bool blocked;
 
     File_Transfer avatar_transfer;
 

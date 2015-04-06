@@ -81,6 +81,7 @@ ApplicationWindow
                         'friend_connection_status': cyanide.get_friend_connection_status(i),
                         'friend_status_icon': cyanide.get_friend_status_icon(i),
                         'friend_status_message': cyanide.get_friend_status_message(i),
+                        'friend_blocked': cyanide.get_friend_blocked(i),
                         'friend_address': settings.get_friend_address(cyanide.get_friend_public_key(i))
                          })
     }
@@ -122,6 +123,10 @@ ApplicationWindow
         target: cyanide
         onSignal_friend_added: {
             refreshFriendList()
+        }
+        onSignal_friend_blocked: {
+            var i = fid + 1
+            friendList.setProperty(i, "friend_blocked", blocked)
         }
         onSignal_friend_name: {
             var i = fid + 1
