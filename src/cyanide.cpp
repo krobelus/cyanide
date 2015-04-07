@@ -1069,11 +1069,8 @@ QString Cyanide::send_friend_request(QString id_str, QString msg_str)
     uint8_t address[TOX_ADDRESS_SIZE];
     if(!string_to_address((char*)address, (char*)id)) {
         /* not a regular id, try DNS discovery */
-        void *data = dns_request((char*)id, id_len);
-        if(data == NULL)
+        if(!dns_request(address, id_str))
             return tr("Error: Invalid Tox ID");
-        memcpy(address, data, TOX_ADDRESS_SIZE);
-        free(data);
     }
 
     QString errmsg = send_friend_request_id(address, msg, msg_len);

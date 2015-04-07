@@ -65,7 +65,7 @@ HEADERS += \
 unix:!macx: LIBS += -L$$PWD/res/usr/lib/ \
                 -ltoxcore -ltoxdns -ltoxav \
                 -lsodium -lopus -lvpx \
-                -lrt -lresolv -lnemonotifications-qt5
+                -lrt -lnemonotifications-qt5
 
 INCLUDEPATH += $$PWD/res/usr/include
 DEPENDPATH += $$PWD/res/usr/include
