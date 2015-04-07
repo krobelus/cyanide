@@ -103,6 +103,10 @@ ApplicationWindow
             messageList.append({"m_type": m_type
                          ,"m_author": m_author
                          ,"m_text": m_text
+                         ,"m_id": 0
+                         ,"f_link": ""
+                         ,"f_status": 0
+                         ,"f_progress": 0
                          })
         } else if(isFile) {
             console.log("f_link: "+cyanide.get_file_link(fid, mid))
