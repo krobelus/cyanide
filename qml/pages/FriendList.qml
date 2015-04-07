@@ -83,7 +83,7 @@ Page {
                     anchors {
                         verticalCenter: parent.verticalCenter
                         right: parent.right
-                        rightMargin: Theme.paddingMedium
+                        rightMargin: Theme.paddingLarge - width / 2
                     }
                 }
                 Label {
