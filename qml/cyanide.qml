@@ -147,19 +147,18 @@ ApplicationWindow
             image_refresh_count++ /* hack to change the url on each avatar change to avoid getting the cached image */
             friendList.setProperty(i, "friend_avatar", cyanide.get_friend_avatar(fid) + "?" + image_refresh_count)
         }
-        onSignal_friend_status: {
+        onSignal_friend_activity: {
             var i = fid + 1
             friendList.setProperty(i, "friend_status_icon", cyanide.get_friend_status_icon(fid))
         }
-        onSignal_friend_activity: {
+        onSignal_friend_status: {
             var i = fid + 1
             friendList.setProperty(i, "friend_status_icon", cyanide.get_friend_status_icon(fid))
         }
         onSignal_friend_connection_status: {
             var i = fid + 1
-            var online = cyanide.get_friend_connection_status(fid)
             friendList.setProperty(i, "friend_connection_status", online)
-            friendList.setProperty(i, "friend_status_icon", cyanide.get_friend_status_icon(fid))
+            friendList.setProperty(i, "friend_status_icon", cyanide.get_friend_status_icon(fid, online))
             if(fid != self_friend_number) {
                 if(online) {
                     //cyanide.play_sound(settings.get("sound-friend-connected"))

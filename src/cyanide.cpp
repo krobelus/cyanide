@@ -1,8 +1,9 @@
 #include <time.h>
 #include <stdlib.h>
 #include <sys/stat.h>
-#include <sailfishapp.h>
+#include <sys/eventfd.h>
 #include <thread>
+#include <sailfishapp.h>
 #include <nemonotifications-qt5/notification.h>
 #include <QtQuick>
 #include <QSound>
@@ -15,6 +16,9 @@
 #include "dns.cpp"
 #include "config.h"
 #include "settings.h"
+
+/* oh boy, here we go... */
+#define UINT32_MAX (4294967295U)
 
 Cyanide cyanide;
 
@@ -39,6 +43,10 @@ int main(int argc, char *argv[])
     }
 
     settings.init();
+
+    cyanide.eventfd = eventfd(0, 0);
+    cyanide.wifi_monitor();
+
     std::thread tox_thread(start_tox_thread, &cyanide);
 
     cyanide.view->rootContext()->setContextProperty("settings", &settings);
@@ -57,6 +65,57 @@ int main(int argc, char *argv[])
     tox_thread.join();
 
     return result;
+}
+
+void Cyanide::wifi_monitor()
+{
+    QDBusConnection dbus_connection = QDBusConnection::systemBus();
+
+    if(!dbus_connection.isConnected()) {
+        qDebug() << "Failed to connect to the D-Bus session bus.";
+    }
+    dbus_connection.connect("net.connman",
+                                "/net/connman/technology/wifi",
+                                "net.connman.Technology",
+                                "PropertyChanged",
+                                &cyanide,
+                                SLOT(wifi_changed(QString, QDBusVariant)));
+}
+
+void Cyanide::wifi_changed(QString name, QDBusVariant dbus_variant)
+{
+    bool value = dbus_variant.variant().toBool();
+    qDebug() << "Received DBus signal";
+    qDebug() << "Property" << name << "Value" << value;
+
+    if(name == "Powered") {
+        ;
+    } else if(name == "Connected") {
+        if(value && loop == LOOP_SUSPEND) {
+            qDebug() << "connected, resuming thread";
+            /*
+            for(auto it = friends.begin(); it != friends.end(); it++) {
+                emit cyanide.signal_friend_connection_status(it->first,
+                          it->second.connection_status != TOX_CONNECTION_NONE);
+            }
+            */
+            loop = LOOP_RUN;
+            uint64_t event = 1;
+            ssize_t tmp = write(eventfd, &event, sizeof(event));
+            Q_ASSERT(tmp == sizeof(event));
+
+        } else if(!value && loop == LOOP_RUN) {
+            qDebug() << "not connected, suspending thread";
+            loop = LOOP_SUSPEND;
+            usleep(100 * 1000);
+            self.connection_status = TOX_CONNECTION_NONE;
+            emit cyanide.signal_friend_connection_status(SELF_FRIEND_NUMBER, false);
+            for(auto it = friends.begin(); it != friends.end(); it++) {
+                it->second.connection_status = TOX_CONNECTION_NONE;
+                emit cyanide.signal_friend_connection_status(it->first, false);
+            }
+        }
+    }
 }
 
 void Cyanide::visibility_changed(QWindow::Visibility visibility)
@@ -141,9 +200,13 @@ void Cyanide::tox_thread()
     // Give toxcore the av functions to call
     set_av_callbacks();
 
+    tox_loop();
+}
+
+void Cyanide::tox_loop()
+{
     uint64_t last_save = get_time(), time;
-    TOX_CONNECTION connection, c;
-    c = connection = TOX_CONNECTION_NONE;
+    TOX_CONNECTION c, connection = c = TOX_CONNECTION_NONE;
 
     while(loop == LOOP_RUN) {
         // Put toxcore to work
@@ -152,7 +215,7 @@ void Cyanide::tox_thread()
         // Check current connection
         if((c = tox_self_get_connection_status(tox)) != connection) {
             self.connection_status = connection = c;
-            emit cyanide.signal_friend_connection_status(SELF_FRIEND_NUMBER);
+            emit cyanide.signal_friend_connection_status(SELF_FRIEND_NUMBER, c != TOX_CONNECTION_NONE);
             qDebug() << (c != TOX_CONNECTION_NONE ? "Connected to DHT" : "Disconnected from DHT");
         }
 
@@ -191,14 +254,26 @@ void Cyanide::tox_thread()
 
             tox_thread();
             break;
+        case LOOP_SUSPEND:
+            qDebug() << "suspending thread";
+            uint64_t event;
+            ssize_t tmp = read(eventfd, &event, sizeof(event));
+            Q_ASSERT(tmp == sizeof(event));
+            qDebug() << "read" << event << ", resuming thread";
+            tox_loop();
+            break;
     }
 }
 
 void Cyanide::killall_tox()
 {
-    TOX_ERR_FRIEND_ADD error;
-
     toxav_kill(toxav);
+    kill_tox();
+}
+
+void Cyanide::kill_tox()
+{
+    TOX_ERR_FRIEND_ADD error;
 
     for(auto it = friends.begin(); it != friends.end(); it++) {
         Friend *f = &it->second;
@@ -528,7 +603,7 @@ void callback_friend_connection_status(Tox *tox, uint32_t fid, TOX_CONNECTION st
         if(errmsg != "")
             qDebug() << "Failed to send avatar. " << errmsg;
     }
-    emit cyanide.signal_friend_connection_status(fid);
+    emit cyanide.signal_friend_connection_status(fid, status != TOX_CONNECTION_NONE);
 }
 
 void callback_file_recv(Tox *tox, uint32_t fid, uint32_t file_number, uint32_t kind,
@@ -1279,7 +1354,7 @@ void Cyanide::set_friend_blocked(int fid, bool block)
 
     if(block) {
         if(tox_friend_delete(tox, fid, (TOX_ERR_FRIEND_DELETE*)&error)) {
-            friends[fid].connection_status = TOX_CONNECTION_NONE;
+            f->connection_status = TOX_CONNECTION_NONE;
         } else {
             qDebug() << "Failed to remove friend";
         }
@@ -1289,7 +1364,7 @@ void Cyanide::set_friend_blocked(int fid, bool block)
     }
     friends[fid].blocked = block;
     emit cyanide.signal_friend_blocked(fid, block);
-    emit cyanide.signal_friend_status(fid);
+    emit cyanide.signal_friend_connection_status(fid, f->connection_status != TOX_CONNECTION_NONE);
 }
 
 void Cyanide::set_self_name(QString name)
@@ -1442,10 +1517,16 @@ QString Cyanide::get_friend_status_message(int fid)
 
 QString Cyanide::get_friend_status_icon(int fid)
 {
+    Friend f = fid == SELF_FRIEND_NUMBER ? self : friends[fid];
+    return get_friend_status_icon(fid, f.connection_status != TOX_CONNECTION_NONE);
+}
+
+QString Cyanide::get_friend_status_icon(int fid, bool online)
+{
     QString url = "qrc:/images/";
     Friend f = fid == SELF_FRIEND_NUMBER ? self : friends[fid];
 
-    if(f.connection_status == TOX_CONNECTION_NONE) {
+    if(!online) {
         url.append("offline");
     } else {
         switch(f.user_status) {

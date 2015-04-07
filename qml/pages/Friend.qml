@@ -308,7 +308,8 @@ Page {
                 bottom: parent.bottom
             }
             EnterKey.onClicked: {
-                if(text === "")
+                var online = friendList.get(f+1).friend_connection_status
+                if(text === "" || !online)
                     return
                 var errmsg = cyanide.send_friend_message(f, text)
                 if(errmsg === "") {

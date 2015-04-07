@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QtQuick>
+#include <QtDBus>
 #include <tox/tox.h>
 #include <tox/toxav.h>
 
@@ -16,6 +17,7 @@ class Cyanide : public QObject
 private:
     uint8_t self_address[TOX_ADDRESS_SIZE];
 
+    void kill_tox();
     void killall_tox();
     QString send_friend_request_id(const uint8_t *id, const uint8_t *msg, size_t msg_length);
     QString send_friend_request_unboxed(char *name, size_t length, char *msg, size_t msg_length);
@@ -26,6 +28,7 @@ public:
     ToxAv *toxav;
     char save_path[TOX_MAX_FILENAME_LENGTH];
     QQuickView *view;
+    int eventfd;
 
     Friend self;
     static const int SELF_FRIEND_NUMBER = -1;
@@ -61,9 +64,11 @@ public:
     void do_bootstrap();
 
     void tox_thread();
+    void tox_loop();
 
     void relocate_blocked_friend();
     void send_new_avatar();
+    void wifi_monitor();
 
     /* */
     Q_INVOKABLE QString send_friend_request(QString id_string, QString msg_string);
@@ -101,6 +106,7 @@ public:
     Q_INVOKABLE QString get_friend_avatar(int fid);
     Q_INVOKABLE QString get_friend_status_message(int fid);
     Q_INVOKABLE QString get_friend_status_icon(int fid);
+    Q_INVOKABLE QString get_friend_status_icon(int fid, bool online);
     Q_INVOKABLE bool get_friend_connection_status(int fid);
     Q_INVOKABLE bool get_friend_accepted(int fid);
     Q_INVOKABLE bool get_friend_blocked(int fid);
@@ -129,11 +135,13 @@ signals:
     void signal_friend_status(int fid);
     void signal_friend_typing(int fid, bool is_typing);
     void signal_friend_read_receipt();
-    void signal_friend_connection_status(int fid);
+    void signal_friend_connection_status(int fid, bool online);
     void signal_avatar_change(int fid);
 
     void signal_file_status(int fid, int mid, int status);
     void signal_file_progress(int fid, int mid, int progress);
+public slots:
+    void wifi_changed(QString str, QDBusVariant variant);
 };
 
 void start_tox_thread(Cyanide *cyanide);

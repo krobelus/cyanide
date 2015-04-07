@@ -14,6 +14,7 @@
 enum { LOOP_RUN = 0
      , LOOP_FINISH = 1
      , LOOP_RELOAD = 2
+     , LOOP_SUSPEND = 3
 };
 
 #endif // CONFIG_H
