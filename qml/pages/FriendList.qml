@@ -26,6 +26,17 @@ Page {
                 onClicked: pageStack.push(Qt.resolvedUrl("Settings.qml"))
             }
             MenuItem {
+                text: qsTr("Switch profile")
+                onClicked: {
+                    fileChooserProperties = {
+                        target: "toxSaveFile",
+                        nameFilters: [ '*.tox' ],
+                        filter: true
+                    }
+                    pageStack.push(Qt.resolvedUrl("FileChooser.qml"), { "folder": "/home/nemo/.config/tox/" } )
+                }
+            }
+            MenuItem {
                 text: qsTr("Add a friend")
                 onClicked: pageStack.push(Qt.resolvedUrl("AddFriend.qml"))
             }

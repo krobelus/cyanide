@@ -9,7 +9,7 @@ Page {
     Component.onCompleted: {
         pages.push("Friend.qml")
         folderListModel.folder = folder
-        folderListModel.nameFilters =  fileChooserProperties.nameFilters
+        folderListModel.toggleNameFilters()
     }
     Component.onDestruction: {
         pages.pop()
@@ -24,6 +24,19 @@ Page {
         showDirs: true
         showDirsFirst: true
         showDotAndDotDot: true
+
+        function toggleNameFilters() {
+            if(fileChooserProperties.filter)
+                nameFilters = fileChooserProperties.nameFilters
+            else
+                nameFilters = []
+        }
+    }
+
+    function returnToPage(name) {
+        pageStack.pop(pageStack.find(function(page) {
+            return page.name === name
+        }))
     }
 
     SilicaListView {
@@ -41,10 +54,11 @@ Page {
                         name = "profile"
                     } else if(fileChooserProperties.target === "fileToSend") {
                         name = "friend"
+                    } else if(fileChooserProperties.target === "toxSaveFile") {
+                        name = "friendlist"
                     }
-                    pageStack.pop(pageStack.find(function(page) {
-                            return page.name === name
-                        }))
+
+                    returnToPage(name)
                 }
             }
             MenuItem {
@@ -53,30 +67,20 @@ Page {
                 onClicked: {
                     var errmsg = cyanide.set_self_avatar("")
                     if(errmsg === "") {
-                            pageStack.pop(pageStack.find(function(page) {
-                                return page.name === "profile"
-                            }))
+                        returnToPage("profile")
                     } else {
                         notify(notification, qsTr("Failed to set avatar"), qsTr(errmsg))
                     }
                 }
             }
             MenuItem {
-                text:  filter + enabled
-                visible: fileChooserProperties.target === "selfAvatar"
-                property string filter: qsTr("Filter by filename extension")
-                property string enabled: fileChooserProperties.nameFilters === [] ? no : yes
-                property string yes: " ☑"
-                property string no:  " ☐"
+                text:  qsTr("Filter by filename extension")+" "+checkbox
+                visible: fileChooserProperties.target !== "fileToSend"
+                property string checkbox: fileChooserProperties.filter ? "☑" : "☐"
                 onClicked: {
-                    if(enabled === yes) {
-                        enabled = no
-                        fileChooserProperties.nameFilters = []
-                    } else {
-                        enabled = yes
-                        fileChooserProperties.nameFilters = ["*.png", "*.gif"]
-                    }
-                    folderListModel.nameFilters = fileChooserProperties.nameFilters
+                    fileChooserProperties.filter = !fileChooserProperties.filter
+                    checkbox = fileChooserProperties.filter ? "☑" : "☐"
+                    folderListModel.toggleNameFilters()
                 }
             }
         }
@@ -102,29 +106,28 @@ Page {
                         ;
                     } else if(fileName == "..") {
                         pageStack.push(Qt.resolvedUrl("FileChooser.qml"),
-                                          { "folder": folder.replace(/[^\/]+\/$/, "")})
+                                          { "folder": folder.replace(/[^\/]+\/$/, "")}, true)
                     } else {
                         pageStack.push(Qt.resolvedUrl("FileChooser.qml"),
-                                          { "folder": folder+fileName+"/"})
+                                          { "folder": folder+fileName+"/"}, true)
                     }
                 } else if(fileChooserProperties.target === "fileToSend") {
                     errmsg = cyanide.send_file(activeFriend(), folder+fileName)
                     if(errmsg === "") {
-                        pageStack.pop(pageStack.find(function(page) {
-                            return page.name === "friend"
-                        }))
+                        returnToPage("friend")
                     } else {
                         notify(notification, qsTr("Failed to send file"), qsTr(errmsg))
                     }
                 } else if(fileChooserProperties.target === "selfAvatar") {
-                        errmsg = cyanide.set_self_avatar(folder+fileName)
-                        if(errmsg === "") {
-                                pageStack.pop(pageStack.find(function(page) {
-                                    return page.name === "profile"
-                                }))
-                        } else {
-                            notify(notification, qsTr("Failed to set avatar"), qsTr(errmsg))
-                        }
+                    errmsg = cyanide.set_self_avatar(folder+fileName)
+                    if(errmsg === "") {
+                        returnToPage("profile")
+                    } else {
+                        notify(notification, qsTr("Failed to set avatar"), qsTr(errmsg))
+                    }
+                } else if(fileChooserProperties.target === "toxSaveFile") {
+                    cyanide.load_tox_save_file(folder+fileName)
+                    returnToPage("friendlist")
                 }
             }
 

@@ -4,12 +4,21 @@
 #define DEFAULT_NAME "Tox User"
 #define DEFAULT_STATUS "Toxing on Cyanide"
 #define DEFAULT_FRIEND_REQUEST_MESSAGE "Tox me maybe?"
-#define CONFIG_PATH "/home/nemo/.config/tox/"
-#define AVATAR_PATH "/home/nemo/.config/tox/avatars/"
-#define DOWNLOAD_PATH "/home/nemo/Downloads/"
 
 #define MAX_AVATAR_SIZE 64 * 1024
 #define MAX_CALLS 16
+
+#include <QString>
+#include <QDir>
+
+const QString TOX_DATA_DIR = QDir::homePath() + "/.config/tox/";
+const QString TOX_AVATAR_DIR   = TOX_DATA_DIR + "avatars/";
+const QString CYANIDE_DATA_DIR = TOX_DATA_DIR + "cyanide/";
+
+const QString DEFAULT_PROFILE_NAME = "tox_save";
+const QString DEFAULT_PROFILE_FILE  = CYANIDE_DATA_DIR + "default_profile";
+
+const QString DOWNLOAD_DIR = QDir::homePath() + "Downloads/";
 
 enum { LOOP_RUN = 0
      , LOOP_FINISH = 1

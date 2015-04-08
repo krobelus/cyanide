@@ -67,18 +67,29 @@ void execute_sql_query(QSqlQuery q)
         qFatal("Failed to execute SQL query: %s", qPrintable(q.lastError().text()));
 }
 
-void Settings::init()
+void Settings::create_database(QString name)
 {
     bool success;
-    QSqlDatabase db;
-    QString dbdir = CONFIG_PATH;
+    if(db.isOpen()) {
+        qDebug() << "closing db";
+        db.close();
+    } else {
+        db = QSqlDatabase::addDatabase("QSQLITE");
+    }
+
+    QString dbdir = CYANIDE_DATA_DIR;
     if (!QDir(dbdir).exists())
         QDir().mkpath(dbdir);
 
-    db = QSqlDatabase::addDatabase("QSQLITE");
+    /* old database location */
+    QFile file(TOX_DATA_DIR + "cyanide.sqlite");
+    if(file.exists()) {
+        file.rename(CYANIDE_DATA_DIR + "tox_save.sqlite");
+    }
+
     success = db.isValid();
     Q_ASSERT(success);
-    db.setDatabaseName(dbdir + "cyanide.sqlite");
+    db.setDatabaseName(dbdir + name.replace('/', '_') + ".sqlite");
     success = db.open();
     Q_ASSERT(success);
 
@@ -254,6 +265,7 @@ QByteArray Settings::get_friend_avatar_hash(QString public_key)
 
 void Settings::update_db_version()
 {
+    create_tables();
     QString current_version = db_get("db_version");
 
     if(current_version == db_version) {
@@ -279,7 +291,7 @@ void Settings::update_db_version()
         }
         q.prepare("DROP TABLE old_friends"); execute_sql_query(q);
     } else {
-        create_tables();
+        ;
     }
     db_set("db_version", db_version);
 }

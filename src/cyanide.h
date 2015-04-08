@@ -26,7 +26,13 @@ private:
 public:
     Tox *tox;
     ToxAv *toxav;
-    char save_path[TOX_MAX_FILENAME_LENGTH];
+
+
+    QString profile_name;
+    QString next_profile_name;
+
+    QString tox_save_file();
+
     QQuickView *view;
     int eventfd;
 
@@ -51,6 +57,8 @@ public:
     // File_Transfer *get_file_transfer(uint32_t friend_number, uint32_t file_number);
     bool get_file_id(uint32_t fid, File_Transfer *ft);
 
+    void read_default_profile(QStringList args);
+    void write_default_profile();
     void load_tox_and_stuff_pretty_please();
     /* reads the tox save file into memory and stores the length in *size */
     const uint8_t *get_save_data(size_t *size);
@@ -86,6 +94,7 @@ public:
     Q_INVOKABLE QString send_file(int fid, QString path);
     Q_INVOKABLE QString send_avatar(int fid);
     Q_INVOKABLE QString send_file(TOX_FILE_KIND kind, int fid, QString path, uint8_t *file_id);
+    Q_INVOKABLE void load_tox_save_file(QString path);
 
     /* setters and getters */
     Q_INVOKABLE QList<int> get_friend_numbers();

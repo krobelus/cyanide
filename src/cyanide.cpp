@@ -36,18 +36,12 @@ int main(int argc, char *argv[])
     app->setApplicationName("Cyanide");
     cyanide.view = SailfishApp::createView();
 
-    if(argc != 1) {
-        sprintf(cyanide.save_path, "%s", argv[1]);
-    } else {
-        sprintf(cyanide.save_path, "%stox_save.tox", CONFIG_PATH);
-    }
-
-    settings.init();
+    cyanide.read_default_profile(app->arguments());
 
     cyanide.eventfd = eventfd(0, 0);
     cyanide.wifi_monitor();
 
-    std::thread tox_thread(start_tox_thread, &cyanide);
+    std::thread my_tox_thread(start_tox_thread, &cyanide);
 
     cyanide.view->rootContext()->setContextProperty("settings", &settings);
     cyanide.view->rootContext()->setContextProperty("cyanide", &cyanide);
@@ -62,9 +56,60 @@ int main(int argc, char *argv[])
     emit cyanide.signal_close_notifications();
 
     cyanide.loop = LOOP_FINISH;
-    tox_thread.join();
+    my_tox_thread.join();
 
     return result;
+}
+
+QString Cyanide::tox_save_file()
+{
+    return TOX_DATA_DIR + profile_name.replace('/', '_') + ".tox";
+}
+
+/* sets profile_name */
+void Cyanide::read_default_profile(QStringList args)
+{
+    for(int i = 0; i < args.size(); i++) {
+        if(args[i].startsWith("tox:")) {
+            //TODO
+        }
+    }
+
+    QFile file(DEFAULT_PROFILE_FILE);
+    if(file.exists()) {
+        file.open(QIODevice::ReadOnly | QIODevice::Text);
+        profile_name = file.readLine();
+        file.close();
+        profile_name.chop(1);
+        if(QFile::exists(tox_save_file()))
+            return;
+    }
+
+    profile_name = DEFAULT_PROFILE_NAME;
+    write_default_profile();
+}
+
+void Cyanide::write_default_profile()
+{
+    QFile file(DEFAULT_PROFILE_FILE);
+    file.open(QIODevice::WriteOnly | QIODevice::Text);
+    file.write(profile_name.toUtf8() + '\n');
+    file.close();
+}
+
+void Cyanide::load_tox_save_file(QString path)
+{
+    QString basename = path.mid(path.lastIndexOf('/') + 1);
+    if(!basename.endsWith(".tox"))
+        basename += ".tox";
+
+    /* ensure that the save file is in ~/.config/tox */
+    QFile::copy(path, TOX_DATA_DIR + basename);
+
+    basename.chop(4);
+    next_profile_name = basename;
+
+    loop = LOOP_RELOAD;
 }
 
 void Cyanide::wifi_monitor()
@@ -93,12 +138,6 @@ void Cyanide::wifi_changed(QString name, QDBusVariant dbus_variant)
     } else if(name == "Connected") {
         if(value && loop == LOOP_SUSPEND) {
             qDebug() << "connected, resuming thread";
-            /*
-            for(auto it = friends.begin(); it != friends.end(); it++) {
-                emit cyanide.signal_friend_connection_status(it->first,
-                          it->second.connection_status != TOX_CONNECTION_NONE);
-            }
-            */
             loop = LOOP_RUN;
             uint64_t event = 1;
             ssize_t tmp = write(eventfd, &event, sizeof(event));
@@ -107,7 +146,7 @@ void Cyanide::wifi_changed(QString name, QDBusVariant dbus_variant)
         } else if(!value && loop == LOOP_RUN) {
             qDebug() << "not connected, suspending thread";
             loop = LOOP_SUSPEND;
-            usleep(100 * 1000);
+            usleep(30 * 1000);
             self.connection_status = TOX_CONNECTION_NONE;
             emit cyanide.signal_friend_connection_status(SELF_FRIEND_NUMBER, false);
             for(auto it = friends.begin(); it != friends.end(); it++) {
@@ -141,13 +180,25 @@ void Cyanide::load_tox_and_stuff_pretty_please()
 {
     int error;
 
+    settings.create_database(profile_name);
+
     self.user_status = TOX_USER_STATUS_NONE;
     self.connection_status = TOX_CONNECTION_NONE;
     memset(&self.avatar_transfer, 0, sizeof(File_Transfer));
-    //FIXME free files;
-    //FIXME free messages;
 
-    // delete friends;
+    for(std::pair<uint32_t, Friend>pair : friends) {
+        Friend f = pair.second;
+        free(f.avatar_transfer.filename);
+        f.files.clear();
+        for(Message m : f.messages) {
+            if(m.ft != NULL) {
+                free(m.ft->filename);
+                free(m.ft);
+            }
+        }
+        f.messages.clear();
+    }
+    friends.clear();
 
     loop = LOOP_RUN;
     save_needed = false;
@@ -174,6 +225,9 @@ void Cyanide::load_tox_and_stuff_pretty_please()
     else
         load_tox_data();
 
+    emit cyanide.signal_friend_added(SELF_FRIEND_NUMBER);
+    emit cyanide.signal_avatar_change(SELF_FRIEND_NUMBER);
+
     qDebug() << "Name:" << self.name;
     qDebug() << "Status" << self.status_message;
     qDebug() << "Tox ID" << get_self_address();
@@ -186,6 +240,9 @@ void start_tox_thread(Cyanide *cyanide)
 
 void Cyanide::tox_thread()
 {
+    qDebug() << "profile name" << profile_name;
+    qDebug() << "tox_save_file" << tox_save_file();
+
     load_tox_and_stuff_pretty_please();
 
     set_callbacks();
@@ -246,16 +303,17 @@ void Cyanide::tox_loop()
 
             break;
         case LOOP_RELOAD:
-            qDebug() << "reloading...";
+            qDebug() << "loading profile" << next_profile_name;
 
             killall_tox();
 
-            // emit cyanide.signal_reloading(whatever)
+            profile_name = next_profile_name;
+
+            write_default_profile();
 
             tox_thread();
             break;
         case LOOP_SUSPEND:
-            qDebug() << "suspending thread";
             uint64_t event;
             ssize_t tmp = read(eventfd, &event, sizeof(event));
             Q_ASSERT(tmp == sizeof(event));
@@ -275,6 +333,7 @@ void Cyanide::kill_tox()
 {
     TOX_ERR_FRIEND_ADD error;
 
+    /* re-add all blocked friends */
     for(auto it = friends.begin(); it != friends.end(); it++) {
         Friend *f = &it->second;
 
@@ -334,39 +393,22 @@ void Cyanide::write_save()
 {
     void *data;
     uint32_t size;
-    char tmp_path[512];
-    FILE *file;
 
     size = tox_get_savedata_size(tox);
     data = malloc(size);
     tox_get_savedata(tox, (uint8_t*)data);
 
-    mkdir(CONFIG_PATH, 0755);
-    mkdir(AVATAR_PATH, 0755);
-    sprintf(tmp_path, "%s.tmp", save_path);
+    QDir().mkpath(TOX_DATA_DIR);
+    QDir().mkpath(TOX_AVATAR_DIR);
 
-    file = fopen(tmp_path, "wb");
-    if(file) {
-        fwrite(data, size, 1, file);
-        fflush(file);
-        int fd = fileno(file);
-        fsync(fd);
-        fclose(file);
-        if(rename(tmp_path, save_path) != 0) {
-            qDebug() << "Failed to rename file, trying again";
-            remove(save_path);
-            if(rename(tmp_path, save_path) != 0) {
-                qDebug() << "Saving Failed";
-            } else {
-                qDebug() << "Saved data";
-            }
-        } else {
-            qDebug() << "Saved data";
-        }
+    QSaveFile file(tox_save_file());
+    if(!file.open(QIODevice::WriteOnly)) {
+        qDebug() << "failed to open save file";
     }
-    int ch = chmod(save_path, S_IRUSR | S_IWUSR);
-    if(ch)
-        qDebug() << "CHMOD: failure";
+
+    file.write((const char*)data, size);
+
+    file.commit();
 
     save_needed = false;
     free(data);
@@ -376,9 +418,7 @@ const uint8_t* Cyanide::get_save_data(size_t *size)
 {
     void *data;
 
-    qDebug() << "save_path" << save_path;
-
-    data = file_raw(save_path, size);
+    data = file_raw(tox_save_file().toUtf8().data(), size);
     if(!data)
         *size = 0;
 
@@ -400,7 +440,6 @@ void Cyanide::load_tox_data()
         uint8_t hex_id[2 * TOX_PUBLIC_KEY_SIZE];
         public_key_to_string((char*)hex_id, (char*)f.public_key);
         QString public_key = utf8_to_qstr(hex_id, 2 * TOX_PUBLIC_KEY_SIZE);
-        qDebug() << public_key;
         settings.add_friend_if_not_exists(public_key);
         QByteArray saved_hash = settings.get_friend_avatar_hash(public_key);
         memcpy(f.avatar_hash, saved_hash.constData(), TOX_HASH_LENGTH);
@@ -629,6 +668,7 @@ void callback_file_recv(Tox *tox, uint32_t fid, uint32_t file_number, uint32_t k
 
     if(file_size == 0) {
         free(m.ft);
+        m.ft = NULL;
         qDebug() << "ignoring transfer request of size 0";
         return;
     }
@@ -641,7 +681,7 @@ void callback_file_recv(Tox *tox, uint32_t fid, uint32_t file_number, uint32_t k
     ft->filename = (uint8_t*)malloc(filename_length);
     memcpy(ft->filename, filename, filename_length);
 
-    m.text = DOWNLOAD_PATH + utf8_to_qstr(filename, filename_length);
+    m.text = DOWNLOAD_DIR + utf8_to_qstr(filename, filename_length);
 
     if((ft->file = fopen(m.text.toUtf8().constData(), "wb")) == NULL)
         qDebug() << "Failed to open file " << m.text;
@@ -676,11 +716,11 @@ void Cyanide::incoming_avatar(uint32_t fid, uint32_t file_number, uint64_t file_
     ft->filename_length = filename_length;
     ft->filename = (uint8_t*)malloc(filename_length);
     memcpy(ft->filename, filename, filename_length);
-    char p[sizeof(AVATAR_PATH) + 2 * TOX_PUBLIC_KEY_SIZE + 4];
+    char p[TOX_AVATAR_DIR.size() + 2 * TOX_PUBLIC_KEY_SIZE + 4];
     char hex_pubkey[2 * TOX_PUBLIC_KEY_SIZE + 1];
     public_key_to_string(hex_pubkey, (char*)cyanide.friends[fid].public_key);
     hex_pubkey[2 * TOX_PUBLIC_KEY_SIZE] = '\0';
-    sprintf(p, "%s%s.png", AVATAR_PATH, hex_pubkey);
+    sprintf(p, "%s%s.png", TOX_AVATAR_DIR.toUtf8().constData(), hex_pubkey);
 
     if(file_size == 0) {
         unlink(p);
@@ -1045,7 +1085,7 @@ QString Cyanide::send_file(int fid, QString path)
 
 QString Cyanide::send_avatar(int fid)
 {
-    QString avatar = AVATAR_PATH + get_friend_public_key(SELF_FRIEND_NUMBER) + QString(".png");
+    QString avatar = TOX_AVATAR_DIR + get_friend_public_key(SELF_FRIEND_NUMBER) + QString(".png");
 
     return send_file(TOX_FILE_KIND_AVATAR, fid, avatar, self.avatar_hash);
 }
@@ -1436,7 +1476,7 @@ QString Cyanide::set_self_avatar(QString new_avatar)
 {
     bool success;
     QString public_key = get_friend_public_key(SELF_FRIEND_NUMBER);
-    QString old_avatar = AVATAR_PATH + public_key + QString(".png");
+    QString old_avatar = TOX_AVATAR_DIR + public_key + QString(".png");
 
     if(new_avatar == "") {
         /* remove the avatar */
@@ -1505,7 +1545,7 @@ QString Cyanide::get_friend_name(int fid)
 
 QString Cyanide::get_friend_avatar(int fid)
 {
-    QString avatar = AVATAR_PATH + get_friend_public_key(fid) + QString(".png");
+    QString avatar = TOX_AVATAR_DIR + get_friend_public_key(fid) + QString(".png");
     return QFile::exists(avatar) ? avatar : "qrc:/images/blankavatar";
 }
 
