@@ -123,6 +123,7 @@ public:
     Q_INVOKABLE int get_message_type(int fid, int mid);
     Q_INVOKABLE bool get_message_author(int fid, int mid);
     Q_INVOKABLE QString get_message_text(int fid, int mid);
+    Q_INVOKABLE QString get_message_html_escaped_text(int fid, int mid);
     Q_INVOKABLE QString get_message_rich_text(int fid, int mid);
     Q_INVOKABLE QDateTime get_message_timestamp(int fid, int mid);
     Q_INVOKABLE int get_file_status(int fid, int mid);

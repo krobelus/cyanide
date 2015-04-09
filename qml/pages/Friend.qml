@@ -183,7 +183,7 @@ Page {
             anchors {
                 fill: parent
                 topMargin: pageHeader.height
-                bottomMargin: pageHeader.height
+                bottomMargin: inputField.height - Theme.paddingSmall
             }
 
             Component.onCompleted: {
@@ -228,6 +228,20 @@ Page {
                     source: "image://theme/icon-s-attach"
                     x: message.x - width
                 }
+
+                MouseArea {
+                    width: message.width
+                    height: message.height
+                    anchors {
+                        fill: message
+                    }
+                    onClicked: {
+                        if(inputField.copied || inputField.text === "") {
+                            inputField.text = (m_text[0] === ">" ? ">" : "> ") + m_text + "\n"
+                            inputField.cursorPosition = inputField.text.length
+                        }
+                    }
+                }
                 Label {
                     id: message
                     property bool file: m_type == msgtype_file || m_type == msgtype_image
@@ -243,8 +257,8 @@ Page {
 
                     x: m_author ? Theme.paddingSmall + attach.width
                                 : page.width - width - Theme.paddingLarge
-                    font.pixelSize: Theme.fontSizeSmall
-                    color: m_author ? Theme.secondaryColor : Theme.primaryColor
+                    font.pixelSize: Theme.fontSizeExtraSmall
+                    // color: m_author ? Theme.secondaryColor : Theme.primaryColor
                     horizontalAlignment: Text.AlignLeft
                     wrapMode: Text.Wrap
                     textFormat: file && f_status == 0 ? Text.RichText : Text.StyledText
@@ -297,8 +311,9 @@ Page {
             VerticalScrollDecorator {}
         }
 
-        TextField {
+        TextArea {
             id: inputField
+            font.pixelSize: Theme.fontSizeExtraSmall
             width: parent.width - Theme.paddingLarge
             inputMethodHints: Qt.ImhNoAutoUppercase
             focus: false
@@ -307,7 +322,16 @@ Page {
             anchors {
                 bottom: parent.bottom
             }
+            property bool copied: false
+            onTextChanged: {
+                if(focus)
+                    copied = false
+                else
+                    copied = true
+            }
             EnterKey.onClicked: {
+                // remove traling newlines
+                text = text.replace(/\n+$/, "")
                 var online = friendList.get(f+1).friend_connection_status
                 if(text === "" || !online)
                     return

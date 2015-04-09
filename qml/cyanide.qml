@@ -96,6 +96,7 @@ ApplicationWindow
         var m_type = cyanide.get_message_type(fid, mid)
         var m_author = cyanide.get_message_author(fid, mid)
         var m_text = cyanide.get_message_text(fid, mid)
+        //var m_escaped = cyanide.get_message_html_escaped_text(fid, mid)
         var m_timestamp = new Date(cyanide.get_message_timestamp(fid, mid))
         var isFile = m_type == msgtype_file || m_type == msgtype_image
 
@@ -103,6 +104,7 @@ ApplicationWindow
             messageList.append({"m_type": m_type
                          ,"m_author": m_author
                          ,"m_text": m_text
+                         //,"m_html_escaped_text": m_escaped
                          ,"m_rich_text": cyanide.get_message_rich_text(fid, mid)
                          ,"m_id": 0
                          ,"f_link": ""
@@ -113,8 +115,9 @@ ApplicationWindow
             messageList.append({"m_type": m_type
                          ,"m_author": m_author
                          ,"m_text": m_text
-                         ,"m_id": mid
+                         //, "m_html_escaped_text": m_escaped
                          ,"m_rich_text": ""
+                         ,"m_id": mid
                          ,"f_link": cyanide.get_file_link(fid, mid)
                          ,"f_status": cyanide.get_file_status(fid, mid)
                          ,"f_progress": cyanide.get_file_progress(fid, mid)

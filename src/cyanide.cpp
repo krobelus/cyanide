@@ -1630,13 +1630,17 @@ int Cyanide::get_message_type(int fid, int mid)
 QString Cyanide::get_message_text(int fid, int mid)
 {
     Q_ASSERT(fid != SELF_FRIEND_NUMBER);
-    return friends[fid].messages[mid].text.toHtmlEscaped();
+    return friends[fid].messages[mid].text;
+}
+
+QString Cyanide::get_message_html_escaped_text(int fid, int mid)
+{
+    return get_message_text(fid, mid).toHtmlEscaped();
 }
 
 QString Cyanide::get_message_rich_text(int fid, int mid)
 {
-    Q_ASSERT(fid != SELF_FRIEND_NUMBER);
-    QString text = friends[fid].messages[mid].text;
+    QString text = get_message_html_escaped_text(fid, mid);
 
     const QString email_chars = QRegExp::escape("A-Za-z0-9!#$%&'*+-/=?^_`{|}~.");
     const QString url_chars =   QRegExp::escape("A-Za-z0-9!#$%&'*+-/=?^_`{|}~");
@@ -1647,21 +1651,32 @@ QString Cyanide::get_message_rich_text(int fid, int mid)
     QRegExp rx("(\\b[A-Za-z][A-Za-z0-9]*:[^\\s]+\\b"
                "|\\b" + email_token + "@" + email_token + "\\b"
                "|\\b" + url_token  + "\\." + email_token + "\\b)");
-    QString link;
+    QString repl;
     int protocol;
     int pos = 0;
 
-     while ((pos = rx.indexIn(text, pos)) != -1) {
+     while((pos = rx.indexIn(text, pos)) != -1) {
          /* check whether the captured text has a protocol identifier */
          protocol = rx.cap(1).indexOf(QRegExp("^[A-Za-z0-9]+:"), 0);
-         link = "<a href=\"" +
+         repl = "<a href=\"" +
                  QString(  (protocol != -1) ? ""
                          : (rx.cap(1).indexOf("@") != -1) ? "mailto:"
                          : "https:")
                  + rx.cap(1) + "\">" + rx.cap(1) + "</a>";
-         text.replace(pos, rx.matchedLength(), link);
-         pos += link.length();
+         text.replace(pos, rx.matchedLength(), repl);
+         pos += repl.length();
      }
+
+     QRegExp ry("(^"+QRegExp::escape("&gt;")+"[^\n]*\n"
+                "|^"+QRegExp::escape("&gt;")+"[^\n]*$)"
+                );
+     pos = 0;
+     while((pos = ry.indexIn(text, pos)) != -1) {
+         repl = "<font color='lightgreen'>"+ry.cap(1)+"</font>";
+         text.replace(pos, ry.matchedLength(), repl);
+         pos += repl.length();
+     }
+     text.replace("\n", "<br>");
 
     return text;
 }
