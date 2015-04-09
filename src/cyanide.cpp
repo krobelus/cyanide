@@ -56,6 +56,7 @@ int main(int argc, char *argv[])
     emit cyanide.signal_close_notifications();
 
     cyanide.loop = LOOP_FINISH;
+    settings.close_databases();
     my_tox_thread.join();
 
     return result;
@@ -180,7 +181,7 @@ void Cyanide::load_tox_and_stuff_pretty_please()
 {
     int error;
 
-    settings.create_database(profile_name);
+    settings.open_database(profile_name);
 
     self.user_status = TOX_USER_STATUS_NONE;
     self.connection_status = TOX_CONNECTION_NONE;

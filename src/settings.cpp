@@ -5,6 +5,8 @@
 
 #include "settings.h"
 
+#define QUERY(q) QSqlQuery q(QSqlDatabase::database(profile_name))
+
 QString db_version = "0002";
 
 QString tables[] = {
@@ -67,14 +69,31 @@ void execute_sql_query(QSqlQuery q)
         qFatal("Failed to execute SQL query: %s", qPrintable(q.lastError().text()));
 }
 
-void Settings::create_database(QString name)
+void Settings::close_databases()
 {
-    bool success;
+    for(QString name : QSqlDatabase::connectionNames()) {
+        qDebug() << "closing database" << name;
+        QSqlDatabase::database(name).close();
+        QSqlDatabase::removeDatabase(name);
+    }
+}
+
+void Settings::open_database(QString name)
+{
+    QSqlDatabase::database(profile_name).close();
+    QSqlDatabase::removeDatabase(profile_name);
+
+    profile_name = name;
+
+    if(QSqlDatabase::contains(profile_name))
+        return;
+
+    QSqlDatabase db;
+
     if(db.isOpen()) {
-        qDebug() << "closing db";
         db.close();
     } else {
-        db = QSqlDatabase::addDatabase("QSQLITE");
+        db = QSqlDatabase::addDatabase("QSQLITE", profile_name);
     }
 
     QString dbdir = CYANIDE_DATA_DIR;
@@ -87,11 +106,8 @@ void Settings::create_database(QString name)
         file.rename(CYANIDE_DATA_DIR + "tox_save.sqlite");
     }
 
-    success = db.isValid();
-    Q_ASSERT(success);
     db.setDatabaseName(dbdir + name.replace('/', '_') + ".sqlite");
-    success = db.open();
-    Q_ASSERT(success);
+    db.open();
 
     update_db_version();
 
@@ -100,7 +116,7 @@ void Settings::create_database(QString name)
             str.append(",(?,?)");
     }
 
-    QSqlQuery q;
+    QUERY(q);
     q.prepare(str);
     for(auto i=entries.begin(); i!=entries.end(); i++) {
         q.addBindValue(i->first);
@@ -183,7 +199,7 @@ void Settings::set_current_index(QString name, int i)
 
 void Settings::db_set(QString name, QString value)
 {
-    QSqlQuery q;
+    QUERY(q);
     q.prepare("INSERT OR REPLACE INTO settings (name, value) VALUES (?, ?)");
     q.addBindValue(name);
     q.addBindValue(value);
@@ -192,7 +208,7 @@ void Settings::db_set(QString name, QString value)
 
 QString Settings::db_get(QString name)
 {
-    QSqlQuery q;
+    QUERY(q);
     q.prepare("SELECT value FROM settings WHERE name = ?");
     q.addBindValue(name);
     execute_sql_query(q);
@@ -205,7 +221,7 @@ QString Settings::db_get(QString name)
 
 void Settings::add_friend(QString address)
 {
-    QSqlQuery q;
+    QUERY(q);
     q.prepare("INSERT OR REPLACE INTO friends (public_key, address) VALUES (?, ?)");
     q.addBindValue(address.left(2 * TOX_PUBLIC_KEY_SIZE));
     q.addBindValue(address);
@@ -214,7 +230,7 @@ void Settings::add_friend(QString address)
 
 void Settings::add_friend_if_not_exists(QString public_key)
 {
-    QSqlQuery q;
+    QUERY(q);
     q.prepare("INSERT OR IGNORE INTO FRIENDS (public_key) VALUES (?)");
     q.addBindValue(public_key);
     execute_sql_query(q);
@@ -222,7 +238,7 @@ void Settings::add_friend_if_not_exists(QString public_key)
 
 void Settings::remove_friend(QString public_key)
 {
-    QSqlQuery q;
+    QUERY(q);
     q.prepare("DELETE FROM friends WHERE public_key = ?");
     q.addBindValue(public_key);
     execute_sql_query(q);
@@ -230,7 +246,7 @@ void Settings::remove_friend(QString public_key)
 
 QString Settings::get_friend_address(QString public_key)
 {
-    QSqlQuery q;
+    QUERY(q);
     q.prepare("SELECT address FROM friends WHERE public_key = ?");
     q.addBindValue(public_key);
     execute_sql_query(q);
@@ -243,7 +259,7 @@ QString Settings::get_friend_address(QString public_key)
 
 void Settings::set_friend_avatar_hash(QString public_key, QByteArray hash)
 {
-    QSqlQuery q;
+    QUERY(q);
     q.prepare("UPDATE friends SET avatar_hash = ? WHERE public_key = ?");
     q.addBindValue(hash);
     q.addBindValue(public_key);
@@ -252,7 +268,7 @@ void Settings::set_friend_avatar_hash(QString public_key, QByteArray hash)
 
 QByteArray Settings::get_friend_avatar_hash(QString public_key)
 {
-    QSqlQuery q;
+    QUERY(q);
     q.prepare("SELECT avatar_hash FROM friends WHERE public_key = ?");
     q.addBindValue(public_key);
     execute_sql_query(q);
@@ -271,7 +287,8 @@ void Settings::update_db_version()
     if(current_version == db_version) {
         ;
     } else if(current_version == "0001") {
-        QSqlQuery q, i;
+        QUERY(q);
+        QUERY(i);
         q.prepare("CREATE TABLE old_friends (fid INT PRIMARY KEY, address TEXT)"); execute_sql_query(q);
         q.prepare("INSERT INTO old_friends SELECT * FROM friends"); execute_sql_query(q);
         q.prepare("DROP TABLE friends"); execute_sql_query(q);
@@ -298,7 +315,7 @@ void Settings::update_db_version()
 
 void Settings::create_tables()
 {
-    QSqlQuery q;
+    QUERY(q);
     for(size_t i=0; i<countof(tables); i++) {
         q.prepare(tables[i]);
         execute_sql_query(q);
