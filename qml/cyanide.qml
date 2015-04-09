@@ -103,19 +103,18 @@ ApplicationWindow
             messageList.append({"m_type": m_type
                          ,"m_author": m_author
                          ,"m_text": m_text
+                         ,"m_rich_text": cyanide.get_message_rich_text(fid, mid)
                          ,"m_id": 0
                          ,"f_link": ""
                          ,"f_status": 0
                          ,"f_progress": 0
                          })
         } else if(isFile) {
-            console.log("f_link: "+cyanide.get_file_link(fid, mid))
-            console.log("f_status: "+cyanide.get_file_status(fid, mid))
-            console.log("f_progress: "+cyanide.get_file_progress(fid, mid))
             messageList.append({"m_type": m_type
                          ,"m_author": m_author
                          ,"m_text": m_text
                          ,"m_id": mid
+                         ,"m_rich_text": ""
                          ,"f_link": cyanide.get_file_link(fid, mid)
                          ,"f_status": cyanide.get_file_status(fid, mid)
                          ,"f_progress": cyanide.get_file_progress(fid, mid)
