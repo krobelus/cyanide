@@ -311,6 +311,13 @@ Page {
             VerticalScrollDecorator {}
         }
 
+        IconButton {
+            icon.source: "image://theme/icon-m-clear"
+            y: inputField.y
+            x: page.width - width - Theme.paddingSmall
+            onClicked: inputField.text = ""
+        }
+
         TextArea {
             id: inputField
             font.pixelSize: Theme.fontSizeExtraSmall
