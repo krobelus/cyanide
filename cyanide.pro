@@ -65,7 +65,7 @@ HEADERS += \
 unix:!macx: LIBS += -L$$PWD/res/usr/lib/ \
                 -ltoxcore -ltoxdns -ltoxav \
                 -lsodium -lopus -lvpx \
-                -lrt -lnemonotifications-qt5
+                -lrt
 
 INCLUDEPATH += $$PWD/res/usr/include
 DEPENDPATH += $$PWD/res/usr/include
@@ -78,3 +78,5 @@ QMAKE_CXXFLAGS += "-Wno-pointer-arith"
 
 RESOURCES += \
     resources.qrc
+
+unix: PKGCONFIG += mlite5
