@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <!DOCTYPE TS>
 <TS version="2.0" language="sv_SE">
 <context>
@@ -36,7 +36,7 @@
     <message>
         <source>Error: Empty message</source>
         <translatorcomment>Fel: Tomt meddelande</translatorcomment>
-        <translation></translation>
+        <translation/>
     </message>
     <message>
         <source>Error: Tox ID is self ID</source>
@@ -92,7 +92,7 @@
     </message>
     <message>
         <source>File not found: </source>
-        <translation>Filen kunde inte hittas:</translation>
+        <translation>Filen kunde inte hittas: </translation>
     </message>
     <message>
         <source>Avatar too large. Maximum size: 16KiB</source>
@@ -166,7 +166,7 @@
     </message>
     <message>
         <source> is typing...</source>
-        <translation>skriver...</translation>
+        <translation> skriver...</translation>
     </message>
     <message>
         <source>Settings</source>
@@ -290,7 +290,7 @@
     <name>cyanide</name>
     <message>
         <source> is now known as </source>
-        <translation>är nu känd som </translation>
+        <translation> är nu känd som </translation>
     </message>
     <message>
         <source>New message</source>
