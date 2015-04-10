@@ -1,6 +1,6 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="sv_SE">
+<TS version="2.1" language="sv_SE">
 <context>
     <name>AcceptFriend</name>
     <message>
@@ -36,7 +36,7 @@
     <message>
         <source>Error: Empty message</source>
         <translatorcomment>Fel: Tomt meddelande</translatorcomment>
-        <translation/>
+        <translation></translation>
     </message>
     <message>
         <source>Error: Tox ID is self ID</source>
@@ -64,11 +64,11 @@
     </message>
     <message>
         <source>No name</source>
-        <translation>Inget namn</translation>
+        <translation type="vanished">Inget namn</translation>
     </message>
     <message>
         <source>Invalid Tox ID</source>
-        <translation>Ogiltigt Tox-ID</translation>
+        <translation type="vanished">Ogiltigt Tox-ID</translation>
     </message>
     <message>
         <source>Error: Friend not found</source>
@@ -118,6 +118,10 @@
         <source>Error: Packet queue is full</source>
         <translation>Fel: Paketkön är full</translation>
     </message>
+    <message>
+        <source>Error: Transfer is paused by peer</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>FileChooser</name>
@@ -154,7 +158,7 @@
     </message>
     <message>
         <source>Launching web browser...</source>
-        <translation>Startar webläsaren...</translation>
+        <translation type="vanished">Startar webläsaren...</translation>
     </message>
     <message>
         <source>Removing friend</source>
@@ -170,7 +174,7 @@
     </message>
     <message>
         <source>Settings</source>
-        <translation>Inställningar</translation>
+        <translation type="vanished">Inställningar</translation>
     </message>
     <message>
         <source>Send a file</source>
@@ -196,6 +200,14 @@
         <source>Failed to send message</source>
         <translation>Kunde inte skicka meddelande</translation>
     </message>
+    <message>
+        <source>Unblock friend</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Block friend</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>FriendList</name>
@@ -210,6 +222,10 @@
     <message>
         <source>Settings</source>
         <translation>Inställningar</translation>
+    </message>
+    <message>
+        <source>Switch profile</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -247,7 +263,7 @@
     </message>
     <message>
         <source>Play this sound when...</source>
-        <translation>Spela upp detta ljud när...</translation>
+        <translation type="vanished">Spela upp detta ljud när...</translation>
     </message>
     <message>
         <source>I receive a message:</source>
@@ -263,11 +279,11 @@
     </message>
     <message>
         <source>a friend comes online</source>
-        <translation>En vän ansluter</translation>
+        <translation type="vanished">En vän ansluter</translation>
     </message>
     <message>
         <source>a friend changes his name</source>
-        <translation>En vän byter namn</translation>
+        <translation type="vanished">En vän byter namn</translation>
     </message>
     <message>
         <source>Yes</source>
@@ -290,7 +306,7 @@
     <name>cyanide</name>
     <message>
         <source> is now known as </source>
-        <translation> är nu känd som </translation>
+        <translation type="vanished"> är nu känd som </translation>
     </message>
     <message>
         <source>New message</source>

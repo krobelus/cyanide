@@ -109,6 +109,10 @@
         <source>Error: Unknown</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Error: Transfer is paused by peer</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>FileChooser</name>
@@ -152,10 +156,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Settings</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Copy Tox ID to clipboard</source>
         <translation type="unfinished"></translation>
     </message>
@@ -183,6 +183,14 @@
         <source>Failed to send message</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Unblock friend</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Block friend</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>FriendList</name>
@@ -196,6 +204,10 @@
     </message>
     <message>
         <source>Friends</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Switch profile</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
