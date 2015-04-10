@@ -95,8 +95,8 @@
         <translation>Filen kunde inte hittas: </translation>
     </message>
     <message>
-        <source>Avatar too large. Maximum size: 16KiB</source>
-        <translation>För stor avatar. Maxstorlek: 16KiB</translation>
+        <source>Avatar too large. Maximum size: 64KiB</source>
+        <translation>För stor avatar. Maxstorlek: 64KiB</translation>
     </message>
     <message>
         <source>Error: Failed to open file: </source>

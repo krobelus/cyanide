@@ -62,8 +62,8 @@
         <translation>Файл не найден: </translation>
     </message>
     <message>
-        <source>Avatar too large. Maximum size: 16KiB</source>
-        <translation>Изображение слишком большое. Максимальный размер 16 KB</translation>
+        <source>Avatar too large. Maximum size: 64KiB</source>
+        <translation>Изображение слишком большое. Максимальный размер 64KB</translation>
     </message>
     <message>
         <source>Error: Friend not found</source>

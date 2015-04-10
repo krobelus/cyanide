@@ -82,8 +82,8 @@
         <translation>Datei nicht gefunden: </translation>
     </message>
     <message>
-        <source>Avatar too large. Maximum size: 16KiB</source>
-        <translation>Avatar ist zu groß. Maximale Größe: 16KiB</translation>
+        <source>Avatar too large. Maximum size: 64KiB</source>
+        <translation>Avatar ist zu groß. Maximale Größe: 64KiB</translation>
     </message>
     <message>
         <source>Error: Failed to open file: </source>

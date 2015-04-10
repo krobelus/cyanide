@@ -82,7 +82,7 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Avatar too large. Maximum size: 16KiB</source>
+        <source>Avatar too large. Maximum size: 64KiB</source>
         <translation type="unfinished"/>
     </message>
     <message>
