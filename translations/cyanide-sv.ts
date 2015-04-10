@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <!DOCTYPE TS>
 <TS version="2.1" language="sv_SE">
 <context>
@@ -36,7 +36,7 @@
     <message>
         <source>Error: Empty message</source>
         <translatorcomment>Fel: Tomt meddelande</translatorcomment>
-        <translation></translation>
+        <translation/>
     </message>
     <message>
         <source>Error: Tox ID is self ID</source>
@@ -120,7 +120,7 @@
     </message>
     <message>
         <source>Error: Transfer is paused by peer</source>
-        <translation type="unfinished"></translation>
+        <translation>Fel: Överföringen pausad av deltagare</translation>
     </message>
 </context>
 <context>
@@ -202,11 +202,11 @@
     </message>
     <message>
         <source>Unblock friend</source>
-        <translation type="unfinished"></translation>
+        <translation>Tillåt vän</translation>
     </message>
     <message>
         <source>Block friend</source>
-        <translation type="unfinished"></translation>
+        <translation>Blockera vän</translation>
     </message>
 </context>
 <context>
@@ -225,7 +225,7 @@
     </message>
     <message>
         <source>Switch profile</source>
-        <translation type="unfinished"></translation>
+        <translation>Byt profil</translation>
     </message>
 </context>
 <context>
