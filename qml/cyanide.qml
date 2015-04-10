@@ -1,6 +1,6 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
-import nemonotifications 1.0
+import mlite5 1.0
 import "pages"
 
 ApplicationWindow
@@ -221,7 +221,7 @@ ApplicationWindow
                 nFriendRequest.body = cyanide.get_friend_status_message(fid)
                 nFriendRequest.previewSummary = nFriendRequest.summary
                 nFriendRequest.previewBody = nFriendRequest.body
-                nFriendRequest.itemCount++
+                nFriendRequest.count++
                 nFriendRequest.publish()
         }
     }
@@ -254,41 +254,45 @@ ApplicationWindow
     Notification {
         id: nFriendRequest
         property int fid: 0
-        category: "x-nemo.social.tox.message"
+        // category: "x-nemo.social.tox.message"
+        /*
         onClicked: {
-            itemCount = 0
+            count = 0
             cyanide.raise()
             friendNumberStack.push(fid)
             pageStack.push(Qt.resolvedUrl("pages/AcceptFriend.qml"))
         }
-        onClosed: console.log("Closed friend request notification, reason: " + reason)
+        */
+        // onClosed: console.log("Closed friend request notification, reason: " + reason)
     }
     Notification {
         id: nFriendMessage
         property int fid: 0
-        category: "x-nemo.social.tox.message"
-        summary: itemCount == 1 ? qsTr("New message") : qsTr("New messages")
-        itemCount: 0
+        // category: "x-nemo.social.tox.message"
+        summary: count == 1 ? qsTr("New message") : qsTr("New messages")
+        count: 0
+        /*
         onClicked: {
-            itemCount = 0
+            count = 0
             cyanide.raise()
             if(!chattingWith(fid)) {
                 chatWith(fid)
             }
         }
-        onClosed: console.log("Closed message notification, reason: " + reason)
+        */
+        // onClosed: console.log("Closed message notification, reason: " + reason)
     }
     function notify(n, summary, body) {
         n.previewSummary = summary
         n.previewBody = body
-        n.itemCount++
+        n.count++
         n.publish()
     }
     Connections {
         target: cyanide
         onSignal_close_notifications: {
-            nFriendMessage.close()
-            nFriendRequest.close()
+            //nFriendMessage.close()
+            //nFriendRequest.close()
         }
     }
 }

@@ -25,7 +25,6 @@ PkgConfigBR:
   - Qt5Core
   - Qt5Qml
   - Qt5Quick
-  - nemonotifications-qt5
 
 # Build dependencies without a pkgconfig setup can be listed here
 # PkgBR:

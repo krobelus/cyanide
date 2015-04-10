@@ -4,7 +4,7 @@
 #include <sys/eventfd.h>
 #include <thread>
 #include <sailfishapp.h>
-#include <nemonotifications-qt5/notification.h>
+#include <mlite5/mnotification.h>
 #include <QtQuick>
 #include <QSound>
 #include <QTranslator>
@@ -28,7 +28,7 @@ struct Tox_Options tox_options;
 
 int main(int argc, char *argv[])
 {
-    qmlRegisterType<Notification>("nemonotifications", 1, 0, "Notification");
+    qmlRegisterType<MNotification>("mlite5", 1, 0, "Notification");
 
     QGuiApplication *app = SailfishApp::application(argc, argv);
     app->setOrganizationName("Tox");
@@ -1045,7 +1045,7 @@ QString Cyanide::send_file_control(int fid, int mid, TOX_FILE_CONTROL action)
             case TOX_ERR_FILE_CONTROL_NOT_PAUSED:
                 return tr("Error: Not paused");
             case TOX_ERR_FILE_CONTROL_DENIED:
-                return "Error: Transfer is paused by peer";
+                return tr("Error: Transfer is paused by peer");
             case TOX_ERR_FILE_CONTROL_ALREADY_PAUSED:
                 return tr("Error: Already paused");
             case TOX_ERR_FILE_CONTROL_SENDQ:

@@ -1,6 +1,6 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
-import nemonotifications 1.0
+import mlite5 1.0
 import "../js/Misc.js" as Misc
 
 Page {
@@ -337,11 +337,14 @@ Page {
                     copied = true
             }
             EnterKey.onClicked: {
-                // remove traling newlines
-                text = text.replace(/\n+$/, "")
                 var online = friendList.get(f+1).friend_connection_status
-                if(text === "" || !online)
+                if(text === "" || !online) {
+                    text = text.replace(/\n$/, "")
+                    inputField.cursorPosition = inputField.text.length
                     return
+                }
+                // remove trailing newlines
+                text = text.replace(/\n+$/, "")
                 var errmsg = cyanide.send_friend_message(f, text)
                 if(errmsg === "") {
                     text = ""
