@@ -1045,7 +1045,7 @@ QString Cyanide::send_file_control(int fid, int mid, TOX_FILE_CONTROL action)
             case TOX_ERR_FILE_CONTROL_NOT_PAUSED:
                 return tr("Error: Not paused");
             case TOX_ERR_FILE_CONTROL_DENIED:
-                return "Error: Transfer is paused by peer";
+                return tr("Error: Transfer is paused by peer");
             case TOX_ERR_FILE_CONTROL_ALREADY_PAUSED:
                 return tr("Error: Already paused");
             case TOX_ERR_FILE_CONTROL_SENDQ:
