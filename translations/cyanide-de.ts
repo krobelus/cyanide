@@ -91,7 +91,7 @@
     </message>
     <message>
         <source>Error: File transfer not found</source>
-        <translation type="unfinished"/>
+        <translation>Fehler: Dateiübertragung nicht gefunden</translation>
     </message>
     <message>
         <source>Error: Not paused</source>
@@ -250,11 +250,11 @@
     </message>
     <message>
         <source>a friend comes online</source>
-        <translation type="vanished">ein Freund online erscheint:</translation>
+        <translation>ein Freund online erscheint</translation>
     </message>
     <message>
         <source>a friend changes his name</source>
-        <translation type="vanished">ein Freund seinen Namen ändert:</translation>
+        <translation>ein Freund seinen Namen ändert</translation>
     </message>
     <message>
         <source>Yes</source>
