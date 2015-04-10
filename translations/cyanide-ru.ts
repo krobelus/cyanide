@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <!DOCTYPE TS>
 <TS version="2.1" language="ru_RU">
 <context>
@@ -111,7 +111,7 @@
     </message>
     <message>
         <source>Error: Transfer is paused by peer</source>
-        <translation type="unfinished"></translation>
+        <translation>Ошибка: Передача остановлена собеседником</translation>
     </message>
 </context>
 <context>
@@ -189,11 +189,11 @@
     </message>
     <message>
         <source>Unblock friend</source>
-        <translation type="unfinished"></translation>
+        <translation>Разблокировать</translation>
     </message>
     <message>
         <source>Block friend</source>
-        <translation type="unfinished"></translation>
+        <translation>Заблокировать</translation>
     </message>
 </context>
 <context>
@@ -212,7 +212,7 @@
     </message>
     <message>
         <source>Switch profile</source>
-        <translation type="unfinished"></translation>
+        <translation>Переключить профиль</translation>
     </message>
 </context>
 <context>
