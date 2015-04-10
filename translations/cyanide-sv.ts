@@ -36,7 +36,7 @@
     <message>
         <source>Error: Empty message</source>
         <translatorcomment>Fel: Tomt meddelande</translatorcomment>
-        <translation/>
+        <translation>Fel: Tomt meddelande</translation>
     </message>
     <message>
         <source>Error: Tox ID is self ID</source>
