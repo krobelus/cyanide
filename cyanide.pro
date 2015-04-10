@@ -18,29 +18,30 @@ QT += sql dbus multimedia
 
 SOURCES += \
     src/cyanide.cpp \
-    src/util.cpp \
-    src/friend.cpp \
     src/dns.cpp \
+    src/friend.cpp \
     src/settings.cpp
+    src/util.cpp \
 
 OTHER_FILES += \
+    cyanide.desktop \
+    cyanide.png \
+    notificationcategories/x-nemo.social.tox.message.conf \
     qml/cover/CoverPage.qml \
+    qml/cyanide.qml \
+    qml/js/Misc.js \
+    qml/pages/AcceptFriend.qml \
+    qml/pages/AddFriend.qml \
+    qml/pages/FileChooser.qml
+    qml/pages/FriendList.qml \
+    qml/pages/Friend.qml \
+    qml/pages/Profile.qml \
+    qml/pages/Settings.qml \
+    rpm/cyanide.changes \
     rpm/cyanide.spec \
     rpm/cyanide.yaml \
     translations/*.ts \
-    qml/pages/FriendList.qml \
-    qml/pages/Profile.qml \
-    qml/js/Misc.js \
-    qml/pages/Friend.qml \
-    qml/cyanide.qml \
-    cyanide.desktop \
-    qml/pages/AddFriend.qml \
-    qml/pages/AcceptFriend.qml \
-    cyanide.png \
-    rpm/cyanide.changes \
-    qml/pages/Settings.qml \
-    notificationcategories/x-nemo.social.tox.message.conf \
-    qml/pages/FileChooser.qml
+
 
 # to disable building translations every time, comment out the
 # following CONFIG line
