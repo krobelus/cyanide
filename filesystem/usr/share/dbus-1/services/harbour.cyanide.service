@@ -1,0 +1,4 @@
+[D-BUS Service]
+Name=harbour.cyanide
+Exec=/usr/bin/invoker --type=silica-qt5 -s /usr/bin/cyanide
+User=nemo

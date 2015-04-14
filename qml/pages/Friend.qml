@@ -1,6 +1,5 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
-import mlite5 1.0
 import "../js/Misc.js" as Misc
 
 Page {
@@ -18,8 +17,6 @@ Page {
     }
 
     RemorsePopup { id: remorsePopup }
-
-    Notification { id: notification }
 
     property int f: activeFriend()
 
@@ -44,14 +41,14 @@ Page {
                 if(errmsg === "") {
                     console.log("paused successfully, closing panel")
                 } else {
-                    notify(notification, qsTr("Failed to pause transfer"), qsTr(errmsg))
+                    cyanide.notify_error(qsTr("Failed to pause transfer"), qsTr(errmsg))
                 }
             } else if(file_status == -1 || file_status == -3) {
                 errmsg = cyanide.resume_transfer(f, m)
                 if(errmsg === "") {
                     console.log("paused successfully, closing panel")
                 } else {
-                    notify(notification, qsTr("Failed to resume transfer"), qsTr(errmsg))
+                    cyanide.notify_error(qsTr("Failed to resume transfer"), qsTr(errmsg))
                 }
             } else if(file_status == 0) {
                 console.log("attempted to pause/resume a cancelled transfer")
@@ -72,7 +69,7 @@ Page {
                 if(errmsg === "")
                     open = false
                 else
-                    notify(notification, qsTr("Failed to cancel transfer"), qsTr(errmsg))
+                    cyanide.notify_error(qsTr("Failed to cancel transfer"), qsTr(errmsg))
             }
             open = false
             cancel.enabled = true
@@ -266,7 +263,7 @@ Page {
                     linkColor: Theme.highlightColor
                     onLinkActivated: {
                         if(!file) {
-                            notify(notification, qsTr("Opening URL..."), "")
+                            cyanide.notify_error(qsTr("Opening URL..."), "")
                             Misc.openUrl(link)
                         } else {
                             if(fileControlPanel.open) {
@@ -277,7 +274,7 @@ Page {
                             } else if(f_status == 0) /* cancelled */ {
                                 ;
                             } else if(f_status == 2) /* finished */ {
-                                notify(notification, qsTr("Opening file..."), m_text)
+                                cyanide.notify_error(qsTr("Opening file..."), m_text)
                                 console.log(link)
                                 Misc.openUrl(link)
                             }
@@ -350,7 +347,7 @@ Page {
                     text = ""
                     parent.focus = true;
                 } else {
-                    notify(notification, qsTr("Failed to send message"), errmsg)
+                    cyanide.notify_error(qsTr("Failed to send message"), errmsg)
                 }
             }
         }

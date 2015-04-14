@@ -2,6 +2,8 @@
 #define FRIEND_H
 
 #include <tox/tox.h>
+#include <mlite5/mnotification.h>
+
 #include "message.h"
 
 class Friend
@@ -33,6 +35,7 @@ public:
 
     QList<Message> messages;
 
+    MNotification *notification;
 
 signals:
 
