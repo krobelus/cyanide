@@ -48,6 +48,7 @@ int main(int argc, char *argv[])
     cyanide.eventfd = eventfd(0, 0);
     cyanide.wifi_monitor();
 
+    cyanide.check_wifi();
     std::thread my_tox_thread(start_tox_thread, &cyanide);
 
     cyanide.view->rootContext()->setContextProperty("cyanide", &cyanide);
@@ -119,19 +120,36 @@ void Cyanide::load_tox_save_file(QString path)
     loop = LOOP_RELOAD;
 }
 
+void Cyanide::check_wifi()
+{
+    if(settings.get("wifi-only") == "true") {
+        if(0 == system("test true = \"$(dbus-send --system --dest=net.connman --print-reply"
+                                      " /net/connman/technology/wifi net.connman.Technology.GetProperties"
+                                      "| grep -A1 Connected | sed -e 1d -e 's/^.*\\s//')\"")) {
+            qDebug() << "connected to wifi, toxing";
+            loop = LOOP_RUN;
+        } else {
+            qDebug() << ("not connected to wifi, not toxing";
+            loop = LOOP_SUSPEND;
+        }
+    } else {
+        loop = LOOP_RUN;
+    }
+}
+
 void Cyanide::wifi_monitor()
 {
-    QDBusConnection dbus_connection = QDBusConnection::systemBus();
+    QDBusConnection dbus = QDBusConnection::systemBus();
 
-    if(!dbus_connection.isConnected()) {
+    if(!dbus.isConnected()) {
         qDebug() << "Failed to connect to the D-Bus session bus.";
     }
-    dbus_connection.connect("net.connman",
-                                "/net/connman/technology/wifi",
-                                "net.connman.Technology",
-                                "PropertyChanged",
-                                &cyanide,
-                                SLOT(wifi_changed(QString, QDBusVariant)));
+    dbus.connect("net.connman",
+                 "/net/connman/technology/wifi",
+                 "net.connman.Technology",
+                 "PropertyChanged",
+                 &cyanide,
+                 SLOT(wifi_changed(QString, QDBusVariant)));
 }
 
 void Cyanide::wifi_changed(QString name, QDBusVariant dbus_variant)
@@ -142,7 +160,7 @@ void Cyanide::wifi_changed(QString name, QDBusVariant dbus_variant)
 
     if(name == "Powered") {
         ;
-    } else if(name == "Connected") {
+    } else if(name == "Connected" && settings.get("wifi-only") == "true") {
         if(value && loop == LOOP_SUSPEND) {
             qDebug() << "connected, resuming thread";
             loop = LOOP_RUN;
@@ -247,7 +265,6 @@ void Cyanide::load_tox_and_stuff_pretty_please()
     }
     friends.clear();
 
-    loop = LOOP_RUN;
     save_needed = false;
 
     tox_options = *tox_options_new((TOX_ERR_OPTIONS_NEW*)&error);

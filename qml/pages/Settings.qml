@@ -33,13 +33,40 @@ Page {
 
         delegate: BackgroundItem {
             id: delegate
-            height: comboBox.height + Theme.paddingMedium
+            height: 2 * label.height + Theme.paddingMedium
+
+            TextSwitch {
+                id: textSwitch
+                visible: type === "bool"
+                x: Theme.paddingLarge
+                width: parent.width - 2 * Theme.paddingLarge
+                y: label.y
+                text: qsTr(display_name)
+
+                checked: 0 == settings.get_current_index(name)
+                onClicked: {
+                    settings.set_current_index(name, checked ? 0 : 1)
+
+                    if(name === "wifi-only")
+                        cyanide.check_wifi()
+                }
+            }
+
+            Label {
+                id: label
+                visible: type === "none"
+                x: textSwitch.x
+                width: textSwitch.width
+                text: textSwitch.text
+            }
 
             ComboBox {
                 id: comboBox
-                x: Theme.paddingLarge
-                width: parent.width - 2 * Theme.paddingLarge
-                label: qsTr(display_name)
+                visible: !textSwitch.visible && !label.visible
+                x: textSwitch.x
+                y: label.y
+                width: textSwitch.width
+                label: textSwitch.text
                 currentIndex: name === "" ? 0 : settings.get_current_index(name)
 
                 menu: buildContextMenu(type)

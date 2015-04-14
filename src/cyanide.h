@@ -85,6 +85,7 @@ public:
     Q_INVOKABLE void visibility_changed(QWindow::Visibility visibility);
     Q_INVOKABLE void notify_error(QString summary, QString body);
     Q_INVOKABLE void notify_message(int fid, QString summary, QString body);
+    Q_INVOKABLE void check_wifi();
 
     Q_INVOKABLE void load_tox_save_file(QString path);
     Q_INVOKABLE QString send_friend_request(QString id_string, QString msg_string);
