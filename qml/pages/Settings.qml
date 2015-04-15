@@ -40,7 +40,6 @@ Page {
                 visible: type === "bool"
                 x: Theme.paddingLarge
                 width: parent.width - 2 * Theme.paddingLarge
-                y: label.y
                 text: qsTr(display_name)
 
                 checked: 0 == settings.get_current_index(name)
@@ -55,19 +54,20 @@ Page {
                 }
             }
 
-            Label {
-                id: label
+            SectionHeader {
+                id: sectionHeader
                 visible: type === "none"
                 x: textSwitch.x
-                width: textSwitch.width
+                y: textSwitch.y
+                //width: textSwitch.width
                 text: textSwitch.text
             }
 
             ComboBox {
                 id: comboBox
-                visible: !textSwitch.visible && !label.visible
+                visible: !textSwitch.visible && !sectionHeader.visible
                 x: textSwitch.x
-                y: label.y
+                y: textSwitch.y
                 width: textSwitch.width
                 label: textSwitch.text
                 currentIndex: name === "" ? 0 : settings.get_current_index(name)

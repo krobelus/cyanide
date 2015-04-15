@@ -167,13 +167,13 @@ void Cyanide::check_wifi()
         if(0 == system("test true = \"$(dbus-send --system --dest=net.connman --print-reply"
                                       " /net/connman/technology/wifi net.connman.Technology.GetProperties"
                                       "| grep -A1 Connected | sed -e 1d -e 's/^.*\\s//')\"")) {
-            qDebug() << "connected to wifi, toxing";
+            qDebug() << "connected via wifi, toxing";
             if(loop == LOOP_SUSPEND)
                 resume_thread();
             else
                 loop = LOOP_RUN;
         } else {
-            qDebug() << "not connected to wifi, not toxing";
+            qDebug() << "not connected via wifi, not toxing";
             suspend_thread();
         }
     } else {

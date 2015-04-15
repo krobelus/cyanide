@@ -309,6 +309,7 @@ Page {
         }
 
         IconButton {
+            id: clear
             icon.source: "image://theme/icon-m-clear"
             y: inputField.y
             x: page.width - width - Theme.paddingSmall
@@ -318,7 +319,7 @@ Page {
         TextArea {
             id: inputField
             font.pixelSize: Theme.fontSizeExtraSmall
-            width: parent.width - Theme.paddingLarge
+            width: parent.width - clear.width - Theme.paddingLarge - Theme.paddingSmall
             inputMethodHints: Qt.ImhNoAutoUppercase
             focus: false
             onFocusChanged: cyanide.send_typing_notification(f, focus)

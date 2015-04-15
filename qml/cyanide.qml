@@ -182,7 +182,8 @@ ApplicationWindow
                     cyanide.notify_message(fid, cyanide.get_friend_name(fid), cyanide.get_message_text(fid, mid))
                 }
                 if(fid == activeFriend() || fid == self_friend_number) {
-                    appendMessage(mid)
+                    // appendMessage(mid)
+                    refreshMessageList()
                 }
             }
         }
