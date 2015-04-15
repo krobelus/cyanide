@@ -18,7 +18,7 @@ const QString CYANIDE_DATA_DIR = TOX_DATA_DIR + "cyanide/";
 const QString DEFAULT_PROFILE_NAME = "tox_save";
 const QString DEFAULT_PROFILE_FILE  = CYANIDE_DATA_DIR + "default_profile";
 
-const QString DOWNLOAD_DIR = QDir::homePath() + "Downloads/";
+const QString DOWNLOAD_DIR = QDir::homePath() + "/Downloads/";
 
 const uint32_t MAX_ITERATION_TIME = 20;
 
