@@ -30,12 +30,6 @@ Page {
         }
     }
 
-    function returnToPage(name) {
-        pageStack.pop(pageStack.find(function(page) {
-            return page.name === name
-        }))
-    }
-
     SilicaListView {
         id: fileList
         anchors.fill: parent

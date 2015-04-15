@@ -46,9 +46,9 @@ int main(int argc, char *argv[])
     cyanide.read_default_profile(app->arguments());
 
     cyanide.eventfd = eventfd(0, 0);
+    cyanide.check_wifi();
     cyanide.wifi_monitor();
 
-    cyanide.check_wifi();
     std::thread my_tox_thread(start_tox_thread, &cyanide);
 
     cyanide.view->rootContext()->setContextProperty("cyanide", &cyanide);
@@ -104,6 +104,11 @@ void Cyanide::write_default_profile()
     file.close();
 }
 
+void Cyanide::reload()
+{
+    loop = LOOP_RELOAD;
+}
+
 void Cyanide::load_tox_save_file(QString path)
 {
     QString basename = path.mid(path.lastIndexOf('/') + 1);
@@ -117,7 +122,7 @@ void Cyanide::load_tox_save_file(QString path)
     basename.chop(4);
     next_profile_name = basename;
 
-    loop = LOOP_RELOAD;
+    loop = LOOP_LOAD_OTHER;
 }
 
 void Cyanide::check_wifi()
@@ -127,13 +132,19 @@ void Cyanide::check_wifi()
                                       " /net/connman/technology/wifi net.connman.Technology.GetProperties"
                                       "| grep -A1 Connected | sed -e 1d -e 's/^.*\\s//')\"")) {
             qDebug() << "connected to wifi, toxing";
-            loop = LOOP_RUN;
+            if(loop == LOOP_SUSPEND)
+                resume_thread();
+            else
+                loop = LOOP_RUN;
         } else {
-            qDebug() << ("not connected to wifi, not toxing";
-            loop = LOOP_SUSPEND;
+            qDebug() << "not connected to wifi, not toxing";
+            suspend_thread();
         }
     } else {
-        loop = LOOP_RUN;
+        if(loop == LOOP_SUSPEND)
+            resume_thread();
+        else
+            loop = LOOP_RUN;
     }
 }
 
@@ -163,23 +174,32 @@ void Cyanide::wifi_changed(QString name, QDBusVariant dbus_variant)
     } else if(name == "Connected" && settings.get("wifi-only") == "true") {
         if(value && loop == LOOP_SUSPEND) {
             qDebug() << "connected, resuming thread";
-            loop = LOOP_RUN;
-            uint64_t event = 1;
-            ssize_t tmp = write(eventfd, &event, sizeof(event));
-            Q_ASSERT(tmp == sizeof(event));
-
+            resume_thread();
         } else if(!value && loop == LOOP_RUN) {
             qDebug() << "not connected, suspending thread";
-            loop = LOOP_SUSPEND;
-            usleep(30 * 1000);
-            self.connection_status = TOX_CONNECTION_NONE;
-            emit cyanide.signal_friend_connection_status(SELF_FRIEND_NUMBER, false);
-            for(auto it = friends.begin(); it != friends.end(); it++) {
-                it->second.connection_status = TOX_CONNECTION_NONE;
-                emit cyanide.signal_friend_connection_status(it->first, false);
-            }
+            suspend_thread();
         }
     }
+}
+
+void Cyanide::resume_thread()
+{
+    loop = LOOP_RUN;
+    uint64_t event = 1;
+    ssize_t tmp = write(eventfd, &event, sizeof(event));
+    Q_ASSERT(tmp == sizeof(event));
+}
+
+void Cyanide::suspend_thread()
+{
+    loop = LOOP_SUSPEND;
+    self.connection_status = TOX_CONNECTION_NONE;
+    emit cyanide.signal_friend_connection_status(SELF_FRIEND_NUMBER, false);
+    for(auto it = friends.begin(); it != friends.end(); it++) {
+        it->second.connection_status = TOX_CONNECTION_NONE;
+        emit cyanide.signal_friend_connection_status(it->first, false);
+    }
+    usleep(30 * 1000);
 }
 
 void Cyanide::visibility_changed(QWindow::Visibility visibility)
@@ -267,11 +287,14 @@ void Cyanide::load_tox_and_stuff_pretty_please()
 
     save_needed = false;
 
+    // TODO free
     tox_options = *tox_options_new((TOX_ERR_OPTIONS_NEW*)&error);
     // TODO switch(error)
 
     size_t save_data_size;
     const uint8_t *save_data = get_save_data(&save_data_size);
+    if(settings.get("udp-enabled") != "true")
+        tox_options.udp_enabled = 0;
     tox = tox_new(&tox_options, save_data, save_data_size, (TOX_ERR_NEW*)&error);
     // TODO switch(error)
 
@@ -321,6 +344,8 @@ void Cyanide::tox_thread()
     // Give toxcore the av functions to call
     set_av_callbacks();
 
+    check_wifi();
+
     tox_loop();
 }
 
@@ -367,6 +392,10 @@ void Cyanide::tox_loop()
 
             break;
         case LOOP_RELOAD:
+            killall_tox();
+            tox_thread();
+            break;
+        case LOOP_LOAD_OTHER:
             qDebug() << "loading profile" << next_profile_name;
 
             killall_tox();

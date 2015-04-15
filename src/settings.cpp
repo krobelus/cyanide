@@ -35,6 +35,8 @@ std::map<QString, settings_entry> Settings::entries = {
       //      , "bool", "true" } }
       , { "send-typing-notifications", { tr("Send typing notifications?")
             , "bool", "true" } }
+      , { "udp-enabled", { tr("Enable UPD")
+            , "bool", "true" } }
       , { "wifi-only", { tr("Wifi only")
             , "bool", "true" } }
     };

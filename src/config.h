@@ -23,7 +23,8 @@ const QString DOWNLOAD_DIR = QDir::homePath() + "Downloads/";
 enum { LOOP_RUN = 0
      , LOOP_FINISH = 1
      , LOOP_RELOAD = 2
-     , LOOP_SUSPEND = 3
+     , LOOP_LOAD_OTHER = 3
+     , LOOP_SUSPEND = 4
 };
 
 #endif // CONFIG_H

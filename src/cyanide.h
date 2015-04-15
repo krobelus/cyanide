@@ -73,6 +73,9 @@ public:
     void tox_thread();
     void tox_loop();
 
+    void suspend_thread();
+    void resume_thread();
+
     void relocate_blocked_friend();
     void send_new_avatar();
     QString send_file(TOX_FILE_KIND kind, int fid, QString path, uint8_t *file_id);
@@ -87,6 +90,7 @@ public:
     Q_INVOKABLE void notify_message(int fid, QString summary, QString body);
     Q_INVOKABLE void check_wifi();
 
+    Q_INVOKABLE void reload();
     Q_INVOKABLE void load_tox_save_file(QString path);
     Q_INVOKABLE QString send_friend_request(QString id_string, QString msg_string);
     Q_INVOKABLE bool accept_friend_request(int fid);
@@ -134,7 +138,6 @@ public:
     Q_INVOKABLE int get_file_progress(int fid, int mid);
 
 signals:
-    void signal_cyanide_reload();
     void signal_focus_friend(int fid);
     void signal_friend_added(int fid);
     void signal_friend_activity(int fid);

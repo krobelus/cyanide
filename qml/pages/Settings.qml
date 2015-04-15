@@ -49,6 +49,9 @@ Page {
 
                     if(name === "wifi-only")
                         cyanide.check_wifi()
+                    if(name === "udp-enabled") {
+                        cyanide.reload()
+                    }
                 }
             }
 

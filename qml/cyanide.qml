@@ -48,6 +48,12 @@ ApplicationWindow
         return activePage() === "Friend.qml" && activeFriend() == fid
     }
 
+    function returnToPage(name) {
+        pageStack.pop(pageStack.find(function(page) {
+            return page.name === name
+        }))
+    }
+
     Component.onCompleted:
         loadSettings()
     function loadSettings() {
