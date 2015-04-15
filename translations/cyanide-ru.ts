@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <!DOCTYPE TS>
 <TS version="2.1" language="ru_RU">
 <context>
@@ -115,7 +115,7 @@
     </message>
     <message>
         <source>Error: Tox save file already exists</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -142,7 +142,7 @@
     </message>
     <message>
         <source>New profile</source>
-        <translation type="unfinished"></translation>
+        <translation>Новый профиль</translation>
     </message>
 </context>
 <context>
@@ -251,15 +251,15 @@
     </message>
     <message>
         <source>Delete profile</source>
-        <translation type="unfinished"></translation>
+        <translation>Удалить профиль</translation>
     </message>
     <message>
         <source>Deleting profile</source>
-        <translation type="unfinished"></translation>
+        <translation>Удаление профиля</translation>
     </message>
     <message>
         <source>Profile Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Имя профиля</translation>
     </message>
 </context>
 <context>
@@ -298,11 +298,11 @@
     </message>
     <message>
         <source>Enable UPD</source>
-        <translation type="unfinished"></translation>
+        <translation>Использовать UPD</translation>
     </message>
     <message>
         <source>Wifi only</source>
-        <translation type="unfinished"></translation>
+        <translation>Только WiFi</translation>
     </message>
 </context>
 <context>
@@ -321,7 +321,7 @@
     </message>
     <message>
         <source>Incoming file: </source>
-        <translation type="unfinished"></translation>
+        <translation>Входящий файл: </translation>
     </message>
 </context>
 </TS>
