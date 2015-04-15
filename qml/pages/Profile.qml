@@ -12,25 +12,121 @@ Page {
         pages.pop()
     }
 
+    RemorsePopup { id: remorsePopup }
+
     SilicaFlickable {
         anchors {
             fill: parent
         }
 
         PullDownMenu {
-            /*
             MenuItem {
                 text: qsTr("Delete profile");
                 onClicked: {
                     remorsePopup.execute(qsTr("Deleting profile"), function() {
-                        cyanide.delete_profile(f)
-                        pageStack.replace(Qt.resolvedUrl("CreateProfile.qml"))
+                        cyanide.delete_current_profile()
+                        fileChooserProperties = {
+                            target: "toxSaveFile",
+                            nameFilters: [ '*.tox' ],
+                            filter: true
+                        }
+                        pageStack.push(Qt.resolvedUrl("FileChooser.qml"), { "folder": "/home/nemo/.config/tox/" } )
                     })
                 }
             }
-            */
         }
 
+        Column {
+            id: column
+            spacing: Theme.paddingMedium
+            y: Theme.paddingMedium
+
+            TextField {
+                id: profileName
+                text: cyanide.get_profile_name()
+                width: name.width
+                label: qsTr("Profile Name")
+                color: Theme.primaryColor
+                inputMethodHints: Qt.ImhNoPredictiveText + Qt.ImhNoAutoUppercase
+                EnterKey.onClicked: {
+                    var errmsg = cyanide.set_profile_name(text)
+                    if(errmsg === "") {
+                        focus = false
+                    } else {
+                        cyanide.notify_error("Failed to rename profile", qsTr(errmsg))
+                    }
+                }
+            }
+            TextField {
+                id: name
+                label: qsTr("Name")
+                width: 3/4 * page.width - Theme.paddingLarge
+                color: Theme.primaryColor
+                inputMethodHints: Qt.ImhNoPredictiveText + Qt.ImhNoAutoUppercase
+                text: cyanide.get_friend_name(self_friend_number)
+                EnterKey.onClicked: {
+                    cyanide.set_self_name(text)
+                    focus = false
+                }
+            }
+            TextField {
+                id: message
+                label: qsTr("Status Message")
+                width: name.width
+                color: Theme.primaryColor
+                inputMethodHints: Qt.ImhNoAutoUppercase
+                text: cyanide.get_friend_status_message(self_friend_number)
+                EnterKey.onClicked: {
+                    cyanide.set_self_status_message(text)
+                    focus = false
+                }
+            }
+            ComboBox {
+                id: statusMenu
+                label: "Status"
+                currentIndex: cyanide.get_self_user_status()
+
+                menu: ContextMenu {
+                    MenuItem { text: qsTr("Online") }
+                    MenuItem { text: qsTr("Away") }
+                    MenuItem { text: qsTr("Busy") }
+                }
+                onCurrentIndexChanged:  cyanide.set_self_user_status(currentIndex)
+            }
+            Text {
+                id: id
+                width: page.width - Theme.paddingLarge
+                height: implicitHeight
+                x: Theme.paddingMedium
+                color: Theme.primaryColor
+
+                text: cyanide.get_self_address()
+                wrapMode: Text.WrapAnywhere
+            }
+            TextEdit {
+                id: clipboard
+                visible: false
+                function setClipboard(value) {
+                    text = value
+                    selectAll()
+                    copy()
+                }
+                function getClipboard() {
+                    text = ""
+                    paste()
+                    return text
+                }
+            }
+            Button {
+                id: copyButton
+                color: Theme.primaryColor
+                text: qsTr("Copy my Tox ID") + " ☐"
+                onClicked: {
+                    clipboard.setClipboard(id.text)
+                    text = qsTr("Copy my Tox ID") + " ☑"
+                }
+            }
+        }
         IconButton {
             id: avatar
             visible: true
@@ -52,105 +148,14 @@ Page {
                 }
                 pageStack.push(Qt.resolvedUrl("FileChooser.qml"), { "folder": "/home/nemo/" } )
             }
-            width: 1/4 * parent.width - Theme.paddingMedium
-            y: Theme.paddingLarge
+            y: name.y
             x: name.x + name.width + Theme.paddingSmall
-        }
-
-        TextField {
-            id: name
-            label: qsTr("Name")
-            width: 3/4 * parent.width - Theme.paddingLarge
-            height: implicitHeight
-            y: Theme.paddingLarge
-            x: Theme.paddingMedium
-            color: Theme.primaryColor
-
-            inputMethodHints: Qt.ImhNoPredictiveText + Qt.ImhNoAutoUppercase
-            text: cyanide.get_friend_name(self_friend_number)
-
-            EnterKey.onClicked: {
-                cyanide.set_self_name(text)
-                focus = false
-            }
-        }
-        TextField {
-            id: message
-            label: qsTr("Status Message")
-            width: parent.width - Theme.paddingLarge
-            height: implicitHeight
-            x: Theme.paddingMedium
-            y: name.y + name.height + Theme.paddingLarge
-            color: Theme.primaryColor
-
-            inputMethodHints: Qt.ImhNoAutoUppercase
-            text: cyanide.get_friend_status_message(self_friend_number)
-            EnterKey.onClicked: {
-                cyanide.set_self_status_message(text)
-                focus = false
-            }
-        }
-        ComboBox {
-            id: statusMenu
-            x: Theme.paddingMedium
-            y: message.y + message.height + Theme.paddingLarge
-            width: parent.width - 2 * Theme.paddingLarge
-            label: "Status"
-            currentIndex: cyanide.get_self_user_status()
-
-            menu: ContextMenu {
-                MenuItem { text: qsTr("Online") }
-                MenuItem { text: qsTr("Away") }
-                MenuItem { text: qsTr("Busy") }
-            }
-            onCurrentIndexChanged:  cyanide.set_self_user_status(currentIndex)
         }
         Image {
             id: selfStatusIcon
             source: friendList.get(0).friend_status_icon
-            anchors {
-                right: parent.right
-                rightMargin: Theme.paddingLarge
-                top: statusMenu.top
-                topMargin: statusMenu.height / 2 - height / 2
-            }
-        }
-        Text {
-            id: id
-            width: parent.width - Theme.paddingLarge
-            height: implicitHeight
-            x: Theme.paddingMedium
-            y: statusMenu.y + statusMenu.height + Theme.paddingLarge
-            color: Theme.primaryColor
-
-            text: cyanide.get_self_address()
-            wrapMode: Text.WrapAnywhere
-        }
-        TextEdit {
-            id: clipboard
-            visible: false
-            function setClipboard(value) {
-                text = value
-                selectAll()
-                copy()
-            }
-            function getClipboard() {
-                text = ""
-                paste()
-                return text
-            }
-        }
-        Button {
-            id: copyButton
-            width: parent.width / 2
-            x: Theme.paddingLarge
-            y: id.y + id.height + Theme.paddingSmall
-            color: Theme.primaryColor
-            text: qsTr("Copy my Tox ID") + " ☐"
-            onClicked: {
-                clipboard.setClipboard(id.text)
-                text = qsTr("Copy my Tox ID") + " ☑"
-            }
+            y: statusMenu.y + statusMenu.height / 2 - height / 2
+            x: page.width - width - Theme.paddingLarge
         }
     }
 }

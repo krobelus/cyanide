@@ -7,6 +7,7 @@
 #include <tox/tox.h>
 #include <tox/toxav.h>
 
+#include "config.h"
 #include "friend.h"
 #include "message.h"
 
@@ -32,6 +33,7 @@ public:
 
     /* get the tox save file based on profile_name */
     QString tox_save_file();
+    QString tox_save_file(QString name);
 
     QQuickView *view;
     int eventfd;
@@ -42,7 +44,7 @@ public:
     std::map<uint32_t, Friend> friends;
 
     bool save_needed;
-    int loop;
+    enum LOOP_STATE loop;
 
     uint32_t add_friend(Friend *f);
     uint32_t next_friend_number();
@@ -91,7 +93,10 @@ public:
     Q_INVOKABLE void check_wifi();
 
     Q_INVOKABLE void reload();
+    Q_INVOKABLE void load_new_profile();
     Q_INVOKABLE void load_tox_save_file(QString path);
+    Q_INVOKABLE void delete_current_profile();
+
     Q_INVOKABLE QString send_friend_request(QString id_string, QString msg_string);
     Q_INVOKABLE bool accept_friend_request(int fid);
     Q_INVOKABLE void remove_friend(int fid);
@@ -104,6 +109,9 @@ public:
     Q_INVOKABLE QString cancel_transfer(int mid, int fid);
 
     /* setters and getters */
+    Q_INVOKABLE QString get_profile_name();
+    Q_INVOKABLE QString set_profile_name(QString name);
+
     Q_INVOKABLE QList<int> get_friend_numbers(); /* friend list ordering goes here */
     Q_INVOKABLE QList<int> get_message_numbers(int fid);
 

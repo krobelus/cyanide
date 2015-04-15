@@ -7,6 +7,7 @@
 #define countof(x) (sizeof(x)/sizeof(*(x)))
 
 #define MAX(a,b) a > b ? a : b
+#define MIN(a,b) a > b ? b : a
 
 /*todo: sprint_bytes */
 
