@@ -34,6 +34,11 @@
         <translation>Fel: Meddelandet är för långt</translation>
     </message>
     <message>
+        <source>Error: Empty message</source>
+        <translatorcomment>Fel: Tomt meddelande</translatorcomment>
+        <translation type="vanished">Fel: Tomt meddelande</translation>
+    </message>
+    <message>
         <source>Error: Tox ID is self ID</source>
         <translation>Fel: Tox-ID är eget ID</translation>
     </message>
