@@ -221,8 +221,8 @@ void Cyanide::visibility_changed(QWindow::Visibility visibility)
 void Cyanide::message_notification_activated(int fid)
 {
     qDebug() << QString(); /* quality code */
-    raise();
     emit cyanide.signal_focus_friend(fid);
+    raise();
 }
 
 void Cyanide::notify_error(QString summary, QString body)
@@ -236,14 +236,13 @@ void Cyanide::notify_message(int fid, QString summary, QString body)
     Q_ASSERT(fid != SELF_FRIEND_NUMBER);
     Friend *f = &friends[fid];
 
-    MRemoteAction action("harbour.cyanide", "/", "harbour.cyanide", "message_notification_activated",
-            QVariantList() << fid);
-    MNotification *n = new MNotification("cyanide.message", summary, body);
-    n->setAction(action);
     if(f->notification != NULL) {
         f->notification->remove();
     }
-    f->notification = n;
+    f->notification = new MNotification("cyanide.message", summary, body);
+    MRemoteAction action("harbour.cyanide", "/", "harbour.cyanide", "message_notification_activated",
+            QVariantList() << fid);
+    f->notification->setAction(action);
     f->notification->publish();
 }
 
