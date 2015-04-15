@@ -1182,16 +1182,16 @@ QString Cyanide::send_file_control(int fid, int mid, TOX_FILE_CONTROL action)
             case TOX_ERR_FILE_CONTROL_NOT_FOUND:
                 return tr("Error: File transfer not found");
             case TOX_ERR_FILE_CONTROL_NOT_PAUSED:
-                return tr("Error: Not paused");
+                return "Bug (please report): Not paused";
             case TOX_ERR_FILE_CONTROL_DENIED:
-                return tr("Error: Transfer is paused by peer");
+                return "Bug (please report): Transfer is paused by peer";
             case TOX_ERR_FILE_CONTROL_ALREADY_PAUSED:
                 return tr("Error: Already paused");
             case TOX_ERR_FILE_CONTROL_SENDQ:
                 return tr("Error: Packet queue is full");
             default:
                 Q_ASSERT(false);
-                return tr("Error: Unknown");
+                return "Bug (please report): Unknown";
         }
     }
 }
@@ -1355,7 +1355,7 @@ QString Cyanide::send_friend_request_id(const uint8_t *id, const uint8_t *msg, s
         case TOX_ERR_FRIEND_ADD_TOO_LONG:
             return tr("Error: Message is too long");
         case TOX_ERR_FRIEND_ADD_NO_MESSAGE:
-            return tr("Error: Empty message");
+            return "Bug (please report): Empty message";
         case TOX_ERR_FRIEND_ADD_OWN_KEY:
             return tr("Error: Tox ID is self ID");
         case TOX_ERR_FRIEND_ADD_ALREADY_SENT:

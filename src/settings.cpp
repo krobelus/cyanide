@@ -45,13 +45,14 @@ std::map<QString, std::vector<type_entry>> Settings::types = {
     { "none",
         {
         }
-    },
-    { "bool",
-        { { tr("Yes"), "true" }
-        , { tr("No"), "false" }
+    }
+   ,{ "bool",
+        { { "", "true" }
+        , { "", "false" }
         }
-    },
-    { "sound",
+    }
+    /*
+   ,{ "sound",
         { { tr("No sound"), "" }
         , { "jolla-alarm", "/usr/share/sounds/jolla-ringtones/stereo/jolla-alarm.wav" }
         , { "jolla-calendar-alarm", "/usr/share/sounds/jolla-ringtones/stereo/jolla-calendar-alarm.wav" }
@@ -61,6 +62,7 @@ std::map<QString, std::vector<type_entry>> Settings::types = {
         , { "jolla-ringtone", "/usr/share/sounds/jolla-ringtones/stereo/jolla-ringtone.wav" }
         }
     }
+    */
 };
 
 Settings::Settings()
