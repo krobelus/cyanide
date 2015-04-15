@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <!DOCTYPE TS>
 <TS version="2.1" language="sv_SE">
 <context>
@@ -124,7 +124,7 @@
     </message>
     <message>
         <source>Error: Tox save file already exists</source>
-        <translation type="unfinished"></translation>
+        <translation>Fel: Filen finns redan</translation>
     </message>
 </context>
 <context>
@@ -151,7 +151,7 @@
     </message>
     <message>
         <source>New profile</source>
-        <translation type="unfinished"></translation>
+        <translation>Ny profil</translation>
     </message>
 </context>
 <context>
@@ -264,15 +264,15 @@
     </message>
     <message>
         <source>Delete profile</source>
-        <translation type="unfinished"></translation>
+        <translation>Ta bort profil</translation>
     </message>
     <message>
         <source>Deleting profile</source>
-        <translation type="unfinished"></translation>
+        <translation>Tar bort profil</translation>
     </message>
     <message>
         <source>Profile Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Profilnamn</translation>
     </message>
 </context>
 <context>
@@ -323,11 +323,11 @@
     </message>
     <message>
         <source>Enable UPD</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktivera UPD</translation>
     </message>
     <message>
         <source>Wifi only</source>
-        <translation type="unfinished"></translation>
+        <translation>Endast WiFi</translation>
     </message>
 </context>
 <context>
@@ -350,7 +350,7 @@
     </message>
     <message>
         <source>Incoming file: </source>
-        <translation type="unfinished"></translation>
+        <translation>Inkommande fil: </translation>
     </message>
 </context>
 </TS>
