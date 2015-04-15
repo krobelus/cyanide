@@ -20,11 +20,15 @@ const QString DEFAULT_PROFILE_FILE  = CYANIDE_DATA_DIR + "default_profile";
 
 const QString DOWNLOAD_DIR = QDir::homePath() + "Downloads/";
 
-enum { LOOP_RUN = 0
-     , LOOP_FINISH = 1
-     , LOOP_RELOAD = 2
-     , LOOP_LOAD_OTHER = 3
-     , LOOP_SUSPEND = 4
+const uint32_t MAX_ITERATION_TIME = 20;
+
+enum LOOP_STATE
+             { LOOP_RUN = 0
+             , LOOP_FINISH
+             , LOOP_RELOAD
+             , LOOP_RELOAD_OTHER
+             , LOOP_SUSPEND
+             , LOOP_STOP
 };
 
 #endif // CONFIG_H

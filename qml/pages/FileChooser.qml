@@ -53,6 +53,16 @@ Page {
                 }
             }
             MenuItem {
+                text:  qsTr("Filter by filename extension")+" "+checkbox
+                visible: fileChooserProperties.target !== "fileToSend"
+                property string checkbox: fileChooserProperties.filter ? "☑" : "☐"
+                onClicked: {
+                    fileChooserProperties.filter = !fileChooserProperties.filter
+                    checkbox = fileChooserProperties.filter ? "☑" : "☐"
+                    folderListModel.toggleNameFilters()
+                }
+            }
+            MenuItem {
                 text: qsTr("Remove my avatar")
                 visible: fileChooserProperties.target === "selfAvatar"
                 onClicked: {
@@ -65,13 +75,11 @@ Page {
                 }
             }
             MenuItem {
-                text:  qsTr("Filter by filename extension")+" "+checkbox
-                visible: fileChooserProperties.target !== "fileToSend"
-                property string checkbox: fileChooserProperties.filter ? "☑" : "☐"
+                text: qsTr("New profile")
+                visible: fileChooserProperties.target === "toxSaveFile"
                 onClicked: {
-                    fileChooserProperties.filter = !fileChooserProperties.filter
-                    checkbox = fileChooserProperties.filter ? "☑" : "☐"
-                    folderListModel.toggleNameFilters()
+                    cyanide.load_new_profile()
+                    returnToPage("profile")
                 }
             }
         }

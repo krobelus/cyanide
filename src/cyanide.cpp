@@ -70,7 +70,12 @@ int main(int argc, char *argv[])
 
 QString Cyanide::tox_save_file()
 {
-    return TOX_DATA_DIR + profile_name.replace('/', '_') + ".tox";
+    return tox_save_file(profile_name);
+}
+
+QString Cyanide::tox_save_file(QString name)
+{
+    return TOX_DATA_DIR + name.replace('/', '_') + ".tox";
 }
 
 /* sets profile_name */
@@ -109,6 +114,31 @@ void Cyanide::reload()
     loop = LOOP_RELOAD;
 }
 
+void Cyanide::load_new_profile()
+{
+    QString path;
+    int i = 0;
+    do {
+        i++;
+        path = TOX_DATA_DIR + "id" + QString::number(i) + ".tox";
+    } while(QFile::exists(path));
+    QFile file(path);
+    file.open(QIODevice::WriteOnly);
+    file.close();
+    load_tox_save_file(path);
+}
+
+void Cyanide::delete_current_profile()
+{
+    bool success;
+    loop = LOOP_STOP;
+    usleep(1500 * MAX_ITERATION_TIME);
+    success = QFile::remove(tox_save_file());
+    qDebug() << "removed" << tox_save_file() << ":" << success;
+    success = QFile::remove(CYANIDE_DATA_DIR + profile_name.replace('/','_') + ".sqlite");
+    qDebug() << "removed db:" << success;
+}
+
 void Cyanide::load_tox_save_file(QString path)
 {
     QString basename = path.mid(path.lastIndexOf('/') + 1);
@@ -122,7 +152,13 @@ void Cyanide::load_tox_save_file(QString path)
     basename.chop(4);
     next_profile_name = basename;
 
-    loop = LOOP_LOAD_OTHER;
+    if(loop == LOOP_STOP) {
+        // tox_loop not running, resume it
+        profile_name = basename;
+        resume_thread();
+    } else {
+        loop = LOOP_RELOAD_OTHER;
+    }
 }
 
 void Cyanide::check_wifi()
@@ -199,7 +235,7 @@ void Cyanide::suspend_thread()
         it->second.connection_status = TOX_CONNECTION_NONE;
         emit cyanide.signal_friend_connection_status(it->first, false);
     }
-    usleep(30 * 1000);
+    usleep(1500 * MAX_ITERATION_TIME);
 }
 
 void Cyanide::visibility_changed(QWindow::Visibility visibility)
@@ -380,10 +416,14 @@ void Cyanide::tox_loop()
         }
 
         uint32_t interval = tox_iteration_interval(tox);
-        usleep(1000 * ((interval > 20) ? 20 : interval));
+        usleep(1000 * MIN(interval, MAX_ITERATION_TIME));
     }
 
+    uint64_t event;
+    ssize_t tmp;
     switch(loop) {
+        case LOOP_RUN:
+            Q_ASSERT(false);
         case LOOP_FINISH:
             qDebug() << "exiting...";
 
@@ -394,7 +434,7 @@ void Cyanide::tox_loop()
             killall_tox();
             tox_thread();
             break;
-        case LOOP_LOAD_OTHER:
+        case LOOP_RELOAD_OTHER:
             qDebug() << "loading profile" << next_profile_name;
 
             killall_tox();
@@ -406,11 +446,19 @@ void Cyanide::tox_loop()
             tox_thread();
             break;
         case LOOP_SUSPEND:
-            uint64_t event;
-            ssize_t tmp = read(eventfd, &event, sizeof(event));
+            tmp = read(eventfd, &event, sizeof(event));
             Q_ASSERT(tmp == sizeof(event));
             qDebug() << "read" << event << ", resuming thread";
             tox_loop();
+            break;
+        case LOOP_STOP:
+            killall_tox();
+            tmp = read(eventfd, &event, sizeof(event));
+            Q_ASSERT(tmp = sizeof(event));
+            qDebug() << "read" << event << ", starting thread with profile" << profile_name
+                        << "save file" << tox_save_file();
+            write_default_profile();
+            tox_thread();
             break;
     }
 }
@@ -1435,6 +1483,33 @@ void Cyanide::remove_friend(int fid)
 }
 
 /* setters and getters */
+
+QString Cyanide::get_profile_name()
+{
+    return profile_name;
+}
+
+QString Cyanide::set_profile_name(QString name)
+{
+    QString old_name = tox_save_file();
+    QString new_name = tox_save_file(name);
+
+    QFile old_file(old_name);
+    QFile new_file(new_name);
+
+    if(new_file.exists()) {
+        return tr("Error: Tox save file already exists");
+    } else {
+        save_needed = false;
+        /* possible race condition? */
+        old_file.rename(new_name);
+        QFile::rename(CYANIDE_DATA_DIR + profile_name.replace('/','_') + ".sqlite",
+                    CYANIDE_DATA_DIR + name.replace('/','_') + ".sqlite");
+        profile_name = name;
+        save_needed = true;
+        return "";
+    }
+}
 
 QList<int> Cyanide::get_friend_numbers()
 {
