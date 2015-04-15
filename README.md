@@ -14,6 +14,13 @@ Features
 - Sound, LED & lockscreen notifications
 - Avatars
 - File Transfers
+- Multiprofile
+
+Translations
+------------
+
+You can use [Weblate](https://hosted.weblate.org/projects/cyanide/) to create
+and improve translations. Alternatively, send a patch or use github.
 
 Building
 --------
