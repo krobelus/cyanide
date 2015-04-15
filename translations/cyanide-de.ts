@@ -323,5 +323,9 @@
         <source>Friend request received!</source>
         <translation>Freundschaftsanfrage empfagen!</translation>
     </message>
+    <message>
+        <source>Incoming file: </source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 </TS>

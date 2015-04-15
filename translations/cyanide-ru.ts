@@ -319,5 +319,9 @@
         <source>Friend request received!</source>
         <translation>Запрос на добавление в друзья!</translation>
     </message>
+    <message>
+        <source>Incoming file: </source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 </TS>

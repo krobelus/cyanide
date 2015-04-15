@@ -343,5 +343,9 @@
         <source>Friend request received!</source>
         <translation>Kontaktförfrågan mottogs!</translation>
     </message>
+    <message>
+        <source>Incoming file: </source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 </TS>

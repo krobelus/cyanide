@@ -279,5 +279,9 @@
         <source>Friend request received!</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Incoming file: </source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 </TS>
