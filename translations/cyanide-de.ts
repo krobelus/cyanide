@@ -103,7 +103,7 @@
     </message>
     <message>
         <source>Error: Tox save file already exists</source>
-        <translation type="unfinished"></translation>
+        <translation>Fehler: Tox-Datei existiert bereits</translation>
     </message>
 </context>
 <context>
@@ -130,7 +130,7 @@
     </message>
     <message>
         <source>New profile</source>
-        <translation type="unfinished"></translation>
+        <translation>Neues Profil</translation>
     </message>
 </context>
 <context>
@@ -165,31 +165,31 @@
     </message>
     <message>
         <source>Failed to pause transfer</source>
-        <translation type="unfinished"/>
+        <translation>Fehler beim Pausieren der Dateiübertragung</translation>
     </message>
     <message>
         <source>Failed to resume transfer</source>
-        <translation type="unfinished"/>
+        <translation>Fehler beim Fortsetzen der Dateiübertragung</translation>
     </message>
     <message>
         <source>Failed to cancel transfer</source>
-        <translation type="unfinished"/>
+        <translation>Fehler beim Abbrechen der Dateiübertragung</translation>
     </message>
     <message>
         <source>Opening file...</source>
-        <translation type="unfinished"/>
+        <translation>Datei wird geöffnet...</translation>
     </message>
     <message>
         <source>Failed to send message</source>
-        <translation type="unfinished"/>
+        <translation>Fehler beim Schicken der Nachricht</translation>
     </message>
     <message>
         <source>Unblock friend</source>
-        <translation type="unfinished"/>
+        <translation>Freund nicht mehr blockieren</translation>
     </message>
     <message>
         <source>Block friend</source>
-        <translation type="unfinished"/>
+        <translation>Freund blockieren</translation>
     </message>
 </context>
 <context>
@@ -208,7 +208,7 @@
     </message>
     <message>
         <source>Switch profile</source>
-        <translation type="unfinished"/>
+        <translation>Profil wechseln</translation>
     </message>
 </context>
 <context>
@@ -239,15 +239,15 @@
     </message>
     <message>
         <source>Delete profile</source>
-        <translation type="unfinished"></translation>
+        <translation>Profil löschen</translation>
     </message>
     <message>
         <source>Deleting profile</source>
-        <translation type="unfinished"></translation>
+        <translation>Profil wir gelöscht</translation>
     </message>
     <message>
         <source>Profile Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Profilname</translation>
     </message>
 </context>
 <context>
@@ -298,11 +298,11 @@
     </message>
     <message>
         <source>Enable UPD</source>
-        <translation type="unfinished"></translation>
+        <translation>UPD aktivieren</translation>
     </message>
     <message>
         <source>Wifi only</source>
-        <translation type="unfinished"></translation>
+        <translation>Nur WLAN</translation>
     </message>
 </context>
 <context>
@@ -325,7 +325,7 @@
     </message>
     <message>
         <source>Incoming file: </source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 </TS>
