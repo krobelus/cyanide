@@ -323,7 +323,10 @@ Page {
             inputMethodHints: Qt.ImhNoAutoUppercase
             focus: false
             onFocusChanged: cyanide.send_typing_notification(f, focus)
-            onYChanged: messageListView.positionViewAtEnd()
+            onYChanged: {
+                if(focus)
+                    messageListView.positionViewAtEnd()
+            }
             anchors {
                 bottom: parent.bottom
             }
