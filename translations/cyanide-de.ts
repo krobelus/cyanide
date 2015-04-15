@@ -261,12 +261,12 @@
         <translation type="vanished">Diesen Klang spielen, wenn...</translation>
     </message>
     <message>
-        <source>I receive a message:</source>
-        <translation>ich eine Nachricht bekomme:</translation>
+        <source>I receive a message</source>
+        <translation>ich eine Nachricht bekomme</translation>
     </message>
     <message>
-        <source>I receive a friend request:</source>
-        <translation>ich eine Freundschaftsanfrage bekomme:</translation>
+        <source>I receive a friend request</source>
+        <translation>ich eine Freundschaftsanfrage bekomme</translation>
     </message>
     <message>
         <source>Notify me when...</source>

@@ -257,11 +257,11 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>I receive a message:</source>
+        <source>I receive a message</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>I receive a friend request:</source>
+        <source>I receive a friend request</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

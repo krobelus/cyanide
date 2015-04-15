@@ -269,12 +269,12 @@
         <translation>Настройки</translation>
     </message>
     <message>
-        <source>I receive a message:</source>
-        <translation>пришло сообщение:</translation>
+        <source>I receive a message</source>
+        <translation>пришло сообщение</translation>
     </message>
     <message>
-        <source>I receive a friend request:</source>
-        <translation>пришел запрос на добавление:</translation>
+        <source>I receive a friend request</source>
+        <translation>пришел запрос на добавление</translation>
     </message>
     <message>
         <source>Notify me when...</source>

@@ -281,12 +281,12 @@
         <translation type="vanished">Spela upp detta ljud när...</translation>
     </message>
     <message>
-        <source>I receive a message:</source>
-        <translation>Jag får ett meddelande:</translation>
+        <source>I receive a message</source>
+        <translation>Jag får ett meddelande</translation>
     </message>
     <message>
-        <source>I receive a friend request:</source>
-        <translation>Jag får en kontaktförfrågan:</translation>
+        <source>I receive a friend request</source>
+        <translation>Jag får en kontaktförfrågan</translation>
     </message>
     <message>
         <source>Notify me when...</source>
