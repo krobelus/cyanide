@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
 <TS version="2.1" language="ru_RU">
 <context>
@@ -35,7 +35,7 @@
     </message>
     <message>
         <source>Error: Empty message</source>
-        <translation>Ошибка: пустое сообщение</translation>
+        <translation type="vanished">Ошибка: пустое сообщение</translation>
     </message>
     <message>
         <source>Error: Tox ID is self ID</source>
@@ -95,7 +95,7 @@
     </message>
     <message>
         <source>Error: Not paused</source>
-        <translation>Ошибка: не остановлено</translation>
+        <translation type="vanished">Ошибка: не остановлено</translation>
     </message>
     <message>
         <source>Error: Already paused</source>
@@ -107,11 +107,15 @@
     </message>
     <message>
         <source>Error: Unknown</source>
-        <translation>Ошибка: неизвестная</translation>
+        <translation type="vanished">Ошибка: неизвестная</translation>
     </message>
     <message>
         <source>Error: Transfer is paused by peer</source>
-        <translation>Ошибка: Передача остановлена собеседником</translation>
+        <translation type="vanished">Ошибка: Передача остановлена собеседником</translation>
+    </message>
+    <message>
+        <source>Error: Tox save file already exists</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -135,6 +139,10 @@
     <message>
         <source>Failed to send file</source>
         <translation>Не удалось передать файл</translation>
+    </message>
+    <message>
+        <source>New profile</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -241,6 +249,18 @@
         <source>Busy</source>
         <translation>Занят</translation>
     </message>
+    <message>
+        <source>Delete profile</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Deleting profile</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Profile Name</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Settings</name>
@@ -262,30 +282,38 @@
     </message>
     <message>
         <source>Yes</source>
-        <translation>Да</translation>
+        <translation type="vanished">Да</translation>
     </message>
     <message>
         <source>No</source>
-        <translation>Нет</translation>
+        <translation type="vanished">Нет</translation>
     </message>
     <message>
         <source>No sound</source>
-        <translation>Без звука</translation>
+        <translation type="vanished">Без звука</translation>
     </message>
     <message>
         <source>Send typing notifications?</source>
         <translation>Отсылать уведомления о наборе?</translation>
+    </message>
+    <message>
+        <source>Enable UPD</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Wifi only</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>cyanide</name>
     <message>
         <source>New message</source>
-        <translation>Новое сообщение</translation>
+        <translation type="vanished">Новое сообщение</translation>
     </message>
     <message>
         <source>New messages</source>
-        <translation>Новые сообщения</translation>
+        <translation type="vanished">Новые сообщения</translation>
     </message>
     <message>
         <source>Friend request received!</source>

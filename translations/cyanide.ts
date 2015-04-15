@@ -34,10 +34,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Error: Empty message</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Error: Tox ID is self ID</source>
         <translation type="unfinished"></translation>
     </message>
@@ -94,10 +90,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Error: Not paused</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Error: Already paused</source>
         <translation type="unfinished"></translation>
     </message>
@@ -106,11 +98,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Error: Unknown</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Error: Transfer is paused by peer</source>
+        <source>Error: Tox save file already exists</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -134,6 +122,10 @@
     </message>
     <message>
         <source>Failed to send file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New profile</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -237,6 +229,18 @@
         <source>Copy my Tox ID</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Delete profile</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Deleting profile</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Profile Name</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Settings</name>
@@ -257,32 +261,20 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Yes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>No</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>No sound</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Send typing notifications?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enable UPD</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Wifi only</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>cyanide</name>
-    <message>
-        <source>New message</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>New messages</source>
-        <translation type="unfinished"></translation>
-    </message>
     <message>
         <source>Friend request received!</source>
         <translation type="unfinished"></translation>

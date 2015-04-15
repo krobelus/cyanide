@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
 <TS version="2.1" language="sv_SE">
 <context>
@@ -34,11 +34,6 @@
         <translation>Fel: Meddelandet är för långt</translation>
     </message>
     <message>
-        <source>Error: Empty message</source>
-        <translatorcomment>Fel: Tomt meddelande</translatorcomment>
-        <translation/>
-    </message>
-    <message>
         <source>Error: Tox ID is self ID</source>
         <translation>Fel: Tox-ID är eget ID</translation>
     </message>
@@ -48,7 +43,7 @@
     </message>
     <message>
         <source>Error: Unknown</source>
-        <translation>Fel: Okänt</translation>
+        <translation type="vanished">Fel: Okänt</translation>
     </message>
     <message>
         <source>Error: Invalid Tox ID (bad checksum)</source>
@@ -108,7 +103,7 @@
     </message>
     <message>
         <source>Error: Not paused</source>
-        <translation>Fel: Inte pausad</translation>
+        <translation type="vanished">Fel: Inte pausad</translation>
     </message>
     <message>
         <source>Error: Already paused</source>
@@ -120,7 +115,11 @@
     </message>
     <message>
         <source>Error: Transfer is paused by peer</source>
-        <translation>Fel: Överföringen pausad av deltagare</translation>
+        <translation type="vanished">Fel: Överföringen pausad av deltagare</translation>
+    </message>
+    <message>
+        <source>Error: Tox save file already exists</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -144,6 +143,10 @@
     <message>
         <source>Failed to send file</source>
         <translation>Kunde inte skicka filen</translation>
+    </message>
+    <message>
+        <source>New profile</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -254,6 +257,18 @@
         <source>Busy</source>
         <translation>Upptagen</translation>
     </message>
+    <message>
+        <source>Delete profile</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Deleting profile</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Profile Name</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Settings</name>
@@ -287,19 +302,27 @@
     </message>
     <message>
         <source>Yes</source>
-        <translation>Ja</translation>
+        <translation type="vanished">Ja</translation>
     </message>
     <message>
         <source>No</source>
-        <translation>Nej</translation>
+        <translation type="vanished">Nej</translation>
     </message>
     <message>
         <source>No sound</source>
-        <translation>Inget ljud</translation>
+        <translation type="vanished">Inget ljud</translation>
     </message>
     <message>
         <source>Send typing notifications?</source>
         <translation>Meddela vännen att du skriver?</translation>
+    </message>
+    <message>
+        <source>Enable UPD</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Wifi only</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -310,11 +333,11 @@
     </message>
     <message>
         <source>New message</source>
-        <translation>Nytt medddelande</translation>
+        <translation type="vanished">Nytt medddelande</translation>
     </message>
     <message>
         <source>New messages</source>
-        <translation>Nya medddelanden</translation>
+        <translation type="vanished">Nya medddelanden</translation>
     </message>
     <message>
         <source>Friend request received!</source>

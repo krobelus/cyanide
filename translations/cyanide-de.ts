@@ -35,7 +35,7 @@
     </message>
     <message>
         <source>Error: Empty message</source>
-        <translation>Fehler: Keine Nachricht</translation>
+        <translation type="vanished">Fehler: Keine Nachricht</translation>
     </message>
     <message>
         <source>Error: Tox ID is self ID</source>
@@ -94,10 +94,6 @@
         <translation>Fehler: Dateiübertragung nicht gefunden</translation>
     </message>
     <message>
-        <source>Error: Not paused</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Error: Already paused</source>
         <translation type="unfinished"></translation>
     </message>
@@ -106,11 +102,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Error: Unknown</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Error: Transfer is paused by peer</source>
+        <source>Error: Tox save file already exists</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -135,6 +127,10 @@
     <message>
         <source>Failed to send file</source>
         <translation>Fehler beim Schicken der Datei</translation>
+    </message>
+    <message>
+        <source>New profile</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -241,6 +237,18 @@
         <source>Busy</source>
         <translation>Beschäftigt</translation>
     </message>
+    <message>
+        <source>Delete profile</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Deleting profile</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Profile Name</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Settings</name>
@@ -266,27 +274,35 @@
     </message>
     <message>
         <source>a friend comes online</source>
-        <translation>ein Freund online erscheint</translation>
+        <translation type="vanished">ein Freund online erscheint</translation>
     </message>
     <message>
         <source>a friend changes his name</source>
-        <translation>ein Freund seinen Namen ändert</translation>
+        <translation type="vanished">ein Freund seinen Namen ändert</translation>
     </message>
     <message>
         <source>Yes</source>
-        <translation>Ja</translation>
+        <translation type="vanished">Ja</translation>
     </message>
     <message>
         <source>No</source>
-        <translation>Nein</translation>
+        <translation type="vanished">Nein</translation>
     </message>
     <message>
         <source>No sound</source>
-        <translation>Keinen Klang</translation>
+        <translation type="vanished">Keinen Klang</translation>
     </message>
     <message>
         <source>Send typing notifications?</source>
         <translation>Tippen anzeigen?</translation>
+    </message>
+    <message>
+        <source>Enable UPD</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Wifi only</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -297,11 +313,11 @@
     </message>
     <message>
         <source>New message</source>
-        <translation>Neue Nachricht</translation>
+        <translation type="vanished">Neue Nachricht</translation>
     </message>
     <message>
         <source>New messages</source>
-        <translation>Neue Nachrichten</translation>
+        <translation type="vanished">Neue Nachrichten</translation>
     </message>
     <message>
         <source>Friend request received!</source>
