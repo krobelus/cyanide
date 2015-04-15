@@ -35,6 +35,10 @@ std::map<QString, settings_entry> Settings::entries = {
       //      , "bool", "true" } }
       , { "send-typing-notifications", { tr("Send typing notifications?")
             , "bool", "true" } }
+      , { "udp-enabled", { tr("Enable UPD")
+            , "bool", "true" } }
+      , { "wifi-only", { tr("Wifi only")
+            , "bool", "true" } }
     };
 
 std::map<QString, std::vector<type_entry>> Settings::types = {
@@ -71,11 +75,13 @@ void execute_sql_query(QSqlQuery q)
 
 void Settings::close_databases()
 {
+    /*
     for(QString name : QSqlDatabase::connectionNames()) {
         qDebug() << "closing database" << name;
         QSqlDatabase::database(name).close();
         QSqlDatabase::removeDatabase(name);
     }
+    */
 }
 
 void Settings::open_database(QString name)

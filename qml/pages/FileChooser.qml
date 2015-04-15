@@ -1,6 +1,5 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
-import mlite5 1.0
 import Qt.labs.folderlistmodel 2.1
 
 Page {
@@ -17,8 +16,6 @@ Page {
 
     property string folder: ""
 
-    Notification { id: notification }
-
     FolderListModel {
         id: folderListModel
         showDirs: true
@@ -31,12 +28,6 @@ Page {
             else
                 nameFilters = []
         }
-    }
-
-    function returnToPage(name) {
-        pageStack.pop(pageStack.find(function(page) {
-            return page.name === name
-        }))
     }
 
     SilicaListView {
@@ -69,7 +60,7 @@ Page {
                     if(errmsg === "") {
                         returnToPage("profile")
                     } else {
-                        notify(notification, qsTr("Failed to set avatar"), qsTr(errmsg))
+                        cyanide.notify_error(qsTr("Failed to set avatar"), qsTr(errmsg))
                     }
                 }
             }
@@ -116,14 +107,14 @@ Page {
                     if(errmsg === "") {
                         returnToPage("friend")
                     } else {
-                        notify(notification, qsTr("Failed to send file"), qsTr(errmsg))
+                        cyanide.notify_error(qsTr("Failed to send file"), qsTr(errmsg))
                     }
                 } else if(fileChooserProperties.target === "selfAvatar") {
                     errmsg = cyanide.set_self_avatar(folder+fileName)
                     if(errmsg === "") {
                         returnToPage("profile")
                     } else {
-                        notify(notification, qsTr("Failed to set avatar"), qsTr(errmsg))
+                        cyanide.notify_error(qsTr("Failed to set avatar"), qsTr(errmsg))
                     }
                 } else if(fileChooserProperties.target === "toxSaveFile") {
                     cyanide.load_tox_save_file(folder+fileName)

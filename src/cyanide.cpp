@@ -1,12 +1,15 @@
-#include <time.h>
 #include <stdlib.h>
-#include <sys/stat.h>
 #include <sys/eventfd.h>
+#include <sys/stat.h>
 #include <thread>
+#include <time.h>
+
 #include <sailfishapp.h>
+#include <mlite5/mnotificationgroup.h>
 #include <mlite5/mnotification.h>
-#include <QtQuick>
+#include <mlite5/mremoteaction.h>
 #include <QSound>
+#include <QtQuick>
 #include <QTranslator>
 
 #include "cyanide.h"
@@ -21,30 +24,35 @@
 #define UINT32_MAX (4294967295U)
 
 Cyanide cyanide;
-
 Settings settings;
 
 struct Tox_Options tox_options;
 
 int main(int argc, char *argv[])
 {
-    qmlRegisterType<MNotification>("mlite5", 1, 0, "Notification");
-
     QGuiApplication *app = SailfishApp::application(argc, argv);
     app->setOrganizationName("Tox");
     app->setOrganizationDomain("Tox");
     app->setApplicationName("Cyanide");
     cyanide.view = SailfishApp::createView();
 
+    bool success;
+    success = QDBusConnection::sessionBus().registerObject("/", &cyanide, QDBusConnection::ExportScriptableContents)
+            && QDBusConnection::sessionBus().registerService("harbour.cyanide");
+
+    if(!success)
+        QGuiApplication::exit(0);
+
     cyanide.read_default_profile(app->arguments());
 
     cyanide.eventfd = eventfd(0, 0);
+    cyanide.check_wifi();
     cyanide.wifi_monitor();
 
     std::thread my_tox_thread(start_tox_thread, &cyanide);
 
-    cyanide.view->rootContext()->setContextProperty("settings", &settings);
     cyanide.view->rootContext()->setContextProperty("cyanide", &cyanide);
+    cyanide.view->rootContext()->setContextProperty("settings", &settings);
     cyanide.view->setSource(SailfishApp::pathTo("qml/cyanide.qml"));
     cyanide.view->showFullScreen();
 
@@ -52,8 +60,6 @@ int main(int argc, char *argv[])
                     &cyanide, SLOT(visibility_changed(QWindow::Visibility)));
 
     int result = app->exec();
-
-    emit cyanide.signal_close_notifications();
 
     cyanide.loop = LOOP_FINISH;
     settings.close_databases();
@@ -98,6 +104,11 @@ void Cyanide::write_default_profile()
     file.close();
 }
 
+void Cyanide::reload()
+{
+    loop = LOOP_RELOAD;
+}
+
 void Cyanide::load_tox_save_file(QString path)
 {
     QString basename = path.mid(path.lastIndexOf('/') + 1);
@@ -107,25 +118,49 @@ void Cyanide::load_tox_save_file(QString path)
     /* ensure that the save file is in ~/.config/tox */
     QFile::copy(path, TOX_DATA_DIR + basename);
 
+    /* remove the .tox extension */
     basename.chop(4);
     next_profile_name = basename;
 
-    loop = LOOP_RELOAD;
+    loop = LOOP_LOAD_OTHER;
+}
+
+void Cyanide::check_wifi()
+{
+    if(settings.get("wifi-only") == "true") {
+        if(0 == system("test true = \"$(dbus-send --system --dest=net.connman --print-reply"
+                                      " /net/connman/technology/wifi net.connman.Technology.GetProperties"
+                                      "| grep -A1 Connected | sed -e 1d -e 's/^.*\\s//')\"")) {
+            qDebug() << "connected to wifi, toxing";
+            if(loop == LOOP_SUSPEND)
+                resume_thread();
+            else
+                loop = LOOP_RUN;
+        } else {
+            qDebug() << "not connected to wifi, not toxing";
+            suspend_thread();
+        }
+    } else {
+        if(loop == LOOP_SUSPEND)
+            resume_thread();
+        else
+            loop = LOOP_RUN;
+    }
 }
 
 void Cyanide::wifi_monitor()
 {
-    QDBusConnection dbus_connection = QDBusConnection::systemBus();
+    QDBusConnection dbus = QDBusConnection::systemBus();
 
-    if(!dbus_connection.isConnected()) {
+    if(!dbus.isConnected()) {
         qDebug() << "Failed to connect to the D-Bus session bus.";
     }
-    dbus_connection.connect("net.connman",
-                                "/net/connman/technology/wifi",
-                                "net.connman.Technology",
-                                "PropertyChanged",
-                                &cyanide,
-                                SLOT(wifi_changed(QString, QDBusVariant)));
+    dbus.connect("net.connman",
+                 "/net/connman/technology/wifi",
+                 "net.connman.Technology",
+                 "PropertyChanged",
+                 &cyanide,
+                 SLOT(wifi_changed(QString, QDBusVariant)));
 }
 
 void Cyanide::wifi_changed(QString name, QDBusVariant dbus_variant)
@@ -136,32 +171,80 @@ void Cyanide::wifi_changed(QString name, QDBusVariant dbus_variant)
 
     if(name == "Powered") {
         ;
-    } else if(name == "Connected") {
+    } else if(name == "Connected" && settings.get("wifi-only") == "true") {
         if(value && loop == LOOP_SUSPEND) {
             qDebug() << "connected, resuming thread";
-            loop = LOOP_RUN;
-            uint64_t event = 1;
-            ssize_t tmp = write(eventfd, &event, sizeof(event));
-            Q_ASSERT(tmp == sizeof(event));
-
+            resume_thread();
         } else if(!value && loop == LOOP_RUN) {
             qDebug() << "not connected, suspending thread";
-            loop = LOOP_SUSPEND;
-            usleep(30 * 1000);
-            self.connection_status = TOX_CONNECTION_NONE;
-            emit cyanide.signal_friend_connection_status(SELF_FRIEND_NUMBER, false);
-            for(auto it = friends.begin(); it != friends.end(); it++) {
-                it->second.connection_status = TOX_CONNECTION_NONE;
-                emit cyanide.signal_friend_connection_status(it->first, false);
-            }
+            suspend_thread();
         }
     }
 }
 
+void Cyanide::resume_thread()
+{
+    loop = LOOP_RUN;
+    uint64_t event = 1;
+    ssize_t tmp = write(eventfd, &event, sizeof(event));
+    Q_ASSERT(tmp == sizeof(event));
+}
+
+void Cyanide::suspend_thread()
+{
+    loop = LOOP_SUSPEND;
+    self.connection_status = TOX_CONNECTION_NONE;
+    emit cyanide.signal_friend_connection_status(SELF_FRIEND_NUMBER, false);
+    for(auto it = friends.begin(); it != friends.end(); it++) {
+        it->second.connection_status = TOX_CONNECTION_NONE;
+        emit cyanide.signal_friend_connection_status(it->first, false);
+    }
+    usleep(30 * 1000);
+}
+
 void Cyanide::visibility_changed(QWindow::Visibility visibility)
 {
-    if(visibility == QWindow::FullScreen)
-        emit signal_close_notifications();
+    /* remove all notifications for now until I find a proper solution
+     * (because the error messages are show too)
+     */
+    for(std::pair<uint32_t, Friend>pair : friends) {
+        Friend f = pair.second;
+        if(f.notification != NULL) {
+            f.notification = NULL;
+        }
+    }
+    for(MNotification *n : MNotification::notifications()) {
+        n->remove();
+    }
+}
+
+void Cyanide::message_notification_activated(int fid)
+{
+    qDebug() << QString(); /* quality code */
+    raise();
+    emit cyanide.signal_focus_friend(fid);
+}
+
+void Cyanide::notify_error(QString summary, QString body)
+{
+    MNotification *n = new MNotification("", summary, body);
+    n->publish();
+}
+
+void Cyanide::notify_message(int fid, QString summary, QString body)
+{
+    Q_ASSERT(fid != SELF_FRIEND_NUMBER);
+    Friend *f = &friends[fid];
+
+    MRemoteAction action("harbour.cyanide", "/", "harbour.cyanide", "message_notification_activated",
+            QVariantList() << fid);
+    MNotification *n = new MNotification("cyanide.message", summary, body);
+    n->setAction(action);
+    if(f->notification != NULL) {
+        f->notification->remove();
+    }
+    f->notification = n;
+    f->notification->publish();
 }
 
 void Cyanide::raise()
@@ -187,6 +270,7 @@ void Cyanide::load_tox_and_stuff_pretty_please()
     self.connection_status = TOX_CONNECTION_NONE;
     memset(&self.avatar_transfer, 0, sizeof(File_Transfer));
 
+    //TODO use this destructor thingy
     for(std::pair<uint32_t, Friend>pair : friends) {
         Friend f = pair.second;
         free(f.avatar_transfer.filename);
@@ -201,14 +285,16 @@ void Cyanide::load_tox_and_stuff_pretty_please()
     }
     friends.clear();
 
-    loop = LOOP_RUN;
     save_needed = false;
 
+    // TODO free
     tox_options = *tox_options_new((TOX_ERR_OPTIONS_NEW*)&error);
     // TODO switch(error)
 
     size_t save_data_size;
     const uint8_t *save_data = get_save_data(&save_data_size);
+    if(settings.get("udp-enabled") != "true")
+        tox_options.udp_enabled = 0;
     tox = tox_new(&tox_options, save_data, save_data_size, (TOX_ERR_NEW*)&error);
     // TODO switch(error)
 
@@ -258,6 +344,8 @@ void Cyanide::tox_thread()
     // Give toxcore the av functions to call
     set_av_callbacks();
 
+    check_wifi();
+
     tox_loop();
 }
 
@@ -304,6 +392,10 @@ void Cyanide::tox_loop()
 
             break;
         case LOOP_RELOAD:
+            killall_tox();
+            tox_thread();
+            break;
+        case LOOP_LOAD_OTHER:
             qDebug() << "loading profile" << next_profile_name;
 
             killall_tox();
@@ -1212,7 +1304,7 @@ QString Cyanide::send_friend_request_id(const uint8_t *id, const uint8_t *msg, s
         case TOX_ERR_FRIEND_ADD_OK:
             return "";
         case TOX_ERR_FRIEND_ADD_NULL:
-            return ""; // TODO
+            return "Error: Null";
         case TOX_ERR_FRIEND_ADD_TOO_LONG:
             return tr("Error: Message is too long");
         case TOX_ERR_FRIEND_ADD_NO_MESSAGE:
@@ -1341,14 +1433,6 @@ void Cyanide::remove_friend(int fid)
     } else {
         qDebug() << "Failed to remove friend";
     }
-}
-
-void Cyanide::play_sound(QString file)
-{
-    if(file == "")
-        return;
-
-    QSound::play(file);
 }
 
 /* setters and getters */

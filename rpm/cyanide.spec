@@ -58,9 +58,12 @@ rm -rf %{buildroot}
 # >> install post
 # TODO use variables for sanity
 install -d -m755 %{buildroot}%{_datadir}/lipstick/notificationcategories
-install -m644 \
-/home/mersdk/share/git/cyanide/notificationcategories/x-nemo.social.tox.message.conf \
-%{buildroot}%{_datadir}/lipstick/notificationcategories
+install -m644 /home/mersdk/share/git/cyanide/filesystem/usr/share/lipstick/notificationcategories/cyanide.message.conf \
+                                         %{buildroot}%{_datadir}/lipstick/notificationcategories
+
+install -d m755 %{buildroot}%{_datadir}/dbus-1/services
+install -m644 /home/mersdk/share/git/cyanide/filesystem/usr/share/dbus-1/services/harbour.cyanide.service \
+                                          %{buildroot}%{_datadir}/dbus-1/services
 # << install post
 
 desktop-file-install --delete-original       \
@@ -74,5 +77,6 @@ desktop-file-install --delete-original       \
 %{_datadir}/applications/%{name}.desktop
 %{_datadir}/icons/hicolor/86x86/apps/%{name}.png
 # >> files
-%{_datadir}/lipstick/notificationcategories/*.conf
+%{_datadir}/lipstick/notificationcategories/cyanide.message.conf
+%{_datadir}/dbus-1/services/harbour.cyanide.service
 # << files

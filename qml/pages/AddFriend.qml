@@ -1,6 +1,5 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
-import mlite5 1.0
 
 Page {
     id: page
@@ -11,8 +10,6 @@ Page {
     Component.onDestruction: {
         pages.pop()
     }
-
-    Notification { id: notification }
 
     TextField {
         id: toxID
@@ -57,7 +54,7 @@ Page {
         if(errmsg === "") {
             pageStack.pop()
         } else {
-            notify(notification, qsTr("Failed to send friend request"), qsTr(errmsg) )
+            cyanide.notify_error(qsTr("Failed to send friend request"), qsTr(errmsg))
         }
     }
 }

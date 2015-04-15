@@ -20,19 +20,19 @@ SOURCES += \
     src/cyanide.cpp \
     src/dns.cpp \
     src/friend.cpp \
-    src/settings.cpp
-    src/util.cpp \
+    src/settings.cpp \
+    src/util.cpp
 
 OTHER_FILES += \
     cyanide.desktop \
     cyanide.png \
-    notificationcategories/x-nemo.social.tox.message.conf \
+    filesystem/* \
     qml/cover/CoverPage.qml \
     qml/cyanide.qml \
     qml/js/Misc.js \
     qml/pages/AcceptFriend.qml \
     qml/pages/AddFriend.qml \
-    qml/pages/FileChooser.qml
+    qml/pages/FileChooser.qml \
     qml/pages/FriendList.qml \
     qml/pages/Friend.qml \
     qml/pages/Profile.qml \
@@ -41,6 +41,8 @@ OTHER_FILES += \
     rpm/cyanide.spec \
     rpm/cyanide.yaml \
     translations/*.ts \
+    filesystem/usr/share/dbus-1/services/harbour.cyanide.service \
+    filesystem/usr/share/lipstick/notificationcategories/cyanide.message.conf
 
 
 # to disable building translations every time, comment out the

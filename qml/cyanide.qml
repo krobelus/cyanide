@@ -1,6 +1,5 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
-import mlite5 1.0
 import "pages"
 
 ApplicationWindow
@@ -49,7 +48,14 @@ ApplicationWindow
         return activePage() === "Friend.qml" && activeFriend() == fid
     }
 
-    Component.onCompleted: loadSettings()
+    function returnToPage(name) {
+        pageStack.pop(pageStack.find(function(page) {
+            return page.name === name
+        }))
+    }
+
+    Component.onCompleted:
+        loadSettings()
     function loadSettings() {
         var nameList = settings.get_names()
         for(var i in nameList) {
@@ -126,6 +132,10 @@ ApplicationWindow
     }
     Connections {
         target: cyanide
+        onSignal_focus_friend: {
+            if(!chattingWith(fid))
+                chatWith(fid)
+        }
         onSignal_friend_added: {
             refreshFriendList()
         }
@@ -137,15 +147,6 @@ ApplicationWindow
             var i = fid + 1
             var name = cyanide.get_friend_name(fid)
             friendList.setProperty(i, "friend_name", name)
-            /*
-            if(fid != self_friend_number && settings.get("notification-friend-name-change")
-                && !(cyanide.is_visible() && chattingWith(fid)))
-            {
-                nNameChange.fid = fid
-                if(previous_name !== name)
-                    notify(nNameChange, previous_name + qsTr(" is now known as ") + name, "")
-            }
-            */
         }
         property int image_refresh_count: 0
         onSignal_avatar_change: {
@@ -165,19 +166,6 @@ ApplicationWindow
             var i = fid + 1
             friendList.setProperty(i, "friend_connection_status", online)
             friendList.setProperty(i, "friend_status_icon", cyanide.get_friend_status_icon(fid, online))
-            if(fid != self_friend_number) {
-                if(online) {
-                    //cyanide.play_sound(settings.get("sound-friend-connected"))
-                    /*
-                    if("true" === settings.get("notification-friend-connected")
-                        && !(cyanide.is_visible() && chattingWith(fid)))
-                    {
-                        nConnectionStatus.fid = fid
-                        //notify(nConnectionStatus, cyanide.get_friend_name(fid), "is now online")
-                    }
-                    */
-                }
-            }
         }
         onSignal_friend_status_message: {
             var i = fid + 1
@@ -188,15 +176,11 @@ ApplicationWindow
             if(fid != self_friend_number) {
                 if(fid == activeFriend())
                     cyanide.set_friend_activity(fid, false)
-                // cyanide.play_sound(settings.get("sound-message-received"))
                 if(settings.get("notification-message-received") === "true"
                     && !(cyanide.is_visible() && chattingWith(fid)))
                 {
-                    nFriendMessage.fid = fid
-                    notify(nFriendMessage, cyanide.get_friend_name(fid), cyanide.get_message_text(fid, mid))
+                    cyanide.notify_message(fid, cyanide.get_friend_name(fid), cyanide.get_message_text(fid, mid))
                 }
-                /* doesn't work reliably with append for some reason... */
-                // refreshMessageList()
                 if(fid == activeFriend() || fid == self_friend_number) {
                     appendMessage(mid)
                 }
@@ -214,85 +198,8 @@ ApplicationWindow
             }
         }
         onSignal_friend_request: {
-            // cyanide.play_sound(settings.get("sound-friend-request-received"))
             if(settings.get("notification-friend-request-received") === "true")
-                nFriendRequest.fid = fid
-                nFriendRequest.summary = qsTr("Friend request received!")
-                nFriendRequest.body = cyanide.get_friend_status_message(fid)
-                nFriendRequest.previewSummary = nFriendRequest.summary
-                nFriendRequest.previewBody = nFriendRequest.body
-                nFriendRequest.count++
-                nFriendRequest.publish()
-        }
-    }
-
-    Notification {
-        id: nDefault
-    }
-    /*
-    Notification {
-        id: nNameChange
-        property int fid: 0
-        onClicked: {
-            cyanide.raise();
-            if(!chattingWith(fid)) {
-                chatWith(fid)
-            }
-        }
-    }
-    Notification {
-        id: nConnectionStatus
-        property int fid: 0
-        onClicked: {
-            cyanide.raise();
-            if(!chattingWith(fid)) {
-                chatWith(fid)
-            }
-        }
-    }
-    */
-    Notification {
-        id: nFriendRequest
-        property int fid: 0
-        // category: "x-nemo.social.tox.message"
-        /*
-        onClicked: {
-            count = 0
-            cyanide.raise()
-            friendNumberStack.push(fid)
-            pageStack.push(Qt.resolvedUrl("pages/AcceptFriend.qml"))
-        }
-        */
-        // onClosed: console.log("Closed friend request notification, reason: " + reason)
-    }
-    Notification {
-        id: nFriendMessage
-        property int fid: 0
-        // category: "x-nemo.social.tox.message"
-        summary: count == 1 ? qsTr("New message") : qsTr("New messages")
-        count: 0
-        /*
-        onClicked: {
-            count = 0
-            cyanide.raise()
-            if(!chattingWith(fid)) {
-                chatWith(fid)
-            }
-        }
-        */
-        // onClosed: console.log("Closed message notification, reason: " + reason)
-    }
-    function notify(n, summary, body) {
-        n.previewSummary = summary
-        n.previewBody = body
-        n.count++
-        n.publish()
-    }
-    Connections {
-        target: cyanide
-        onSignal_close_notifications: {
-            //nFriendMessage.close()
-            //nFriendRequest.close()
+                cyanide.notify_message(fid, qsTr("Friend request received!"), cyanide.get_friend_status_message(fid))
         }
     }
 }

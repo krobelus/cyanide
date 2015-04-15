@@ -13,6 +13,7 @@
 class Cyanide : public QObject
 {
     Q_OBJECT
+    Q_CLASSINFO("D-Bus Interface", "harbour.cyanide")
 
 private:
     uint8_t self_address[TOX_ADDRESS_SIZE];
@@ -27,10 +28,9 @@ public:
     Tox *tox;
     ToxAv *toxav;
 
+    QString profile_name, next_profile_name;
 
-    QString profile_name;
-    QString next_profile_name;
-
+    /* get the tox save file based on profile_name */
     QString tox_save_file();
 
     QQuickView *view;
@@ -52,13 +52,12 @@ public:
                          const uint8_t *filename, size_t filename_length);
     void incoming_avatar_chunk(uint32_t fid, uint64_t position,
                                const uint8_t *data, size_t length);
-    // void add_file_transfer(File_Transfer *ft);
-    // void remove_file_transfer(File_Transfer *ft);
-    // File_Transfer *get_file_transfer(uint32_t friend_number, uint32_t file_number);
     bool get_file_id(uint32_t fid, File_Transfer *ft);
 
+    /* read the name of the profile (profile_name) to load from DEFAULT_PROFILE_FILE */
     void read_default_profile(QStringList args);
     void write_default_profile();
+
     void load_tox_and_stuff_pretty_please();
     /* reads the tox save file into memory and stores the length in *size */
     const uint8_t *get_save_data(size_t *size);
@@ -74,30 +73,38 @@ public:
     void tox_thread();
     void tox_loop();
 
+    void suspend_thread();
+    void resume_thread();
+
     void relocate_blocked_friend();
     void send_new_avatar();
+    QString send_file(TOX_FILE_KIND kind, int fid, QString path, uint8_t *file_id);
     void wifi_monitor();
 
-    /* */
-    Q_INVOKABLE QString send_friend_request(QString id_string, QString msg_string);
-    Q_INVOKABLE void send_typing_notification(int fid, bool typing);
-    Q_INVOKABLE QString send_friend_message(int fid, QString msg);
-    Q_INVOKABLE bool accept_friend_request(int fid);
-    Q_INVOKABLE void remove_friend(int fid);
-    Q_INVOKABLE void play_sound(QString file);
+    Q_SCRIPTABLE void message_notification_activated(int fid);
+
     Q_INVOKABLE void raise();
     Q_INVOKABLE bool is_visible();
     Q_INVOKABLE void visibility_changed(QWindow::Visibility visibility);
+    Q_INVOKABLE void notify_error(QString summary, QString body);
+    Q_INVOKABLE void notify_message(int fid, QString summary, QString body);
+    Q_INVOKABLE void check_wifi();
+
+    Q_INVOKABLE void reload();
+    Q_INVOKABLE void load_tox_save_file(QString path);
+    Q_INVOKABLE QString send_friend_request(QString id_string, QString msg_string);
+    Q_INVOKABLE bool accept_friend_request(int fid);
+    Q_INVOKABLE void remove_friend(int fid);
+    Q_INVOKABLE QString send_friend_message(int fid, QString msg);
+    Q_INVOKABLE void send_typing_notification(int fid, bool typing);
+    Q_INVOKABLE QString send_avatar(int fid);
+    Q_INVOKABLE QString send_file(int fid, QString path);
     Q_INVOKABLE QString resume_transfer(int mid, int fid);
     Q_INVOKABLE QString pause_transfer(int mid, int fid);
     Q_INVOKABLE QString cancel_transfer(int mid, int fid);
-    Q_INVOKABLE QString send_file(int fid, QString path);
-    Q_INVOKABLE QString send_avatar(int fid);
-    Q_INVOKABLE QString send_file(TOX_FILE_KIND kind, int fid, QString path, uint8_t *file_id);
-    Q_INVOKABLE void load_tox_save_file(QString path);
 
     /* setters and getters */
-    Q_INVOKABLE QList<int> get_friend_numbers();
+    Q_INVOKABLE QList<int> get_friend_numbers(); /* friend list ordering goes here */
     Q_INVOKABLE QList<int> get_message_numbers(int fid);
 
     Q_INVOKABLE void set_friend_activity(int fid, bool status);
@@ -131,8 +138,7 @@ public:
     Q_INVOKABLE int get_file_progress(int fid, int mid);
 
 signals:
-    void signal_cyanide_reload();
-    void signal_close_notifications();
+    void signal_focus_friend(int fid);
     void signal_friend_added(int fid);
     void signal_friend_activity(int fid);
     void signal_friend_blocked(int fid, bool blocked);
@@ -150,6 +156,7 @@ signals:
 
     void signal_file_status(int fid, int mid, int status);
     void signal_file_progress(int fid, int mid, int progress);
+
 public slots:
     void wifi_changed(QString str, QDBusVariant variant);
 };
