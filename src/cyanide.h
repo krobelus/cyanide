@@ -152,7 +152,7 @@ signals:
     void signal_friend_blocked(int fid, bool blocked);
 
     void signal_friend_request(int fid);
-    void signal_friend_message(int fid, int mid);
+    void signal_friend_message(int fid, int mid, int type);
     void signal_friend_action();
     void signal_friend_name(int fid, QString previous_name);
     void signal_friend_status_message(int fid);

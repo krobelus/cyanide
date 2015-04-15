@@ -673,7 +673,7 @@ void Cyanide::add_message(uint32_t fid, Message message)
     if(!message.author)
         set_friend_activity(fid, true);
 
-    emit signal_friend_message(fid, mid);
+    emit signal_friend_message(fid, mid, message.type);
 }
 
 void Cyanide::set_callbacks()
@@ -1473,13 +1473,13 @@ bool Cyanide::accept_friend_request(int fid)
 void Cyanide::remove_friend(int fid)
 {
     TOX_ERR_FRIEND_DELETE error;
-    if(tox_friend_delete(tox, fid, &error)) {
-        save_needed = true;
-        settings.remove_friend(get_friend_public_key(fid));
-        friends.erase(fid);
-    } else {
+    if(friends[fid].accepted && !tox_friend_delete(tox, fid, &error)) {
         qDebug() << "Failed to remove friend";
+        return;
     }
+    save_needed = true;
+    settings.remove_friend(get_friend_public_key(fid));
+    friends.erase(fid);
 }
 
 /* setters and getters */

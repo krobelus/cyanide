@@ -179,7 +179,10 @@ ApplicationWindow
                 if(settings.get("notification-message-received") === "true"
                     && !(cyanide.is_visible() && chattingWith(fid)))
                 {
-                    cyanide.notify_message(fid, cyanide.get_friend_name(fid), cyanide.get_message_text(fid, mid))
+                    var txt = cyanide.get_message_text(fid, mid)
+                    cyanide.notify_message(fid, cyanide.get_friend_name(fid),
+                                           type == msgtype_file ? qsTr("Incoming file: ")+txt.replace(/^.*\//, "")
+                                                                : txt)
                 }
                 if(fid == activeFriend() || fid == self_friend_number) {
                     // appendMessage(mid)
