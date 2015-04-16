@@ -33,7 +33,6 @@ Page {
 
         delegate: BackgroundItem {
             id: delegate
-            height: 2 * label.height + Theme.paddingMedium
 
             TextSwitch {
                 id: textSwitch
