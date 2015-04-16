@@ -165,6 +165,8 @@ signals:
     void signal_file_status(int fid, int mid, int status);
     void signal_file_progress(int fid, int mid, int progress);
 
+    void signal_av_invite(int fid);
+
 public slots:
     void wifi_changed(QString str, QDBusVariant variant);
 };

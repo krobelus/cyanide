@@ -695,21 +695,21 @@ void Cyanide::set_callbacks()
 
 void Cyanide::set_av_callbacks()
 {
-    //toxav_register_callstate_callback(toxav, callback_av_invite, av_OnInvite, NULL);
-    //toxav_register_callstate_callback(toxav, callback_av_start, av_OnStart, NULL);
-    //toxav_register_callstate_callback(toxav, callback_av_cancel, av_OnCancel, NULL);
-    //toxav_register_callstate_callback(toxav, callback_av_reject, av_OnReject, NULL);
-    //toxav_register_callstate_callback(toxav, callback_av_end, av_OnEnd, NULL);
+    toxav_register_callstate_callback(toxav, (ToxAVCallback)callback_av_invite, av_OnInvite, NULL);
+    toxav_register_callstate_callback(toxav, (ToxAVCallback)callback_av_start, av_OnStart, NULL);
+    toxav_register_callstate_callback(toxav, (ToxAVCallback)callback_av_cancel, av_OnCancel, NULL);
+    toxav_register_callstate_callback(toxav, (ToxAVCallback)callback_av_reject, av_OnReject, NULL);
+    toxav_register_callstate_callback(toxav, (ToxAVCallback)callback_av_end, av_OnEnd, NULL);
 
-    //toxav_register_callstate_callback(toxav, callback_av_ringing, av_OnRinging, NULL);
+    toxav_register_callstate_callback(toxav, (ToxAVCallback)callback_av_ringing, av_OnRinging, NULL);
 
-    //toxav_register_callstate_callback(toxav, callback_av_requesttimeout, av_OnRequestTimeout, NULL);
-    //toxav_register_callstate_callback(toxav, callback_av_peertimeout, av_OnPeerTimeout, NULL);
-    //toxav_register_callstate_callback(toxav, callback_av_selfmediachange, av_OnSelfCSChange, NULL);
-    //toxav_register_callstate_callback(toxav, callback_av_peermediachange, av_OnPeerCSChange, NULL);
+    toxav_register_callstate_callback(toxav, (ToxAVCallback)callback_av_requesttimeout, av_OnRequestTimeout, NULL);
+    toxav_register_callstate_callback(toxav, (ToxAVCallback)callback_av_peertimeout, av_OnPeerTimeout, NULL);
+    toxav_register_callstate_callback(toxav, (ToxAVCallback)callback_av_selfmediachange, av_OnSelfCSChange, NULL);
+    toxav_register_callstate_callback(toxav, (ToxAVCallback)callback_av_peermediachange, av_OnPeerCSChange, NULL);
 
-    //toxav_register_audio_callback(toxav, callback_av_audio, NULL);
-    //toxav_register_video_callback(toxav, callback_av_video, NULL);
+    toxav_register_audio_callback(toxav, (ToxAvAudioCallback)callback_av_audio, NULL);
+    toxav_register_video_callback(toxav, (ToxAvVideoCallback)callback_av_video, NULL);
 }
 
 void callback_friend_request(Tox *UNUSED(tox), const uint8_t *id, const uint8_t *msg, size_t length, void *UNUSED(userdata))
@@ -1299,6 +1299,74 @@ QString Cyanide::send_file(TOX_FILE_KIND kind, int fid, QString path, uint8_t *f
         add_message(fid, m);
 
     return "";
+}
+
+void callback_av_invite(ToxAv *arg, int32_t call_index, void *UNUSED(userdata))
+{
+    qDebug() << "was called";
+
+    int fid = toxav_get_peer_id(arg, call_index, 0);
+
+    ToxAvCSettings peer_settings ;
+    toxav_get_peer_csettings(arg, call_index, 0, &peer_settings);
+    bool video = peer_settings.call_type == av_TypeVideo;
+
+    emit cyanide.signal_av_invite(fid);
+}
+
+void callback_av_start(ToxAv *arg, int32_t call_index, void *UNUSED(userdata))
+{
+    qDebug() << "was called";
+}
+
+void callback_av_cancel(ToxAv *arg, int32_t call_index, void *UNUSED(userdata))
+{
+    qDebug() << "was called";
+}
+
+void callback_av_reject(ToxAv *arg, int32_t call_index, void *UNUSED(userdata))
+{
+    qDebug() << "was called";
+}
+
+void callback_av_end(ToxAv *arg, int32_t call_index, void *UNUSED(userdata))
+{
+    qDebug() << "was called";
+}
+
+void callback_av_ringing(ToxAv *arg, int32_t call_index, void *UNUSED(userdata))
+{
+    qDebug() << "was called";
+}
+
+void callback_av_requesttimeout(ToxAv *arg, int32_t call_index, void *UNUSED(userdata))
+{
+    qDebug() << "was called";
+}
+
+void callback_av_peertimeout(ToxAv *arg, int32_t call_index, void *UNUSED(userdata))
+{
+    qDebug() << "was called";
+}
+
+void callback_av_selfmediachange(ToxAv *arg, int32_t call_index, void *UNUSED(userdata))
+{
+    qDebug() << "was called";
+}
+
+void callback_av_peermediachange(ToxAv *arg, int32_t call_index, void *UNUSED(userdata))
+{
+    qDebug() << "was called";
+}
+
+void callback_av_audio(ToxAv *av, int32_t call_index, const int16_t *data, uint16_t samples, void *UNUSED(userdata))
+{
+    qDebug() << "was called";
+}
+
+void callback_av_video(ToxAv *av, int32_t call_index, const vpx_image_t *img, void *UNUSED(userdata))
+{
+    qDebug() << "was called";
 }
 
 void Cyanide::send_typing_notification(int fid, bool typing)
