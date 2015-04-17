@@ -2,7 +2,7 @@ import QtQuick 2.0
 import Sailfish.Silica 1.0
 import "../js/Misc.js" as Misc
 
-Page {
+Dialog {
     id: page
     property string name: "friend"
     allowedOrientations: Orientation.All
@@ -16,7 +16,10 @@ Page {
             cyanide.send_typing_notification(f, false)
     }
 
-    RemorsePopup { id: remorsePopup }
+    onOrientationChanged: refreshMessageList()
+
+    canAccept: true
+    acceptDestination: Qt.resolvedUrl("FriendAction.qml")
 
     property int f: activeFriend()
 
@@ -118,57 +121,42 @@ Page {
         }
 
         PullDownMenu {
+            visible: false
+
             MenuItem {
-                property bool blocked: friendList.get(f+1).friend_blocked
-                text: blocked ? qsTr("Unblock friend") : qsTr("Block friend")
-                onClicked: {
-                    cyanide.set_friend_blocked(f, !blocked)
-                }
+                text: "Accept call"
             }
+        }
+
+        PushUpMenu {
+            visible: false
+
             MenuItem {
-                text: qsTr("Remove friend")
-                onClicked: {
-                    remorsePopup.execute(qsTr("Removing friend"), function() {
-                        cyanide.remove_friend(f)
-                        refreshFriendList()
-                        pageStack.pop()
-                    })
-                }
-            }
-            MenuItem {
-                text: qsTr("Copy Tox ID to clipboard")
-                enabled: friendList.get(f+1).friend_address !== ""
-                onClicked: {
-                    clipboard.setClipboard(friendList.get(f+1).friend_address)
-                }
-            }
-            MenuItem {
-                text: qsTr("Send a file")
-                onClicked: {
-                    fileChooserProperties = {
-                        target: "fileToSend",
-                        nameFilters: []
-                    }
-                    pageStack.push(Qt.resolvedUrl("FileChooser.qml"), { "folder": "/home/nemo/" } )
-                }
+                text: "Hang up"
             }
         }
 
         PageHeader {
             id: pageHeader
-            title: friendList.get(f+1).friend_name
-            anchors {
-                right: parent.right
-                rightMargin: 2 * Theme.paddingLarge + friendStatusIcon.width
+            Label {
+                id: title
+                text: friendList.get(f+1).friend_name
+                font.pixelSize: Theme.fontSizeMedium
+                color: Theme.highlightColor
+                y: pageHeader.height / 2 - height / 2
+                anchors {
+                    right: parent.right
+                    rightMargin: Theme.paddingLarge
+                }
             }
-        }
-        Image {
-            id: friendStatusIcon
-            source: friendList.get(f+1).friend_status_icon
-            y: pageHeader.height / 2 - height / 2
-            anchors {
-                right: parent.right
-                rightMargin: Theme.paddingLarge
+            Image {
+                id: friendStatusIcon
+                source: friendList.get(f+1).friend_status_icon
+                y: pageHeader.height / 2 - height / 2
+                anchors {
+                    right: title.left
+                    rightMargin: Theme.paddingMedium
+                }
             }
         }
 

@@ -173,7 +173,7 @@ ApplicationWindow
         }
         onSignal_friend_message: {
             var i = fid + 1
-            if(fid != self_friend_number) {
+            if(!cyanide.get_message_author(fid, mid)) {
                 if(fid == activeFriend())
                     cyanide.set_friend_activity(fid, false)
                 if(settings.get("notification-message-received") === "true"
@@ -184,10 +184,10 @@ ApplicationWindow
                                            type == msgtype_file ? qsTr("Incoming file: ")+txt.replace(/^.*\//, "")
                                                                 : txt)
                 }
-                if(fid == activeFriend() || fid == self_friend_number) {
-                    // appendMessage(mid)
-                    refreshMessageList()
-                }
+            }
+            if(fid == activeFriend()) {
+                // appendMessage(mid)
+                refreshMessageList()
             }
         }
         onSignal_file_status: {

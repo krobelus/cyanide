@@ -28,5 +28,11 @@
         <file alias="away_notification_svg">Tox-UI/status/dot_idle_notification.svg</file>
         <file alias="offline_notification_svg">Tox-UI/status/dot_offline_notification.svg</file>
         <file alias="online_notification_svg">Tox-UI/status/dot_online_notification.svg</file>
+        <file alias="attach_2x">Tox-UI/button icons/attach_2x.png</file>
+        <file alias="video_2x">Tox-UI/button icons/video_2x.png</file>
+        <file alias="phone_2x">Tox-UI/button icons/phone_2x.png</file>
+        <file alias="video_4x">Tox-UI/button icons/video_4x.png</file>
+        <file alias="phone_4x">Tox-UI/button icons/phone_4x.png</file>
+        <file alias="attach_4x">Tox-UI/button icons/attach_4x.png</file>
     </qresource>
 </RCC>
