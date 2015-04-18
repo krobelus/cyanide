@@ -9,6 +9,7 @@ Friend::Friend()
     accepted = true;
     activity = false;
     blocked = false;
+    callstate = 0;
     memset(avatar_hash, 0, TOX_HASH_LENGTH);
     memset(&avatar_transfer, 0, sizeof(File_Transfer));
     notification = NULL;
@@ -22,6 +23,7 @@ Friend::Friend(const uint8_t *public_key, QString name, QString status_message)
     accepted = true;
     activity = false;
     blocked = false;
+    callstate = 0;
     memset(avatar_hash, 0, TOX_HASH_LENGTH);
     memset(&avatar_transfer, 0, sizeof(File_Transfer));
     notification = NULL;

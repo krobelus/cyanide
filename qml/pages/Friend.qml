@@ -20,8 +20,15 @@ Dialog {
 
     canAccept: true
     acceptDestination: Qt.resolvedUrl("FriendAction.qml")
+    onAccepted: {
+        console.log("callstate: "+callstate)
+        console.log("in list "+friendList.get(f+1).friend_callstate)
+        console.log("real callstate "+cyanide.get_friend_callstate(f))
+        pages.push("FriendAction.qml")
+    }
 
     property int f: activeFriend()
+    property int callstate: friendList.get(f+1).friend_callstate
 
     DockedPanel {
         id: fileControlPanel
@@ -121,18 +128,42 @@ Dialog {
         }
 
         PullDownMenu {
-            visible: false
+            id: pullDownMenu
+            visible: callstate == -2
 
             MenuItem {
-                text: "Accept call"
+                id: accept
+                //: av call
+                text: qsTr("Answer")
+                onClicked: {
+                    cyanide.av_invite_accept(f)
+                }
             }
         }
 
         PushUpMenu {
-            visible: false
+            id: pushUpMenu
+            visible: callstate != 0
 
             MenuItem {
-                text: "Hang up"
+                id: reject
+                //: av call
+                text: qsTr("Ignore")
+                visible: callstate == -2
+                onClicked: cyanide.av_invite_reject(f)
+            }
+            MenuItem {
+                id: cancelCall
+                //: outgoing call
+                text: qsTr("Cancel")
+                visible: callstate == -1
+                onClicked: cyanide.av_call_cancel(f)
+            }
+            MenuItem {
+                id: hangup
+                text: qsTr("Hang up")
+                visible: callstate > 0
+                onClicked: cyanide.av_hangup(f)
             }
         }
 
@@ -140,7 +171,7 @@ Dialog {
             id: pageHeader
             Label {
                 id: title
-                text: friendList.get(f+1).friend_name
+                Component.onCompleted: text = friendList.get(f+1).friend_name
                 font.pixelSize: Theme.fontSizeMedium
                 color: Theme.highlightColor
                 y: pageHeader.height / 2 - height / 2
@@ -151,7 +182,7 @@ Dialog {
             }
             Image {
                 id: friendStatusIcon
-                source: friendList.get(f+1).friend_status_icon
+                Component.onCompleted: source = friendList.get(f+1).friend_status_icon
                 y: pageHeader.height / 2 - height / 2
                 anchors {
                     right: title.left

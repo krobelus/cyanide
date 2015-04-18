@@ -5,6 +5,11 @@ Page {
     id: page
     property string name: "friendaction"
     allowedOrientations: Orientation.All
+    Component.onDestruction: {
+        if(activePage() === "FriendAction.qml") {
+            pages.pop()
+        }
+    }
 
     RemorsePopup { id: remorsePopup }
 
@@ -33,7 +38,8 @@ Page {
             IconButton {
                 icon.source: "qrc:/images/phone_4x"
                 onClicked: {
-                    cyanide.notify_error("Not implemented yet", "")
+                    cyanide.av_call(f)
+                    pageStack.pop()
                 }
             }
             IconButton {

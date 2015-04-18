@@ -38,8 +38,14 @@ ApplicationWindow
         }
     }
     function chatWith(fid) {
-        friendNumberStack.push(fid)
-        pageStack.push(Qt.resolvedUrl("pages/Friend.qml"))
+        var p = activePage()
+        if(fid == activeFriend()) {
+            if(p === "friendaction.qml")
+                pageStack.pop()
+        } else {
+            friendNumberStack.push(fid)
+            pageStack.push(Qt.resolvedUrl("pages/Friend.qml"))
+        }
     }
     function activePage() {
         return pages[pages.length-1]
@@ -87,7 +93,8 @@ ApplicationWindow
                         'friend_status_icon': cyanide.get_friend_status_icon(i),
                         'friend_status_message': cyanide.get_friend_status_message(i),
                         'friend_blocked': cyanide.get_friend_blocked(i),
-                        'friend_address': settings.get_friend_address(cyanide.get_friend_public_key(i))
+                        'friend_address': settings.get_friend_address(cyanide.get_friend_public_key(i)),
+                        'friend_callstate': cyanide.get_friend_callstate(i)
                          })
     }
     function refreshMessageList() {
@@ -133,8 +140,7 @@ ApplicationWindow
     Connections {
         target: cyanide
         onSignal_focus_friend: {
-            if(!chattingWith(fid))
-                chatWith(fid)
+            chatWith(fid)
         }
         onSignal_friend_added: {
             refreshFriendList()
@@ -189,6 +195,13 @@ ApplicationWindow
                 // appendMessage(mid)
                 refreshMessageList()
             }
+        }
+        onSignal_friend_callstate: {
+            var i = fid + 1
+            friendList.setProperty(i, "friend_callstate", callstate)
+        }
+        onSignal_av_invite: {
+            cyanide.notify_call(fid, cyanide.get_friend_name(fid)+" "+qsTr("is calling"), "")
         }
         onSignal_file_status: {
             if(fid == activeFriend()) {

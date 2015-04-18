@@ -25,6 +25,9 @@ public:
     bool activity;
     bool blocked;
 
+    int callstate;
+    int32_t call_index;
+
     File_Transfer avatar_transfer;
 
     /* maps file_number to mid (message id)

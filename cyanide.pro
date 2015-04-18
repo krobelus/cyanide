@@ -42,8 +42,9 @@ OTHER_FILES += \
     rpm/cyanide.yaml \
     translations/*.ts \
     filesystem/usr/share/dbus-1/services/harbour.cyanide.service \
-    filesystem/usr/share/lipstick/notificationcategories/cyanide.message.conf \
-    qml/pages/FriendAction.qml
+    qml/pages/FriendAction.qml \
+    filesystem/usr/share/lipstick/notificationcategories/harbour.cyanide.call.conf \
+    filesystem/usr/share/lipstick/notificationcategories/harbour.cyanide.message.conf
 
 
 # to disable building translations every time, comment out the

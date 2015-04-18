@@ -74,6 +74,7 @@ public:
 
     void tox_thread();
     void tox_loop();
+    void toxav_thread();
 
     void suspend_thread();
     void resume_thread();
@@ -90,6 +91,7 @@ public:
     Q_INVOKABLE void visibility_changed(QWindow::Visibility visibility);
     Q_INVOKABLE void notify_error(QString summary, QString body);
     Q_INVOKABLE void notify_message(int fid, QString summary, QString body);
+    Q_INVOKABLE void notify_call(int fid, QString summary, QString body);
     Q_INVOKABLE void check_wifi();
 
     Q_INVOKABLE void reload();
@@ -107,6 +109,12 @@ public:
     Q_INVOKABLE QString resume_transfer(int mid, int fid);
     Q_INVOKABLE QString pause_transfer(int mid, int fid);
     Q_INVOKABLE QString cancel_transfer(int mid, int fid);
+
+    Q_INVOKABLE void av_invite_accept(int fid);
+    Q_INVOKABLE void av_invite_reject(int fid);
+    Q_INVOKABLE void av_hangup(int fid);
+    Q_INVOKABLE void av_call(int fid);
+    Q_INVOKABLE void av_call_cancel(int fid);
 
     /* setters and getters */
     Q_INVOKABLE QString get_profile_name();
@@ -134,6 +142,7 @@ public:
     Q_INVOKABLE bool get_friend_connection_status(int fid);
     Q_INVOKABLE bool get_friend_accepted(int fid);
     Q_INVOKABLE bool get_friend_blocked(int fid);
+    Q_INVOKABLE int get_friend_callstate(int fid);
 
     Q_INVOKABLE int get_message_type(int fid, int mid);
     Q_INVOKABLE bool get_message_author(int fid, int mid);
@@ -165,6 +174,7 @@ signals:
     void signal_file_status(int fid, int mid, int status);
     void signal_file_progress(int fid, int mid, int progress);
 
+    void signal_friend_callstate(int fid, int callstate);
     void signal_av_invite(int fid);
 
 public slots:
@@ -172,5 +182,6 @@ public slots:
 };
 
 void start_tox_thread(Cyanide *cyanide);
+void start_toxav_thread(Cyanide *cyanide);
 
 #endif // CYANIDE_H

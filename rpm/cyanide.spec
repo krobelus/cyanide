@@ -57,13 +57,13 @@ rm -rf %{buildroot}
 
 # >> install post
 # TODO use variables for sanity
-install -d -m755 %{buildroot}%{_datadir}/lipstick/notificationcategories
-install -m644 /home/mersdk/share/git/cyanide/filesystem/usr/share/lipstick/notificationcategories/cyanide.message.conf \
-                                         %{buildroot}%{_datadir}/lipstick/notificationcategories
+install -Dm644 /home/mersdk/share/git/cyanide/filesystem/usr/share/lipstick/notificationcategories/harbour.cyanide.call.conf \
+                                           %{buildroot}%{_datadir}/lipstick/notificationcategories/harbour.cyanide.call.conf
+install -Dm644 /home/mersdk/share/git/cyanide/filesystem/usr/share/lipstick/notificationcategories/harbour.cyanide.message.conf \
+                                           %{buildroot}%{_datadir}/lipstick/notificationcategories/harbour.cyanide.message.conf
 
-install -d m755 %{buildroot}%{_datadir}/dbus-1/services
-install -m644 /home/mersdk/share/git/cyanide/filesystem/usr/share/dbus-1/services/harbour.cyanide.service \
-                                          %{buildroot}%{_datadir}/dbus-1/services
+install -Dm644 /home/mersdk/share/git/cyanide/filesystem/usr/share/dbus-1/services/harbour.cyanide.service \
+                                           %{buildroot}%{_datadir}/dbus-1/services/harbour.cyanide.service
 # << install post
 
 desktop-file-install --delete-original       \

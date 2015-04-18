@@ -230,10 +230,10 @@ void Cyanide::suspend_thread()
 {
     loop = LOOP_SUSPEND;
     self.connection_status = TOX_CONNECTION_NONE;
-    emit cyanide.signal_friend_connection_status(SELF_FRIEND_NUMBER, false);
+    emit signal_friend_connection_status(SELF_FRIEND_NUMBER, false);
     for(auto it = friends.begin(); it != friends.end(); it++) {
         it->second.connection_status = TOX_CONNECTION_NONE;
-        emit cyanide.signal_friend_connection_status(it->first, false);
+        emit signal_friend_connection_status(it->first, false);
     }
     usleep(1500 * MAX_ITERATION_TIME);
 }
@@ -257,7 +257,7 @@ void Cyanide::visibility_changed(QWindow::Visibility visibility)
 void Cyanide::message_notification_activated(int fid)
 {
     qDebug() << QString(); /* quality code */
-    emit cyanide.signal_focus_friend(fid);
+    emit signal_focus_friend(fid);
     raise();
 }
 
@@ -275,7 +275,22 @@ void Cyanide::notify_message(int fid, QString summary, QString body)
     if(f->notification != NULL) {
         f->notification->remove();
     }
-    f->notification = new MNotification("cyanide.message", summary, body);
+    f->notification = new MNotification("harbour.cyanide.message", summary, body);
+    MRemoteAction action("harbour.cyanide", "/", "harbour.cyanide", "message_notification_activated",
+            QVariantList() << fid);
+    f->notification->setAction(action);
+    f->notification->publish();
+}
+
+void Cyanide::notify_call(int fid, QString summary, QString body)
+{
+    Q_ASSERT(fid != SELF_FRIEND_NUMBER);
+    Friend *f = &friends[fid];
+
+    if(f->notification != NULL) {
+        f->notification->remove();
+    }
+    f->notification = new MNotification("harbour.cyanide.call", summary, body);
     MRemoteAction action("harbour.cyanide", "/", "harbour.cyanide", "message_notification_activated",
             QVariantList() << fid);
     f->notification->setAction(action);
@@ -347,8 +362,8 @@ void Cyanide::load_tox_and_stuff_pretty_please()
     else
         load_tox_data();
 
-    emit cyanide.signal_friend_added(SELF_FRIEND_NUMBER);
-    emit cyanide.signal_avatar_change(SELF_FRIEND_NUMBER);
+    emit signal_friend_added(SELF_FRIEND_NUMBER);
+    emit signal_avatar_change(SELF_FRIEND_NUMBER);
 
     qDebug() << "Name:" << self.name;
     qDebug() << "Status" << self.status_message;
@@ -358,6 +373,11 @@ void Cyanide::load_tox_and_stuff_pretty_please()
 void start_tox_thread(Cyanide *cyanide)
 {
     cyanide->tox_thread();
+}
+
+void start_toxav_thread(Cyanide *cyanide)
+{
+    cyanide->toxav_thread();
 }
 
 void Cyanide::tox_thread()
@@ -386,6 +406,8 @@ void Cyanide::tox_thread()
 
 void Cyanide::tox_loop()
 {
+    std::thread av_thread(start_toxav_thread, &cyanide);
+
     uint64_t last_save = get_time(), time;
     TOX_CONNECTION c, connection = c = TOX_CONNECTION_NONE;
 
@@ -396,7 +418,7 @@ void Cyanide::tox_loop()
         // Check current connection
         if((c = tox_self_get_connection_status(tox)) != connection) {
             self.connection_status = connection = c;
-            emit cyanide.signal_friend_connection_status(SELF_FRIEND_NUMBER, c != TOX_CONNECTION_NONE);
+            emit signal_friend_connection_status(SELF_FRIEND_NUMBER, c != TOX_CONNECTION_NONE);
             qDebug() << (c != TOX_CONNECTION_NONE ? "Connected to DHT" : "Disconnected from DHT");
         }
 
@@ -419,11 +441,15 @@ void Cyanide::tox_loop()
         usleep(1000 * MIN(interval, MAX_ITERATION_TIME));
     }
 
+    if(loop != LOOP_SUSPEND)
+        av_thread.join();
+
     uint64_t event;
     ssize_t tmp;
     switch(loop) {
         case LOOP_RUN:
             Q_ASSERT(false);
+            break;
         case LOOP_FINISH:
             qDebug() << "exiting...";
 
@@ -459,6 +485,28 @@ void Cyanide::tox_loop()
                         << "save file" << tox_save_file();
             write_default_profile();
             tox_thread();
+            break;
+    }
+}
+
+void Cyanide::toxav_thread()
+{
+    while(loop == LOOP_RUN || loop == LOOP_SUSPEND) {
+        toxav_do(toxav);
+        usleep(toxav_do_interval(toxav));
+    }
+    switch(loop) {
+        case LOOP_RUN:
+            Q_ASSERT(false);
+            break;
+        case LOOP_FINISH:
+        case LOOP_RELOAD:
+        case LOOP_RELOAD_OTHER:
+            break;
+        case LOOP_SUSPEND:
+            Q_ASSERT(false);
+            break;
+        case LOOP_STOP:
             break;
     }
 }
@@ -524,8 +572,8 @@ void Cyanide::load_defaults()
     tox_self_set_name(tox, name, name_len, &error);
     tox_self_set_status_message(tox, status, status_len, &error);
 
-    emit cyanide.signal_friend_name(SELF_FRIEND_NUMBER, NULL);
-    emit cyanide.signal_friend_status_message(SELF_FRIEND_NUMBER);
+    emit signal_friend_name(SELF_FRIEND_NUMBER, NULL);
+    emit signal_friend_status_message(SELF_FRIEND_NUMBER);
     save_needed = true;
 }
 
@@ -613,8 +661,8 @@ void Cyanide::load_tox_data()
     tox_self_get_status_message(tox, status_message);
     self.status_message = utf8_to_qstr(status_message, length);
 
-    emit cyanide.signal_friend_name(SELF_FRIEND_NUMBER, NULL);
-    emit cyanide.signal_friend_status_message(SELF_FRIEND_NUMBER);
+    emit signal_friend_name(SELF_FRIEND_NUMBER, NULL);
+    emit signal_friend_status_message(SELF_FRIEND_NUMBER);
     save_needed = true;
 }
 
@@ -622,7 +670,7 @@ uint32_t Cyanide::add_friend(Friend *f)
 {
     uint32_t fid = next_friend_number();
     friends[fid] = *f;
-    emit cyanide.signal_friend_added(fid);
+    emit signal_friend_added(fid);
     return fid;
 }
 
@@ -657,7 +705,7 @@ void Cyanide::relocate_blocked_friend()
         uint32_t to = next_but_one_unoccupied_friend_number();
         friends[to] = friends[from];
         friends.erase(from);
-        emit cyanide.signal_friend_added(to);
+        emit signal_friend_added(to);
     }
 }
 
@@ -867,7 +915,7 @@ void Cyanide::incoming_avatar(uint32_t fid, uint32_t file_number, uint64_t file_
         memset(friends[fid].avatar_hash, 0, TOX_HASH_LENGTH);
         QByteArray hash((const char*)friends[fid].avatar_hash, TOX_HASH_LENGTH);
         settings.set_friend_avatar_hash(cyanide.get_friend_public_key(fid), hash);
-        emit cyanide.signal_avatar_change(fid);
+        emit signal_avatar_change(fid);
         goto cancel;
     } else if(file_size > MAX_AVATAR_SIZE) {
         qDebug() << "avatar too large, rejecting";
@@ -914,7 +962,7 @@ void Cyanide::incoming_avatar_chunk(uint32_t fid, uint64_t position,
         Q_ASSERT(n == ft.file_size);
         fclose(ft.file);
         free(ft.data);
-        emit cyanide.signal_avatar_change(fid);
+        emit signal_avatar_change(fid);
     } else {
         memcpy(ft.data + position, data, length);
     }
@@ -1168,7 +1216,7 @@ QString Cyanide::send_file_control(int fid, int mid, TOX_FILE_CONTROL action)
         }
         qDebug() << "sent file control, new status:" << ft->status;
         if(mid >= 0)
-            emit cyanide.signal_file_status(fid, mid, ft->status);
+            emit signal_file_status(fid, mid, ft->status);
         return "";
     } else {
         qDebug() << "File control failed";
@@ -1301,60 +1349,74 @@ QString Cyanide::send_file(TOX_FILE_KIND kind, int fid, QString path, uint8_t *f
     return "";
 }
 
-void callback_av_invite(ToxAv *arg, int32_t call_index, void *UNUSED(userdata))
+void callback_av_invite(ToxAv *av, int32_t call_index, void *UNUSED(userdata))
 {
     qDebug() << "was called";
 
-    int fid = toxav_get_peer_id(arg, call_index, 0);
+    int fid = toxav_get_peer_id(av, call_index, 0);
+    Friend *f = &cyanide.friends[fid];
 
     ToxAvCSettings peer_settings ;
-    toxav_get_peer_csettings(arg, call_index, 0, &peer_settings);
+    toxav_get_peer_csettings(av, call_index, 0, &peer_settings);
     bool video = peer_settings.call_type == av_TypeVideo;
 
+    f->call_index = call_index;
+    f->callstate = -2;
+    emit cyanide.signal_friend_callstate(fid, f->callstate);
     emit cyanide.signal_av_invite(fid);
 }
 
-void callback_av_start(ToxAv *arg, int32_t call_index, void *UNUSED(userdata))
+void callback_av_start(ToxAv *av, int32_t call_index, void *UNUSED(userdata))
+{
+    qDebug() << "was called";
+    ToxAvCSettings peer_settings;
+    int fid = toxav_get_peer_id(av, call_index, 0);
+    toxav_get_peer_csettings(av, call_index, 0, &peer_settings);
+    bool video = peer_settings.call_type == av_TypeVideo;
+    if(toxav_prepare_transmission(av, call_index, 1) == 0) {
+        notify_error("asdf call started", "");
+    } else {
+        qDebug() << "toxav_prepare_transmission() failed";
+        return;
+    }
+}
+
+void callback_av_cancel(ToxAv *av, int32_t call_index, void *UNUSED(userdata))
 {
     qDebug() << "was called";
 }
 
-void callback_av_cancel(ToxAv *arg, int32_t call_index, void *UNUSED(userdata))
+void callback_av_reject(ToxAv *av, int32_t call_index, void *UNUSED(userdata))
 {
     qDebug() << "was called";
 }
 
-void callback_av_reject(ToxAv *arg, int32_t call_index, void *UNUSED(userdata))
+void callback_av_end(ToxAv *av, int32_t call_index, void *UNUSED(userdata))
 {
     qDebug() << "was called";
 }
 
-void callback_av_end(ToxAv *arg, int32_t call_index, void *UNUSED(userdata))
+void callback_av_ringing(ToxAv *av, int32_t call_index, void *UNUSED(userdata))
 {
     qDebug() << "was called";
 }
 
-void callback_av_ringing(ToxAv *arg, int32_t call_index, void *UNUSED(userdata))
+void callback_av_requesttimeout(ToxAv *av, int32_t call_index, void *UNUSED(userdata))
 {
     qDebug() << "was called";
 }
 
-void callback_av_requesttimeout(ToxAv *arg, int32_t call_index, void *UNUSED(userdata))
+void callback_av_peertimeout(ToxAv *av, int32_t call_index, void *UNUSED(userdata))
 {
     qDebug() << "was called";
 }
 
-void callback_av_peertimeout(ToxAv *arg, int32_t call_index, void *UNUSED(userdata))
+void callback_av_selfmediachange(ToxAv *av, int32_t call_index, void *UNUSED(userdata))
 {
     qDebug() << "was called";
 }
 
-void callback_av_selfmediachange(ToxAv *arg, int32_t call_index, void *UNUSED(userdata))
-{
-    qDebug() << "was called";
-}
-
-void callback_av_peermediachange(ToxAv *arg, int32_t call_index, void *UNUSED(userdata))
+void callback_av_peermediachange(ToxAv *av, int32_t call_index, void *UNUSED(userdata))
 {
     qDebug() << "was called";
 }
@@ -1362,11 +1424,65 @@ void callback_av_peermediachange(ToxAv *arg, int32_t call_index, void *UNUSED(us
 void callback_av_audio(ToxAv *av, int32_t call_index, const int16_t *data, uint16_t samples, void *UNUSED(userdata))
 {
     qDebug() << "was called";
+    ToxAvCSettings dest;
+    if(toxav_get_peer_csettings(av, call_index, 0, &dest) == 0) {
+        audio_play(call_index, data, length, dest.audio_channels);
+    }
+}
+
+static void audio_play(int i, const int16_t *data, int samples, uint8_t channels, unsigned int sample_rate)
+{
+    if(!channels || channels > 2) {
+        return;
+    }
+    // TODO
 }
 
 void callback_av_video(ToxAv *av, int32_t call_index, const vpx_image_t *img, void *UNUSED(userdata))
 {
     qDebug() << "was called";
+}
+
+void Cyanide::av_invite_accept(int fid)
+{
+    Friend *f = &friends[fid];
+    ToxAvCSettings csettings = av_DefaultSettings;
+    toxav_answer(toxav, f->call_index, &csettings);
+    emit signal_friend_callstate(fid, (f->callstate = 2));
+}
+
+void Cyanide::av_invite_reject(int fid)
+{
+    Friend *f = &friends[fid];
+    toxav_reject(toxav, f->call_index, ""); //TODO add reason
+    emit signal_friend_callstate(fid, (f->callstate = 0));
+}
+
+void Cyanide::av_call(int fid)
+{
+    Friend *f = &friends[fid];
+    if(f->callstate != 0)
+        notify_error("already in a call", "");
+
+    ToxAvCSettings csettings = av_DefaultSettings;
+
+    toxav_call(toxav, &f->call_index, fid, &csettings, 15);
+    emit signal_friend_callstate(fid, (f->callstate = -1));
+}
+
+void Cyanide::av_call_cancel(int fid)
+{
+    Friend *f = &friends[fid];
+    Q_ASSERT(f->callstate == -1);
+    toxav_cancel(toxav, f->call_index, fid, "Call cancelled by friend");
+    emit signal_friend_callstate(fid, (f->callstate = 0));
+}
+
+void Cyanide::av_hangup(int fid)
+{
+    Friend *f = &friends[fid];
+    toxav_hangup(toxav, f->call_index);
+    emit signal_friend_callstate(fid, (f->callstate = 0));
 }
 
 void Cyanide::send_typing_notification(int fid, bool typing)
@@ -1603,7 +1719,7 @@ void Cyanide::set_friend_activity(int fid, bool status)
 {
     Q_ASSERT(fid != SELF_FRIEND_NUMBER);
     friends[fid].activity = status;
-    emit cyanide.signal_friend_activity(fid);
+    emit signal_friend_activity(fid);
 }
 
 bool Cyanide::get_friend_blocked(int fid)
@@ -1630,8 +1746,14 @@ void Cyanide::set_friend_blocked(int fid, bool block)
         Q_ASSERT(friend_number == fid);
     }
     friends[fid].blocked = block;
-    emit cyanide.signal_friend_blocked(fid, block);
-    emit cyanide.signal_friend_connection_status(fid, f->connection_status != TOX_CONNECTION_NONE);
+    emit signal_friend_blocked(fid, block);
+    emit signal_friend_connection_status(fid, f->connection_status != TOX_CONNECTION_NONE);
+}
+
+int Cyanide::get_friend_callstate(int fid)
+{
+    Friend f = fid == SELF_FRIEND_NUMBER ? self : friends[fid];
+    return f.callstate;
 }
 
 void Cyanide::set_self_name(QString name)
@@ -1696,7 +1818,7 @@ void Cyanide::set_self_user_status(int status)
             break;
     }
     tox_self_set_status(tox, self.user_status);
-    emit cyanide.signal_friend_status(SELF_FRIEND_NUMBER);
+    emit signal_friend_status(SELF_FRIEND_NUMBER);
 }
 
 QString Cyanide::set_self_avatar(QString new_avatar)
@@ -1712,7 +1834,7 @@ QString Cyanide::set_self_avatar(QString new_avatar)
             qDebug() << "Failed to remove avatar file";
         } else {
             memset(self.avatar_hash, 0, TOX_HASH_LENGTH);
-            emit cyanide.signal_avatar_change(SELF_FRIEND_NUMBER);
+            emit signal_avatar_change(SELF_FRIEND_NUMBER);
             send_new_avatar();
         }
         return "";
@@ -1745,7 +1867,7 @@ QString Cyanide::set_self_avatar(QString new_avatar)
          * send it anyway, other clients will probably reject it
          */
     }
-    emit cyanide.signal_avatar_change(SELF_FRIEND_NUMBER);
+    emit signal_avatar_change(SELF_FRIEND_NUMBER);
     send_new_avatar();
 
     return "";

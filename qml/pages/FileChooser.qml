@@ -6,7 +6,7 @@ Page {
     id: page
     allowedOrientations: Orientation.All
     Component.onCompleted: {
-        pages.push("Friend.qml")
+        pages.push("FileChooser.qml")
         folderListModel.folder = folder
         folderListModel.toggleNameFilters()
     }
