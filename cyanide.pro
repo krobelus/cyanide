@@ -65,8 +65,7 @@ HEADERS += \
     src/friend.h \
     src/tox_callbacks.h \
     src/message.h \
-    src/settings.h \
-    src/config.h
+    src/settings.h
 
 unix:!macx: LIBS += -L$$PWD/res/usr/lib/ \
                 -ltoxcore -ltoxdns -ltoxav \

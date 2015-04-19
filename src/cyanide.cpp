@@ -5,10 +5,9 @@
 #include <time.h>
 
 #include <sailfishapp.h>
-#include <mlite5/mnotificationgroup.h>
 #include <mlite5/mnotification.h>
 #include <mlite5/mremoteaction.h>
-#include <QSound>
+#include <QtDBus>
 #include <QtQuick>
 #include <QTranslator>
 
@@ -17,7 +16,6 @@
 #include "tox_callbacks.h"
 #include "util.h"
 #include "dns.cpp"
-#include "config.h"
 #include "settings.h"
 
 /* oh boy, here we go... */
@@ -563,11 +561,11 @@ void Cyanide::load_defaults()
 {
     TOX_ERR_SET_INFO error;
 
-    uint8_t *name = (uint8_t*)DEFAULT_NAME, *status = (uint8_t*)DEFAULT_STATUS;
-    uint16_t name_len = sizeof(DEFAULT_NAME) - 1, status_len = sizeof(DEFAULT_STATUS) - 1;
+    uint8_t *name = (uint8_t*)DEFAULT_NAME.data(), *status = (uint8_t*)DEFAULT_STATUS.data();
+    uint16_t name_len = DEFAULT_NAME.toUtf8().size() , status_len = DEFAULT_STATUS.toUtf8().size();
 
-    self.name = QString(DEFAULT_NAME);
-    self.status_message = QString(DEFAULT_STATUS);
+    self.name = DEFAULT_NAME;
+    self.status_message = DEFAULT_STATUS;
 
     tox_self_set_name(tox, name, name_len, &error);
     tox_self_set_status_message(tox, status, status_len, &error);
@@ -1363,7 +1361,7 @@ QString Cyanide::send_friend_request(QString id_str, QString msg_str)
     qstr_to_utf8((uint8_t*)id, id_str);
 
     if(msg_str.isEmpty())
-        msg_str = QString(DEFAULT_FRIEND_REQUEST_MESSAGE);
+        msg_str = DEFAULT_FRIEND_REQUEST_MESSAGE;
 
     size_t msg_len = qstrlen(msg_str);
     uint8_t msg[msg_len];

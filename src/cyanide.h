@@ -3,13 +3,34 @@
 
 #include <QObject>
 #include <QtQuick>
-#include <QtDBus>
 #include <tox/tox.h>
 #include <tox/toxav.h>
 
-#include "config.h"
 #include "friend.h"
 #include "message.h"
+
+#define MAX_AVATAR_SIZE 64 * 1024
+#define MAX_CALLS 16
+
+const QString TOX_DATA_DIR = QDir::homePath() + "/.config/tox/";
+const QString TOX_AVATAR_DIR   = TOX_DATA_DIR + "avatars/";
+const QString CYANIDE_DATA_DIR = TOX_DATA_DIR + "cyanide/";
+
+const QString DEFAULT_PROFILE_NAME = "tox_save";
+const QString DEFAULT_PROFILE_FILE  = CYANIDE_DATA_DIR + "default_profile";
+
+const QString DOWNLOAD_DIR = QDir::homePath() + "/Downloads/";
+
+const uint32_t MAX_ITERATION_TIME = 20;
+
+enum LOOP_STATE
+             { LOOP_RUN = 0
+             , LOOP_FINISH
+             , LOOP_RELOAD
+             , LOOP_RELOAD_OTHER
+             , LOOP_SUSPEND
+             , LOOP_STOP
+};
 
 class Cyanide : public QObject
 {
@@ -45,6 +66,8 @@ public:
 
     bool save_needed;
     enum LOOP_STATE loop;
+
+
 
     uint32_t add_friend(Friend *f);
     uint32_t next_friend_number();
@@ -183,5 +206,9 @@ public slots:
 
 void start_tox_thread(Cyanide *cyanide);
 void start_toxav_thread(Cyanide *cyanide);
+
+const QString DEFAULT_NAME = Cyanide::tr("Tox User");
+const QString DEFAULT_STATUS = Cyanide::tr("Toxing on Cyanide");
+const QString DEFAULT_FRIEND_REQUEST_MESSAGE = Cyanide::tr("Tox me maybe?");
 
 #endif // CYANIDE_H

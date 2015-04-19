@@ -1,6 +1,6 @@
 #include <tox/tox.h>
 
-#include "config.h"
+#include "cyanide.h"
 #include "util.h"
 
 #include "settings.h"
