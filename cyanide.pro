@@ -21,7 +21,8 @@ SOURCES += \
     src/dns.cpp \
     src/friend.cpp \
     src/settings.cpp \
-    src/util.cpp
+    src/util.cpp \
+    src/av.cpp
 
 OTHER_FILES += \
     cyanide.desktop \
