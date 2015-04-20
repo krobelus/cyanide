@@ -22,7 +22,8 @@ SOURCES += \
     src/friend.cpp \
     src/settings.cpp \
     src/util.cpp \
-    src/av.cpp
+    src/av.cpp \
+    src/filetransfers.cpp
 
 OTHER_FILES += \
     cyanide.desktop \

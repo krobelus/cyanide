@@ -77,6 +77,7 @@ desktop-file-install --delete-original       \
 %{_datadir}/applications/%{name}.desktop
 %{_datadir}/icons/hicolor/86x86/apps/%{name}.png
 # >> files
-%{_datadir}/lipstick/notificationcategories/cyanide.message.conf
 %{_datadir}/dbus-1/services/harbour.cyanide.service
+%{_datadir}/lipstick/notificationcategories/harbour.cyanide.call.conf
+%{_datadir}/lipstick/notificationcategories/harbour.cyanide.message.conf
 # << files
