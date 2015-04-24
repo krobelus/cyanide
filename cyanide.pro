@@ -14,7 +14,7 @@ TARGET = cyanide
 
 CONFIG += sailfishapp
 
-QT += sql dbus multimedia
+QT += sql dbus
 
 SOURCES += \
     src/cyanide.cpp \
@@ -85,4 +85,4 @@ QMAKE_CXXFLAGS += "-Wno-pointer-arith"
 RESOURCES += \
     resources.qrc
 
-unix: PKGCONFIG += mlite5
+unix: PKGCONFIG += mlite5 openal

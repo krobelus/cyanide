@@ -26,6 +26,7 @@ BuildRequires:  pkgconfig(sailfishapp) >= 1.0.2
 BuildRequires:  pkgconfig(Qt5Core)
 BuildRequires:  pkgconfig(Qt5Qml)
 BuildRequires:  pkgconfig(Qt5Quick)
+BuildRequires:  pkgconfig(openal)
 BuildRequires:  desktop-file-utils
 
 %description
@@ -58,12 +59,12 @@ rm -rf %{buildroot}
 # >> install post
 # TODO use variables for sanity
 install -Dm644 /home/mersdk/share/git/cyanide/filesystem/usr/share/lipstick/notificationcategories/harbour.cyanide.call.conf \
-                                           %{buildroot}%{_datadir}/lipstick/notificationcategories/harbour.cyanide.call.conf
+%{buildroot}%{_datadir}/lipstick/notificationcategories/harbour.cyanide.call.conf
 install -Dm644 /home/mersdk/share/git/cyanide/filesystem/usr/share/lipstick/notificationcategories/harbour.cyanide.message.conf \
-                                           %{buildroot}%{_datadir}/lipstick/notificationcategories/harbour.cyanide.message.conf
+%{buildroot}%{_datadir}/lipstick/notificationcategories/harbour.cyanide.message.conf
 
 install -Dm644 /home/mersdk/share/git/cyanide/filesystem/usr/share/dbus-1/services/harbour.cyanide.service \
-                                           %{buildroot}%{_datadir}/dbus-1/services/harbour.cyanide.service
+%{buildroot}%{_datadir}/dbus-1/services/harbour.cyanide.service
 # << install post
 
 desktop-file-install --delete-original       \
