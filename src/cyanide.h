@@ -8,6 +8,7 @@
 
 #include "friend.h"
 #include "message.h"
+#include "settings.h"
 
 #define MAX_AVATAR_SIZE 64 * 1024
 #define MAX_CALLS 16
@@ -49,6 +50,7 @@ private:
 public:
     Tox *tox;
     ToxAv *toxav;
+    Settings settings;
 
     QString profile_name, next_profile_name;
 
@@ -57,7 +59,7 @@ public:
     QString tox_save_file(QString name);
 
     QQuickView *view;
-    int eventfd;
+    int events;
 
     Friend self;
     static const int SELF_FRIEND_NUMBER = -1;
@@ -68,6 +70,7 @@ public:
     enum LOOP_STATE loop;
 
 
+    Cyanide(QObject *parent = 0);
 
     uint32_t add_friend(Friend *f);
     uint32_t next_friend_number();

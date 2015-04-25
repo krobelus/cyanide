@@ -21,9 +21,6 @@
 /* oh boy, here we go... */
 #define UINT32_MAX (4294967295U)
 
-Cyanide cyanide;
-Settings settings;
-
 struct Tox_Options tox_options;
 
 int main(int argc, char *argv[])
@@ -32,39 +29,42 @@ int main(int argc, char *argv[])
     app->setOrganizationName("Tox");
     app->setOrganizationDomain("Tox");
     app->setApplicationName("Cyanide");
-    cyanide.view = SailfishApp::createView();
 
-    bool success;
-    success = QDBusConnection::sessionBus().registerObject("/", &cyanide, QDBusConnection::ExportScriptableContents)
-            && QDBusConnection::sessionBus().registerService("harbour.cyanide");
+    Cyanide *cyanide = new Cyanide();
+    cyanide->read_default_profile(app->arguments());
 
-    if(!success)
-        QGuiApplication::exit(0);
+    std::thread my_tox_thread(start_tox_thread, cyanide);
 
-    cyanide.read_default_profile(app->arguments());
+    cyanide->view->rootContext()->setContextProperty("cyanide", cyanide);
+    cyanide->view->rootContext()->setContextProperty("settings", &cyanide->settings);
+    cyanide->view->setSource(SailfishApp::pathTo("qml/cyanide.qml"));
+    cyanide->view->showFullScreen();
 
-    cyanide.eventfd = eventfd(0, 0);
-    cyanide.check_wifi();
-    cyanide.wifi_monitor();
-
-    std::thread my_tox_thread(start_tox_thread, &cyanide);
-
-    cyanide.view->rootContext()->setContextProperty("cyanide", &cyanide);
-    cyanide.view->rootContext()->setContextProperty("settings", &settings);
-    cyanide.view->setSource(SailfishApp::pathTo("qml/cyanide.qml"));
-    cyanide.view->showFullScreen();
-
-    QObject::connect(cyanide.view, SIGNAL(visibilityChanged(QWindow::Visibility)),
-                    &cyanide, SLOT(visibility_changed(QWindow::Visibility)));
+    QObject::connect(cyanide->view, SIGNAL(visibilityChanged(QWindow::Visibility)),
+                     cyanide, SLOT(visibility_changed(QWindow::Visibility)));
 
     int result = app->exec();
 
-    cyanide.loop = LOOP_FINISH;
-    settings.close_databases();
+    cyanide->loop = LOOP_FINISH;
+    //settings->close_databases();
     my_tox_thread.join();
 
     return result;
 }
+
+Cyanide::Cyanide(QObject *parent) : QObject(parent)
+{
+    if(!(QDBusConnection::sessionBus().registerObject("/", this, QDBusConnection::ExportScriptableContents)
+                                         && QDBusConnection::sessionBus().registerService("harbour.cyanide")))
+        QGuiApplication::exit(0);
+
+    view = SailfishApp::createView();
+
+    events = eventfd(0, 0);
+    check_wifi();
+    wifi_monitor();
+}
+
 
 QString Cyanide::tox_save_file()
 {
@@ -193,7 +193,7 @@ void Cyanide::wifi_monitor()
                  "/net/connman/technology/wifi",
                  "net.connman.Technology",
                  "PropertyChanged",
-                 &cyanide,
+                 this,
                  SLOT(wifi_changed(QString, QDBusVariant)));
 }
 
@@ -220,7 +220,7 @@ void Cyanide::resume_thread()
 {
     loop = LOOP_RUN;
     uint64_t event = 1;
-    ssize_t tmp = write(eventfd, &event, sizeof(event));
+    ssize_t tmp = write(events, &event, sizeof(event));
     Q_ASSERT(tmp == sizeof(event));
 }
 
@@ -409,8 +409,8 @@ void Cyanide::tox_thread()
 
 void Cyanide::tox_loop()
 {
-    std::thread toxav_thread(start_toxav_thread, &cyanide);
-    std::thread audio_thread(start_audio_thread, &cyanide);
+    std::thread toxav_thread(start_toxav_thread, this);
+    std::thread audio_thread(start_audio_thread, this);
 
     uint64_t last_save = get_time(), time;
     TOX_CONNECTION c, connection = c = TOX_CONNECTION_NONE;
@@ -478,14 +478,14 @@ void Cyanide::tox_loop()
             tox_thread();
             break;
         case LOOP_SUSPEND:
-            tmp = read(eventfd, &event, sizeof(event));
+            tmp = read(events, &event, sizeof(event));
             Q_ASSERT(tmp == sizeof(event));
             qDebug() << "read" << event << ", resuming thread";
             tox_loop();
             break;
         case LOOP_STOP:
             killall_tox();
-            tmp = read(eventfd, &event, sizeof(event));
+            tmp = read(events, &event, sizeof(event));
             Q_ASSERT(tmp = sizeof(event));
             qDebug() << "read" << event << ", starting thread with profile" << profile_name
                         << "save file" << tox_save_file();
@@ -732,111 +732,38 @@ void Cyanide::add_message(uint32_t fid, Message message)
 
 void Cyanide::set_callbacks()
 {
-    tox_callback_friend_request(tox, callback_friend_request, NULL);
-    tox_callback_friend_message(tox, callback_friend_message, NULL);
-    tox_callback_friend_name(tox, callback_friend_name, NULL);
-    tox_callback_friend_status_message(tox, callback_friend_status_message, NULL);
-    tox_callback_friend_status(tox, callback_friend_status, NULL);
-    tox_callback_friend_typing(tox, callback_friend_typing, NULL);
-    tox_callback_friend_read_receipt(tox, callback_friend_read_receipt, NULL);
-    tox_callback_friend_connection_status(tox, callback_friend_connection_status, NULL);
+    tox_callback_friend_request(tox, callback_friend_request, this);
+    tox_callback_friend_message(tox, callback_friend_message, this);
+    tox_callback_friend_name(tox, callback_friend_name, this);
+    tox_callback_friend_status_message(tox, callback_friend_status_message, this);
+    tox_callback_friend_status(tox, callback_friend_status, this);
+    tox_callback_friend_typing(tox, callback_friend_typing, this);
+    tox_callback_friend_read_receipt(tox, callback_friend_read_receipt, this);
+    tox_callback_friend_connection_status(tox, callback_friend_connection_status, this);
 
-    tox_callback_file_recv(tox, callback_file_recv, NULL);
-    tox_callback_file_recv_chunk(tox, callback_file_recv_chunk, NULL);
-    tox_callback_file_recv_control(tox, callback_file_recv_control, NULL);
-    tox_callback_file_chunk_request(tox, callback_file_chunk_request, NULL);
+    tox_callback_file_recv(tox, callback_file_recv, this);
+    tox_callback_file_recv_chunk(tox, callback_file_recv_chunk, this);
+    tox_callback_file_recv_control(tox, callback_file_recv_control, this);
+    tox_callback_file_chunk_request(tox, callback_file_chunk_request, this);
 }
 
 void Cyanide::set_av_callbacks()
 {
-    toxav_register_callstate_callback(toxav, (ToxAVCallback)callback_av_invite, av_OnInvite, NULL);
-    toxav_register_callstate_callback(toxav, (ToxAVCallback)callback_av_start, av_OnStart, NULL);
-    toxav_register_callstate_callback(toxav, (ToxAVCallback)callback_av_cancel, av_OnCancel, NULL);
-    toxav_register_callstate_callback(toxav, (ToxAVCallback)callback_av_reject, av_OnReject, NULL);
-    toxav_register_callstate_callback(toxav, (ToxAVCallback)callback_av_end, av_OnEnd, NULL);
+    toxav_register_callstate_callback(toxav, (ToxAVCallback)callback_av_invite, av_OnInvite, this);
+    toxav_register_callstate_callback(toxav, (ToxAVCallback)callback_av_start, av_OnStart, this);
+    toxav_register_callstate_callback(toxav, (ToxAVCallback)callback_av_cancel, av_OnCancel, this);
+    toxav_register_callstate_callback(toxav, (ToxAVCallback)callback_av_reject, av_OnReject, this);
+    toxav_register_callstate_callback(toxav, (ToxAVCallback)callback_av_end, av_OnEnd, this);
 
-    toxav_register_callstate_callback(toxav, (ToxAVCallback)callback_av_ringing, av_OnRinging, NULL);
+    toxav_register_callstate_callback(toxav, (ToxAVCallback)callback_av_ringing, av_OnRinging, this);
 
-    toxav_register_callstate_callback(toxav, (ToxAVCallback)callback_av_requesttimeout, av_OnRequestTimeout, NULL);
-    toxav_register_callstate_callback(toxav, (ToxAVCallback)callback_av_peertimeout, av_OnPeerTimeout, NULL);
-    toxav_register_callstate_callback(toxav, (ToxAVCallback)callback_av_selfmediachange, av_OnSelfCSChange, NULL);
-    toxav_register_callstate_callback(toxav, (ToxAVCallback)callback_av_peermediachange, av_OnPeerCSChange, NULL);
+    toxav_register_callstate_callback(toxav, (ToxAVCallback)callback_av_requesttimeout, av_OnRequestTimeout, this);
+    toxav_register_callstate_callback(toxav, (ToxAVCallback)callback_av_peertimeout, av_OnPeerTimeout, this);
+    toxav_register_callstate_callback(toxav, (ToxAVCallback)callback_av_selfmediachange, av_OnSelfCSChange, this);
+    toxav_register_callstate_callback(toxav, (ToxAVCallback)callback_av_peermediachange, av_OnPeerCSChange, this);
 
-    toxav_register_audio_callback(toxav, (ToxAvAudioCallback)callback_av_audio, NULL);
-    toxav_register_video_callback(toxav, (ToxAvVideoCallback)callback_av_video, NULL);
-}
-
-void callback_friend_request(Tox *UNUSED(tox), const uint8_t *id, const uint8_t *msg, size_t length, void *UNUSED(userdata))
-{
-    qDebug() << "was called";
-    int name_length = 2 * TOX_ADDRESS_SIZE * sizeof(char);
-    void *name = malloc(name_length);
-    address_to_string((char*)name, (char*)id);
-    Friend *f = new Friend(id, utf8_to_qstr(name, name_length), utf8_to_qstr(msg, length));
-    f->accepted = false;
-    uint32_t friend_number = cyanide.add_friend(f);
-    emit cyanide.signal_friend_request(friend_number);
-}
-
-void callback_friend_message(Tox *UNUSED(tox), uint32_t fid, TOX_MESSAGE_TYPE type, const uint8_t *msg, size_t length, void *UNUSED(userdata))
-{
-    qDebug() << "was called";
-    Message m;
-    m.type = type == TOX_MESSAGE_TYPE_ACTION ? MSGTYPE_ACTION : MSGTYPE_NORMAL;
-    m.author = false;
-    m.text = utf8_to_qstr(msg, length);
-    m.timestamp = QDateTime::currentDateTime();
-    m.ft = NULL;
-    cyanide.add_message(fid, m);
-}
-
-void callback_friend_name(Tox *UNUSED(tox), uint32_t fid, const uint8_t *newname, size_t length, void *UNUSED(userdata))
-{
-    qDebug() << "was called";
-    Friend *f = &cyanide.friends[fid];
-    QString previous_name = f->name;
-    f->name = utf8_to_qstr(newname, length);
-    emit cyanide.signal_friend_name(fid, previous_name);
-    cyanide.save_needed = true;
-}
-
-void callback_friend_status_message(Tox *UNUSED(tox), uint32_t fid, const uint8_t *newstatus, size_t length, void *UNUSED(userdata))
-{
-    qDebug() << "was called";
-    cyanide.friends[fid].status_message = utf8_to_qstr(newstatus, length);
-    emit cyanide.signal_friend_status_message(fid);
-    cyanide.save_needed = true;
-}
-
-void callback_friend_status(Tox *UNUSED(tox), uint32_t fid, TOX_USER_STATUS status, void *UNUSED(userdata))
-{
-    qDebug() << "was called";
-    cyanide.friends[fid].user_status = status;
-    emit cyanide.signal_friend_status(fid);
-}
-
-void callback_friend_typing(Tox *UNUSED(tox), uint32_t fid, bool is_typing, void *UNUSED(userdata))
-{
-    emit cyanide.signal_friend_typing(fid, is_typing);
-}
-
-void callback_friend_read_receipt(Tox *UNUSED(tox), uint32_t fid, uint32_t receipt, void *UNUSED(userdata))
-{
-    // TODO
-    qDebug() << "was called";
-}
-
-void callback_friend_connection_status(Tox *tox, uint32_t fid, TOX_CONNECTION status, void *UNUSED(userdata))
-{
-    Friend *f = &cyanide.friends[fid];
-    f->connection_status = status;
-    if(status != TOX_CONNECTION_NONE) {
-        qDebug() << "Sending avatar to friend" << fid;
-        QString errmsg = cyanide.send_avatar(fid);
-        if(errmsg != "")
-            qDebug() << "Failed to send avatar. " << errmsg;
-    }
-    emit cyanide.signal_friend_connection_status(fid, status != TOX_CONNECTION_NONE);
+    toxav_register_audio_callback(toxav, (ToxAvAudioCallback)callback_av_audio, this);
+    toxav_register_video_callback(toxav, (ToxAvVideoCallback)callback_av_video, this);
 }
 
 void Cyanide::send_typing_notification(int fid, bool typing)
@@ -1233,7 +1160,7 @@ void Cyanide::send_new_avatar()
     for(auto i=friends.begin(); i!=friends.end(); i++) {
         Friend *f = &i->second;
         if(f->connection_status != TOX_CONNECTION_NONE) {
-            QString errmsg = cyanide.send_avatar(i->first);
+            QString errmsg = send_avatar(i->first);
             if(errmsg != "")
                 qDebug() << "Failed to send avatar. " << errmsg;
         }

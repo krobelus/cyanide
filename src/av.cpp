@@ -6,18 +6,17 @@
 #include "unused.h"
 #include "util.h"
 
-extern Cyanide cyanide;
-
 static ALCdevice *device_out, *device_in;
 static ALCcontext *context;
 static ALuint source[MAX_CALLS];
 
-void callback_av_invite(ToxAv *av, int32_t call_index, void *UNUSED(userdata))
+void callback_av_invite(ToxAv *av, int32_t call_index, void *that)
 {
     qDebug() << "was called";
+    Cyanide *cyanide = (Cyanide*)that;
 
     int fid = toxav_get_peer_id(av, call_index, 0);
-    Friend *f = &cyanide.friends[fid];
+    Friend *f = &cyanide->friends[fid];
 
     ToxAvCSettings peer_settings ;
     toxav_get_peer_csettings(av, call_index, 0, &peer_settings);
@@ -25,13 +24,14 @@ void callback_av_invite(ToxAv *av, int32_t call_index, void *UNUSED(userdata))
 
     f->call_index = call_index;
     f->callstate = -2;
-    emit cyanide.signal_friend_callstate(fid, f->callstate);
-    emit cyanide.signal_av_invite(fid);
+    emit cyanide->signal_friend_callstate(fid, f->callstate);
+    emit cyanide->signal_av_invite(fid);
 }
 
-void callback_av_start(ToxAv *av, int32_t call_index, void *UNUSED(userdata))
+void callback_av_start(ToxAv *av, int32_t call_index, void *that)
 {
     qDebug() << "was called";
+    Cyanide *cyanide = (Cyanide*)that;
     ToxAvCSettings peer_settings;
     int fid = toxav_get_peer_id(av, call_index, 0);
     toxav_get_peer_csettings(av, call_index, 0, &peer_settings);
@@ -44,44 +44,52 @@ void callback_av_start(ToxAv *av, int32_t call_index, void *UNUSED(userdata))
     }
 }
 
-void callback_av_cancel(ToxAv *av, int32_t call_index, void *UNUSED(userdata))
+void callback_av_cancel(ToxAv *av, int32_t call_index, void *that)
 {
     qDebug() << "was called";
+    //Cyanide *cyanide = (Cyanide*)that;
 }
 
-void callback_av_reject(ToxAv *av, int32_t call_index, void *UNUSED(userdata))
+void callback_av_reject(ToxAv *av, int32_t call_index, void *that)
 {
     qDebug() << "was called";
+    //Cyanide *cyanide = (Cyanide*)that;
 }
 
-void callback_av_end(ToxAv *av, int32_t call_index, void *UNUSED(userdata))
+void callback_av_end(ToxAv *av, int32_t call_index, void *that)
 {
     qDebug() << "was called";
+    //Cyanide *cyanide = (Cyanide*)that;
 }
 
-void callback_av_ringing(ToxAv *av, int32_t call_index, void *UNUSED(userdata))
+void callback_av_ringing(ToxAv *av, int32_t call_index, void *that)
 {
     qDebug() << "was called";
+    //Cyanide *cyanide = (Cyanide*)that;
 }
 
-void callback_av_requesttimeout(ToxAv *av, int32_t call_index, void *UNUSED(userdata))
+void callback_av_requesttimeout(ToxAv *av, int32_t call_index, void *that)
 {
     qDebug() << "was called";
+    //Cyanide *cyanide = (Cyanide*)that;
 }
 
-void callback_av_peertimeout(ToxAv *av, int32_t call_index, void *UNUSED(userdata))
+void callback_av_peertimeout(ToxAv *av, int32_t call_index, void *that)
 {
     qDebug() << "was called";
+    //Cyanide *cyanide = (Cyanide*)that;
 }
 
-void callback_av_selfmediachange(ToxAv *av, int32_t call_index, void *UNUSED(userdata))
+void callback_av_selfmediachange(ToxAv *av, int32_t call_index, void *that)
 {
     qDebug() << "was called";
+    //Cyanide *cyanide = (Cyanide*)that;
 }
 
-void callback_av_peermediachange(ToxAv *av, int32_t call_index, void *UNUSED(userdata))
+void callback_av_peermediachange(ToxAv *av, int32_t call_index, void *that)
 {
     qDebug() << "was called";
+    //Cyanide *cyanide = (Cyanide*)that;
 }
 
 void audio_play(int i, const int16_t *data, int samples, uint8_t channels, unsigned int sample_rate)
@@ -319,7 +327,7 @@ void Cyanide::audio_thread()
     alcCloseDevice(device_out);
 }
 
-void callback_av_audio(ToxAv *av, int32_t call_index, const int16_t *data, uint16_t samples, void *UNUSED(userdata))
+void callback_av_audio(ToxAv *av, int32_t call_index, const int16_t *data, uint16_t samples, void *that)
 {
     //qDebug() << "was called";
     ToxAvCSettings dest;
@@ -328,7 +336,7 @@ void callback_av_audio(ToxAv *av, int32_t call_index, const int16_t *data, uint1
     }
 }
 
-void callback_av_video(ToxAv *av, int32_t call_index, const vpx_image_t *img, void *UNUSED(userdata))
+void callback_av_video(ToxAv *av, int32_t call_index, const vpx_image_t *img, void *that)
 {
     qDebug() << "was called";
 }

@@ -4,14 +4,12 @@
 #include "unused.h"
 #include "util.h"
 
-extern Cyanide cyanide;
-extern Settings settings;
-
 void callback_file_recv(Tox *tox, uint32_t fid, uint32_t file_number, uint32_t kind,
-                        uint64_t file_size, const uint8_t *filename, size_t filename_length, void *UNUSED(user_data))
+                        uint64_t file_size, const uint8_t *filename, size_t filename_length, void *that)
 {
+    Cyanide *cyanide = (Cyanide*)that;
     if(kind == TOX_FILE_KIND_AVATAR)
-        return cyanide.incoming_avatar(fid, file_number, file_size, filename, filename_length);
+        return cyanide->incoming_avatar(fid, file_number, file_size, filename, filename_length);
 
     qDebug() << "Received file transfer request: friend" << fid << "file" << file_number
              << "size" << file_size;
@@ -48,7 +46,7 @@ void callback_file_recv(Tox *tox, uint32_t fid, uint32_t file_number, uint32_t k
     if((ft->file = fopen(m.text.toUtf8().constData(), "wb")) == NULL)
         qDebug() << "Failed to open file " << m.text;
 
-    cyanide.add_message(fid, m);
+    cyanide->add_message(fid, m);
 }
 
 void Cyanide::incoming_avatar(uint32_t fid, uint32_t file_number, uint64_t file_size,
@@ -68,8 +66,8 @@ void Cyanide::incoming_avatar(uint32_t fid, uint32_t file_number, uint64_t file_
     ft->status = -2;
 
     /* check if the hash is the same as the one of the cached avatar */
-    cyanide.get_file_id(fid, ft);
-    if(0 == memcmp(cyanide.friends[fid].avatar_hash, ft->file_id,
+    get_file_id(fid, ft);
+    if(0 == memcmp(friends[fid].avatar_hash, ft->file_id,
             TOX_HASH_LENGTH)) {
         qDebug() << "avatar already present";
         goto cancel;
@@ -80,7 +78,7 @@ void Cyanide::incoming_avatar(uint32_t fid, uint32_t file_number, uint64_t file_
     memcpy(ft->filename, filename, filename_length);
     char p[TOX_AVATAR_DIR.size() + 2 * TOX_PUBLIC_KEY_SIZE + 4];
     char hex_pubkey[2 * TOX_PUBLIC_KEY_SIZE + 1];
-    public_key_to_string(hex_pubkey, (char*)cyanide.friends[fid].public_key);
+    public_key_to_string(hex_pubkey, (char*)friends[fid].public_key);
     hex_pubkey[2 * TOX_PUBLIC_KEY_SIZE] = '\0';
     sprintf(p, "%s%s.png", TOX_AVATAR_DIR.toUtf8().constData(), hex_pubkey);
 
@@ -88,7 +86,7 @@ void Cyanide::incoming_avatar(uint32_t fid, uint32_t file_number, uint64_t file_
         unlink(p);
         memset(friends[fid].avatar_hash, 0, TOX_HASH_LENGTH);
         QByteArray hash((const char*)friends[fid].avatar_hash, TOX_HASH_LENGTH);
-        settings.set_friend_avatar_hash(cyanide.get_friend_public_key(fid), hash);
+        settings.set_friend_avatar_hash(get_friend_public_key(fid), hash);
         emit signal_avatar_change(fid);
         goto cancel;
     } else if(file_size > MAX_AVATAR_SIZE) {
@@ -101,14 +99,14 @@ void Cyanide::incoming_avatar(uint32_t fid, uint32_t file_number, uint64_t file_
         qDebug() << "Failed to allocate memory for the avatar";
         goto cancel;
     } else {
-        QString errmsg = cyanide.send_file_control(fid, -2, TOX_FILE_CONTROL_RESUME);
+        QString errmsg = send_file_control(fid, -2, TOX_FILE_CONTROL_RESUME);
         if(errmsg == "")
             return;
         else
             qDebug() << "failed to resume avatar transfer: " << errmsg;
     }
 cancel:
-    QString errmsg = cyanide.send_file_control(fid, -2, TOX_FILE_CONTROL_CANCEL);
+    QString errmsg = send_file_control(fid, -2, TOX_FILE_CONTROL_CANCEL);
     if(errmsg != "")
         qDebug() << "failed to cancel avatar transfer: " << errmsg;
     free(ft->data);
@@ -122,7 +120,7 @@ void Cyanide::incoming_avatar_chunk(uint32_t fid, uint64_t position,
     bool success;
     size_t n;
 
-    Friend *f = &cyanide.friends[fid];
+    Friend *f = &friends[fid];
     File_Transfer ft = f->avatar_transfer;
 
     if(length == 0) {
@@ -130,7 +128,7 @@ void Cyanide::incoming_avatar_chunk(uint32_t fid, uint64_t position,
                  << "file" << ft.file_number;
         success = tox_hash(f->avatar_hash, ft.data, ft.file_size);
         QByteArray hash((const char*)f->avatar_hash, TOX_HASH_LENGTH);
-        settings.set_friend_avatar_hash(cyanide.get_friend_public_key(fid), hash);
+        settings.set_friend_avatar_hash(get_friend_public_key(fid), hash);
         Q_ASSERT(success);
         n = fwrite(ft.data, 1, ft.file_size, ft.file);
         Q_ASSERT(n == ft.file_size);
@@ -143,17 +141,18 @@ void Cyanide::incoming_avatar_chunk(uint32_t fid, uint64_t position,
 }
 
 void callback_file_recv_chunk(Tox *tox, uint32_t fid, uint32_t file_number, uint64_t position,
-                              const uint8_t *data, size_t length, void *UNUSED(user_data))
+                              const uint8_t *data, size_t length, void *that)
 {
+    Cyanide *cyanide = (Cyanide*)that;
     qDebug() << "was called";
 
-    Friend *f = &cyanide.friends[fid];
+    Friend *f = &cyanide->friends[fid];
     int mid = f->files[file_number];
 
     if(mid == -1) {
         Q_ASSERT(false);
     } else if(mid == -2) {
-        return cyanide.incoming_avatar_chunk(fid, position, data, length);
+        return cyanide->incoming_avatar_chunk(fid, position, data, length);
     }
 
     File_Transfer *ft = f->messages[mid].ft;
@@ -163,8 +162,8 @@ void callback_file_recv_chunk(Tox *tox, uint32_t fid, uint32_t file_number, uint
         qDebug() << "file transfer finished";
         fclose(ft->file);
         ft->status = 2;
-        emit cyanide.signal_file_status(fid, mid, ft->status);
-        emit cyanide.signal_file_progress(fid, mid, 100);
+        emit cyanide->signal_file_status(fid, mid, ft->status);
+        emit cyanide->signal_file_progress(fid, mid, 100);
     } else if(fwrite(data, 1, length, file) != length) {
         qDebug() << "fwrite failed";
     } else {
@@ -173,17 +172,18 @@ void callback_file_recv_chunk(Tox *tox, uint32_t fid, uint32_t file_number, uint
             qDebug() << "lol";
         } else {
             ft->position += length;
-            emit cyanide.signal_file_progress(fid, mid, cyanide.get_file_progress(fid, mid));
+            emit cyanide->signal_file_progress(fid, mid, cyanide->get_file_progress(fid, mid));
         }
     }
 }
 
 void callback_file_recv_control(Tox *UNUSED(tox), uint32_t fid, uint32_t file_number,
-                                TOX_FILE_CONTROL action, void *UNUSED(userdata))
+                                TOX_FILE_CONTROL action, void *that)
 {
+    Cyanide *cyanide = (Cyanide*)that;
     qDebug() << "was called";
 
-    Friend *f = &cyanide.friends[fid];
+    Friend *f = &cyanide->friends[fid];
     int mid  = f->files[file_number];
     qDebug() << "message id is" << mid << "file number is" << file_number;
 
@@ -192,7 +192,7 @@ void callback_file_recv_control(Tox *UNUSED(tox), uint32_t fid, uint32_t file_nu
 
     if(mid == -1) {
         qDebug() << "outgoing avatar transfer";
-        ft = &cyanide.self.avatar_transfer;
+        ft = &cyanide->self.avatar_transfer;
     } else if(mid == -2) {
         qDebug() << "incoming avatar transfer";
         ft = &f->avatar_transfer;
@@ -235,19 +235,20 @@ void callback_file_recv_control(Tox *UNUSED(tox), uint32_t fid, uint32_t file_nu
         default:
             Q_ASSERT(false);
     }
-    emit cyanide.signal_file_status(fid, mid, ft->status);
+    emit cyanide->signal_file_status(fid, mid, ft->status);
 }
 
 void callback_file_chunk_request(Tox *tox, uint32_t fid, uint32_t file_number,
-                                 uint64_t position, size_t length, void *UNUSED(user_data))
+                                 uint64_t position, size_t length, void *that)
 {
+    Cyanide *cyanide = (Cyanide*)that;
     qDebug() << "was called";
 
     bool success = false;
     TOX_ERR_FILE_SEND_CHUNK error;
     uint8_t *chunk = NULL;
 
-    Friend *f = &cyanide.friends[fid];
+    Friend *f = &cyanide->friends[fid];
     int mid = f->files[file_number];
 
     qDebug() << "mid" << mid << "fid" << fid
@@ -256,7 +257,7 @@ void callback_file_chunk_request(Tox *tox, uint32_t fid, uint32_t file_number,
     File_Transfer *ft;
 
     if(mid == -1) {
-        ft = &cyanide.self.avatar_transfer;
+        ft = &cyanide->self.avatar_transfer;
     } else if(mid == -2) {
         Q_ASSERT(false);
     } else {
@@ -269,7 +270,7 @@ void callback_file_chunk_request(Tox *tox, uint32_t fid, uint32_t file_number,
         fclose(file);
         qDebug() << "file sending done";
         ft->status = 2;
-        emit cyanide.signal_file_status(fid, mid, ft->status);
+        emit cyanide->signal_file_status(fid, mid, ft->status);
         success = true;
     } else {
         chunk = (uint8_t*)malloc(length);
@@ -284,7 +285,7 @@ void callback_file_chunk_request(Tox *tox, uint32_t fid, uint32_t file_number,
     if(success) {
         ft->position += length;
         if(mid >= 0)
-            emit cyanide.signal_file_progress(fid, mid, cyanide.get_file_progress(fid, mid));
+            emit cyanide->signal_file_progress(fid, mid, cyanide->get_file_progress(fid, mid));
     } else {
         qDebug() << "Failed to send file chunk";
         switch(error) {
