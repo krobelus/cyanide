@@ -98,6 +98,7 @@ public:
     void tox_thread();
     void tox_loop();
     void toxav_thread();
+    void audio_thread();
 
     void suspend_thread();
     void resume_thread();
@@ -206,6 +207,7 @@ public slots:
 
 void start_tox_thread(Cyanide *cyanide);
 void start_toxav_thread(Cyanide *cyanide);
+void start_audio_thread(Cyanide *cyanide);
 
 const QString DEFAULT_NAME = Cyanide::tr("Tox User");
 const QString DEFAULT_STATUS = Cyanide::tr("Toxing on Cyanide");

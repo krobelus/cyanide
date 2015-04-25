@@ -378,6 +378,11 @@ void start_toxav_thread(Cyanide *cyanide)
     cyanide->toxav_thread();
 }
 
+void start_audio_thread(Cyanide *cyanide)
+{
+    cyanide->audio_thread();
+}
+
 void Cyanide::tox_thread()
 {
     qDebug() << "profile name" << profile_name;
@@ -404,7 +409,8 @@ void Cyanide::tox_thread()
 
 void Cyanide::tox_loop()
 {
-    std::thread av_thread(start_toxav_thread, &cyanide);
+    std::thread toxav_thread(start_toxav_thread, &cyanide);
+    std::thread audio_thread(start_audio_thread, &cyanide);
 
     uint64_t last_save = get_time(), time;
     TOX_CONNECTION c, connection = c = TOX_CONNECTION_NONE;
@@ -439,8 +445,10 @@ void Cyanide::tox_loop()
         usleep(1000 * MIN(interval, MAX_ITERATION_TIME));
     }
 
-    if(loop != LOOP_SUSPEND)
-        av_thread.join();
+    if(loop != LOOP_SUSPEND) {
+        toxav_thread.join();
+        audio_thread.join();
+    }
 
     uint64_t event;
     ssize_t tmp;
