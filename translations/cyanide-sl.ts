@@ -16,7 +16,7 @@
     <name>AddFriend</name>
     <message>
         <source>Tox me maybe?</source>
-        <translation type="unfinished">Toxaj z mano…</translation>
+        <translation>Toxaj z mano…</translation>
     </message>
     <message>
         <source>Send friend request</source>

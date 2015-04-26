@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
 <TS version="2.1" language="ru_RU">
 <context>
@@ -115,7 +115,19 @@
     </message>
     <message>
         <source>Error: Tox save file already exists</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tox User</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Toxing on Cyanide</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tox me maybe?</source>
+        <translation>Привет, добавите меня в друзья?</translation>
     </message>
 </context>
 <context>
@@ -161,7 +173,7 @@
     </message>
     <message>
         <source>Send a file</source>
-        <translation>Передать файл</translation>
+        <translation type="vanished">Передать файл</translation>
     </message>
     <message>
         <source>Failed to pause transfer</source>
@@ -198,6 +210,7 @@
         <source>Removing friend</source>
         <translation>Удаление из друзей</translation>
     </message>
+    <message>
         <source>Unblock friend</source>
         <translation>Разблокировать</translation>
     </message>
