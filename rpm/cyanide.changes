@@ -11,13 +11,15 @@
 # * Sun Apr 13 2014 Jack Tar <jack.tar@example.com> 0.0.1-1
 # - Scrubbed the deck
 # - Hoisted the sails
-* Tue Apr 08 2015 Johannes Altmanninger <aclopte@gmail.com> 0.2.0-1
+* Sun Apr 26 2015 Johannes Altmanninger <aclopte@gmail.com> 0.2.0-1
 - upgrade to the new toxcore api, incompatible with previous versions
 - avatars
-- file transfers
+- file transfers (no file resuming across restarts yet)
 - contact blocking
+- multiprofile support
+- UI improvements
+- new options: wifi only, enable udp
 - removed the sound settings as this is done better by the notification system
-- basic multiprofile support
 - fixed errors that occurred after deleting friends
 - message splitting
 
