@@ -15,7 +15,14 @@ void callback_file_recv(Tox *tox, uint32_t fid, uint32_t file_number, uint32_t k
              << "size" << file_size;
 
     Message m;
-    m.type = MSGTYPE_FILE;
+
+    QString basename = utf8_to_qstr(filename, filename_length);
+    QRegExp rx("\\.(png|jpeg|gif)$");
+
+    if(rx.indexIn(basename) != -1)
+        m.type = MSGTYPE_IMAGE;
+    else
+        m.type = MSGTYPE_FILE;
 
     m.timestamp = QDateTime::currentDateTime();
     m.author = false;
@@ -41,7 +48,13 @@ void callback_file_recv(Tox *tox, uint32_t fid, uint32_t file_number, uint32_t k
     ft->filename = (uint8_t*)malloc(filename_length);
     memcpy(ft->filename, filename, filename_length);
 
-    m.text = DOWNLOAD_DIR + utf8_to_qstr(filename, filename_length);
+    QString path = m.text = DOWNLOAD_DIR + utf8_to_qstr(filename, filename_length);
+    int i = 1;
+    while(QFile::exists(path)) {
+        path = m.text + "." + QString::number(i);
+        i++;
+    }
+    m.text = path;
 
     if((ft->file = fopen(m.text.toUtf8().constData(), "wb")) == NULL)
         qDebug() << "Failed to open file " << m.text;

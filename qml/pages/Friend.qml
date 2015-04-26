@@ -232,7 +232,7 @@ Dialog {
 
             delegate: Item {
                 id: delegate
-                height: Theme.paddingMedium + message.height
+                height: Theme.paddingMedium + message.height + inlineImage.height
 
                 Image {
                     id: attach
@@ -254,6 +254,16 @@ Dialog {
                             inputField.cursorPosition = inputField.text.length
                         }
                     }
+                }
+                Image {
+                    id: inlineImage
+                    visible: m_type == msgtype_image && f_progress == 100
+                    x: Theme.paddingLarge
+                    y: message.y + message.height + Theme.paddingSmall
+                    width: page.width - 2 * Theme.paddingLarge > implicitWidth ?
+                               implicitWidth : page.width - 2 * Theme.paddingLarge
+                    fillMode: Image.PreserveAspectFit
+                    source: f_progress == 100 ? m_text : ""
                 }
                 Label {
                     id: message
