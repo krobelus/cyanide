@@ -227,7 +227,7 @@
     </message>
     <message>
         <source>Friends</source>
-        <translation>Друзья</translation>
+        <translation type="vanished">Друзья</translation>
     </message>
     <message>
         <source>Settings</source>

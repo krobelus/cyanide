@@ -23,6 +23,9 @@ Page {
         spacing: Theme.paddingLarge
 
         Row {
+            anchors {
+                horizontalCenter: parent.horizontalCenter
+            }
             spacing: 3 * Theme.paddingMedium
 
             IconButton {

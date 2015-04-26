@@ -206,10 +206,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Friends</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Switch profile</source>
         <translation type="unfinished"></translation>
     </message>
