@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <!DOCTYPE TS>
 <TS version="2.1" language="de_DE">
 <context>
@@ -20,7 +20,7 @@
     </message>
     <message>
         <source>Tox me maybe?</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Failed to send friend request</source>
@@ -95,7 +95,7 @@
     </message>
     <message>
         <source>Error: Packet queue is full</source>
-        <translation type="unfinished"></translation>
+        <translation>Fehler: Paket-Warteschlange ist voll</translation>
     </message>
     <message>
         <source>Error: Tox save file already exists</source>
@@ -103,15 +103,15 @@
     </message>
     <message>
         <source>Tox User</source>
-        <translation type="unfinished"></translation>
+        <translation>Tox Benutzer</translation>
     </message>
     <message>
         <source>Toxing on Cyanide</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Tox me maybe?</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -292,7 +292,7 @@
     </message>
     <message>
         <source>Incoming file: </source>
-        <translation type="unfinished"></translation>
+        <translation>Eingehende Datei: </translation>
     </message>
 </context>
 </TS>
