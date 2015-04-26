@@ -101,6 +101,18 @@
         <source>Error: Tox save file already exists</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Tox User</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Toxing on Cyanide</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tox me maybe?</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>FileChooser</name>
@@ -132,27 +144,11 @@
 <context>
     <name>Friend</name>
     <message>
-        <source>Remove friend</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Removing friend</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source> is typing...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Opening URL...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Copy Tox ID to clipboard</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Send a file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -175,12 +171,27 @@
         <source>Failed to send message</source>
         <translation type="unfinished"></translation>
     </message>
+</context>
+<context>
+    <name>FriendAction</name>
+    <message>
+        <source>Copy Tox ID to clipboard</source>
+        <translation type="unfinished"></translation>
+    </message>
     <message>
         <source>Unblock friend</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Block friend</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove friend</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Removing friend</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

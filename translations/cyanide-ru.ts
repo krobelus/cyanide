@@ -148,16 +148,8 @@
 <context>
     <name>Friend</name>
     <message>
-        <source>Remove friend</source>
-        <translation>Удалить из друзей</translation>
-    </message>
-    <message>
         <source>Opening URL...</source>
         <translation>Открывается URL...</translation>
-    </message>
-    <message>
-        <source>Removing friend</source>
-        <translation>Удаление из друзей</translation>
     </message>
     <message>
         <source> is typing...</source>
@@ -166,10 +158,6 @@
     <message>
         <source>Settings</source>
         <translation type="vanished">Настройки</translation>
-    </message>
-    <message>
-        <source>Copy Tox ID to clipboard</source>
-        <translation>Скопировать Tox ID</translation>
     </message>
     <message>
         <source>Send a file</source>
@@ -195,7 +183,21 @@
         <source>Failed to send message</source>
         <translation>Не удалось отправить сообщение</translation>
     </message>
+</context>
+<context>
+    <name>FriendAction</name>
     <message>
+        <source>Copy Tox ID to clipboard</source>
+        <translation>Скопировать Tox ID</translation>
+    </message>
+    <message>
+        <source>Remove friend</source>
+        <translation>Удалить из друзей</translation>
+    </message>
+    <message>
+        <source>Removing friend</source>
+        <translation>Удаление из друзей</translation>
+    </message>
         <source>Unblock friend</source>
         <translation>Разблокировать</translation>
     </message>

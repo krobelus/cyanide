@@ -232,14 +232,14 @@ void Cyanide::audio_thread()
             f_a = new_filter_audio(av_DefaultSettings.audio_sample_rate);
             if (!f_a) {
                 audio_filtering_enabled = 0;
-                qDebug() << "filter audio failed");
+                qDebug() << "filter audio failed";
             } else {
-                qDebug() << "filter audio on");
+                qDebug() << "filter audio on";
             }
         } else if (f_a && !audio_filtering_enabled) {
             kill_filter_audio(f_a);
             f_a = NULL;
-            qDebug() << "filter audio off");
+            qDebug() << "filter audio off";
         }
         #else
         if (audio_filtering_enabled)
@@ -279,7 +279,7 @@ void Cyanide::audio_thread()
 
         #ifdef AUDIO_FILTERING
         if (f_a && filter_audio(f_a, (int16_t*)buf, perframe) == -1) {
-            qDebug() << "filter audio error");
+            qDebug() << "filter audio error";
         }
         #endif
         if(preview) {

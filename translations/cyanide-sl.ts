@@ -101,6 +101,18 @@
         <source>Error: Tox save file already exists</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Tox User</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Toxing on Cyanide</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tox me maybe?</source>
+        <translation type="unfinished">Toxaj z mano…</translation>
+    </message>
 </context>
 <context>
     <name>FileChooser</name>
@@ -132,35 +144,11 @@
 <context>
     <name>Friend</name>
     <message>
-        <source>Remove friend</source>
-        <translation>Odstrani prijatelja</translation>
-    </message>
-    <message>
-        <source>About to remove friend</source>
-        <translation type="obsolete">Prijatelj bo odstranjen</translation>
-    </message>
-    <message>
-        <source>Launching web browser...</source>
-        <translation type="vanished">Odpiram spletni brskalnik...</translation>
-    </message>
-    <message>
-        <source>Removing friend</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source> is typing...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Opening URL...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Copy Tox ID to clipboard</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Send a file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -181,6 +169,21 @@
     </message>
     <message>
         <source>Failed to send message</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>FriendAction</name>
+    <message>
+        <source>Copy Tox ID to clipboard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove friend</source>
+        <translation>Odstrani prijatelja</translation>
+    </message>
+    <message>
+        <source>Removing friend</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -283,10 +286,6 @@
 </context>
 <context>
     <name>cyanide</name>
-    <message>
-        <source> is now known as </source>
-        <translation type="obsolete"> je sedaj znan kot </translation>
-    </message>
     <message>
         <source>Friend request received!</source>
         <translation type="unfinished"></translation>

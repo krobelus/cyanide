@@ -201,7 +201,7 @@ ApplicationWindow
             friendList.setProperty(i, "friend_callstate", callstate)
         }
         onSignal_av_invite: {
-            cyanide.notify_call(fid, cyanide.get_friend_name(fid)+" "+qsTr("is calling"), "")
+            // cyanide.notify_call(fid, cyanide.get_friend_name(fid)+" "+qsTr("is calling"), "")
         }
         onSignal_file_status: {
             if(fid == activeFriend()) {

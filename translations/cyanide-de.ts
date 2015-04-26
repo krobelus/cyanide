@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
 <TS version="2.1" language="de_DE">
 <context>
@@ -20,7 +20,7 @@
     </message>
     <message>
         <source>Tox me maybe?</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Failed to send friend request</source>
@@ -32,10 +32,6 @@
     <message>
         <source>Error: Message is too long</source>
         <translation>Fehler: Nachricht ist zu lang</translation>
-    </message>
-    <message>
-        <source>Error: Empty message</source>
-        <translation type="vanished">Fehler: Keine Nachricht</translation>
     </message>
     <message>
         <source>Error: Tox ID is self ID</source>
@@ -99,11 +95,23 @@
     </message>
     <message>
         <source>Error: Packet queue is full</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Error: Tox save file already exists</source>
         <translation>Fehler: Tox-Datei existiert bereits</translation>
+    </message>
+    <message>
+        <source>Tox User</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Toxing on Cyanide</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tox me maybe?</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -136,32 +144,12 @@
 <context>
     <name>Friend</name>
     <message>
-        <source>Remove friend</source>
-        <translation>Freund entfernen</translation>
-    </message>
-    <message>
         <source>Opening URL...</source>
         <translation>URL wird geöffnet...</translation>
     </message>
     <message>
-        <source>Removing friend</source>
-        <translation>Freund wird entfernt</translation>
-    </message>
-    <message>
         <source> is typing...</source>
         <translation> schreibt gerade...</translation>
-    </message>
-    <message>
-        <source>Settings</source>
-        <translation type="vanished">Einstellungen</translation>
-    </message>
-    <message>
-        <source>Copy Tox ID to clipboard</source>
-        <translation>Tox ID in die Zwischenablage kopieren</translation>
-    </message>
-    <message>
-        <source>Send a file</source>
-        <translation>Eine Datei schicken</translation>
     </message>
     <message>
         <source>Failed to pause transfer</source>
@@ -182,6 +170,21 @@
     <message>
         <source>Failed to send message</source>
         <translation>Fehler beim Schicken der Nachricht</translation>
+    </message>
+</context>
+<context>
+    <name>FriendAction</name>
+    <message>
+        <source>Copy Tox ID to clipboard</source>
+        <translation>Tox ID in die Zwischenablage kopieren</translation>
+    </message>
+    <message>
+        <source>Remove friend</source>
+        <translation>Freund entfernen</translation>
+    </message>
+    <message>
+        <source>Removing friend</source>
+        <translation>Freund wird entfernt</translation>
     </message>
     <message>
         <source>Unblock friend</source>
@@ -257,10 +260,6 @@
         <translation>Einstellungen</translation>
     </message>
     <message>
-        <source>Play this sound when...</source>
-        <translation type="vanished">Diesen Klang spielen, wenn...</translation>
-    </message>
-    <message>
         <source>I receive a message</source>
         <translation>ich eine Nachricht bekomme</translation>
     </message>
@@ -271,26 +270,6 @@
     <message>
         <source>Notify me when...</source>
         <translation>Benachrichtige mich, wenn...</translation>
-    </message>
-    <message>
-        <source>a friend comes online</source>
-        <translation type="vanished">ein Freund online erscheint</translation>
-    </message>
-    <message>
-        <source>a friend changes his name</source>
-        <translation type="vanished">ein Freund seinen Namen ändert</translation>
-    </message>
-    <message>
-        <source>Yes</source>
-        <translation type="vanished">Ja</translation>
-    </message>
-    <message>
-        <source>No</source>
-        <translation type="vanished">Nein</translation>
-    </message>
-    <message>
-        <source>No sound</source>
-        <translation type="vanished">Keinen Klang</translation>
     </message>
     <message>
         <source>Send typing notifications?</source>
@@ -308,24 +287,12 @@
 <context>
     <name>cyanide</name>
     <message>
-        <source> is now known as </source>
-        <translation type="vanished"> heißt jetzt </translation>
-    </message>
-    <message>
-        <source>New message</source>
-        <translation type="vanished">Neue Nachricht</translation>
-    </message>
-    <message>
-        <source>New messages</source>
-        <translation type="vanished">Neue Nachrichten</translation>
-    </message>
-    <message>
         <source>Friend request received!</source>
         <translation>Freundschaftsanfrage empfagen!</translation>
     </message>
     <message>
         <source>Incoming file: </source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

@@ -131,7 +131,7 @@ Dialog {
             MenuItem {
                 id: accept
                 //: av call
-                text: qsTr("Answer")
+                // text: qsTr("Answer")
                 onClicked: {
                     cyanide.av_invite_accept(f)
                 }
@@ -145,20 +145,20 @@ Dialog {
             MenuItem {
                 id: reject
                 //: av call
-                text: qsTr("Ignore")
+                // text: qsTr("Ignore")
                 visible: callstate == -2
                 onClicked: cyanide.av_invite_reject(f)
             }
             MenuItem {
                 id: cancelCall
                 //: outgoing call
-                text: qsTr("Cancel")
+                // text: qsTr("Cancel")
                 visible: callstate == -1
                 onClicked: cyanide.av_call_cancel(f)
             }
             MenuItem {
                 id: hangup
-                text: qsTr("Hang up")
+                // text: qsTr("Hang up")
                 visible: callstate > 0
                 onClicked: cyanide.av_hangup(f)
             }

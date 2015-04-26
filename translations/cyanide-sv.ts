@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
 <TS version="2.1" language="sv_SE">
 <context>
@@ -34,21 +34,12 @@
         <translation>Fel: Meddelandet är för långt</translation>
     </message>
     <message>
-        <source>Error: Empty message</source>
-        <translatorcomment>Fel: Tomt meddelande</translatorcomment>
-        <translation type="vanished">Fel: Tomt meddelande</translation>
-    </message>
-    <message>
         <source>Error: Tox ID is self ID</source>
         <translation>Fel: Tox-ID är eget ID</translation>
     </message>
     <message>
         <source>Error: Tox ID is already in friend list</source>
         <translation>Fel: Tox-ID finns redan i kontaktlistan</translation>
-    </message>
-    <message>
-        <source>Error: Unknown</source>
-        <translation type="vanished">Fel: Okänt</translation>
     </message>
     <message>
         <source>Error: Invalid Tox ID (bad checksum)</source>
@@ -61,14 +52,6 @@
     <message>
         <source>Error: No memory</source>
         <translation>Fel: Minnesbrist</translation>
-    </message>
-    <message>
-        <source>No name</source>
-        <translation type="vanished">Inget namn</translation>
-    </message>
-    <message>
-        <source>Invalid Tox ID</source>
-        <translation type="vanished">Ogiltigt Tox-ID</translation>
     </message>
     <message>
         <source>Error: Friend not found</source>
@@ -107,10 +90,6 @@
         <translation>Fel: Filöverföring kan inte hittas</translation>
     </message>
     <message>
-        <source>Error: Not paused</source>
-        <translation type="vanished">Fel: Inte pausad</translation>
-    </message>
-    <message>
         <source>Error: Already paused</source>
         <translation>Fel: Redan pausad</translation>
     </message>
@@ -119,12 +98,20 @@
         <translation>Fel: Paketkön är full</translation>
     </message>
     <message>
-        <source>Error: Transfer is paused by peer</source>
-        <translation type="vanished">Fel: Överföringen pausad av deltagare</translation>
-    </message>
-    <message>
         <source>Error: Tox save file already exists</source>
         <translation>Fel: Filen finns redan</translation>
+    </message>
+    <message>
+        <source>Tox User</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Toxing on Cyanide</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tox me maybe?</source>
+        <translation type="unfinished">Toxa mig kanske?</translation>
     </message>
 </context>
 <context>
@@ -157,36 +144,12 @@
 <context>
     <name>Friend</name>
     <message>
-        <source>Remove friend</source>
-        <translation>Ta bort vännen</translation>
-    </message>
-    <message>
-        <source>Copy Tox ID to clipboard</source>
-        <translation>Kopiera Tox-ID till urklipp</translation>
-    </message>
-    <message>
-        <source>Launching web browser...</source>
-        <translation type="vanished">Startar webläsaren...</translation>
-    </message>
-    <message>
-        <source>Removing friend</source>
-        <translation>Tar bort vän</translation>
-    </message>
-    <message>
         <source>Opening URL...</source>
         <translation>Öppnar URL...</translation>
     </message>
     <message>
         <source> is typing...</source>
         <translation> skriver...</translation>
-    </message>
-    <message>
-        <source>Settings</source>
-        <translation type="vanished">Inställningar</translation>
-    </message>
-    <message>
-        <source>Send a file</source>
-        <translation>Skicka en fil</translation>
     </message>
     <message>
         <source>Failed to pause transfer</source>
@@ -207,6 +170,21 @@
     <message>
         <source>Failed to send message</source>
         <translation>Kunde inte skicka meddelande</translation>
+    </message>
+</context>
+<context>
+    <name>FriendAction</name>
+    <message>
+        <source>Copy Tox ID to clipboard</source>
+        <translation>Kopiera Tox-ID till urklipp</translation>
+    </message>
+    <message>
+        <source>Remove friend</source>
+        <translation>Ta bort vännen</translation>
+    </message>
+    <message>
+        <source>Removing friend</source>
+        <translation>Tar bort vän</translation>
     </message>
     <message>
         <source>Unblock friend</source>
@@ -282,10 +260,6 @@
         <translation>Inställningar</translation>
     </message>
     <message>
-        <source>Play this sound when...</source>
-        <translation type="vanished">Spela upp detta ljud när...</translation>
-    </message>
-    <message>
         <source>I receive a message</source>
         <translation>Jag får ett meddelande</translation>
     </message>
@@ -296,26 +270,6 @@
     <message>
         <source>Notify me when...</source>
         <translation>Meddela mig när...</translation>
-    </message>
-    <message>
-        <source>a friend comes online</source>
-        <translation type="vanished">En vän ansluter</translation>
-    </message>
-    <message>
-        <source>a friend changes his name</source>
-        <translation type="vanished">En vän byter namn</translation>
-    </message>
-    <message>
-        <source>Yes</source>
-        <translation type="vanished">Ja</translation>
-    </message>
-    <message>
-        <source>No</source>
-        <translation type="vanished">Nej</translation>
-    </message>
-    <message>
-        <source>No sound</source>
-        <translation type="vanished">Inget ljud</translation>
     </message>
     <message>
         <source>Send typing notifications?</source>
@@ -332,18 +286,6 @@
 </context>
 <context>
     <name>cyanide</name>
-    <message>
-        <source> is now known as </source>
-        <translation type="vanished"> är nu känd som </translation>
-    </message>
-    <message>
-        <source>New message</source>
-        <translation type="vanished">Nytt medddelande</translation>
-    </message>
-    <message>
-        <source>New messages</source>
-        <translation type="vanished">Nya medddelanden</translation>
-    </message>
     <message>
         <source>Friend request received!</source>
         <translation>Kontaktförfrågan mottogs!</translation>
