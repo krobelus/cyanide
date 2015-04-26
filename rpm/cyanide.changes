@@ -14,6 +14,7 @@
 * Sun Apr 26 2015 Johannes Altmanninger <aclopte@gmail.com> 0.2.0-1
 - upgrade to the new toxcore api, incompatible with previous versions
 - avatars
+- inline images
 - file transfers (no file resuming across restarts yet)
 - contact blocking
 - multiprofile support
