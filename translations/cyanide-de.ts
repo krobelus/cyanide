@@ -203,7 +203,7 @@
     </message>
     <message>
         <source>Friends</source>
-        <translation>Freunde</translation>
+        <translation type="vanished">Freunde</translation>
     </message>
     <message>
         <source>Settings</source>
