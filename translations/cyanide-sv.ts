@@ -276,8 +276,8 @@
         <translation>Meddela vännen att du skriver?</translation>
     </message>
     <message>
-        <source>Enable UPD</source>
-        <translation>Aktivera UPD</translation>
+        <source>Enable UDP</source>
+        <translation>Aktivera UDP</translation>
     </message>
     <message>
         <source>Wifi only</source>
