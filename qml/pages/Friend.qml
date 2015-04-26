@@ -21,9 +21,6 @@ Dialog {
     canAccept: true
     acceptDestination: Qt.resolvedUrl("FriendAction.qml")
     onAccepted: {
-        console.log("callstate: "+callstate)
-        console.log("in list "+friendList.get(f+1).friend_callstate)
-        console.log("real callstate "+cyanide.get_friend_callstate(f))
         pages.push("FriendAction.qml")
     }
 

@@ -23,7 +23,8 @@ SOURCES += \
     src/settings.cpp \
     src/util.cpp \
     src/av.cpp \
-    src/filetransfers.cpp
+    src/filetransfers.cpp \
+    src/dbusinterface.cpp
 
 OTHER_FILES += \
     cyanide.desktop \
@@ -66,7 +67,8 @@ HEADERS += \
     src/friend.h \
     src/tox_callbacks.h \
     src/message.h \
-    src/settings.h
+    src/settings.h \
+    src/dbusinterface.h
 
 unix:!macx: LIBS += -L$$PWD/res/usr/lib/ \
                 -ltoxcore -ltoxdns -ltoxav \

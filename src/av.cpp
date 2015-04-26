@@ -149,7 +149,7 @@ void Cyanide::audio_thread()
     #endif
     #endif
 
-    qDebug() << "frame size:", perframe;
+    qDebug() << "frame size:" << perframe;
 
     device_list = alcGetString(NULL, ALC_ALL_DEVICES_SPECIFIER);
     if(device_list) {

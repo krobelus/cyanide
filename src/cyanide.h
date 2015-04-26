@@ -36,7 +36,6 @@ enum LOOP_STATE
 class Cyanide : public QObject
 {
     Q_OBJECT
-    Q_CLASSINFO("D-Bus Interface", "harbour.cyanide")
 
 private:
     uint8_t self_address[TOX_ADDRESS_SIZE];
@@ -111,7 +110,7 @@ public:
     QString send_file(TOX_FILE_KIND kind, int fid, QString path, uint8_t *file_id);
     void wifi_monitor();
 
-    Q_SCRIPTABLE void message_notification_activated(int fid);
+    void on_message_notification_activated(int fid);
 
     Q_INVOKABLE void raise();
     Q_INVOKABLE bool is_visible();

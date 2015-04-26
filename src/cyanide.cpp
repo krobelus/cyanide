@@ -7,11 +7,13 @@
 #include <sailfishapp.h>
 #include <mlite5/mnotification.h>
 #include <mlite5/mremoteaction.h>
+#include <QObject>
 #include <QtDBus>
 #include <QtQuick>
 #include <QTranslator>
 
 #include "cyanide.h"
+#include "dbusinterface.h"
 #include "tox_bootstrap.h"
 #include "tox_callbacks.h"
 #include "util.h"
@@ -31,6 +33,15 @@ int main(int argc, char *argv[])
     app->setApplicationName("Cyanide");
 
     Cyanide *cyanide = new Cyanide();
+    DBusInterface *relay = new DBusInterface();
+    relay->cyanide = cyanide;
+
+    if(!(QDBusConnection::sessionBus().registerObject("/", relay, QDBusConnection::ExportScriptableContents)
+                                         && QDBusConnection::sessionBus().registerService("harbour.cyanide")))
+        QGuiApplication::exit(0);
+
+    cyanide->wifi_monitor();
+
     cyanide->read_default_profile(app->arguments());
 
     std::thread my_tox_thread(start_tox_thread, cyanide);
@@ -54,17 +65,11 @@ int main(int argc, char *argv[])
 
 Cyanide::Cyanide(QObject *parent) : QObject(parent)
 {
-    if(!(QDBusConnection::sessionBus().registerObject("/", this, QDBusConnection::ExportScriptableContents)
-                                         && QDBusConnection::sessionBus().registerService("harbour.cyanide")))
-        QGuiApplication::exit(0);
-
     view = SailfishApp::createView();
 
     events = eventfd(0, 0);
     check_wifi();
-    wifi_monitor();
 }
-
 
 QString Cyanide::tox_save_file()
 {
@@ -239,7 +244,7 @@ void Cyanide::suspend_thread()
 void Cyanide::visibility_changed(QWindow::Visibility visibility)
 {
     /* remove all notifications for now until I find a proper solution
-     * (because the error messages are show too)
+     * (because the error messages are shown too)
      */
     for(std::pair<uint32_t, Friend>pair : friends) {
         Friend f = pair.second;
@@ -252,9 +257,9 @@ void Cyanide::visibility_changed(QWindow::Visibility visibility)
     }
 }
 
-void Cyanide::message_notification_activated(int fid)
+void Cyanide::on_message_notification_activated(int fid)
 {
-    qDebug() << QString(); /* quality code */
+    qDebug() << "notification activated";
     emit signal_focus_friend(fid);
     raise();
 }

@@ -37,6 +37,7 @@ Page {
             }
             IconButton {
                 icon.source: "qrc:/images/phone_4x"
+                enabled: false
                 onClicked: {
                     cyanide.av_call(f)
                     pageStack.pop()
@@ -44,8 +45,8 @@ Page {
             }
             IconButton {
                 icon.source: "qrc:/images/video_4x"
+                enabled: false
                 onClicked: {
-                    cyanide.notify_error("Not implemented yet", "")
                 }
             }
         }
