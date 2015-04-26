@@ -38,6 +38,7 @@ Page {
         }
 
         Button {
+            //: Friend request
             text: qsTr("Accept")
             onClicked: {
                 if(cyanide.accept_friend_request(activeFriend())) {
@@ -49,6 +50,7 @@ Page {
             }
         }
         Button {
+            //: Friend request
             text: qsTr("Ignore")
             onClicked: {
                 cyanide.remove_friend(activeFriend())

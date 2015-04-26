@@ -5,10 +5,12 @@
     <name>AcceptFriend</name>
     <message>
         <source>Accept</source>
+        <extracomment>Friend request</extracomment>
         <translation>Annehmen</translation>
     </message>
     <message>
         <source>Ignore</source>
+        <extracomment>Friend request</extracomment>
         <translation>Ignorieren</translation>
     </message>
 </context>

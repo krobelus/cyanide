@@ -4,13 +4,15 @@
 <context>
     <name>AcceptFriend</name>
     <message>
-        <location filename="../qml/pages/AcceptFriend.qml" line="41"/>
+        <location filename="../qml/pages/AcceptFriend.qml" line="42"/>
         <source>Accept</source>
+        <extracomment>Friend request</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/AcceptFriend.qml" line="52"/>
+        <location filename="../qml/pages/AcceptFriend.qml" line="54"/>
         <source>Ignore</source>
+        <extracomment>Friend request</extracomment>
         <translation type="unfinished"></translation>
     </message>
 </context>
