@@ -22,6 +22,7 @@ Source0:    %{name}-%{version}.tar.bz2
 Source100:  cyanide.yaml
 Requires:   sailfishsilica-qt5 >= 0.10.9
 Requires:   qt5-qtdeclarative-import-folderlistmodel
+Requires:   toxcore >= 15.0426
 BuildRequires:  pkgconfig(sailfishapp) >= 1.0.2
 BuildRequires:  pkgconfig(Qt5Core)
 BuildRequires:  pkgconfig(Qt5Qml)
