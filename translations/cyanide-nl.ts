@@ -71,8 +71,8 @@
     </message>
     <message>
         <location filename="../src/cyanide.cpp" line="904"/>
-        <location filename="../src/filetransfers.cpp" line="417"/>
-        <location filename="../src/filetransfers.cpp" line="525"/>
+        <location filename="../src/filetransfers.cpp" line="418"/>
+        <location filename="../src/filetransfers.cpp" line="526"/>
         <source>Error: Friend not connected</source>
         <translation type="unfinished"></translation>
     </message>
@@ -107,38 +107,38 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/filetransfers.cpp" line="415"/>
-        <location filename="../src/filetransfers.cpp" line="523"/>
+        <location filename="../src/filetransfers.cpp" line="416"/>
+        <location filename="../src/filetransfers.cpp" line="524"/>
         <source>Error: Friend not found</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/filetransfers.cpp" line="419"/>
+        <location filename="../src/filetransfers.cpp" line="420"/>
         <source>Error: File transfer not found</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/filetransfers.cpp" line="425"/>
+        <location filename="../src/filetransfers.cpp" line="426"/>
         <source>Error: Already paused</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/filetransfers.cpp" line="427"/>
+        <location filename="../src/filetransfers.cpp" line="428"/>
         <source>Error: Packet queue is full</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/filetransfers.cpp" line="504"/>
+        <location filename="../src/filetransfers.cpp" line="505"/>
         <source>Error: Failed to open file: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/filetransfers.cpp" line="527"/>
+        <location filename="../src/filetransfers.cpp" line="528"/>
         <source>Error: Filename too long</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/filetransfers.cpp" line="529"/>
+        <location filename="../src/filetransfers.cpp" line="530"/>
         <source>Error: Too many ongoing transfers</source>
         <translation type="unfinished"></translation>
     </message>

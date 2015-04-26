@@ -257,7 +257,7 @@ Dialog {
                 }
                 Image {
                     id: inlineImage
-                    visible: m_type == msgtype_image && f_progress == 100
+                    visible: m_type == msgtype_image && (m_author || f_progress == 100)
                     x: Theme.paddingLarge
                     y: message.y + message.height + Theme.paddingSmall
                     width: page.width - 2 * Theme.paddingLarge > implicitWidth ?

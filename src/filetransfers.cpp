@@ -4,6 +4,12 @@
 #include "unused.h"
 #include "util.h"
 
+bool looks_like_an_image(QString path)
+{
+    QRegExp rx("\\.(png|jpeg|gif)$");
+    return rx.indexIn(path) != -1;
+}
+
 void callback_file_recv(Tox *tox, uint32_t fid, uint32_t file_number, uint32_t kind,
                         uint64_t file_size, const uint8_t *filename, size_t filename_length, void *that)
 {
@@ -17,12 +23,7 @@ void callback_file_recv(Tox *tox, uint32_t fid, uint32_t file_number, uint32_t k
     Message m;
 
     QString basename = utf8_to_qstr(filename, filename_length);
-    QRegExp rx("\\.(png|jpeg|gif)$");
-
-    if(rx.indexIn(basename) != -1)
-        m.type = MSGTYPE_IMAGE;
-    else
-        m.type = MSGTYPE_FILE;
+    m.type = looks_like_an_image(basename) ? MSGTYPE_IMAGE : MSGTYPE_FILE;
 
     m.timestamp = QDateTime::currentDateTime();
     m.author = false;
@@ -481,7 +482,7 @@ QString Cyanide::send_file(TOX_FILE_KIND kind, int fid, QString path, uint8_t *f
             qDebug() << "Failed to allocate memory for the file transfer";
             return "no memory";
         }
-        m.type = MSGTYPE_FILE; //TODO inline images?
+        m.type = looks_like_an_image(path) ? MSGTYPE_IMAGE : MSGTYPE_FILE;
         m.timestamp = QDateTime::currentDateTime();
         m.author = true;
         m.text = path;
