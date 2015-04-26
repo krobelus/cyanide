@@ -26,8 +26,8 @@ libvpx-devel-1.3.0-10.20.1.jolla.armv7hl.rpm
 libvpx-utils-1.3.0-10.20.1.jolla.armv7hl.rpm
 opus-1.1-10.5.1.jolla.armv7hl.rpm
 opus-devel-1.1-10.5.1.jolla.armv7hl.rpm
-toxcore-15.0406-10.1.1.jolla.armv7hl.rpm
-toxcore-devel-15.0406-10.1.1.jolla.armv7hl.rpm
+toxcore-15.0426-10.2.1.jolla.armv7hl.rpm
+toxcore-devel-15.0426-10.2.1.jolla.armv7hl.rpm
 EOF
 
 for package in *.rpm; do
