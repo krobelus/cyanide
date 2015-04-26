@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <!DOCTYPE TS>
 <TS version="2.1" language="sv_SE">
 <context>
@@ -103,15 +103,15 @@
     </message>
     <message>
         <source>Tox User</source>
-        <translation type="unfinished"></translation>
+        <translation>Tox-användare</translation>
     </message>
     <message>
         <source>Toxing on Cyanide</source>
-        <translation type="unfinished"></translation>
+        <translation>Toxar i Cyanide</translation>
     </message>
     <message>
         <source>Tox me maybe?</source>
-        <translation type="unfinished">Toxa mig kanske?</translation>
+        <translation>Toxa mig kanske?</translation>
     </message>
 </context>
 <context>
