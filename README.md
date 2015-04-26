@@ -1,9 +1,5 @@
-Cyanide
-==========
-
-Installing
-----------
-Use the [warehouse app](https://openrepos.net/content/basil/warehouse-sailfishos) for easy installation and updates
+Cyanide is a client for [Tox](https://tox.im).
+Some features are missing and there may be some bugs.
 
 Features
 --------
@@ -13,8 +9,20 @@ Features
 - Typing notification
 - Sound, LED & lockscreen notifications
 - Avatars
-- File Transfers
+- Inline Images
+- File Transfers (no resuming across restarts yet)
 - Multiprofile
+
+Planned Features
+----------------
+
+- audio/video calls
+- groupchats
+- chat logs
+
+Installing
+----------
+Use the [warehouse app](https://openrepos.net/content/basil/warehouse-sailfishos) for easy installation and updates
 
 Translations
 ------------
