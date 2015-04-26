@@ -19,17 +19,18 @@
 <context>
     <name>AddFriend</name>
     <message>
-        <location filename="../qml/pages/AddFriend.qml" line="38"/>
+        <location filename="../qml/pages/AddFriend.qml" line="39"/>
         <source>Tox me maybe?</source>
+        <extracomment>default friend request message - feel free to tranlate freely</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/AddFriend.qml" line="45"/>
+        <location filename="../qml/pages/AddFriend.qml" line="46"/>
         <source>Send friend request</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/AddFriend.qml" line="57"/>
+        <location filename="../qml/pages/AddFriend.qml" line="58"/>
         <source>Failed to send friend request</source>
         <translation type="unfinished"></translation>
     </message>
@@ -94,18 +95,21 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/cyanide.h" line="214"/>
-        <source>Tox User</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../src/cyanide.h" line="215"/>
-        <source>Toxing on Cyanide</source>
+        <source>Tox User</source>
+        <extracomment>default username</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/cyanide.h" line="216"/>
+        <location filename="../src/cyanide.h" line="217"/>
+        <source>Toxing on Cyanide</source>
+        <extracomment>default status</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/cyanide.h" line="219"/>
         <source>Tox me maybe?</source>
+        <extracomment>default friend request message - feel free to tranlate freely</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -281,33 +285,35 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/Profile.qml" line="62"/>
+        <location filename="../qml/pages/Profile.qml" line="63"/>
         <source>Name</source>
+        <extracomment>username for this profile</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/Profile.qml" line="74"/>
+        <location filename="../qml/pages/Profile.qml" line="75"/>
         <source>Status Message</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/Profile.qml" line="90"/>
+        <location filename="../qml/pages/Profile.qml" line="92"/>
         <source>Online</source>
+        <extracomment>user status</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/Profile.qml" line="91"/>
+        <location filename="../qml/pages/Profile.qml" line="93"/>
         <source>Away</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/Profile.qml" line="92"/>
+        <location filename="../qml/pages/Profile.qml" line="94"/>
         <source>Busy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/Profile.qml" line="123"/>
-        <location filename="../qml/pages/Profile.qml" line="126"/>
+        <location filename="../qml/pages/Profile.qml" line="125"/>
+        <location filename="../qml/pages/Profile.qml" line="128"/>
         <source>Copy my Tox ID</source>
         <translation type="unfinished"></translation>
     </message>
