@@ -312,8 +312,8 @@
         <translation>Отсылать уведомления о наборе?</translation>
     </message>
     <message>
-        <source>Enable UPD</source>
-        <translation>Использовать UPD</translation>
+        <source>Enable UDP</source>
+        <translation>Использовать UDP</translation>
     </message>
     <message>
         <source>Wifi only</source>

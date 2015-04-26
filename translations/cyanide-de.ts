@@ -276,8 +276,8 @@
         <translation>Tippen anzeigen?</translation>
     </message>
     <message>
-        <source>Enable UPD</source>
-        <translation>UPD aktivieren</translation>
+        <source>Enable UDP</source>
+        <translation>UDP aktivieren</translation>
     </message>
     <message>
         <source>Wifi only</source>

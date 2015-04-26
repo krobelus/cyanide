@@ -276,7 +276,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Enable UPD</source>
+        <source>Enable UDP</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
