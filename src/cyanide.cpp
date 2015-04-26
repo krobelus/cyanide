@@ -780,6 +780,10 @@ void Cyanide::send_typing_notification(int fid, bool typing)
 
 QString Cyanide::send_friend_request(QString id_str, QString msg_str)
 {
+    /* honor the Tox URI scheme */
+    if(id_str.startsWith("tox:"))
+        id_str = id_str.remove(0,4);
+
     size_t id_len = qstrlen(id_str);
     char id[id_len];
     qstr_to_utf8((uint8_t*)id, id_str);
