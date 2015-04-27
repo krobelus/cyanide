@@ -972,7 +972,7 @@ QString Cyanide::set_profile_name(QString name)
     QFile new_file(new_name);
 
     if(new_file.exists()) {
-        return tr("Error: Tox save file already exists");
+        return tr("Error: File exists");
     } else {
         save_needed = false;
         /* possible race condition? */
