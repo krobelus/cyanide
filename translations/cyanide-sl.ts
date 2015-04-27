@@ -18,6 +18,7 @@
     <name>AddFriend</name>
     <message>
         <source>Tox me maybe?</source>
+        <extracomment>default friend request message - feel free to tranlate freely</extracomment>
         <translation>Toxaj z mano…</translation>
     </message>
     <message>
@@ -100,20 +101,23 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Error: Tox save file already exists</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Tox User</source>
+        <extracomment>default username</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Toxing on Cyanide</source>
+        <extracomment>default status</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Tox me maybe?</source>
+        <extracomment>default friend request message - feel free to tranlate freely</extracomment>
         <translation type="unfinished">Toxaj z mano…</translation>
+    </message>
+    <message>
+        <source>Error: File exists</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -220,6 +224,7 @@
     <name>Profile</name>
     <message>
         <source>Name</source>
+        <extracomment>username for this profile</extracomment>
         <translation>Ime</translation>
     </message>
     <message>
@@ -232,6 +237,7 @@
     </message>
     <message>
         <source>Online</source>
+        <extracomment>user status</extracomment>
         <translation>Povezan</translation>
     </message>
     <message>

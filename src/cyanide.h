@@ -211,8 +211,11 @@ void start_tox_thread(Cyanide *cyanide);
 void start_toxav_thread(Cyanide *cyanide);
 void start_audio_thread(Cyanide *cyanide);
 
+//: default username
 const QString DEFAULT_NAME = Cyanide::tr("Tox User");
+//: default status
 const QString DEFAULT_STATUS = Cyanide::tr("Toxing on Cyanide");
+//: default friend request message - feel free to tranlate freely
 const QString DEFAULT_FRIEND_REQUEST_MESSAGE = Cyanide::tr("Tox me maybe?");
 
 #endif // CYANIDE_H

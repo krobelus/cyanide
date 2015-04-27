@@ -59,6 +59,7 @@ Page {
             }
             TextField {
                 id: name
+                //: username for this profile
                 label: qsTr("Name")
                 width: 3/4 * page.width - Theme.paddingLarge
                 color: Theme.primaryColor
@@ -87,6 +88,7 @@ Page {
                 currentIndex: cyanide.get_self_user_status()
 
                 menu: ContextMenu {
+                    //: user status
                     MenuItem { text: qsTr("Online") }
                     MenuItem { text: qsTr("Away") }
                     MenuItem { text: qsTr("Busy") }

@@ -35,6 +35,7 @@ Page {
 
         inputMethodHints: Qt.ImhNoAutoUppercase
         // TODO use DEFAULT_FRIEND_REQUEST_MESSAGE
+        //: default friend request message - feel free to tranlate freely
         placeholderText: qsTr("Tox me maybe?")
         EnterKey.onClicked: {
             submit()
