@@ -101,10 +101,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Error: Tox save file already exists</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Tox User</source>
         <extracomment>default username</extracomment>
         <translation type="unfinished"></translation>
@@ -117,6 +113,10 @@
     <message>
         <source>Tox me maybe?</source>
         <extracomment>default friend request message - feel free to tranlate freely</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error: File exists</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

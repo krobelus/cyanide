@@ -117,10 +117,6 @@
         <translation type="vanished">Ошибка: Передача остановлена собеседником</translation>
     </message>
     <message>
-        <source>Error: Tox save file already exists</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Tox User</source>
         <extracomment>default username</extracomment>
         <translation type="unfinished"></translation>
@@ -134,6 +130,10 @@
         <source>Tox me maybe?</source>
         <extracomment>default friend request message - feel free to tranlate freely</extracomment>
         <translation>Привет, добавите меня в друзья?</translation>
+    </message>
+    <message>
+        <source>Error: File exists</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

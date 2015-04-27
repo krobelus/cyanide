@@ -58,7 +58,8 @@ TRANSLATIONS += translations/cyanide-de.ts \
                 translations/cyanide-ru.ts \
                 translations/cyanide-sv.ts \
                 translations/cyanide-sl.ts \
-                translations/cyanide-nl.ts
+                translations/cyanide-nl.ts \
+                translations/cyanide-it.ts
 
 HEADERS += \
     src/cyanide.h \

@@ -102,7 +102,7 @@
     </message>
     <message>
         <source>Error: Tox save file already exists</source>
-        <translation>Fel: Filen finns redan</translation>
+        <translation type="vanished">Fel: Filen finns redan</translation>
     </message>
     <message>
         <source>Tox User</source>
@@ -118,6 +118,10 @@
         <source>Tox me maybe?</source>
         <extracomment>default friend request message - feel free to tranlate freely</extracomment>
         <translation>Toxa mig kanske?</translation>
+    </message>
+    <message>
+        <source>Error: File exists</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
