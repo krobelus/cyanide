@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <!DOCTYPE TS>
 <TS version="2.1" language="de_DE">
 <context>
@@ -23,7 +23,7 @@
     <message>
         <source>Tox me maybe?</source>
         <extracomment>default friend request message - feel free to tranlate freely</extracomment>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Failed to send friend request</source>
@@ -112,16 +112,16 @@
     <message>
         <source>Toxing on Cyanide</source>
         <extracomment>default status</extracomment>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Tox me maybe?</source>
         <extracomment>default friend request message - feel free to tranlate freely</extracomment>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Error: File exists</source>
-        <translation type="unfinished"></translation>
+        <translation>Fehler: Datei existiert bereits</translation>
     </message>
 </context>
 <context>
