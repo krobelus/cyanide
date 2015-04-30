@@ -875,6 +875,7 @@ QString Cyanide::send_friend_message(int fid, QString message)
     QString errmsg = "";
 
     if(friends[fid].blocked)
+        /* TODO show this somehow in the UI */
         return "Friend is blocked, unblock to connect";
 
     TOX_MESSAGE_TYPE type = TOX_MESSAGE_TYPE_NORMAL;
