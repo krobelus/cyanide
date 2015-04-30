@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
 <TS version="2.1" language="nl">
 <context>
@@ -73,24 +73,24 @@
         <translation>Fout: geen geheugen</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="904"/>
+        <location filename="../src/cyanide.cpp" line="905"/>
         <location filename="../src/filetransfers.cpp" line="418"/>
         <location filename="../src/filetransfers.cpp" line="526"/>
         <source>Error: Friend not connected</source>
         <translation>Fout: vriend niet verbonden</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="975"/>
+        <location filename="../src/cyanide.cpp" line="976"/>
         <source>Error: File exists</source>
         <translation>Fout: bestand bestaat al</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="1136"/>
+        <location filename="../src/cyanide.cpp" line="1137"/>
         <source>File not found: </source>
         <translation>Bestand niet gevonden: </translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="1141"/>
+        <location filename="../src/cyanide.cpp" line="1142"/>
         <source>Avatar too large. Maximum size: 64KiB</source>
         <translation>Te grote avatar. Maximumgrootte: 64KiB</translation>
     </message>
