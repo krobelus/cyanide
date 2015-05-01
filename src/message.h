@@ -1,27 +1,41 @@
 #ifndef MESSAGE_H
 #define MESSAGE_H
 
+#include "tox/tox.h"
 #include <QtCore>
+
+class Message_Type : public QObject
+{
+    Q_OBJECT
+    Q_ENUMS(_)
+public:
+    enum _ { Normal = 0x0001
+           , Action = 0x0003
+           , File   = 0x0010
+           , Image  = 0x0030
+           };
+};
+
+class File_State : public QObject
+{
+    Q_OBJECT
+    Q_ENUMS(_)
+public:
+    enum _ { Cancelled   = 0
+           , Paused      = 1
+           , Paused_Us   = 1 | 2
+           , Paused_Them = 1 | 4
+           , Paused_Both = Paused_Us | Paused_Them
+           , Active      = 8
+           , Finished    = 16
+           };
+};
 
 typedef struct {
     uint32_t file_number;
-    // uint32_t friend_number;
 
-    /* -1 - paused by us
-     * -2 - paused by them
-     * -3 - paused by both
-     *  0 - cancelled
-     *  1 - active
-     *  2 - finished
-     */
-    int status;
-    // currently not needed because avatars are in
-    // friends[fid].avatar_transfer
-    // uint32_t kind;
+    int status; // File_Transfer_Status
 
-    /*
-    QString filename;
-    */
     uint8_t *filename;
     size_t filename_length;
     uint64_t file_size;
@@ -33,17 +47,12 @@ typedef struct {
     uint8_t file_id[TOX_FILE_ID_LENGTH];
 } File_Transfer;
 
-#define MSGTYPE_NORMAL      1
-#define MSGTYPE_ACTION      2
-#define MSGTYPE_IMAGE       3
-#define MSGTYPE_FILE        4
-
 typedef struct {
-    int type;
+    int type; // Message_Type
 
     QDateTime timestamp;
     bool author; /* sent by self */
-    QString text; /* absolute file path if type =~ MSGTYPE_(IMAGE|FILE) */
+    QString text; /* absolute file path if Image or File */
 
     File_Transfer *ft;
 } Message;

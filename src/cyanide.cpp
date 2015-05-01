@@ -46,6 +46,8 @@ int main(int argc, char *argv[])
 
     std::thread my_tox_thread(start_tox_thread, cyanide);
 
+    qmlRegisterType<Message_Type>("harbour.cyanide", 1, 0, "Message_Type");
+    qmlRegisterType<File_State>("harbour.cyanide", 1, 0, "File_State");
     cyanide->view->rootContext()->setContextProperty("cyanide", cyanide);
     cyanide->view->rootContext()->setContextProperty("settings", &cyanide->settings);
     cyanide->view->setSource(SailfishApp::pathTo("qml/cyanide.qml"));
@@ -919,7 +921,7 @@ QString Cyanide::send_friend_message(int fid, QString message)
             return errmsg;
 
         Message m;
-        m.type = MSGTYPE_NORMAL; //TODO implement /me
+        m.type = Message_Type::Normal;
         m.author = true;
         m.text = msg_str;
         m.timestamp = QDateTime::currentDateTime();

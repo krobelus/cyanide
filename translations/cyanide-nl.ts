@@ -38,59 +38,59 @@
 <context>
     <name>Cyanide</name>
     <message>
-        <location filename="../src/cyanide.cpp" line="802"/>
+        <location filename="../src/cyanide.cpp" line="804"/>
         <source>Error: Invalid Tox ID</source>
         <translation>Fout: ongeldige Tox-ID</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="830"/>
+        <location filename="../src/cyanide.cpp" line="832"/>
         <source>Error: Message is too long</source>
         <translation>Fout: bericht is te lang</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="834"/>
+        <location filename="../src/cyanide.cpp" line="836"/>
         <source>Error: Tox ID is self ID</source>
         <translation>Fout: Tox-ID is eigen ID</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="836"/>
+        <location filename="../src/cyanide.cpp" line="838"/>
         <source>Error: Tox ID is already in friend list</source>
         <translation>Fout: Tox-ID staat al in vriendenlijst</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="838"/>
+        <location filename="../src/cyanide.cpp" line="840"/>
         <source>Error: Invalid Tox ID (bad checksum)</source>
         <translation>Fout: ongeldige Tox-ID (foute checksum)</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="840"/>
+        <location filename="../src/cyanide.cpp" line="842"/>
         <source>Error: Invalid Tox ID (bad nospam value)</source>
         <translation>Fout: ongeldige Tox-ID (foute nospam-waarde)</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="842"/>
+        <location filename="../src/cyanide.cpp" line="844"/>
         <source>Error: No memory</source>
         <translation>Fout: geen geheugen</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="905"/>
+        <location filename="../src/cyanide.cpp" line="907"/>
         <location filename="../src/filetransfers.cpp" line="418"/>
         <location filename="../src/filetransfers.cpp" line="526"/>
         <source>Error: Friend not connected</source>
         <translation>Fout: vriend niet verbonden</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="976"/>
+        <location filename="../src/cyanide.cpp" line="978"/>
         <source>Error: File exists</source>
         <translation>Fout: bestand bestaat al</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="1137"/>
+        <location filename="../src/cyanide.cpp" line="1139"/>
         <source>File not found: </source>
         <translation>Bestand niet gevonden: </translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="1142"/>
+        <location filename="../src/cyanide.cpp" line="1144"/>
         <source>Avatar too large. Maximum size: 64KiB</source>
         <translation>Te grote avatar. Maximumgrootte: 64KiB</translation>
     </message>
@@ -359,12 +359,12 @@
 <context>
     <name>cyanide</name>
     <message>
-        <location filename="../qml/cyanide.qml" line="190"/>
+        <location filename="../qml/cyanide.qml" line="184"/>
         <source>Incoming file: </source>
         <translation>Inkomend bestand: </translation>
     </message>
     <message>
-        <location filename="../qml/cyanide.qml" line="219"/>
+        <location filename="../qml/cyanide.qml" line="213"/>
         <source>Friend request received!</source>
         <translation>Vriendschapsverzoek ontvangen!</translation>
     </message>

@@ -1,5 +1,6 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
+import harbour.cyanide 1.0
 import "pages"
 
 ApplicationWindow
@@ -16,11 +17,6 @@ ApplicationWindow
     property ListModel settingsList: ListModel { id: settingsList }
 
     property ListModel messageList: ListModel { id: messageList }
-
-    property int msgtype_normal: 1
-    property int msgtype_action: 2
-    property int msgtype_image : 3
-    property int msgtype_file  : 4
 
     /* stack of friend IDs */
     property var friendNumberStack: new Array
@@ -111,9 +107,8 @@ ApplicationWindow
         var m_text = cyanide.get_message_text(fid, mid)
         //var m_escaped = cyanide.get_message_html_escaped_text(fid, mid)
         var m_timestamp = new Date(cyanide.get_message_timestamp(fid, mid))
-        var isFile = m_type == msgtype_file || m_type == msgtype_image
 
-        if(!isFile) {
+        if(!(m_type & Message_Type.File)) {
             messageList.append({"m_type": m_type
                          ,"m_author": m_author
                          ,"m_text": m_text
@@ -124,7 +119,7 @@ ApplicationWindow
                          ,"f_status": 0
                          ,"f_progress": 0
                          })
-        } else if(isFile) {
+        } else {
             messageList.append({"m_type": m_type
                          ,"m_author": m_author
                          ,"m_text": m_text
@@ -187,7 +182,7 @@ ApplicationWindow
                 {
                     var txt = cyanide.get_message_text(fid, mid)
                     cyanide.notify_message(fid, cyanide.get_friend_name(fid),
-                                           type == msgtype_file ? qsTr("Incoming file: ")+txt.replace(/^.*\//, "")
+                                      type == Message_Type.File ? qsTr("Incoming file: ")+txt.replace(/^.*\//, "")
                                                                 : txt)
                 }
             }

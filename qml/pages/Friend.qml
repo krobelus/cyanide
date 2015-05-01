@@ -1,5 +1,7 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
+import harbour.cyanide 1.0
+
 import "../js/Misc.js" as Misc
 
 Dialog {
@@ -43,23 +45,23 @@ Dialog {
             togglePaused.enabled = false
             console.log("togglePaused() was called")
             var errmsg
-            if(file_status == 1 || file_status == -2) {
+            if(file_status == File_State.Active || file_status == File_State.Paused_Them) {
                 errmsg = cyanide.pause_transfer(f, m)
                 if(errmsg === "") {
                     console.log("paused successfully, closing panel")
                 } else {
                     cyanide.notify_error(qsTr("Failed to pause transfer"), qsTr(errmsg))
                 }
-            } else if(file_status == -1 || file_status == -3) {
+            } else if(file_status == File_State.Paused_Us || file_status == File_State.Paused_Both) {
                 errmsg = cyanide.resume_transfer(f, m)
                 if(errmsg === "") {
                     console.log("paused successfully, closing panel")
                 } else {
                     cyanide.notify_error(qsTr("Failed to resume transfer"), qsTr(errmsg))
                 }
-            } else if(file_status == 0) {
+            } else if(file_status == File_State.Cancelled) {
                 console.log("attempted to pause/resume a cancelled transfer")
-            } else if(file_status == 2) {
+            } else if(file_status == File_State.Finished) {
                 console.log("attempted to pause/resume a finished transfer")
             }
             file_status = cyanide.get_file_status(f, m)
@@ -69,7 +71,7 @@ Dialog {
         function cancel() {
             cancel.enabled = false
             console.log("cancel() was called")
-            if(file_status == 2 || file_status == 0) {
+            if(file_status == File_State.Finished || file_status == File_State.Cancelled) {
                 console.log("attempted to cancel a finished/cancelled transfer")
             } else {
                 var errmsg =  cyanide.cancel_transfer(f, m)
@@ -83,15 +85,15 @@ Dialog {
         }
 
         function toggleIcons() {
-            if(file_status == -1 || file_status == -3) {
+            if(file_status == File_State.Paused_Us || file_status == File_State.Paused_Both) {
                 togglePaused.icon.source = "image://theme/icon-cover-play"
                 togglePaused.visible = true
                 cancel.visible = true
-            } else if(file_status == 1 || file_status == -2) {
+            } else if(file_status == File_State.Active || file_status == File_State.Paused_Them) {
                 togglePaused.icon.source = "image://theme/icon-cover-pause"
                 togglePaused.visible = true
                 cancel.visible = true
-            } else if(file_status == 0 || file_status == 2) {
+            } else if(file_status == File_State.Cancelled || file_status == File_State.Finished) {
                 togglePaused.visible = false
                 cancel.visible = false
             }
@@ -250,6 +252,7 @@ Dialog {
                     }
                     onClicked: {
                         if(inputField.copied || inputField.text === "") {
+                            messageListView.positionViewAtEnd()
                             inputField.text = (m_text[0] === ">" ? ">" : "> ") + m_text + "\n"
                             inputField.cursorPosition = inputField.text.length
                         }
@@ -257,7 +260,7 @@ Dialog {
                 }
                 Image {
                     id: inlineImage
-                    visible: m_type == msgtype_image && (m_author || f_progress == 100)
+                    visible: m_type == Message_Type.Image && (m_author || f_progress == 100)
                     x: Theme.paddingLarge
                     y: message.y + message.height + Theme.paddingSmall
                     width: page.width - 2 * Theme.paddingLarge > implicitWidth ?
@@ -267,13 +270,13 @@ Dialog {
                 }
                 Label {
                     id: message
-                    property bool file: m_type == msgtype_file || m_type == msgtype_image
+                    property bool file: m_type & Message_Type.File
                     text: file ? f_status == 0 ?
                               "<s>(" + f_progress + "%) " + m_text.replace(/.*\//, "") + "</s>"
                                : "(" + f_progress + "%) " + f_link
                                : m_rich_text
                     Component.onCompleted: {
-                        var limit = page.width * 2/3 // - file ? attach.width : 0
+                        var limit = page.width * 2/3
                         if(width > limit)
                             width = limit
                     }
