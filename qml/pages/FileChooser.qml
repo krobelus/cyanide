@@ -44,7 +44,7 @@ Page {
                     if(fileChooserProperties.target === "selfAvatar") {
                         name = "profile"
                     } else if(fileChooserProperties.target === "fileToSend") {
-                        name = "friendaction"
+                        name = "friend"
                     } else if(fileChooserProperties.target === "toxSaveFile") {
                         name = "friendlist"
                     }
@@ -113,7 +113,7 @@ Page {
                 } else if(fileChooserProperties.target === "fileToSend") {
                     errmsg = cyanide.send_file(activeFriend(), folder+fileName)
                     if(errmsg === "") {
-                        returnToPage("friendaction")
+                        returnToPage("friend")
                     } else {
                         cyanide.notify_error(qsTr("Failed to send file"), qsTr(errmsg))
                     }

@@ -263,7 +263,7 @@ Dialog {
                     width: page.width - 2 * Theme.paddingLarge > implicitWidth ?
                                implicitWidth : page.width - 2 * Theme.paddingLarge
                     fillMode: Image.PreserveAspectFit
-                    source: f_progress == 100 ? m_text : ""
+                    source: visible ? m_text : ""
                 }
                 Label {
                     id: message
