@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <!DOCTYPE TS>
 <TS version="2.1" language="ru_RU">
 <context>
@@ -119,12 +119,12 @@
     <message>
         <source>Tox User</source>
         <extracomment>default username</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Пользователь Tox</translation>
     </message>
     <message>
         <source>Toxing on Cyanide</source>
         <extracomment>default status</extracomment>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Tox me maybe?</source>
@@ -133,7 +133,7 @@
     </message>
     <message>
         <source>Error: File exists</source>
-        <translation type="unfinished"></translation>
+        <translation>Ошибка: файл существует</translation>
     </message>
 </context>
 <context>
