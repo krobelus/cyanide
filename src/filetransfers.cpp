@@ -23,7 +23,7 @@ void callback_file_recv(Tox *tox, uint32_t fid, uint32_t file_number, uint32_t k
     Message m;
 
     QString basename = utf8_to_qstr(filename, filename_length);
-    m.type = looks_like_an_image(basename) ? MSGTYPE_IMAGE : MSGTYPE_FILE;
+    m.type = looks_like_an_image(basename) ? Message_Type::Image : Message_Type::File;
 
     m.timestamp = QDateTime::currentDateTime();
     m.author = false;
@@ -45,7 +45,7 @@ void callback_file_recv(Tox *tox, uint32_t fid, uint32_t file_number, uint32_t k
     ft->file_size = file_size;
     ft->position = 0;
     ft->filename_length = filename_length;
-    ft->status = -1;
+    ft->status = File_State::Paused_Us;
     ft->filename = (uint8_t*)malloc(filename_length);
     memcpy(ft->filename, filename, filename_length);
 
@@ -77,7 +77,7 @@ void Cyanide::incoming_avatar(uint32_t fid, uint32_t file_number, uint64_t file_
     ft->position = 0;
     ft->file = NULL;
     ft->data = NULL;
-    ft->status = -2;
+    ft->status = File_State::Paused_Them;
 
     /* check if the hash is the same as the one of the cached avatar */
     get_file_id(fid, ft);
@@ -175,7 +175,7 @@ void callback_file_recv_chunk(Tox *tox, uint32_t fid, uint32_t file_number, uint
     if(length == 0) {
         qDebug() << "file transfer finished";
         fclose(ft->file);
-        ft->status = 2;
+        ft->status = File_State::Finished;
         emit cyanide->signal_file_status(fid, mid, ft->status);
         emit cyanide->signal_file_progress(fid, mid, 100);
     } else if(fwrite(data, 1, length, file) != length) {
@@ -218,28 +218,28 @@ void callback_file_recv_control(Tox *UNUSED(tox), uint32_t fid, uint32_t file_nu
 
     switch(action){
         case TOX_FILE_CONTROL_RESUME:
-            qDebug() << "transfer was resumed, status:" << ft->status;
-            if(ft->status == -2) {
-                ft->status = 1;
-            } else if(ft->status == -3) {
-                ft->status = -1;
+            qDebug() << "transfer was resumed by peer, status:" << ft->status;
+            if(ft->status == File_State::Paused_Them) {
+                ft->status = File_State::Active;
+            } else if(ft->status == File_State::Paused_Both) {
+                ft->status = File_State::Paused_Us;
             } else {
                 qDebug() << "unexpected status ^";
             }
             break;
         case TOX_FILE_CONTROL_PAUSE:
-            qDebug() << "transfer was paused, status:" << ft->status;
-            if(ft->status == -1) {
-                ft->status = -3;
-            } else if(ft->status == 1) {
-                ft->status = -2;
+            qDebug() << "transfer was paused by peer, status:" << ft->status;
+            if(ft->status == File_State::Paused_Us) {
+                ft->status = File_State::Paused_Both;
+            } else if(ft->status == File_State::Active) {
+                ft->status = File_State::Paused_Them;
             } else {
                 qDebug() << "unexpected status ^";
             }
             break;
         case TOX_FILE_CONTROL_CANCEL:
-            qDebug() << "transfer was cancelled, status:" << ft->status;
-            ft->status = 0;
+            qDebug() << "transfer was cancelled by peer, status:" << ft->status;
+            ft->status = File_State::Cancelled;
             /* if it's an incoming file, delete the file */
             if(m != NULL && !m->author) {
                 if(!QFile::remove(m->text))
@@ -283,7 +283,7 @@ void callback_file_chunk_request(Tox *tox, uint32_t fid, uint32_t file_number,
     if(length == 0) {
         fclose(file);
         qDebug() << "file sending done";
-        ft->status = 2;
+        ft->status = File_State::Finished;
         emit cyanide->signal_file_status(fid, mid, ft->status);
         success = true;
     } else {
@@ -375,27 +375,27 @@ QString Cyanide::send_file_control(int fid, int mid, TOX_FILE_CONTROL action)
         switch(action) {
         case TOX_FILE_CONTROL_RESUME:
             qDebug() << "resuming transfer, status:" << ft->status;
-            if(ft->status == -1) {
-                ft->status = 1;
-            } else if(ft->status == -3) {
-                ft->status = -2;
+            if(ft->status == File_State::Paused_Us) {
+                ft->status = File_State::Active;
+            } else if(ft->status == File_State::Paused_Both) {
+                ft->status = File_State::Paused_Them;
             } else {
                 qDebug() << "unexpected status ^";
             }
             break;
         case TOX_FILE_CONTROL_PAUSE:
             qDebug() << "pausing transfer, status:" << ft->status;
-            if(ft->status == 1) {
-                ft->status = -1;
-            } else if(ft->status == -2) {
-                ft->status = -3;
+            if(ft->status == File_State::Active) {
+                ft->status = File_State::Paused_Us;
+            } else if(ft->status == File_State::Paused_Them) {
+                ft->status = File_State::Paused_Both;
             } else {
                 qDebug() << "unexpected status ^";
             }
             break;
         case TOX_FILE_CONTROL_CANCEL:
             qDebug() << "cancelling transfer, status:" << ft->status;
-            ft->status = 0;
+            ft->status = File_State::Cancelled;
             /* if it's an incoming file, delete the file */
             if(m != NULL && !m->author) {
                 if(!QFile::remove(m->text))
@@ -482,7 +482,7 @@ QString Cyanide::send_file(TOX_FILE_KIND kind, int fid, QString path, uint8_t *f
             qDebug() << "Failed to allocate memory for the file transfer";
             return "no memory";
         }
-        m.type = looks_like_an_image(path) ? MSGTYPE_IMAGE : MSGTYPE_FILE;
+        m.type = looks_like_an_image(path) ? Message_Type::Image : Message_Type::File;
         m.timestamp = QDateTime::currentDateTime();
         m.author = true;
         m.text = path;
@@ -490,7 +490,7 @@ QString Cyanide::send_file(TOX_FILE_KIND kind, int fid, QString path, uint8_t *f
     }
 
     ft->position = 0;
-    ft->status = -2;
+    ft->status = File_State::Paused_Them;
 
     QString basename = path.right(path.size() - 1 - path.lastIndexOf("/"));
     ft->filename_length = qstrlen(basename);

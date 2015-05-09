@@ -2,8 +2,9 @@
 #define TOX_CALLBACKS_H
 
 #include "cyanide.h"
-#include "util.h"
+#include "message.h"
 #include "unused.h"
+#include "util.h"
 
 void callback_friend_request(Tox *UNUSED(tox), const uint8_t *id, const uint8_t *msg, size_t length, void *that)
 {
@@ -23,7 +24,7 @@ void callback_friend_message(Tox *UNUSED(tox), uint32_t fid, TOX_MESSAGE_TYPE ty
     qDebug() << "was called";
     Cyanide *cyanide = (Cyanide*)that;
     Message m;
-    m.type = type == TOX_MESSAGE_TYPE_ACTION ? MSGTYPE_ACTION : MSGTYPE_NORMAL;
+    m.type = type == TOX_MESSAGE_TYPE_ACTION ? Message_Type::Action : Message_Type::Normal;
     m.author = false;
     m.text = utf8_to_qstr(msg, length);
     m.timestamp = QDateTime::currentDateTime();
