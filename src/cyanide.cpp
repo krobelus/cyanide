@@ -443,7 +443,7 @@ void Cyanide::tox_loop()
                 do_bootstrap();
             }
 
-            if (save_needed || (time - last_save >= (uint)100 * 1000 * 1000 * 1000)) {
+            if(save_needed || (time - last_save >= (uint)100 * 1000 * 1000 * 1000)) {
                 write_save();
             }
         }
@@ -576,7 +576,7 @@ void Cyanide::load_defaults()
 {
     TOX_ERR_SET_INFO error;
 
-    uint8_t *name = (uint8_t*)DEFAULT_NAME.data(), *status = (uint8_t*)DEFAULT_STATUS.data();
+    uint8_t *name = (uint8_t*)DEFAULT_NAME.toUtf8().data(), *status = (uint8_t*)DEFAULT_STATUS.toUtf8().data();
     uint16_t name_len = DEFAULT_NAME.toUtf8().size() , status_len = DEFAULT_STATUS.toUtf8().size();
 
     self.name = DEFAULT_NAME;
@@ -592,6 +592,7 @@ void Cyanide::load_defaults()
 
 void Cyanide::write_save()
 {
+    qDebug() << "";
     void *data;
     uint32_t size;
 

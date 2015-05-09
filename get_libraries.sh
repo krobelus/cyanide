@@ -6,9 +6,9 @@ rm -rf res
 mkdir  res
 cd     res
 
-which wget || ( echo "wget not found"; exit 1 ) >/dev/null
-which rpm2cpio || ( echo "rpm2cpio not found"; exit 1 ) >/dev/null
-which bsdtar || ( echo "bsdtar not found"; exit 1 ) >/dev/null
+which wget || ( echo "wget not found"; exit 1 )
+which rpm2cpio || ( echo "rpm2cpio not found"; exit 1 )
+which bsdtar || ( echo "bsdtar not found"; exit 1 )
 
 rpmextract() {
     rpm2cpio "$1" | bsdtar -xf -
