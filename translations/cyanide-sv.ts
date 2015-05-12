@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <!DOCTYPE TS>
 <TS version="2.1" language="sv_SE">
 <context>
@@ -206,7 +206,7 @@
     </message>
     <message>
         <source>Clear chat log</source>
-        <translation type="unfinished"></translation>
+        <translation>Rensa chattloggen</translation>
     </message>
 </context>
 <context>
@@ -301,7 +301,7 @@
     </message>
     <message>
         <source>Keep chat history</source>
-        <translation type="unfinished"></translation>
+        <translation>Spara chatthistorik</translation>
     </message>
 </context>
 <context>
