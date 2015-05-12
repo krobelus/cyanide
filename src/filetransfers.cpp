@@ -212,6 +212,10 @@ void callback_file_recv_control(Tox *UNUSED(tox), uint32_t fid, uint32_t file_nu
         ft = &f->avatar_transfer;
     } else {
         qDebug() << "normal transfer";
+        if(mid > f->messages.size()-1) {
+            qWarning() << "received callback for deleted file transfer";
+            return;
+        }
         m = &f->messages[mid];
         ft = m->ft;
     }

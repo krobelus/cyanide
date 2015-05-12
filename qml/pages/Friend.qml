@@ -16,6 +16,7 @@ Dialog {
         friendNumberStack.pop()
         if(inputField.focus)
             cyanide.send_typing_notification(f, false)
+        refreshMessageList()
     }
 
     onOrientationChanged: refreshMessageList()
@@ -36,6 +37,8 @@ Dialog {
         height: Theme.itemSizeExtraLarge
 
         dock: Dock.Top
+
+        open: false
 
         property int m: -1
         property int file_status: 99
@@ -297,12 +300,12 @@ Dialog {
                         } else {
                             if(fileControlPanel.open) {
                                 fileControlPanel.open = false
-                            } else if(f_status == 1 /* active  */
-                                    ||f_status < 0) /* paused  */ {
+                            } else if((f_status == File_State.Active)
+                                    ||(f_status &  File_State.Paused)) {
                                 openFileControlPanel(m_id, f_status)
-                            } else if(f_status == 0) /* cancelled */ {
+                            } else if(f_status == File_State.Cancelled) {
                                 ;
-                            } else if(f_status == 2) /* finished */ {
+                            } else if(f_status == File_State.Finished) {
                                 cyanide.notify_error(qsTr("Opening file..."), m_text)
                                 console.log(link)
                                 Misc.openUrl(link)
@@ -311,7 +314,7 @@ Dialog {
                     }
                 }
                 function openFileControlPanel(m, f_status) {
-                    fileControlPanel.m = m
+                    fileControlPanel.m = parseInt(m)
                     fileControlPanel.incoming = !m_author
                     fileControlPanel.file_status = f_status
                     fileControlPanel.open = true
