@@ -200,6 +200,10 @@
         <source>Block friend</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Clear chat log</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>FriendList</name>
@@ -289,6 +293,10 @@
     </message>
     <message>
         <source>Wifi only</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Keep chat history</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

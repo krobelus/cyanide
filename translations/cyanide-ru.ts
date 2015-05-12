@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
 <TS version="2.1" language="ru_RU">
 <context>
@@ -124,7 +124,7 @@
     <message>
         <source>Toxing on Cyanide</source>
         <extracomment>default status</extracomment>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Tox me maybe?</source>
@@ -223,6 +223,10 @@
     <message>
         <source>Block friend</source>
         <translation>Заблокировать</translation>
+    </message>
+    <message>
+        <source>Clear chat log</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -326,6 +330,10 @@
     <message>
         <source>Wifi only</source>
         <translation>Только WiFi</translation>
+    </message>
+    <message>
+        <source>Keep chat history</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
