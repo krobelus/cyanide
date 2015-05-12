@@ -181,7 +181,7 @@ Dialog {
             }
             Image {
                 id: friendStatusIcon
-                Component.onCompleted: source = friendList.get(f+1).friend_status_icon
+                source: friendList.get(f+1).friend_status_icon
                 y: pageHeader.height / 2 - height / 2
                 anchors {
                     right: title.left
