@@ -250,7 +250,7 @@ Dialog {
                     anchors {
                         fill: message
                     }
-                    onClicked: {
+                    onPressAndHold: {
                         if(inputField.copied || inputField.text === "") {
                             messageListView.positionViewAtEnd()
                             inputField.text = (m_text[0] === ">" ? ">" : "> ") + m_text + "\n"
