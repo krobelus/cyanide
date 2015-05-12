@@ -4,12 +4,6 @@
 #include "unused.h"
 #include "util.h"
 
-bool looks_like_an_image(QString path)
-{
-    QRegExp rx("\\.(png|jpeg|gif)$");
-    return rx.indexIn(path) != -1;
-}
-
 void callback_file_recv(Tox *tox, uint32_t fid, uint32_t file_number, uint32_t kind,
                         uint64_t file_size, const uint8_t *filename, size_t filename_length, void *that)
 {
@@ -520,6 +514,8 @@ QString Cyanide::send_file(TOX_FILE_KIND kind, int fid, QString path, uint8_t *f
     friends[fid].files[ft->file_number] = -1;
     qDebug() << "sending file, friend number" << fid
              << "file number" << ft->file_number;
+
+    get_file_id(fid, ft);
 
     switch(error) {
         case TOX_ERR_FILE_SEND_OK:

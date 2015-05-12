@@ -15,6 +15,7 @@ class Settings : public QObject
     Q_OBJECT
 
 private:
+    static QString db_version;
     static QString tables[];
     static std::map<QString, settings_entry> entries;
     static std::map<QString, std::vector<type_entry>> types;
@@ -26,7 +27,6 @@ private:
     QString db_get(QString name);
 
 public:
-    Settings();
     QString profile_name;
     void open_database(QString name);
     void close_databases();

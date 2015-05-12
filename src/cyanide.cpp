@@ -319,6 +319,7 @@ bool Cyanide::is_visible()
 
 void Cyanide::free_friend_messages(Friend *f)
 {
+        f->files.clear();
         for(Message m : f->messages) {
             if(m.ft != NULL) {
                 free(m.ft->filename);
@@ -343,7 +344,6 @@ void Cyanide::load_tox_and_stuff_pretty_please()
     for(std::pair<uint32_t, Friend>pair : friends) {
         Friend f = pair.second;
         free(f.avatar_transfer.filename);
-        f.files.clear();
         free_friend_messages(&f);
     }
     friends.clear();
@@ -673,6 +673,7 @@ void Cyanide::load_tox_data()
         f.status_message = utf8_to_qstr(status_message, length);
 
         uint32_t fid = add_friend(&f);
+	/* TODO queue all paused transfers for resuming */
         history.load_messages(get_friend_public_key(fid), &friends[fid].messages);
     }
     emit signal_load_messages();
@@ -747,8 +748,12 @@ void Cyanide::add_message(uint32_t fid, Message message)
     if(!message.author)
         set_friend_activity(fid, true);
 
-    if(settings.get("keep-history") == "true")
-        history.add_message(get_friend_public_key(fid), &message);
+    if(settings.get("keep-history") == "true") {
+        QByteArray file_id = NULL;
+        if(message.ft != NULL)
+            file_id = QByteArray((const char*)message.ft->file_id, TOX_FILE_ID_LENGTH);
+        history.add_message(get_friend_public_key(fid), file_id, &message);
+    }
 
     emit signal_friend_message(fid, mid, message.type);
 }

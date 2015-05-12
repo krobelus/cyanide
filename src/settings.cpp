@@ -7,7 +7,7 @@
 
 #define QUERY(q) QSqlQuery q(QSqlDatabase::database("s"+profile_name))
 
-QString db_version = "0002";
+QString Settings::db_version = "0002";
 
 QString Settings::tables[] = {
         "CREATE TABLE IF NOT EXISTS settings (name TEXT PRIMARY KEY, value TEXT)",
@@ -71,10 +71,6 @@ void execute_sql_query(QSqlQuery q)
 {
     if (!q.exec())
         qFatal("Failed to execute SQL query: %s", qPrintable(q.lastError().text()));
-}
-
-Settings::Settings()
-{
 }
 
 void Settings::close_databases()

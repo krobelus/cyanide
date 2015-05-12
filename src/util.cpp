@@ -186,3 +186,8 @@ uint64_t get_time()
     return ((uint64_t)ts.tv_sec * (1000 * 1000 * 1000)) + (uint64_t)ts.tv_nsec;
 }
 
+bool looks_like_an_image(QString &path)
+{
+    QRegExp rx("\\.(png|jpeg|gif)$");
+    return rx.indexIn(path) != -1;
+}
