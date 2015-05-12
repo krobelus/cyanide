@@ -64,6 +64,14 @@ Page {
         }
         Button {
             anchors.horizontalCenter: parent.horizontalCenter
+            text: qsTr("Clear chat log")
+            onClicked: {
+                cyanide.clear_history(f)
+                pageStack.pop()
+            }
+        }
+        Button {
+            anchors.horizontalCenter: parent.horizontalCenter
             property bool blocked: friendList.get(f+1).friend_blocked
             text: blocked ? qsTr("Unblock friend") : qsTr("Block friend")
             onClicked: {

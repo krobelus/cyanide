@@ -15,6 +15,7 @@ class Settings : public QObject
     Q_OBJECT
 
 private:
+    static QString tables[];
     static std::map<QString, settings_entry> entries;
     static std::map<QString, std::vector<type_entry>> types;
 

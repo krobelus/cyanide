@@ -9,6 +9,7 @@
 #include "friend.h"
 #include "message.h"
 #include "settings.h"
+#include "history.h"
 
 #define MAX_AVATAR_SIZE 64 * 1024
 #define MAX_CALLS 16
@@ -50,6 +51,7 @@ public:
     Tox *tox;
     ToxAv *toxav;
     Settings settings;
+    History history;
 
     QString profile_name, next_profile_name;
 
@@ -142,6 +144,9 @@ public:
     Q_INVOKABLE void av_call(int fid);
     Q_INVOKABLE void av_call_cancel(int fid);
 
+    void free_friend_messages(Friend *f);
+    Q_INVOKABLE void clear_history(int fid);
+
     /* setters and getters */
     Q_INVOKABLE QString get_profile_name();
     Q_INVOKABLE QString set_profile_name(QString name);
@@ -185,6 +190,7 @@ signals:
     void signal_friend_added(int fid);
     void signal_friend_activity(int fid);
     void signal_friend_blocked(int fid, bool blocked);
+    void signal_load_messages();
 
     void signal_friend_request(int fid);
     void signal_friend_message(int fid, int mid, int type);

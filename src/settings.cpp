@@ -5,17 +5,19 @@
 
 #include "settings.h"
 
-#define QUERY(q) QSqlQuery q(QSqlDatabase::database(profile_name))
+#define QUERY(q) QSqlQuery q(QSqlDatabase::database("s"+profile_name))
 
 QString db_version = "0002";
 
-QString tables[] = {
+QString Settings::tables[] = {
         "CREATE TABLE IF NOT EXISTS settings (name TEXT PRIMARY KEY, value TEXT)",
         //"CREATE TABLE IF NOT EXISTS friends (fid INT PRIMARY KEY, address TEXT)"
         "CREATE TABLE IF NOT EXISTS friends (public_key TEXT PRIMARY KEY, address TEXT, avatar_hash BLOB)"
         };
 
 std::map<QString, settings_entry> Settings::entries = {
+        { "keep-history", { tr("Keep chat history")
+            , "bool", "true" } }
       // { "enable-sounds", { tr("Enable sounds"), "bool", "true" } }
       //  { "sound-when", { tr("Play this sound when..."), "none", "" } }
       //, { "sound-message-received", { tr("I receive a message")
@@ -24,7 +26,7 @@ std::map<QString, settings_entry> Settings::entries = {
       //      , "sound", "/usr/share/sounds/jolla-ringtones/stereo/jolla-emailtone.wav" } }
       //, { "sound-friend-connected", { tr("a friend comes online")
       //      , "sound", "/usr/share/sounds/jolla-ringtones/stereo/jolla-imtone.wav" } }
-        { "notification-when", { tr("Notify me when..."), "none", "" } }
+      , { "notification-when", { tr("Notify me when..."), "none", "" } }
       , { "notification-message-received", { tr("I receive a message")
             , "bool", "true" } }
       , { "notification-friend-request-received", { tr("I receive a friend request")
@@ -65,14 +67,14 @@ std::map<QString, std::vector<type_entry>> Settings::types = {
     */
 };
 
-Settings::Settings()
-{
-}
-
 void execute_sql_query(QSqlQuery q)
 {
     if (!q.exec())
         qFatal("Failed to execute SQL query: %s", qPrintable(q.lastError().text()));
+}
+
+Settings::Settings()
+{
 }
 
 void Settings::close_databases()
@@ -88,20 +90,20 @@ void Settings::close_databases()
 
 void Settings::open_database(QString name)
 {
-    QSqlDatabase::database(profile_name).close();
-    QSqlDatabase::removeDatabase(profile_name);
+    QSqlDatabase::database("s"+profile_name).close();
+    QSqlDatabase::removeDatabase("s"+profile_name);
 
     profile_name = name;
 
-    if(QSqlDatabase::contains(profile_name))
+    if(QSqlDatabase::contains("s"+profile_name))
         return;
 
     QSqlDatabase db;
 
     if(db.isOpen()) {
-        db.close();
+    //        db.close();
     } else {
-        db = QSqlDatabase::addDatabase("QSQLITE", profile_name);
+        db = QSqlDatabase::addDatabase("QSQLITE", "s"+profile_name);
     }
 
     QString dbdir = CYANIDE_DATA_DIR;

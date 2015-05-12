@@ -19,6 +19,7 @@
 #include "util.h"
 #include "dns.cpp"
 #include "settings.h"
+#include "history.h"
 
 /* oh boy, here we go... */
 #define UINT32_MAX (4294967295U)
@@ -59,7 +60,8 @@ int main(int argc, char *argv[])
     int result = app->exec();
 
     cyanide->loop = LOOP_FINISH;
-    //settings->close_databases();
+    cyanide->settings.close_databases();
+    cyanide->history.close_databases();
     my_tox_thread.join();
 
     return result;
@@ -315,11 +317,23 @@ bool Cyanide::is_visible()
     return view->visibility() == QWindow::FullScreen;
 }
 
+void Cyanide::free_friend_messages(Friend *f)
+{
+        for(Message m : f->messages) {
+            if(m.ft != NULL) {
+                free(m.ft->filename);
+                free(m.ft);
+            }
+        }
+        f->messages.clear();
+}
+
 void Cyanide::load_tox_and_stuff_pretty_please()
 {
     int error;
 
     settings.open_database(profile_name);
+    history.open_database(profile_name);
 
     self.user_status = TOX_USER_STATUS_NONE;
     self.connection_status = TOX_CONNECTION_NONE;
@@ -330,13 +344,7 @@ void Cyanide::load_tox_and_stuff_pretty_please()
         Friend f = pair.second;
         free(f.avatar_transfer.filename);
         f.files.clear();
-        for(Message m : f.messages) {
-            if(m.ft != NULL) {
-                free(m.ft->filename);
-                free(m.ft);
-            }
-        }
-        f.messages.clear();
+        free_friend_messages(&f);
     }
     friends.clear();
 
@@ -348,8 +356,10 @@ void Cyanide::load_tox_and_stuff_pretty_please()
 
     size_t save_data_size;
     const uint8_t *save_data = get_save_data(&save_data_size);
+    qDebug() << "getting settinsg";
     if(settings.get("udp-enabled") != "true")
         tox_options.udp_enabled = 0;
+    qDebug() << "got settings";
     tox = tox_new(&tox_options, save_data, save_data_size, (TOX_ERR_NEW*)&error);
     // TODO switch(error)
 
@@ -662,8 +672,10 @@ void Cyanide::load_tox_data()
         }
         f.status_message = utf8_to_qstr(status_message, length);
 
-        add_friend(&f);
+        uint32_t fid = add_friend(&f);
+        history.load_messages(get_friend_public_key(fid), &friends[fid].messages);
     }
+    emit signal_load_messages();
 
     length = tox_self_get_name_size(tox);
     uint8_t name[length];
@@ -734,6 +746,9 @@ void Cyanide::add_message(uint32_t fid, Message message)
 
     if(!message.author)
         set_friend_activity(fid, true);
+
+    if(settings.get("keep-history") == "true")
+        history.add_message(get_friend_public_key(fid), &message);
 
     emit signal_friend_message(fid, mid, message.type);
 }
@@ -958,6 +973,13 @@ void Cyanide::remove_friend(int fid)
     save_needed = true;
     settings.remove_friend(get_friend_public_key(fid));
     friends.erase(fid);
+}
+
+void Cyanide::clear_history(int fid)
+{
+    history.clear_messages(get_friend_public_key(fid));
+    free_friend_messages(&friends[fid]);
+    emit signal_load_messages();
 }
 
 /* setters and getters */

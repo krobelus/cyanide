@@ -172,6 +172,10 @@ ApplicationWindow
             var i = fid + 1
             friendList.setProperty(i, "friend_status_message", cyanide.get_friend_status_message(fid))
         }
+        onSignal_load_messages: {
+            refreshMessageList()
+        }
+
         onSignal_friend_message: {
             var i = fid + 1
             if(!cyanide.get_message_author(fid, mid)) {
@@ -187,8 +191,7 @@ ApplicationWindow
                 }
             }
             if(fid == activeFriend()) {
-                // appendMessage(mid)
-                refreshMessageList()
+                appendMessage(mid)
             }
         }
         onSignal_friend_callstate: {
