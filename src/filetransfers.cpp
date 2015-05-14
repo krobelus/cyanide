@@ -238,6 +238,7 @@ void callback_file_recv_control(Tox *UNUSED(tox), uint32_t fid, uint32_t file_nu
         case TOX_FILE_CONTROL_CANCEL:
             qDebug() << "transfer was cancelled by peer, status:" << ft->status;
             ft->status = File_State::Cancelled;
+            cyanide->history.update_file(ft);
             /* if it's an incoming file, delete the file */
             if(m != NULL && !m->author) {
                 if(!QFile::remove(m->text))
@@ -394,6 +395,7 @@ QString Cyanide::send_file_control(int fid, int mid, TOX_FILE_CONTROL action)
         case TOX_FILE_CONTROL_CANCEL:
             qDebug() << "cancelling transfer, status:" << ft->status;
             ft->status = File_State::Cancelled;
+            history.update_file(ft);
             /* if it's an incoming file, delete the file */
             if(m != NULL && !m->author) {
                 if(!QFile::remove(m->text))

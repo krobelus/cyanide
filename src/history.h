@@ -14,9 +14,9 @@ class History
  public:
     void open_database(QString name);
     void close_databases();
-    void add_message(QString public_key, QByteArray &tox_file_id, Message *m);
-    void add_file(File_Transfer *ft, QByteArray &tox_file_id);
-    void update_file(File_Transfer *ft, QByteArray &tox_file_id);
+    void add_message(QString public_key, Message *m);
+    void add_file(File_Transfer *ft);
+    void update_file(File_Transfer *ft);
     void load_messages(QString public_key, QList<Message> *messages, QDateTime from = QDateTime(), QDateTime to = QDateTime()); // TODO make sense
     void load_file_transfer(int file_id, File_Transfer *ft);
     void clear_messages(QString public_key);

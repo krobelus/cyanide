@@ -88,13 +88,14 @@ int History::get_file_id(QByteArray &tox_file_id)
         return 0;
 }
 
-void History::add_message(QString public_key, QByteArray &tox_file_id, Message *m)
+void History::add_message(QString public_key, Message *m)
 {
     QUERY(q);
 
     if(m->ft != NULL) {
-        add_file(m->ft, tox_file_id);
+        add_file(m->ft);
         q.prepare("INSERT INTO messages (file_id, timestamp, chat_id, author, message) VALUES (?, ?, ?, ?, ?)");
+        QByteArray tox_file_id = QByteArray((const char*)m->ft->file_id, TOX_FILE_ID_LENGTH);
         q.addBindValue(get_file_id(tox_file_id));
     } else {
         q.prepare("INSERT INTO messages (timestamp, chat_id, author, message) VALUES (?, ?, ?, ?)");
@@ -107,9 +108,10 @@ void History::add_message(QString public_key, QByteArray &tox_file_id, Message *
     execute_sql_query(q);
 }
 
-void History::add_file(File_Transfer *ft, QByteArray &tox_file_id)
+void History::add_file(File_Transfer *ft)
 {
     QUERY(q);
+    QByteArray tox_file_id = QByteArray((const char*)ft->file_id, TOX_FILE_ID_LENGTH);
 
     q.prepare("INSERT INTO files (tox_file_id, status, filename, file_size, position)"
               "VALUES (?, ?, ?, ?, ?)");
@@ -121,9 +123,10 @@ void History::add_file(File_Transfer *ft, QByteArray &tox_file_id)
     execute_sql_query(q);
 }
 
-void History::update_file(File_Transfer *ft, QByteArray &tox_file_id)
+void History::update_file(File_Transfer *ft)
 {
     QUERY(q);
+    QByteArray tox_file_id = QByteArray((const char*)ft->file_id, TOX_FILE_ID_LENGTH);
     q.prepare("UPDATE files SET status = ?, position = ? WHERE tox_file_id = ?");
     /* no file resuming yet, so set to cancelled unless already finished */
     int status = ft->status == File_State::Finished ? File_State::Finished

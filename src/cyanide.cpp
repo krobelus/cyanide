@@ -541,8 +541,7 @@ void Cyanide::killall_tox()
             // i.second is the corresponding message id
             if(i.second >= 0) {
                 File_Transfer *ft = fit->second.messages[i.second].ft;
-                QByteArray file_id = QByteArray((const char*)ft->file_id, TOX_FILE_ID_LENGTH);
-                history.update_file(ft, file_id);
+                history.update_file(ft);
             }
         }
     }
@@ -760,10 +759,7 @@ void Cyanide::add_message(uint32_t fid, Message message)
         set_friend_activity(fid, true);
 
     if(settings.get("keep-history") == "true") {
-        QByteArray file_id = NULL;
-        if(message.ft != NULL)
-            file_id = QByteArray((const char*)message.ft->file_id, TOX_FILE_ID_LENGTH);
-        history.add_message(get_friend_public_key(fid), file_id, &message);
+        history.add_message(get_friend_public_key(fid), &message);
     }
 
     emit signal_friend_message(fid, mid, message.type);
