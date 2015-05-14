@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
 <TS version="2.1" language="sv_SE">
 <context>
@@ -206,7 +206,25 @@
     </message>
     <message>
         <source>Clear chat log</source>
-        <translation>Rensa chattloggen</translation>
+        <translation type="vanished">Rensa chattloggen</translation>
+    </message>
+    <message>
+        <source>Chat history</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Load</source>
+        <extracomment>chat history</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delete</source>
+        <extracomment>chat history</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Deleting chat history</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -226,6 +244,17 @@
     <message>
         <source>Switch profile</source>
         <translation>Byt profil</translation>
+    </message>
+</context>
+<context>
+    <name>LoadChatHistory</name>
+    <message>
+        <source>From</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>To</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

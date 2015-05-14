@@ -201,7 +201,21 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Clear chat log</source>
+        <source>Chat history</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Load</source>
+        <extracomment>chat history</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delete</source>
+        <extracomment>chat history</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Deleting chat history</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -221,6 +235,17 @@
     </message>
     <message>
         <source>Switch profile</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>LoadChatHistory</name>
+    <message>
+        <source>From</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>To</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
