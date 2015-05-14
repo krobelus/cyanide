@@ -11,35 +11,22 @@ QString Settings::db_version = "0002";
 
 QString Settings::tables[] = {
         "CREATE TABLE IF NOT EXISTS settings (name TEXT PRIMARY KEY, value TEXT)",
-        //"CREATE TABLE IF NOT EXISTS friends (fid INT PRIMARY KEY, address TEXT)"
         "CREATE TABLE IF NOT EXISTS friends (public_key TEXT PRIMARY KEY, address TEXT, avatar_hash BLOB)"
         };
 
 std::map<QString, settings_entry> Settings::entries = {
-      // { "enable-sounds", { tr("Enable sounds"), "bool", "true" } }
-      //  { "sound-when", { tr("Play this sound when..."), "none", "" } }
-      //, { "sound-message-received", { tr("I receive a message")
-      //      , "sound", "/usr/share/sounds/jolla-ringtones/stereo/jolla-imtone.wav" } }
-      //, { "sound-friend-request-received", { tr("I receive a friend request")
-      //      , "sound", "/usr/share/sounds/jolla-ringtones/stereo/jolla-emailtone.wav" } }
-      //, { "sound-friend-connected", { tr("a friend comes online")
-      //      , "sound", "/usr/share/sounds/jolla-ringtones/stereo/jolla-imtone.wav" } }
-        { "notification-when", { tr("Notify me when..."), "none", "" } }
-      , { "notification-message-received", { tr("I receive a message")
+        { "wifi-only", {0, tr("Wifi only")
             , "bool", "true" } }
-      , { "notification-friend-request-received", { tr("I receive a friend request")
+      , { "send-typing-notifications", {1, tr("Send typing notifications?")
             , "bool", "true" } }
-      //, { "notification-friend-connected", { tr("a friend comes online")
-      //      , "bool", "true" } }
-      //, { "notification-friend-name-change", { tr("a friend changes his name")
-      //      , "bool", "true" } }
-      , { "udp-enabled", { tr("Enable UDP")
+      , { "keep-history", {2, tr("Keep chat history")
             , "bool", "true" } }
-      , { "keep-history", { tr("Keep chat history")
+      , { "udp-enabled", {3, tr("Enable UDP")
             , "bool", "true" } }
-      , { "send-typing-notifications", { tr("Send typing notifications?")
+      , { "notification-when", { 4, tr("Notify me when..."), "none", "" } }
+      , { "notification-message-received", { 5, tr("I receive a message")
             , "bool", "true" } }
-      , { "wifi-only", { tr("Wifi only")
+      , { "notification-friend-request-received", { 6, tr("I receive a friend request")
             , "bool", "true" } }
     };
 
@@ -174,11 +161,13 @@ int Settings::get_current_index(QString name)
 
 QStringList Settings::get_names()
 {
-    QStringList sl;
+    QStringList names;
+    for(auto i=0; i<entries.size(); i++)
+        names.append(QString());
     for(auto i=entries.begin(); i!=entries.end(); i++) {
-        sl << i->first;
+        names[i->second.index] = i->first;
     }
-    return sl;
+    return names;
 }
 
 QStringList Settings::get_display_names(QString type)

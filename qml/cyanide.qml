@@ -66,7 +66,7 @@ ApplicationWindow
     }
 
     function appendSetting(name) {
-        settingsList.insert(0, {
+        settingsList.append({
                         'name': name,
                         'type': settings.get_type(name),
                         'display_name': settings.get_display_name(name),

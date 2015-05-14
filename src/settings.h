@@ -6,7 +6,7 @@
 #include <QSqlError>
 #include <QVariant>
 
-typedef struct {QString display_name; QString type; QString value;} settings_entry;
+typedef struct {int index; QString display_name; QString type; QString value;} settings_entry;
 
 typedef struct {QString display_name; QString value;} type_entry;
 
