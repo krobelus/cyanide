@@ -249,17 +249,17 @@ Dialog {
                 }
 
                 MouseArea {
+                    id: mouseArea
                     width: message.width
                     height: message.height
                     anchors {
                         fill: message
                     }
-                    onPressAndHold: {
-                        if(inputField.copied || inputField.text === "") {
-                            messageListView.positionViewAtEnd()
-                            inputField.text = (m_text[0] === ">" ? ">" : "> ") + m_text + "\n"
-                            inputField.cursorPosition = inputField.text.length
-                        }
+                    onClicked: {
+                        enabled = false
+                        message.visible = false
+                        selectableMessage.visible = true
+                        selectableMessage.focus = true
                     }
                 }
                 Image {
@@ -272,8 +272,32 @@ Dialog {
                     fillMode: Image.PreserveAspectFit
                     source: visible ? m_text : ""
                 }
+                TextArea {
+                    id: selectableMessage
+                    visible: false
+
+                    y: message.y - Theme.paddingSmall
+                    x: message.x - Theme.paddingLarge
+                    height: implicitHeight
+                    width: message.width + 2 * Theme.paddingLarge
+                    readOnly: true
+                    focusOnClick: true
+                    onFocusChanged: {
+                        if(!focus) {
+                            mouseArea.enabled = true
+                            visible = false
+                            focus = false
+                            message.visible = true
+                        }
+                    }
+
+                    text: m_text
+                    horizontalAlignment: message.horizontalAlignment
+                    font.pixelSize: message.font.pixelSize
+                }
                 Label {
                     id: message
+                    visible: true
                     property bool file: m_type & Message_Type.File
                     text: file ? f_status == 0 ?
                               "<s>(" + f_progress + "%) " + m_text.replace(/.*\//, "") + "</s>"
@@ -362,13 +386,6 @@ Dialog {
             }
             anchors {
                 bottom: parent.bottom
-            }
-            property bool copied: false
-            onTextChanged: {
-                if(focus)
-                    copied = false
-                else
-                    copied = true
             }
             EnterKey.onClicked: {
                 var online = friendList.get(f+1).friend_connection_status
