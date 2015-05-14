@@ -367,10 +367,10 @@ Dialog {
 
         IconButton {
             id: clear
-            icon.source: "image://theme/icon-m-clear"
-            y: inputField.y
+            icon.source: "qrc:/images/sendmessage"
+            y: inputField.y + inputField.height - height - Theme.paddingLarge
             x: content.width - width - Theme.paddingSmall
-            onClicked: inputField.text = ""
+            onClicked: inputField.dispatch()
         }
 
         TextArea {
@@ -387,15 +387,11 @@ Dialog {
             anchors {
                 bottom: parent.bottom
             }
-            EnterKey.onClicked: {
+            function dispatch() {
                 var online = friendList.get(f+1).friend_connection_status
                 if(text === "" || !online) {
-                    text = text.replace(/\n$/, "")
-                    inputField.cursorPosition = inputField.text.length
                     return
                 }
-                // remove trailing newlines
-                text = text.replace(/\n+$/, "")
                 var errmsg = cyanide.send_friend_message(f, text)
                 if(errmsg === "") {
                     text = ""

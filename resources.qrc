@@ -34,8 +34,7 @@
         <file alias="video_4x">Tox-UI/button icons/video_4x.png</file>
         <file alias="phone_4x">Tox-UI/button icons/phone_4x.png</file>
         <file alias="attach_4x">Tox-UI/button icons/attach_4x.png</file>
+        <file alias="sendmessage">Tox-UI/button icons/sendmessage_2x.png</file>
     </qresource>
-    <qresource prefix="/">
-        <file>qml/pages/LoadChatHistory.qml</file>
-    </qresource>
+    <qresource prefix="/"/>
 </RCC>
