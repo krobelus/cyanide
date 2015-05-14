@@ -94,7 +94,6 @@ void History::add_message(QString public_key, QByteArray &tox_file_id, Message *
 
     if(m->ft != NULL) {
         add_file(m->ft, tox_file_id);
-
         q.prepare("INSERT INTO messages (file_id, timestamp, chat_id, author, message) VALUES (?, ?, ?, ?, ?)");
         q.addBindValue(get_file_id(tox_file_id));
     } else {
@@ -115,10 +114,23 @@ void History::add_file(File_Transfer *ft, QByteArray &tox_file_id)
     q.prepare("INSERT INTO files (tox_file_id, status, filename, file_size, position)"
               "VALUES (?, ?, ?, ?, ?)");
     q.addBindValue(tox_file_id);
-    q.addBindValue(ft->status);
+    q.addBindValue(ft->status); // initial state, is updated later
     q.addBindValue(utf8_to_qstr(ft->filename, ft->filename_length));
     q.addBindValue(ft->file_size);
+    q.addBindValue(0); // position, updated later
+    execute_sql_query(q);
+}
+
+void History::update_file(File_Transfer *ft, QByteArray &tox_file_id)
+{
+    QUERY(q);
+    q.prepare("UPDATE files SET status = ?, position = ? WHERE tox_file_id = ?");
+    /* no file resuming yet, so set to cancelled unless already finished */
+    int status = ft->status == File_State::Finished ? File_State::Finished
+                                                    : File_State::Cancelled;
+    q.addBindValue(status);
     q.addBindValue(ft->position);
+    q.addBindValue(tox_file_id);
     execute_sql_query(q);
 }
 
@@ -179,16 +191,14 @@ void History::load_file_transfer(int file_id, File_Transfer *ft)
 
     memcpy(ft->file_id, q.value("tox_file_id").toByteArray().data(), TOX_FILE_ID_LENGTH);
     ft->status = q.value("status").toInt();
-    ft->filename = (uint8_t*)q.value("filename").toString().toUtf8().data();
     ft->filename_length = q.value("filename").toString().toUtf8().size();
+    ft->filename = (uint8_t*)malloc(ft->filename_length);
+    memcpy(ft->filename, (uint8_t*)q.value("filename").toString().toUtf8().data(), ft->filename_length);
     ft->file_size = q.value("file_size").toInt();
     ft->position = q.value("position").toInt();
-
-    /* uninitialized fields:
-     * file_number - retrieve from tox_file_send()
-     * file
-     * data
-     */
+    ft->file = NULL;
+    ft->data = NULL;
+    /* file_number is unitialized - get it with tox_file_send() */
 }
 
 void History::clear_messages(QString public_key)

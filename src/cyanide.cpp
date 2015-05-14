@@ -534,6 +534,19 @@ void Cyanide::toxav_thread()
 
 void Cyanide::killall_tox()
 {
+    qDebug() << "updating saved file transfers";
+    for(auto fit = friends.begin(); fit != friends.end(); fit++) {
+        for(auto i : fit->second.files) {
+            // i.first is the toxcore file number
+            // i.second is the corresponding message id
+            if(i.second >= 0) {
+                File_Transfer *ft = fit->second.messages[i.second].ft;
+                QByteArray file_id = QByteArray((const char*)ft->file_id, TOX_FILE_ID_LENGTH);
+                history.update_file(ft, file_id);
+            }
+        }
+    }
+
     toxav_kill(toxav);
     kill_tox();
 }
@@ -1028,6 +1041,7 @@ QString Cyanide::set_profile_name(QString name)
 
 QList<int> Cyanide::get_friend_numbers()
 {
+    qDebug() << friends.size() << "friends";
     QList<int> friend_numbers;
     for(auto it = friends.begin(); it != friends.end(); it++) {
         friend_numbers.append(it->first);
