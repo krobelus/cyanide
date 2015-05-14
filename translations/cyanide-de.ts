@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <!DOCTYPE TS>
 <TS version="2.1" language="de_DE">
 <context>
@@ -23,7 +23,7 @@
     <message>
         <source>Tox me maybe?</source>
         <extracomment>default friend request message - feel free to tranlate freely</extracomment>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Failed to send friend request</source>
@@ -112,12 +112,12 @@
     <message>
         <source>Toxing on Cyanide</source>
         <extracomment>default status</extracomment>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Tox me maybe?</source>
         <extracomment>default friend request message - feel free to tranlate freely</extracomment>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Error: File exists</source>
@@ -206,21 +206,21 @@
     </message>
     <message>
         <source>Chat history</source>
-        <translation type="unfinished"></translation>
+        <translation>Gesprächsverlauf</translation>
     </message>
     <message>
         <source>Load</source>
         <extracomment>chat history</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Laden</translation>
     </message>
     <message>
         <source>Delete</source>
         <extracomment>chat history</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Löschen</translation>
     </message>
     <message>
         <source>Deleting chat history</source>
-        <translation type="unfinished"></translation>
+        <translation>Gesprächsverlauf wird gelöscht</translation>
     </message>
 </context>
 <context>
@@ -246,11 +246,11 @@
     <name>LoadChatHistory</name>
     <message>
         <source>From</source>
-        <translation type="unfinished"></translation>
+        <translation>Von</translation>
     </message>
     <message>
         <source>To</source>
-        <translation type="unfinished"></translation>
+        <translation>Bis</translation>
     </message>
 </context>
 <context>
@@ -326,7 +326,7 @@
     </message>
     <message>
         <source>Keep chat history</source>
-        <translation type="unfinished"></translation>
+        <translation>Gesprächsverläufe speichern</translation>
     </message>
 </context>
 <context>
