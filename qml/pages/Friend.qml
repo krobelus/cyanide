@@ -33,12 +33,12 @@ Dialog {
     DockedPanel {
         id: fileControlPanel
 
-        width: parent.width
-        height: Theme.itemSizeExtraLarge
-
-        dock: Dock.Top
+        width: Theme.itemSizeLarge
+        height: parent.height
+        dock: Dock.Right
 
         open: false
+        visible: open
 
         property int m: -1
         property int file_status: 99
@@ -106,7 +106,7 @@ Dialog {
             toggleIcons()
         }
 
-        Row {
+        Column {
             anchors {
                 centerIn: parent
             }
@@ -124,9 +124,10 @@ Dialog {
     }
 
     SilicaFlickable {
+        id: content
         anchors {
             fill: parent
-            topMargin: page.isPortrait ? fileControlPanel.visibleSize : 0
+            rightMargin: fileControlPanel.visibleSize
         }
 
         PullDownMenu {
@@ -266,8 +267,8 @@ Dialog {
                     visible: m_type == Message_Type.Image && (m_author || f_progress == 100)
                     x: Theme.paddingLarge
                     y: message.y + message.height + Theme.paddingSmall
-                    width: page.width - 2 * Theme.paddingLarge > implicitWidth ?
-                               implicitWidth : page.width - 2 * Theme.paddingLarge
+                    width: content.width - 2 * Theme.paddingLarge > implicitWidth ?
+                               implicitWidth : content.width - 2 * Theme.paddingLarge
                     fillMode: Image.PreserveAspectFit
                     source: visible ? m_text : ""
                 }
@@ -279,13 +280,13 @@ Dialog {
                                : "(" + f_progress + "%) " + f_link
                                : m_rich_text
                     Component.onCompleted: {
-                        var limit = page.width * 2/3
+                        var limit = content.width * 2/3
                         if(width > limit)
                             width = limit
                     }
 
                     x: m_author ? Theme.paddingSmall + attach.width
-                                : page.width - width - Theme.paddingLarge
+                                : content.width - width - Theme.paddingLarge
                     font.pixelSize: Theme.fontSizeExtraSmall
                     // color: m_author ? Theme.secondaryColor : Theme.primaryColor
                     horizontalAlignment: Text.AlignLeft
@@ -326,7 +327,7 @@ Dialog {
                     id: timestampLabel
                     text: qsTr(Misc.elapsedTime(timestamp))
                     wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-                    width: page.width/3 - 3*Theme.paddingMedium
+                    width: content.width/3 - 3*Theme.paddingMedium
                     font.pixelSize: Theme.fontSizeExtraSmall
                     color: Theme.secondaryColor
                     horizontalAlignment: m_author ? Text.AlignRight : Text.AlignLeft
@@ -344,14 +345,14 @@ Dialog {
             id: clear
             icon.source: "image://theme/icon-m-clear"
             y: inputField.y
-            x: page.width - width - Theme.paddingSmall
+            x: content.width - width - Theme.paddingSmall
             onClicked: inputField.text = ""
         }
 
         TextArea {
             id: inputField
             font.pixelSize: Theme.fontSizeExtraSmall
-            width: parent.width - clear.width - Theme.paddingLarge - Theme.paddingSmall
+            width: content.width - clear.width - Theme.paddingLarge - Theme.paddingSmall
             inputMethodHints: Qt.ImhNoAutoUppercase
             focus: false
             onFocusChanged: cyanide.send_typing_notification(f, focus)
