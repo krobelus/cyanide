@@ -755,9 +755,6 @@ void Cyanide::add_message(uint32_t fid, Message message)
     if(message.ft != NULL)
         friends[fid].files[message.ft->file_number] = mid;
 
-    if(!message.author)
-        set_friend_activity(fid, true);
-
     if(settings.get("keep-history") == "true") {
         history.add_message(get_friend_public_key(fid), &message);
     }

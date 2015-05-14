@@ -16,8 +16,6 @@ QString Settings::tables[] = {
         };
 
 std::map<QString, settings_entry> Settings::entries = {
-        { "keep-history", { tr("Keep chat history")
-            , "bool", "true" } }
       // { "enable-sounds", { tr("Enable sounds"), "bool", "true" } }
       //  { "sound-when", { tr("Play this sound when..."), "none", "" } }
       //, { "sound-message-received", { tr("I receive a message")
@@ -26,7 +24,7 @@ std::map<QString, settings_entry> Settings::entries = {
       //      , "sound", "/usr/share/sounds/jolla-ringtones/stereo/jolla-emailtone.wav" } }
       //, { "sound-friend-connected", { tr("a friend comes online")
       //      , "sound", "/usr/share/sounds/jolla-ringtones/stereo/jolla-imtone.wav" } }
-      , { "notification-when", { tr("Notify me when..."), "none", "" } }
+        { "notification-when", { tr("Notify me when..."), "none", "" } }
       , { "notification-message-received", { tr("I receive a message")
             , "bool", "true" } }
       , { "notification-friend-request-received", { tr("I receive a friend request")
@@ -35,9 +33,11 @@ std::map<QString, settings_entry> Settings::entries = {
       //      , "bool", "true" } }
       //, { "notification-friend-name-change", { tr("a friend changes his name")
       //      , "bool", "true" } }
-      , { "send-typing-notifications", { tr("Send typing notifications?")
-            , "bool", "true" } }
       , { "udp-enabled", { tr("Enable UDP")
+            , "bool", "true" } }
+      , { "keep-history", { tr("Keep chat history")
+            , "bool", "true" } }
+      , { "send-typing-notifications", { tr("Send typing notifications?")
             , "bool", "true" } }
       , { "wifi-only", { tr("Wifi only")
             , "bool", "true" } }

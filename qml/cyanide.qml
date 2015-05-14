@@ -181,13 +181,13 @@ ApplicationWindow
         onSignal_friend_message: {
             var i = fid + 1
             if(!cyanide.get_message_author(fid, mid)) {
-                if(fid == activeFriend())
-                    cyanide.set_friend_activity(fid, false)
+                cyanide.set_friend_activity(fid, fid != activeFriend())
                 if(settings.get("notification-message-received") === "true"
                     && !(cyanide.is_visible() && chattingWith(fid)))
                 {
                     var txt = cyanide.get_message_text(fid, mid)
-                    cyanide.notify_message(fid, cyanide.get_friend_name(fid),
+                    if(settings.get("notification-message-received" === "true"))
+                        cyanide.notify_message(fid, cyanide.get_friend_name(fid),
                                       type == Message_Type.File ? qsTr("Incoming file: ")+txt.replace(/^.*\//, "")
                                                                 : txt)
                 }

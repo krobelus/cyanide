@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
 <TS version="2.1" language="da">
 <context>
@@ -38,59 +38,59 @@
 <context>
     <name>Cyanide</name>
     <message>
-        <location filename="../src/cyanide.cpp" line="832"/>
+        <location filename="../src/cyanide.cpp" line="829"/>
         <source>Error: Invalid Tox ID</source>
         <translation>Fejl: Ugyldig ToxID</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="860"/>
+        <location filename="../src/cyanide.cpp" line="857"/>
         <source>Error: Message is too long</source>
         <translation>Fejl: Meddelelse er for lang</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="864"/>
+        <location filename="../src/cyanide.cpp" line="861"/>
         <source>Error: Tox ID is self ID</source>
         <translation>Fejl: ToxID er dit eget ID</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="866"/>
+        <location filename="../src/cyanide.cpp" line="863"/>
         <source>Error: Tox ID is already in friend list</source>
         <translation>Fejl: ToxID er allerede på venneliste</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="868"/>
+        <location filename="../src/cyanide.cpp" line="865"/>
         <source>Error: Invalid Tox ID (bad checksum)</source>
         <translation>Fejl: Ugyldigt ToxID (ugyldig checksum)</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="870"/>
+        <location filename="../src/cyanide.cpp" line="867"/>
         <source>Error: Invalid Tox ID (bad nospam value)</source>
         <translation>Fejl: Ugyldig ToxID (ugyldig nospam værdi)</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="872"/>
+        <location filename="../src/cyanide.cpp" line="869"/>
         <source>Error: No memory</source>
         <translation>Fejl: Hukommelse opbrugt</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="935"/>
+        <location filename="../src/cyanide.cpp" line="932"/>
         <location filename="../src/filetransfers.cpp" line="418"/>
         <location filename="../src/filetransfers.cpp" line="528"/>
         <source>Error: Friend not connected</source>
         <translation>Fejl: Ven ikke tilsluttet</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="1025"/>
+        <location filename="../src/cyanide.cpp" line="1022"/>
         <source>Error: File exists</source>
         <translation>Fejl: Filen eksisterer allerede</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="1187"/>
+        <location filename="../src/cyanide.cpp" line="1184"/>
         <source>File not found: </source>
         <translation>Filen er ikke fundet: </translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="1192"/>
+        <location filename="../src/cyanide.cpp" line="1189"/>
         <source>Avatar too large. Maximum size: 64KiB</source>
         <translation>Avatar er for stor. Maks. størrelse: 64kB</translation>
     </message>
@@ -216,7 +216,7 @@
         <translation>Åbner fil...</translation>
     </message>
     <message>
-        <location filename="../qml/pages/Friend.qml" line="404"/>
+        <location filename="../qml/pages/Friend.qml" line="400"/>
         <source>Failed to send message</source>
         <translation>Kan ikke sende meddelelse</translation>
     </message>
@@ -356,37 +356,37 @@
 <context>
     <name>Settings</name>
     <message>
-        <location filename="../qml/pages/Settings.qml" line="28"/>
+        <location filename="../qml/pages/Settings.qml" line="30"/>
         <source>Settings</source>
         <translation>Indstillinger</translation>
     </message>
     <message>
-        <location filename="../src/settings.cpp" line="19"/>
+        <location filename="../src/settings.cpp" line="38"/>
         <source>Keep chat history</source>
         <translation>Bevar chathistorik</translation>
     </message>
     <message>
-        <location filename="../src/settings.cpp" line="29"/>
+        <location filename="../src/settings.cpp" line="27"/>
         <source>Notify me when...</source>
         <translation>Påmind mig når...</translation>
     </message>
     <message>
-        <location filename="../src/settings.cpp" line="30"/>
+        <location filename="../src/settings.cpp" line="28"/>
         <source>I receive a message</source>
         <translation>Jeg modtog en meddelelse</translation>
     </message>
     <message>
-        <location filename="../src/settings.cpp" line="32"/>
+        <location filename="../src/settings.cpp" line="30"/>
         <source>I receive a friend request</source>
         <translation>Jeg modtog en venneanmodning</translation>
     </message>
     <message>
-        <location filename="../src/settings.cpp" line="38"/>
+        <location filename="../src/settings.cpp" line="40"/>
         <source>Send typing notifications?</source>
         <translation>Sende skrivestatus påmindelse?</translation>
     </message>
     <message>
-        <location filename="../src/settings.cpp" line="40"/>
+        <location filename="../src/settings.cpp" line="36"/>
         <source>Enable UDP</source>
         <translation>Aktivér UDP</translation>
     </message>
@@ -399,12 +399,12 @@
 <context>
     <name>cyanide</name>
     <message>
-        <location filename="../qml/cyanide.qml" line="191"/>
+        <location filename="../qml/cyanide.qml" line="192"/>
         <source>Incoming file: </source>
         <translation>Indkommen fil: </translation>
     </message>
     <message>
-        <location filename="../qml/cyanide.qml" line="222"/>
+        <location filename="../qml/cyanide.qml" line="223"/>
         <source>Friend request received!</source>
         <translation>Venneanmodning modtaget!</translation>
     </message>

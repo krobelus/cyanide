@@ -189,7 +189,7 @@ Dialog {
                 y: pageHeader.height / 2 - height / 2
                 anchors {
                     right: title.left
-                    rightMargin: Theme.paddingMedium
+                    rightMargin: Theme.paddingSmall + width/2
                 }
             }
         }
@@ -228,7 +228,7 @@ Dialog {
                     if(fileControlPanel.open
                             && fid == f
                             && mid == fileControlPanel.m
-                            && (status == 2 || status == 0))
+                            && (status == File_State.Finished || status == File_State.Cancelled))
                     {
                         console.log("transfer finished, closing panel")
                         fileControlPanel.open = false
@@ -366,7 +366,7 @@ Dialog {
         }
 
         IconButton {
-            id: clear
+            id: submit
             icon.source: "qrc:/images/sendmessage"
             y: inputField.y + inputField.height - height - Theme.paddingLarge
             x: content.width - width - Theme.paddingSmall
@@ -376,7 +376,7 @@ Dialog {
         TextArea {
             id: inputField
             font.pixelSize: Theme.fontSizeExtraSmall
-            width: content.width - clear.width - Theme.paddingLarge - Theme.paddingSmall
+            width: content.width - submit.width - Theme.paddingLarge - Theme.paddingSmall
             inputMethodHints: Qt.ImhNoAutoUppercase
             focus: false
             onFocusChanged: cyanide.send_typing_notification(f, focus)
