@@ -238,7 +238,7 @@ Dialog {
 
             delegate: Item {
                 id: delegate
-                height: Theme.paddingMedium + message.height + inlineImage.height
+                height: 2 * Theme.paddingMedium + message.height + inlineImage.height
 
                 Image {
                     id: attach

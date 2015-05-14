@@ -59,22 +59,34 @@ Page {
                 clipboard.setClipboard(friendList.get(f+1).friend_address)
             }
         }
-        Row {
+
+        ComboBox {
+            id: history
             anchors.horizontalCenter: parent.horizontalCenter
-            Button {
-                text: qsTr("Load chat log")
-                onClicked: pageStack.push(Qt.resolvedUrl("LoadChatHistory.qml"))
+            label: qsTr("Chat history")
+            currentIndex: -1
+            menu: ContextMenu {
+                MenuItem {
+                    //: chat history
+                    text: qsTr("Load")
+                }
+                MenuItem {
+                    //: chat history
+                    text: qsTr("Delete")
+                }
             }
-            Button {
-                text: qsTr("Clear chat log")
-                onClicked: {
-                    remorsePopup.execute(qsTr("Clearing chat log"), function() {
+            onCurrentIndexChanged: {
+                if(currentIndex == 0) {
+                    pageStack.push(Qt.resolvedUrl("LoadChatHistory.qml"))
+                } else if(currentIndex == 1) {
+                    remorsePopup.execute(qsTr("Deleting chat history"), function() {
                         cyanide.clear_history(f)
                         pageStack.pop()
                     })
                 }
             }
         }
+
         Row {
             anchors.horizontalCenter: parent.horizontalCenter
             Button {
