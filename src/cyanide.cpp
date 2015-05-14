@@ -356,10 +356,8 @@ void Cyanide::load_tox_and_stuff_pretty_please()
 
     size_t save_data_size;
     const uint8_t *save_data = get_save_data(&save_data_size);
-    qDebug() << "getting settinsg";
     if(settings.get("udp-enabled") != "true")
         tox_options.udp_enabled = 0;
-    qDebug() << "got settings";
     tox = tox_new(&tox_options, save_data, save_data_size, (TOX_ERR_NEW*)&error);
     // TODO switch(error)
 
@@ -673,7 +671,7 @@ void Cyanide::load_tox_data()
         f.status_message = utf8_to_qstr(status_message, length);
 
         uint32_t fid = add_friend(&f);
-	/* TODO queue all paused transfers for resuming */
+        /* TODO queue all paused transfers for resuming */
         history.load_messages(get_friend_public_key(fid), &friends[fid].messages);
     }
     emit signal_load_messages();
@@ -980,11 +978,23 @@ void Cyanide::remove_friend(int fid)
     friends.erase(fid);
 }
 
+void Cyanide::load_history(int fid, QDateTime from, QDateTime to)
+{
+    free_friend_messages(&friends[fid]);
+    history.load_messages(get_friend_public_key(fid), &friends[fid].messages, from, to);
+    emit signal_load_messages();
+}
+
 void Cyanide::clear_history(int fid)
 {
     history.clear_messages(get_friend_public_key(fid));
     free_friend_messages(&friends[fid]);
     emit signal_load_messages();
+}
+
+QDateTime Cyanide::null_date()
+{
+    return QDateTime();
 }
 
 /* setters and getters */

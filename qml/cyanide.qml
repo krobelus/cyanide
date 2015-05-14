@@ -90,7 +90,9 @@ ApplicationWindow
                         'friend_status_message': cyanide.get_friend_status_message(i),
                         'friend_blocked': cyanide.get_friend_blocked(i),
                         'friend_address': settings.get_friend_address(cyanide.get_friend_public_key(i)),
-                        'friend_callstate': cyanide.get_friend_callstate(i)
+                        'friend_callstate': cyanide.get_friend_callstate(i),
+                        'friend_history_from' : undefined,
+                        'friend_history_to' : undefined
                          })
     }
     function refreshMessageList() {

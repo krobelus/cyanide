@@ -17,15 +17,12 @@ Page {
 
     Column {
         anchors {
-            verticalCenter: parent.verticalCenter
-            horizontalCenter: parent.horizontalCenter
+            centerIn: parent
         }
         spacing: Theme.paddingLarge
 
         Row {
-            anchors {
-                horizontalCenter: parent.horizontalCenter
-            }
+            anchors.horizontalCenter: parent.horizontalCenter
             spacing: 3 * Theme.paddingMedium
 
             IconButton {
@@ -62,32 +59,41 @@ Page {
                 clipboard.setClipboard(friendList.get(f+1).friend_address)
             }
         }
-        Button {
+        Row {
             anchors.horizontalCenter: parent.horizontalCenter
-            text: qsTr("Clear chat log")
-            onClicked: {
-                cyanide.clear_history(f)
-                pageStack.pop()
+            Button {
+                text: qsTr("Load chat log")
+                onClicked: pageStack.push(Qt.resolvedUrl("LoadChatHistory.qml"))
+            }
+            Button {
+                text: qsTr("Clear chat log")
+                onClicked: {
+                    remorsePopup.execute(qsTr("Clearing chat log"), function() {
+                        cyanide.clear_history(f)
+                        pageStack.pop()
+                    })
+                }
             }
         }
-        Button {
+        Row {
             anchors.horizontalCenter: parent.horizontalCenter
-            property bool blocked: friendList.get(f+1).friend_blocked
-            text: blocked ? qsTr("Unblock friend") : qsTr("Block friend")
-            onClicked: {
-                cyanide.set_friend_blocked(f, !blocked)
+            Button {
+                property bool blocked: friendList.get(f+1).friend_blocked
+                text: blocked ? qsTr("Unblock friend") : qsTr("Block friend")
+                onClicked: {
+                    cyanide.set_friend_blocked(f, !blocked)
+                }
             }
-        }
-        Button {
-            anchors.horizontalCenter: parent.horizontalCenter
-            text: qsTr("Remove friend")
-            onClicked: {
-                remorsePopup.execute(qsTr("Removing friend"), function() {
-                    cyanide.remove_friend(f)
-                    refreshFriendList()
-                    pageStack.pop()
-                    pageStack.pop()
-                })
+            Button {
+                text: qsTr("Remove friend")
+                onClicked: {
+                    remorsePopup.execute(qsTr("Removing friend"), function() {
+                        cyanide.remove_friend(f)
+                        refreshFriendList()
+                        pageStack.pop()
+                        pageStack.pop()
+                    })
+                }
             }
         }
     }

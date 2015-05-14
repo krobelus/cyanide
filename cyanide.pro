@@ -41,6 +41,7 @@ OTHER_FILES += \
     qml/pages/Friend.qml \
     qml/pages/Profile.qml \
     qml/pages/Settings.qml \
+    qml/pages/LoadChatHistory.qml \
     rpm/cyanide.changes \
     rpm/cyanide.spec \
     rpm/cyanide.yaml \

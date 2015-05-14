@@ -70,7 +70,6 @@ public:
     bool save_needed;
     enum LOOP_STATE loop;
 
-
     Cyanide(QObject *parent = 0);
 
     uint32_t add_friend(Friend *f);
@@ -145,7 +144,9 @@ public:
     Q_INVOKABLE void av_call_cancel(int fid);
 
     void free_friend_messages(Friend *f);
+    Q_INVOKABLE void load_history(int fid, QDateTime from, QDateTime to);
     Q_INVOKABLE void clear_history(int fid);
+    Q_INVOKABLE QDateTime null_date();
 
     /* setters and getters */
     Q_INVOKABLE QString get_profile_name();

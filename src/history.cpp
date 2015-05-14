@@ -122,12 +122,32 @@ void History::add_file(File_Transfer *ft, QByteArray &tox_file_id)
     execute_sql_query(q);
 }
 
-void History::load_messages(QString public_key, QList<Message> *messages, int limit)
+void History::load_messages(QString public_key, QList<Message> *messages, QDateTime from, QDateTime to)
 {
     QUERY(q);
-    q.prepare("SELECT timestamp, author, message, file_id FROM messages WHERE chat_id = ? LIMIT ?");
+    const int limit = 100;
+    int count;
+    int offset;
+    q.prepare("SELECT COUNT(id) my_count FROM messages");
+    execute_sql_query(q);
+    q.first();
+    count = q.value("my_count").toInt();
+    if(count <= limit)
+        offset = 0;
+    else
+        offset = count - limit;
+
+    q.prepare((QString)"SELECT timestamp, author, message, file_id FROM messages WHERE chat_id = ? "+
+              (from.isNull() ? "" : "AND timestamp > ? ") + (to.isNull() ? "" : "AND timestamp < ?")+
+              // if no date range is given, limit the number messages to load
+              (from.isNull() && to.isNull() ? " LIMIT "+QString::number(limit)+" OFFSET "+QString::number(offset) : "")
+              );
     q.addBindValue(get_chat_id(public_key));
-    q.addBindValue(limit);
+    if(!from.isNull())
+        q.addBindValue(from);
+    if(!to.isNull())
+        q.addBindValue(to);
+
     execute_sql_query(q);
     while(q.next()) {
         Message m;
