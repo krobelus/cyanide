@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <!DOCTYPE TS>
 <TS version="2.1" language="ru_RU">
 <context>
@@ -124,7 +124,7 @@
     <message>
         <source>Toxing on Cyanide</source>
         <extracomment>default status</extracomment>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Tox me maybe?</source>
@@ -226,21 +226,21 @@
     </message>
     <message>
         <source>Chat history</source>
-        <translation type="unfinished"></translation>
+        <translation>История переписки</translation>
     </message>
     <message>
         <source>Load</source>
         <extracomment>chat history</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Загрузить</translation>
     </message>
     <message>
         <source>Delete</source>
         <extracomment>chat history</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Удалить</translation>
     </message>
     <message>
         <source>Deleting chat history</source>
-        <translation type="unfinished"></translation>
+        <translation>Удаление истории</translation>
     </message>
 </context>
 <context>
@@ -266,11 +266,11 @@
     <name>LoadChatHistory</name>
     <message>
         <source>From</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Начиная с</translation>
     </message>
     <message>
         <source>To</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Заканчивая</translation>
     </message>
 </context>
 <context>
@@ -358,7 +358,7 @@
     </message>
     <message>
         <source>Keep chat history</source>
-        <translation type="unfinished"></translation>
+        <translation>Сохранять историю переписки</translation>
     </message>
 </context>
 <context>
