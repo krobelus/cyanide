@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <!DOCTYPE TS>
 <TS version="2.1" language="da">
 <context>
@@ -237,18 +237,18 @@
         <location filename="../qml/pages/FriendAction.qml" line="71"/>
         <source>Load</source>
         <extracomment>chat history</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Hent</translation>
     </message>
     <message>
         <location filename="../qml/pages/FriendAction.qml" line="75"/>
         <source>Delete</source>
         <extracomment>chat history</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Slet</translation>
     </message>
     <message>
         <location filename="../qml/pages/FriendAction.qml" line="82"/>
         <source>Deleting chat history</source>
-        <translation type="unfinished"></translation>
+        <translation>Slet chathistorik</translation>
     </message>
     <message>
         <location filename="../qml/pages/FriendAction.qml" line="94"/>
@@ -294,12 +294,12 @@
     <message>
         <location filename="../qml/pages/LoadChatHistory.qml" line="39"/>
         <source>From</source>
-        <translation type="unfinished"></translation>
+        <translation>Fra</translation>
     </message>
     <message>
         <location filename="../qml/pages/LoadChatHistory.qml" line="56"/>
         <source>To</source>
-        <translation type="unfinished"></translation>
+        <translation>Til</translation>
     </message>
 </context>
 <context>
