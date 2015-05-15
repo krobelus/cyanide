@@ -406,7 +406,6 @@ Dialog {
                 bottom: parent.bottom
             }
             function dispatch() {
-                var online = friend_connection_status
                 if(text === "" || !online) {
                     return
                 }
