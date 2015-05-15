@@ -129,6 +129,7 @@ void audio_play(int i, const int16_t *data, int samples, uint8_t channels, unsig
 
 void Cyanide::audio_thread()
 {
+    return;
     const char *device_list, *output_device = NULL;
     //void *audio_device = NULL;
 

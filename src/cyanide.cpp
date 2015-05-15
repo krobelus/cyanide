@@ -512,6 +512,7 @@ void Cyanide::tox_loop()
 
 void Cyanide::toxav_thread()
 {
+    return;
     while(loop == LOOP_RUN || loop == LOOP_SUSPEND) {
         toxav_do(toxav);
         usleep(toxav_do_interval(toxav));
@@ -707,7 +708,6 @@ uint32_t Cyanide::add_friend(Friend *f)
 {
     uint32_t fid = next_friend_number();
     friends[fid] = *f;
-    emit signal_friend_added(fid);
     return fid;
 }
 
@@ -832,7 +832,7 @@ QString Cyanide::send_friend_request(QString id_str, QString msg_str)
     QString errmsg = send_friend_request_id(address, msg, msg_len);
     if(errmsg == "") {
         Friend *f = new Friend((const uint8_t*)address, id_str, "");
-        add_friend(f);
+        emit signal_friend_added(add_friend(f));
         char hex_address[2 * TOX_ADDRESS_SIZE + 1];
         address_to_string(hex_address, (char*)address);
         hex_address[2 * TOX_ADDRESS_SIZE] = '\0';
