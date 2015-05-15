@@ -11,6 +11,11 @@
 # * Sun Apr 13 2014 Jack Tar <jack.tar@example.com> 0.0.1-1
 # - Scrubbed the deck
 # - Hoisted the sails
+* Fri May 15 2015 Johannes Altmanninger <aclopte@gmail.com> 0.2.2-1
+- chat history is now saved
+- friend list is ordered by online/busy/away status
+- text in messages can now be selected
+
 * Sun Apr 26 2015 Johannes Altmanninger <aclopte@gmail.com> 0.2.0-1
 - upgrade to the new toxcore api, incompatible with previous versions
 - avatars
