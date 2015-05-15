@@ -231,7 +231,7 @@
     <message>
         <location filename="../qml/pages/FriendAction.qml" line="66"/>
         <source>Chat history</source>
-        <translation>Ryd chatlog</translation>
+        <translation>Samtalehistorik</translation>
     </message>
     <message>
         <location filename="../qml/pages/FriendAction.qml" line="71"/>
@@ -248,7 +248,7 @@
     <message>
         <location filename="../qml/pages/FriendAction.qml" line="82"/>
         <source>Deleting chat history</source>
-        <translation>Slet chathistorik</translation>
+        <translation>Sletter samtalehistorik</translation>
     </message>
     <message>
         <location filename="../qml/pages/FriendAction.qml" line="94"/>
@@ -363,27 +363,27 @@
     <message>
         <location filename="../src/settings.cpp" line="38"/>
         <source>Keep chat history</source>
-        <translation>Bevar chathistorik</translation>
+        <translation>Bevar samtalehistorik</translation>
     </message>
     <message>
         <location filename="../src/settings.cpp" line="27"/>
         <source>Notify me when...</source>
-        <translation>Påmind mig når...</translation>
+        <translation>Påmind mig ved...</translation>
     </message>
     <message>
         <location filename="../src/settings.cpp" line="28"/>
         <source>I receive a message</source>
-        <translation>Jeg modtog en meddelelse</translation>
+        <translation>Ny meddelelse</translation>
     </message>
     <message>
         <location filename="../src/settings.cpp" line="30"/>
         <source>I receive a friend request</source>
-        <translation>Jeg modtog en venneanmodning</translation>
+        <translation>Venneanmodning</translation>
     </message>
     <message>
         <location filename="../src/settings.cpp" line="40"/>
         <source>Send typing notifications?</source>
-        <translation>Sende skrivestatus påmindelse?</translation>
+        <translation>Sende skrivestatus?</translation>
     </message>
     <message>
         <location filename="../src/settings.cpp" line="36"/>
