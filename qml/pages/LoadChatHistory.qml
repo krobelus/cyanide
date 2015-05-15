@@ -10,8 +10,8 @@ Dialog {
     property int f: activeFriend()
 
     onAccepted: {
-        onClicked: cyanide.load_history(f, friendList.get(f+1).friend_history_from
-                                         , friendList.get(f+1).friend_history_to)
+        onClicked: cyanide.load_history(f, friendList.get(listFid(f)).friend_history_from
+                                         , friendList.get(listFid(f)).friend_history_to)
         refreshFriendList()
         returnToPage("friend")
     }
@@ -22,9 +22,9 @@ Dialog {
                                     })
         dialog.accepted.connect(function() {
             if(id === dateTo) {
-                friendList.setProperty(f+1, "friend_history_to", dialog.date)
+                friendList.setProperty(listFid(f), "friend_history_to", dialog.date)
             } else if(id === dateFrom) {
-                friendList.setProperty(f+1, "friend_history_from", dialog.date)
+                friendList.setProperty(listFid(f), "friend_history_from", dialog.date)
             }
         })
     }
@@ -38,14 +38,14 @@ Dialog {
                 width: page.width - clearTo.width - Theme.paddingLarge
                 label: qsTr("From")
                 onClicked: openDateDialog(dateFrom)
-                value: friendList.get(f+1).friend_history_from === undefined ? ""
-                     : (friendList.get(f+1).friend_history_from.toString() === "Invalid Date" ? ""
-                     :  friendList.get(f+1).friend_history_from.toString())
+                value: friendList.get(listFid(f)).friend_history_from === undefined ? ""
+                     : (friendList.get(listFid(f)).friend_history_from.toString() === "Invalid Date" ? ""
+                     :  friendList.get(listFid(f)).friend_history_from.toString())
             }
             IconButton {
                 id: clearFrom
                 icon.source: "image://theme/icon-m-clear"
-                onClicked: friendList.setProperty(f+1, "friend_history_from", cyanide.null_date())
+                onClicked: friendList.setProperty(listFid(f), "friend_history_from", cyanide.null_date())
             }
         }
 
@@ -55,14 +55,14 @@ Dialog {
                 width: dateFrom.width
                 label: qsTr("To")
                 onClicked: openDateDialog(dateTo)
-                value: friendList.get(f+1).friend_history_to === undefined ? ""
-                     : (friendList.get(f+1).friend_history_to.toString() === "Invalid Date" ? ""
-                     :  friendList.get(f+1).friend_history_to.toString())
+                value: friendList.get(listFid(f)).friend_history_to === undefined ? ""
+                     : (friendList.get(listFid(f)).friend_history_to.toString() === "Invalid Date" ? ""
+                     :  friendList.get(listFid(f)).friend_history_to.toString())
             }
             IconButton {
                 id: clearTo
                 icon.source: "image://theme/icon-m-clear"
-                onClicked: friendList.setProperty(f+1, "friend_history_to", cyanide.null_date())
+                onClicked: friendList.setProperty(listFid(f), "friend_history_to", cyanide.null_date())
             }
         }
     }

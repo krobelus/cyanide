@@ -14,6 +14,8 @@ ApplicationWindow
     /* the list of friends */
     property ListModel friendList: ListModel { id: friendList }
 
+    property var friendListIndices: []
+
     property ListModel settingsList: ListModel { id: settingsList }
 
     property ListModel messageList: ListModel { id: messageList }
@@ -56,8 +58,8 @@ ApplicationWindow
         }))
     }
 
-    Component.onCompleted:
-        loadSettings()
+    Component.onCompleted: loadSettings()
+
     function loadSettings() {
         var nameList = settings.get_names()
         for(var i in nameList) {
@@ -75,28 +77,40 @@ ApplicationWindow
 
     function refreshFriendList() {
         friendList.clear()
+        friendListIndices = []
         appendFriend(-1)
         var fids = cyanide.get_friend_numbers()
-        for(var i in fids) {
-            appendFriend(fids[i])
+        var f
+        for	(f = 0; f < fids.length; f++) {
+            friendListIndices[fids[f]] = friendList.count
+            appendFriend(fids[f])
         }
     }
-    function appendFriend(i) {
+    function listFid(f) {
+        if(f == self_friend_number)
+            return 0
+        return friendListIndices[f]
+    }
+
+    function appendFriend(f) {
             friendList.append({
-                        'friend_name': cyanide.get_friend_name(i),
-                        'friend_avatar': cyanide.get_friend_avatar(i),
-                        'friend_connection_status': cyanide.get_friend_connection_status(i),
-                        'friend_status_icon': cyanide.get_friend_status_icon(i),
-                        'friend_status_message': cyanide.get_friend_status_message(i),
-                        'friend_blocked': cyanide.get_friend_blocked(i),
-                        'friend_address': settings.get_friend_address(cyanide.get_friend_public_key(i)),
-                        'friend_callstate': cyanide.get_friend_callstate(i),
+                        'friend_number': f,
+                        'friend_name': cyanide.get_friend_name(f),
+                        'friend_avatar': cyanide.get_friend_avatar(f),
+                        'friend_connection_status': cyanide.get_friend_connection_status(f),
+                        'friend_status_icon': cyanide.get_friend_status_icon(f),
+                        'friend_status_message': cyanide.get_friend_status_message(f),
+                        'friend_blocked': cyanide.get_friend_blocked(f),
+                        'friend_address': settings.get_friend_address(cyanide.get_friend_public_key(f)),
+                        'friend_callstate': cyanide.get_friend_callstate(f),
                         'friend_history_from' : undefined,
                         'friend_history_to' : undefined
                          })
     }
     function refreshMessageList() {
         messageList.clear()
+        if(activeFriend() < 0)
+            return
         var mids = cyanide.get_message_numbers(activeFriend())
         for(var mid in mids) {
             appendMessage(mid)
@@ -104,6 +118,8 @@ ApplicationWindow
     }
     function appendMessage(mid) {
         var fid = activeFriend()
+        if(activeFriend() < 0)
+            return
         var m_type = cyanide.get_message_type(fid, mid)
         var m_author = cyanide.get_message_author(fid, mid)
         var m_text = cyanide.get_message_text(fid, mid)
@@ -143,35 +159,32 @@ ApplicationWindow
             refreshFriendList()
         }
         onSignal_friend_blocked: {
-            var i = fid + 1
+            var i = listFid(fid)
             friendList.setProperty(i, "friend_blocked", blocked)
         }
         onSignal_friend_name: {
-            var i = fid + 1
+            var i = listFid(fid)
             var name = cyanide.get_friend_name(fid)
             friendList.setProperty(i, "friend_name", name)
         }
         property int image_refresh_count: 0
         onSignal_avatar_change: {
-            var i = fid + 1
+            var i = listFid(fid)
             image_refresh_count++ /* hack to change the url on each avatar change to avoid getting the cached image */
             friendList.setProperty(i, "friend_avatar", cyanide.get_friend_avatar(fid) + "?" + image_refresh_count)
         }
         onSignal_friend_activity: {
-            var i = fid + 1
+            var i = listFid(fid)
             friendList.setProperty(i, "friend_status_icon", cyanide.get_friend_status_icon(fid))
         }
         onSignal_friend_status: {
-            var i = fid + 1
-            friendList.setProperty(i, "friend_status_icon", cyanide.get_friend_status_icon(fid))
+            refreshFriendList()
         }
         onSignal_friend_connection_status: {
-            var i = fid + 1
-            friendList.setProperty(i, "friend_connection_status", online)
-            friendList.setProperty(i, "friend_status_icon", cyanide.get_friend_status_icon(fid, online))
+            refreshFriendList()
         }
         onSignal_friend_status_message: {
-            var i = fid + 1
+            var i = listFid(fid)
             friendList.setProperty(i, "friend_status_message", cyanide.get_friend_status_message(fid))
         }
         onSignal_load_messages: {
@@ -179,7 +192,7 @@ ApplicationWindow
         }
 
         onSignal_friend_message: {
-            var i = fid + 1
+//            var i = listFid(fid)
             if(!cyanide.get_message_author(fid, mid)) {
                 cyanide.set_friend_activity(fid, fid != activeFriend())
                 if(settings.get("notification-message-received") === "true"
@@ -200,7 +213,7 @@ ApplicationWindow
             }
         }
         onSignal_friend_callstate: {
-            var i = fid + 1
+            var i = listFid(fid)
             friendList.setProperty(i, "friend_callstate", callstate)
         }
         onSignal_av_invite: {

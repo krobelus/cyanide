@@ -5,6 +5,9 @@ Page {
     id: page
     property string name: "friendaction"
     allowedOrientations: Orientation.All
+    Component.onCompleted: {
+        setProperties()
+    }
     Component.onDestruction: {
         if(activePage() === "FriendAction.qml") {
             pages.pop()
@@ -14,6 +17,20 @@ Page {
     RemorsePopup { id: remorsePopup }
 
     property int f: activeFriend()
+    property string friend_address: ""
+    property bool friend_blocked: false
+
+    function setProperties() {
+        var entry = friendList.get(listFid(f))
+        friend_address = entry.friend_address
+        friend_blocked = entry.friend_blocked
+    }
+
+    Connections {
+        target: cyanide
+        onSignal_friend_connection_status: setProperties()
+        onSignal_friend_status: setProperties()
+    }
 
     Column {
         anchors {
@@ -54,9 +71,9 @@ Page {
         Button {
             anchors.horizontalCenter: parent.horizontalCenter
             text: qsTr("Copy Tox ID to clipboard")
-            enabled: friendList.get(f+1).friend_address !== ""
+            enabled: friend_address !== ""
             onClicked: {
-                clipboard.setClipboard(friendList.get(f+1).friend_address)
+                clipboard.setClipboard(friend_address)
             }
         }
 
@@ -90,10 +107,9 @@ Page {
         Row {
             anchors.horizontalCenter: parent.horizontalCenter
             Button {
-                property bool blocked: friendList.get(f+1).friend_blocked
-                text: blocked ? qsTr("Unblock friend") : qsTr("Block friend")
+                text: friend_blocked ? qsTr("Unblock friend") : qsTr("Block friend")
                 onClicked: {
-                    cyanide.set_friend_blocked(f, !blocked)
+                    cyanide.set_friend_blocked(f, !friend_blocked)
                 }
             }
             Button {

@@ -10,6 +10,7 @@ Dialog {
     allowedOrientations: Orientation.All
     Component.onCompleted: {
         pages.push("Friend.qml")
+        setProperties()
     }
     Component.onDestruction: {
         pages.pop()
@@ -28,7 +29,24 @@ Dialog {
     }
 
     property int f: activeFriend()
-    property int callstate: friendList.get(f+1).friend_callstate
+    property int callstate: 0
+    property string friend_name: ""
+    property string friend_status_icon: ""
+    property bool online: false
+
+    function setProperties() {
+        var entry = friendList.get(listFid(f))
+        callstate = entry.friend_callstate
+        friend_name = entry.friend_name
+        friend_status_icon = entry.friend_status_icon
+        online = entry.friend_connection_status
+    }
+
+    Connections {
+        target: cyanide
+        onSignal_friend_connection_status: setProperties()
+        onSignal_friend_status: setProperties()
+    }
 
     DockedPanel {
         id: fileControlPanel
@@ -174,7 +192,7 @@ Dialog {
             id: pageHeader
             Label {
                 id: title
-                Component.onCompleted: text = friendList.get(f+1).friend_name
+                text: friend_name
                 font.pixelSize: Theme.fontSizeMedium
                 color: Theme.highlightColor
                 y: pageHeader.height / 2 - height / 2
@@ -185,7 +203,7 @@ Dialog {
             }
             Image {
                 id: friendStatusIcon
-                source: friendList.get(f+1).friend_status_icon
+                source: friend_status_icon
                 y: pageHeader.height / 2 - height / 2
                 anchors {
                     right: title.left
@@ -219,7 +237,7 @@ Dialog {
                 onSignal_friend_typing: {
                     if(fid == f) {
                         inputField.label = is_typing
-                            ? friendList.get(f+1).friend_name + qsTr(" is typing...")
+                            ? friend_name + qsTr(" is typing...")
                             : ""
                         inputField.placeholderText = inputField.label
                     }
@@ -388,7 +406,7 @@ Dialog {
                 bottom: parent.bottom
             }
             function dispatch() {
-                var online = friendList.get(f+1).friend_connection_status
+                var online = friend_connection_status
                 if(text === "" || !online) {
                     return
                 }

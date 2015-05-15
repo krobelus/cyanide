@@ -162,7 +162,7 @@ int Settings::get_current_index(QString name)
 QStringList Settings::get_names()
 {
     QStringList names;
-    for(auto i=0; i<entries.size(); i++)
+    for(size_t i=0; i<entries.size(); i++)
         names.append(QString());
     for(auto i=entries.begin(); i!=entries.end(); i++) {
         names[i->second.index] = i->first;

@@ -1034,12 +1034,35 @@ QString Cyanide::set_profile_name(QString name)
 
 QList<int> Cyanide::get_friend_numbers()
 {
-    qDebug() << friends.size() << "friends";
-    QList<int> friend_numbers;
-    for(auto it = friends.begin(); it != friends.end(); it++) {
-        friend_numbers.append(it->first);
+    int fid;
+    Friend *f = NULL;
+    QList<int> list;
+    int away = 0, busy = 0;
+
+//    qDebug() << "friends.size()" << friends.size();
+    for(auto it = friends.begin(); it!=friends.end(); it++) {
+        fid=it->first;
+        f=&it->second;
+        if(fid < 0) {
+            qWarning() << "friend id < 0";
+            continue;
+        }
+//        qDebug() << "fid" << fid << "name" << f->name;
+        if(f->connection_status == TOX_CONNECTION_NONE) {
+            list.append(fid);
+        } else if(f->user_status == TOX_USER_STATUS_BUSY) {
+            list.insert(busy++, fid);
+        } else if(f->user_status == TOX_USER_STATUS_AWAY) {
+            list.insert(away++, fid);
+            busy++;
+        } else {
+            list.insert(0, fid);
+            away++;
+            busy++;
+        }
     }
-    return friend_numbers;
+
+    return list;
 }
 
 QList<int> Cyanide::get_message_numbers(int fid)

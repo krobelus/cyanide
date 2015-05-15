@@ -11,6 +11,7 @@ Features
 - Avatars
 - Inline Images
 - File Transfers (no resuming across restarts yet)
+- History
 - Multiprofile
 
 Planned Features
@@ -18,7 +19,6 @@ Planned Features
 
 - audio/video calls
 - groupchats
-- chat logs
 
 Installing
 ----------

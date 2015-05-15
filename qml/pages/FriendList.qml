@@ -115,7 +115,7 @@ Page {
                     color: Theme.secondaryColor
                 }
                 onClicked: {
-                    var fid = index - 1
+                    var fid = friend_number
                     if(fid == self_friend_number) {
                         pageStack.push(Qt.resolvedUrl("Profile.qml"))
                     } else if(!cyanide.get_friend_accepted(fid)) {
