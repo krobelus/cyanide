@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <!DOCTYPE TS>
 <TS version="2.1" language="sv_SE">
 <context>
@@ -210,21 +210,21 @@
     </message>
     <message>
         <source>Chat history</source>
-        <translation type="unfinished"></translation>
+        <translation>Chatthistorik</translation>
     </message>
     <message>
         <source>Load</source>
         <extracomment>chat history</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Läs in</translation>
     </message>
     <message>
         <source>Delete</source>
         <extracomment>chat history</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Ta bort</translation>
     </message>
     <message>
         <source>Deleting chat history</source>
-        <translation type="unfinished"></translation>
+        <translation>Tar bort chatthistoriken</translation>
     </message>
 </context>
 <context>
@@ -250,11 +250,11 @@
     <name>LoadChatHistory</name>
     <message>
         <source>From</source>
-        <translation type="unfinished"></translation>
+        <translation>Från</translation>
     </message>
     <message>
         <source>To</source>
-        <translation type="unfinished"></translation>
+        <translation>Till</translation>
     </message>
 </context>
 <context>
