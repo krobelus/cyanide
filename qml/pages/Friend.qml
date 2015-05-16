@@ -389,6 +389,7 @@ Dialog {
             y: inputField.y + inputField.height - height - Theme.paddingLarge
             x: content.width - width - Theme.paddingSmall
             onClicked: inputField.dispatch()
+            visible: inputField.focus
         }
 
         TextArea {
