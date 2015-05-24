@@ -412,21 +412,13 @@ Dialog {
                 }
                 var errmsg = cyanide.send_friend_message(f, text)
                 if(errmsg === "") {
-                    text = ""
+                    focus = false
                     parent.focus = true;
+                    text = ""
                 } else {
                     cyanide.notify_error(qsTr("Failed to send message"), errmsg)
                 }
             }
-        }
-    }
-    TextEdit {
-        id: clipboard
-        visible: false
-        function setClipboard(value) {
-        text = value
-            selectAll()
-            copy()
         }
     }
 }
