@@ -9,7 +9,7 @@
 
 #define QUERY(q) QSqlQuery q(QSqlDatabase::database("h"+profile_name))
 
-void execute_sql_query(QSqlQuery q);
+void execute_sql_query(QSqlQuery &q);
 
 QString History::db_version = "0001";
 
@@ -20,7 +20,7 @@ QString History::tables[] = {
     "CREATE TABLE IF NOT EXISTS files (id INTEGER PRIMARY KEY AUTOINCREMENT, tox_file_id BLOB UNIQUE NOT NULL, status INTEGER NOT NULL, filename TEXT NOT NULL, file_size INTEGER NOT NULL, position INTEGER NOT NULL)"
 };
     
-void History::open_database(QString name)
+void History::open_database(QString &name)
 {
     QSqlDatabase::database("h"+profile_name).close();
     QSqlDatabase::removeDatabase("h"+profile_name);

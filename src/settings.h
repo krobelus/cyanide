@@ -28,7 +28,7 @@ private:
 
 public:
     QString profile_name;
-    void open_database(QString name);
+    void open_database(QString &name);
     void close_databases();
 
     Q_INVOKABLE QString get(QString name); // gets the current value
@@ -43,8 +43,8 @@ public:
     void add_friend(QString address);
     void add_friend_if_not_exists(QString public_key);
     Q_INVOKABLE QString get_friend_address(QString public_key);
-    void set_friend_avatar_hash(QString public_key, QByteArray hash);
-    QByteArray get_friend_avatar_hash(QString public_key);
+    void set_friend_avatar_hash(QString public_key, QByteArray &hash);
+    QByteArray get_friend_avatar_hash(QString &public_key);
     void remove_friend(QString public_key);
 };
 

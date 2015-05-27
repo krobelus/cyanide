@@ -54,9 +54,9 @@ std::map<QString, std::vector<type_entry>> Settings::types = {
     */
 };
 
-void execute_sql_query(QSqlQuery q)
+void execute_sql_query(QSqlQuery &q)
 {
-    if (!q.exec())
+    if(!q.exec())
         qFatal("Failed to execute SQL query: %s", qPrintable(q.lastError().text()));
 }
 
@@ -71,7 +71,7 @@ void Settings::close_databases()
     */
 }
 
-void Settings::open_database(QString name)
+void Settings::open_database(QString &name)
 {
     QSqlDatabase::database("s"+profile_name).close();
     QSqlDatabase::removeDatabase("s"+profile_name);
@@ -252,7 +252,7 @@ QString Settings::get_friend_address(QString public_key)
     }
 }
 
-void Settings::set_friend_avatar_hash(QString public_key, QByteArray hash)
+void Settings::set_friend_avatar_hash(QString public_key, QByteArray &hash)
 {
     QUERY(q);
     q.prepare("UPDATE friends SET avatar_hash = ? WHERE public_key = ?");
@@ -261,7 +261,7 @@ void Settings::set_friend_avatar_hash(QString public_key, QByteArray hash)
     execute_sql_query(q);
 }
 
-QByteArray Settings::get_friend_avatar_hash(QString public_key)
+QByteArray Settings::get_friend_avatar_hash(QString &public_key)
 {
     QUERY(q);
     q.prepare("SELECT avatar_hash FROM friends WHERE public_key = ?");

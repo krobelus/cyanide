@@ -80,7 +80,7 @@ QString Cyanide::tox_save_file()
     return tox_save_file(profile_name);
 }
 
-QString Cyanide::tox_save_file(QString name)
+QString Cyanide::tox_save_file(QString &name)
 {
     return TOX_DATA_DIR + name.replace('/', '_') + ".tox";
 }
@@ -206,7 +206,7 @@ void Cyanide::wifi_monitor()
                  SLOT(wifi_changed(QString, QDBusVariant)));
 }
 
-void Cyanide::wifi_changed(QString name, QDBusVariant dbus_variant)
+void Cyanide::wifi_changed(QString &name, QDBusVariant &dbus_variant)
 {
     bool value = dbus_variant.variant().toBool();
     qDebug() << "Received DBus signal";
@@ -746,7 +746,7 @@ void Cyanide::relocate_blocked_friend()
     }
 }
 
-void Cyanide::add_message(uint32_t fid, Message message)
+void Cyanide::add_message(uint32_t fid, Message &message)
 {
     friends[fid].messages.append(message);
     uint32_t mid = friends[fid].messages.size() - 1;
@@ -874,7 +874,7 @@ QString Cyanide::send_friend_request_id(const uint8_t *id, const uint8_t *msg, s
     }
 }
 
-std::vector<QString> split_message(QString rest)
+std::vector<QString> split_message(QString &rest)
 {
     std::vector<QString> messages;
     QString chunk;
