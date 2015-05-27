@@ -21,7 +21,6 @@ Dialog {
     }
 
     onOrientationChanged: {
-        refreshMessageList()
         messageListView.positionViewAtEnd()
     }
 
