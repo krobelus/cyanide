@@ -22,11 +22,11 @@ Page {
         placeholderText: "Tox ID"
 
         EnterKey.onClicked: {
-            toxID.focus = false
+            focus = false
             message.focus = true
         }
     }
-    TextField {
+    TextArea {
         id: message
         width: parent.width
         //height: Math.max(page.width/3, implicitHeight)
@@ -37,9 +37,6 @@ Page {
         // TODO use DEFAULT_FRIEND_REQUEST_MESSAGE
         //: default friend request message - feel free to tranlate freely
         placeholderText: qsTr("Tox me maybe?")
-        EnterKey.onClicked: {
-            submit()
-        }
     }
     Button {
         id: button

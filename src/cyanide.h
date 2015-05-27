@@ -57,7 +57,7 @@ public:
 
     /* get the tox save file based on profile_name */
     QString tox_save_file();
-    QString tox_save_file(QString name);
+    QString tox_save_file(QString &name);
 
     QQuickView *view;
     int events;
@@ -75,7 +75,7 @@ public:
     uint32_t add_friend(Friend *f);
     uint32_t next_friend_number();
     uint32_t next_but_one_unoccupied_friend_number();
-    void add_message(uint32_t fid, Message message);
+    void add_message(uint32_t fid, Message &message);
     void incoming_avatar(uint32_t fid, uint32_t file_number, uint64_t file_size,
                          const uint8_t *filename, size_t filename_length);
     void incoming_avatar_chunk(uint32_t fid, uint64_t position,
@@ -211,7 +211,7 @@ signals:
     void signal_av_invite(int fid);
 
 public slots:
-    void wifi_changed(QString str, QDBusVariant variant);
+    void wifi_changed(QString &str, QDBusVariant &variant);
 };
 
 void start_tox_thread(Cyanide *cyanide);

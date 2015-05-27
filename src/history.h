@@ -12,7 +12,7 @@ class History
     static QString tables[];
     static QString db_version;
  public:
-    void open_database(QString name);
+    void open_database(QString &name);
     void close_databases();
     void add_message(QString public_key, Message *m);
     void add_file(File_Transfer *ft);

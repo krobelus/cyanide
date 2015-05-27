@@ -9,7 +9,7 @@
 
 #define QUERY(q) QSqlQuery q(QSqlDatabase::database("h"+profile_name))
 
-void execute_sql_query(QSqlQuery q);
+void execute_sql_query(QSqlQuery &q);
 
 QString History::db_version = "0001";
 
@@ -20,7 +20,7 @@ QString History::tables[] = {
     "CREATE TABLE IF NOT EXISTS files (id INTEGER PRIMARY KEY AUTOINCREMENT, tox_file_id BLOB UNIQUE NOT NULL, status INTEGER NOT NULL, filename TEXT NOT NULL, file_size INTEGER NOT NULL, position INTEGER NOT NULL)"
 };
     
-void History::open_database(QString name)
+void History::open_database(QString &name)
 {
     QSqlDatabase::database("h"+profile_name).close();
     QSqlDatabase::removeDatabase("h"+profile_name);
@@ -143,7 +143,9 @@ void History::load_messages(QString public_key, QList<Message> *messages, QDateT
     const int limit = 100;
     int count;
     int offset;
-    q.prepare("SELECT COUNT(id) my_count FROM messages");
+    int chat_id = get_chat_id(public_key);
+    q.prepare("SELECT COUNT(id) my_count FROM messages WHERE chat_id = ?");
+    q.addBindValue(chat_id);
     execute_sql_query(q);
     q.first();
     count = q.value("my_count").toInt();
@@ -152,12 +154,13 @@ void History::load_messages(QString public_key, QList<Message> *messages, QDateT
     else
         offset = count - limit;
 
-    q.prepare((QString)"SELECT timestamp, author, message, file_id FROM messages WHERE chat_id = ? "+
+    QString qstr = (QString)"SELECT timestamp, author, message, file_id FROM messages WHERE chat_id = ? "+
               (from.isNull() ? "" : "AND timestamp > ? ") + (to.isNull() ? "" : "AND timestamp < ?")+
               // if no date range is given, limit the number messages to load
-              (from.isNull() && to.isNull() ? " LIMIT "+QString::number(limit)+" OFFSET "+QString::number(offset) : "")
-              );
-    q.addBindValue(get_chat_id(public_key));
+              (from.isNull() && to.isNull() ? " LIMIT "+QString::number(limit)+" OFFSET "+QString::number(offset) : "");
+
+    q.prepare(qstr);
+    q.addBindValue(chat_id);
     if(!from.isNull())
         q.addBindValue(from);
     if(!to.isNull())

@@ -11,6 +11,10 @@
 # * Sun Apr 13 2014 Jack Tar <jack.tar@example.com> 0.0.1-1
 # - Scrubbed the deck
 # - Hoisted the sails
+* Wed May 27 2015 Johannes Altmanninger <aclopte@gmail.com> 0.2.3-1
+- fixed a bug where the history would not be loaded
+- some small ui fixes
+
 * Fri May 15 2015 Johannes Altmanninger <aclopte@gmail.com> 0.2.2-1
 - chat history is now saved
 - friend list is ordered by online/busy/away status
