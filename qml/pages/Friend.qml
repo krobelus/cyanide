@@ -20,7 +20,10 @@ Dialog {
         refreshMessageList()
     }
 
-    onOrientationChanged: refreshMessageList()
+    onOrientationChanged: {
+        refreshMessageList()
+        messageListView.positionViewAtEnd()
+    }
 
     canAccept: true
     acceptDestination: Qt.resolvedUrl("FriendAction.qml")
