@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <!DOCTYPE TS>
 <TS version="2.1" language="nl">
 <context>
@@ -231,24 +231,24 @@
     <message>
         <location filename="../qml/pages/FriendAction.qml" line="83"/>
         <source>Chat history</source>
-        <translation type="unfinished"></translation>
+        <translation>Chat historie</translation>
     </message>
     <message>
         <location filename="../qml/pages/FriendAction.qml" line="88"/>
         <source>Load</source>
         <extracomment>chat history</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Laden</translation>
     </message>
     <message>
         <location filename="../qml/pages/FriendAction.qml" line="92"/>
         <source>Delete</source>
         <extracomment>chat history</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Verwijderen</translation>
     </message>
     <message>
         <location filename="../qml/pages/FriendAction.qml" line="99"/>
         <source>Deleting chat history</source>
-        <translation type="unfinished"></translation>
+        <translation>Verwijderen chat historie</translation>
     </message>
     <message>
         <location filename="../qml/pages/FriendAction.qml" line="110"/>
@@ -294,12 +294,12 @@
     <message>
         <location filename="../qml/pages/LoadChatHistory.qml" line="39"/>
         <source>From</source>
-        <translation type="unfinished"></translation>
+        <translation>Van</translation>
     </message>
     <message>
         <location filename="../qml/pages/LoadChatHistory.qml" line="56"/>
         <source>To</source>
-        <translation type="unfinished"></translation>
+        <translation>Aan</translation>
     </message>
 </context>
 <context>
@@ -363,7 +363,7 @@
     <message>
         <location filename="../src/settings.cpp" line="22"/>
         <source>Keep chat history</source>
-        <translation type="unfinished"></translation>
+        <translation>Bewaren chat historie</translation>
     </message>
     <message>
         <location filename="../src/settings.cpp" line="26"/>

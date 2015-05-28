@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <!DOCTYPE TS>
 <TS version="2.1" language="da">
 <context>
@@ -231,24 +231,24 @@
     <message>
         <location filename="../qml/pages/FriendAction.qml" line="83"/>
         <source>Chat history</source>
-        <translation>Ryd chatlog</translation>
+        <translation>Samtalehistorik</translation>
     </message>
     <message>
         <location filename="../qml/pages/FriendAction.qml" line="88"/>
         <source>Load</source>
         <extracomment>chat history</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Hent</translation>
     </message>
     <message>
         <location filename="../qml/pages/FriendAction.qml" line="92"/>
         <source>Delete</source>
         <extracomment>chat history</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Slet</translation>
     </message>
     <message>
         <location filename="../qml/pages/FriendAction.qml" line="99"/>
         <source>Deleting chat history</source>
-        <translation type="unfinished"></translation>
+        <translation>Sletter samtalehistorik</translation>
     </message>
     <message>
         <location filename="../qml/pages/FriendAction.qml" line="110"/>
@@ -294,12 +294,12 @@
     <message>
         <location filename="../qml/pages/LoadChatHistory.qml" line="39"/>
         <source>From</source>
-        <translation type="unfinished"></translation>
+        <translation>Fra</translation>
     </message>
     <message>
         <location filename="../qml/pages/LoadChatHistory.qml" line="56"/>
         <source>To</source>
-        <translation type="unfinished"></translation>
+        <translation>Til</translation>
     </message>
 </context>
 <context>
@@ -363,27 +363,27 @@
     <message>
         <location filename="../src/settings.cpp" line="22"/>
         <source>Keep chat history</source>
-        <translation>Bevar chathistorik</translation>
+        <translation>Bevar samtalehistorik</translation>
     </message>
     <message>
         <location filename="../src/settings.cpp" line="26"/>
         <source>Notify me when...</source>
-        <translation>Påmind mig når...</translation>
+        <translation>Påmind mig ved...</translation>
     </message>
     <message>
         <location filename="../src/settings.cpp" line="27"/>
         <source>I receive a message</source>
-        <translation>Jeg modtog en meddelelse</translation>
+        <translation>Ny meddelelse</translation>
     </message>
     <message>
         <location filename="../src/settings.cpp" line="29"/>
         <source>I receive a friend request</source>
-        <translation>Jeg modtog en venneanmodning</translation>
+        <translation>Venneanmodning</translation>
     </message>
     <message>
         <location filename="../src/settings.cpp" line="20"/>
         <source>Send typing notifications?</source>
-        <translation>Sende skrivestatus påmindelse?</translation>
+        <translation>Sende skrivestatus?</translation>
     </message>
     <message>
         <location filename="../src/settings.cpp" line="24"/>
