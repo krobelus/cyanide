@@ -25,12 +25,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/AddFriend.qml" line="46"/>
+        <location filename="../qml/pages/AddFriend.qml" line="43"/>
         <source>Send friend request</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/AddFriend.qml" line="58"/>
+        <location filename="../qml/pages/AddFriend.qml" line="55"/>
         <source>Failed to send friend request</source>
         <translation type="unfinished"></translation>
     </message>
@@ -85,12 +85,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="1184"/>
+        <location filename="../src/cyanide.cpp" line="1207"/>
         <source>File not found: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="1189"/>
+        <location filename="../src/cyanide.cpp" line="1212"/>
         <source>Avatar too large. Maximum size: 64KiB</source>
         <translation type="unfinished"></translation>
     </message>
@@ -186,37 +186,37 @@
 <context>
     <name>Friend</name>
     <message>
-        <location filename="../qml/pages/Friend.qml" line="56"/>
+        <location filename="../qml/pages/Friend.qml" line="76"/>
         <source>Failed to pause transfer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/Friend.qml" line="63"/>
+        <location filename="../qml/pages/Friend.qml" line="83"/>
         <source>Failed to resume transfer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/Friend.qml" line="84"/>
+        <location filename="../qml/pages/Friend.qml" line="104"/>
         <source>Failed to cancel transfer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/Friend.qml" line="222"/>
+        <location filename="../qml/pages/Friend.qml" line="242"/>
         <source> is typing...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/Friend.qml" line="323"/>
+        <location filename="../qml/pages/Friend.qml" line="343"/>
         <source>Opening URL...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/Friend.qml" line="334"/>
+        <location filename="../qml/pages/Friend.qml" line="354"/>
         <source>Opening file...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/Friend.qml" line="400"/>
+        <location filename="../qml/pages/Friend.qml" line="421"/>
         <source>Failed to send message</source>
         <translation type="unfinished"></translation>
     </message>
@@ -224,49 +224,49 @@
 <context>
     <name>FriendAction</name>
     <message>
-        <location filename="../qml/pages/FriendAction.qml" line="56"/>
+        <location filename="../qml/pages/FriendAction.qml" line="73"/>
         <source>Copy Tox ID to clipboard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/FriendAction.qml" line="66"/>
+        <location filename="../qml/pages/FriendAction.qml" line="83"/>
         <source>Chat history</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/FriendAction.qml" line="71"/>
+        <location filename="../qml/pages/FriendAction.qml" line="88"/>
         <source>Load</source>
         <extracomment>chat history</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/FriendAction.qml" line="75"/>
+        <location filename="../qml/pages/FriendAction.qml" line="92"/>
         <source>Delete</source>
         <extracomment>chat history</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/FriendAction.qml" line="82"/>
+        <location filename="../qml/pages/FriendAction.qml" line="99"/>
         <source>Deleting chat history</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/FriendAction.qml" line="94"/>
+        <location filename="../qml/pages/FriendAction.qml" line="110"/>
         <source>Unblock friend</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/FriendAction.qml" line="94"/>
+        <location filename="../qml/pages/FriendAction.qml" line="110"/>
         <source>Block friend</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/FriendAction.qml" line="100"/>
+        <location filename="../qml/pages/FriendAction.qml" line="116"/>
         <source>Remove friend</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/FriendAction.qml" line="102"/>
+        <location filename="../qml/pages/FriendAction.qml" line="118"/>
         <source>Removing friend</source>
         <translation type="unfinished"></translation>
     </message>
@@ -361,37 +361,37 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/settings.cpp" line="38"/>
+        <location filename="../src/settings.cpp" line="22"/>
         <source>Keep chat history</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/settings.cpp" line="27"/>
+        <location filename="../src/settings.cpp" line="26"/>
         <source>Notify me when...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/settings.cpp" line="28"/>
+        <location filename="../src/settings.cpp" line="27"/>
         <source>I receive a message</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/settings.cpp" line="30"/>
+        <location filename="../src/settings.cpp" line="29"/>
         <source>I receive a friend request</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/settings.cpp" line="40"/>
+        <location filename="../src/settings.cpp" line="20"/>
         <source>Send typing notifications?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/settings.cpp" line="36"/>
+        <location filename="../src/settings.cpp" line="24"/>
         <source>Enable UDP</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/settings.cpp" line="42"/>
+        <location filename="../src/settings.cpp" line="18"/>
         <source>Wifi only</source>
         <translation type="unfinished"></translation>
     </message>
@@ -399,12 +399,12 @@
 <context>
     <name>cyanide</name>
     <message>
-        <location filename="../qml/cyanide.qml" line="192"/>
+        <location filename="../qml/cyanide.qml" line="203"/>
         <source>Incoming file: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/cyanide.qml" line="223"/>
+        <location filename="../qml/cyanide.qml" line="234"/>
         <source>Friend request received!</source>
         <translation type="unfinished"></translation>
     </message>
