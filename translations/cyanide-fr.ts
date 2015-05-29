@@ -22,7 +22,7 @@
         <location filename="../qml/pages/AddFriend.qml" line="39"/>
         <source>Tox me maybe?</source>
         <extracomment>default friend request message - feel free to tranlate freely</extracomment>
-        <translation>Tox moi !</translation>
+        <translation>Tu me Tox ?</translation>
     </message>
     <message>
         <location filename="../qml/pages/AddFriend.qml" line="43"/>
@@ -110,7 +110,7 @@
         <location filename="../src/cyanide.h" line="226"/>
         <source>Tox me maybe?</source>
         <extracomment>default friend request message - feel free to tranlate freely</extracomment>
-        <translation>Tox moi !</translation>
+        <translation>Tu me tox ?</translation>
     </message>
     <message>
         <location filename="../src/filetransfers.cpp" line="416"/>
