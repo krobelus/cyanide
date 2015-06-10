@@ -358,7 +358,12 @@ void Cyanide::load_tox_and_stuff_pretty_please()
     const uint8_t *save_data = get_save_data(&save_data_size);
     if(settings.get("udp-enabled") != "true")
         tox_options.udp_enabled = 0;
-    tox = tox_new(&tox_options, save_data, save_data_size, (TOX_ERR_NEW*)&error);
+    tox_options.savedata_type = TOX_SAVEDATA_TYPE_TOX_SAVE;
+    tox_options.savedata_data = save_data;
+    tox_options.savedata_length = save_data_size;
+    if((tox = tox_new(&tox_options, (TOX_ERR_NEW*)&error)) == 0) {
+        qDebug() << "tox_new() failed:" << error;
+    }
     // TODO switch(error)
 
     tox_self_get_address(tox, self_address);

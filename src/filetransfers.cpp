@@ -443,6 +443,8 @@ bool Cyanide::get_file_id(uint32_t fid, File_Transfer *ft)
         switch(error) {
             case TOX_ERR_FILE_GET_OK:
                 break;
+            case TOX_ERR_FILE_GET_NULL:
+                break;
             case TOX_ERR_FILE_GET_FRIEND_NOT_FOUND:
                 qDebug() << "Error: File not found";
                 break;
