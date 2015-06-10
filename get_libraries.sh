@@ -6,9 +6,14 @@ rm -rf res
 mkdir  res
 cd     res
 
-which wget || ( echo "wget not found"; exit 1 )
-which rpm2cpio || ( echo "rpm2cpio not found"; exit 1 )
-which bsdtar || ( echo "bsdtar not found"; exit 1 )
+die() {
+    echo "$@"
+    exit 1
+}
+
+which wget || die "wget not found"
+which rpm2cpio || die "rpm2cpio not found"
+which bsdtar || die "bsdtar not found"
 
 rpmextract() {
     rpm2cpio "$1" | bsdtar -xf -
@@ -26,8 +31,8 @@ libvpx-devel-1.3.0-10.20.1.jolla.armv7hl.rpm
 libvpx-utils-1.3.0-10.20.1.jolla.armv7hl.rpm
 opus-1.1-10.5.1.jolla.armv7hl.rpm
 opus-devel-1.1-10.5.1.jolla.armv7hl.rpm
-toxcore-15.0426-10.2.1.jolla.armv7hl.rpm
-toxcore-devel-15.0426-10.2.1.jolla.armv7hl.rpm
+toxcore-15.0610-10.3.1.jolla.armv7hl.rpm
+toxcore-devel-15.0610-10.3.1.jolla.armv7hl.rpm
 EOF
 
 for package in *.rpm; do
