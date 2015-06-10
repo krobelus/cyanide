@@ -77,11 +77,13 @@ void callback_friend_connection_status(Tox *tox, uint32_t fid, TOX_CONNECTION st
     Cyanide *cyanide = (Cyanide*)that;
     Friend *f = &cyanide->friends[fid];
     f->connection_status = status;
-    if(status != TOX_CONNECTION_NONE) {
+    if(status != TOX_CONNECTION_NONE && f->needs_avatar) {
         qDebug() << "Sending avatar to friend" << fid;
         QString errmsg = cyanide->send_avatar(fid);
         if(errmsg != "")
             qDebug() << "Failed to send avatar. " << errmsg;
+        else
+            f->needs_avatar = false;
     }
     emit cyanide->signal_friend_connection_status(fid, status != TOX_CONNECTION_NONE);
 }

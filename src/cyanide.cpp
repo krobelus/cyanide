@@ -1243,6 +1243,10 @@ void Cyanide::send_new_avatar()
             QString errmsg = send_avatar(i->first);
             if(errmsg != "")
                 qDebug() << "Failed to send avatar. " << errmsg;
+            else
+                f->needs_avatar = false;
+        } else {
+            f->needs_avatar = true;
         }
     }
 }

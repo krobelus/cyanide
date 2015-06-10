@@ -131,7 +131,7 @@ public:
     Q_INVOKABLE void remove_friend(int fid);
     Q_INVOKABLE QString send_friend_message(int fid, QString msg);
     Q_INVOKABLE void send_typing_notification(int fid, bool typing);
-    Q_INVOKABLE QString send_avatar(int fid);
+    QString send_avatar(int fid);
     Q_INVOKABLE QString send_file(int fid, QString path);
     Q_INVOKABLE QString resume_transfer(int mid, int fid);
     Q_INVOKABLE QString pause_transfer(int mid, int fid);

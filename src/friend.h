@@ -24,6 +24,7 @@ public:
     bool accepted;
     bool activity;
     bool blocked;
+    bool needs_avatar;
 
     int callstate;
     int32_t call_index;
