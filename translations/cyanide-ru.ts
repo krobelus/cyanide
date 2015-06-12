@@ -124,7 +124,7 @@
     <message>
         <source>Toxing on Cyanide</source>
         <extracomment>default status</extracomment>
-        <translation type="unfinished"/>
+        <translation type="unfinished">Использую Cyanide</translation>
     </message>
     <message>
         <source>Tox me maybe?</source>
