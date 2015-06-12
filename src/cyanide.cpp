@@ -350,9 +350,7 @@ void Cyanide::load_tox_and_stuff_pretty_please()
 
     save_needed = false;
 
-    // TODO free
-    tox_options = *tox_options_new((TOX_ERR_OPTIONS_NEW*)&error);
-    // TODO switch(error)
+    tox_options_default(&tox_options);
 
     size_t save_data_size;
     const uint8_t *save_data = get_save_data(&save_data_size);
