@@ -121,6 +121,13 @@
     </message>
 </context>
 <context>
+    <name>EnterPassword</name>
+    <message>
+        <source>Enter password</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>FileChooser</name>
     <message>
         <source>Cancel</source>
@@ -144,6 +151,10 @@
     </message>
     <message>
         <source>New profile</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Decryption failed</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

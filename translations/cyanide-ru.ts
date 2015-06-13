@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
 <TS version="2.1" language="ru_RU">
 <context>
@@ -124,7 +124,7 @@
     <message>
         <source>Toxing on Cyanide</source>
         <extracomment>default status</extracomment>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Tox me maybe?</source>
@@ -134,6 +134,13 @@
     <message>
         <source>Error: File exists</source>
         <translation>Ошибка: файл существует</translation>
+    </message>
+</context>
+<context>
+    <name>EnterPassword</name>
+    <message>
+        <source>Enter password</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -161,6 +168,10 @@
     <message>
         <source>New profile</source>
         <translation>Новый профиль</translation>
+    </message>
+    <message>
+        <source>Decryption failed</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

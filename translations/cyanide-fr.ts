@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
 <TS version="2.1" language="fr">
 <context>
@@ -32,89 +32,89 @@
     <message>
         <location filename="../qml/pages/AddFriend.qml" line="55"/>
         <source>Failed to send friend request</source>
-        <translation>L'envoi d'une requête à échoué</translation>
+        <translation>L&apos;envoi d&apos;une requête à échoué</translation>
     </message>
 </context>
 <context>
     <name>Cyanide</name>
     <message>
-        <location filename="../src/cyanide.cpp" line="829"/>
+        <location filename="../src/cyanide.cpp" line="896"/>
         <source>Error: Invalid Tox ID</source>
         <translation>Erreur : Tox ID invalide</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="857"/>
+        <location filename="../src/cyanide.cpp" line="924"/>
         <source>Error: Message is too long</source>
         <translation>Erreur : le message est trop long</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="861"/>
+        <location filename="../src/cyanide.cpp" line="928"/>
         <source>Error: Tox ID is self ID</source>
         <translation>Erreur : le Tox ID est votre propre ID</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="863"/>
+        <location filename="../src/cyanide.cpp" line="930"/>
         <source>Error: Tox ID is already in friend list</source>
-        <translation>Erreur : le Tox ID est déjà sur la liste d'amis</translation>
+        <translation>Erreur : le Tox ID est déjà sur la liste d&apos;amis</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="865"/>
+        <location filename="../src/cyanide.cpp" line="932"/>
         <source>Error: Invalid Tox ID (bad checksum)</source>
         <translation>Erreur : Tox ID invalide (somme de contrôle erronée)</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="867"/>
+        <location filename="../src/cyanide.cpp" line="934"/>
         <source>Error: Invalid Tox ID (bad nospam value)</source>
         <translation>Erreur : Tox ID invalide (mauvaise valeur nospam)</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="869"/>
+        <location filename="../src/cyanide.cpp" line="936"/>
         <source>Error: No memory</source>
         <translation>Erreur : pas de mémoire</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="932"/>
+        <location filename="../src/cyanide.cpp" line="999"/>
         <location filename="../src/filetransfers.cpp" line="418"/>
-        <location filename="../src/filetransfers.cpp" line="528"/>
+        <location filename="../src/filetransfers.cpp" line="530"/>
         <source>Error: Friend not connected</source>
         <translation>Erreur : Ami non connecté</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="1022"/>
+        <location filename="../src/cyanide.cpp" line="1089"/>
         <source>Error: File exists</source>
         <translation>Erreur : Le fichier existe</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="1207"/>
+        <location filename="../src/cyanide.cpp" line="1274"/>
         <source>File not found: </source>
         <translation>Fichier non trouvé : </translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="1212"/>
+        <location filename="../src/cyanide.cpp" line="1279"/>
         <source>Avatar too large. Maximum size: 64KiB</source>
         <translation>Avatar trop grand. Taille maxi : 64 Ko</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.h" line="222"/>
+        <location filename="../src/cyanide.h" line="228"/>
         <source>Tox User</source>
         <extracomment>default username</extracomment>
         <translation>Utilisateur Tox</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.h" line="224"/>
+        <location filename="../src/cyanide.h" line="230"/>
         <source>Toxing on Cyanide</source>
         <extracomment>default status</extracomment>
         <translation>Toxant sur Cyanide</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.h" line="226"/>
+        <location filename="../src/cyanide.h" line="232"/>
         <source>Tox me maybe?</source>
         <extracomment>default friend request message - feel free to tranlate freely</extracomment>
         <translation>Tu me tox ?</translation>
     </message>
     <message>
         <location filename="../src/filetransfers.cpp" line="416"/>
-        <location filename="../src/filetransfers.cpp" line="526"/>
+        <location filename="../src/filetransfers.cpp" line="528"/>
         <source>Error: Friend not found</source>
         <translation>Erreur : Ami non trouvé</translation>
     </message>
@@ -131,22 +131,30 @@
     <message>
         <location filename="../src/filetransfers.cpp" line="428"/>
         <source>Error: Packet queue is full</source>
-        <translation>Erreur : file d'attente de paquets pleine</translation>
+        <translation>Erreur : file d&apos;attente de paquets pleine</translation>
     </message>
     <message>
-        <location filename="../src/filetransfers.cpp" line="505"/>
+        <location filename="../src/filetransfers.cpp" line="507"/>
         <source>Error: Failed to open file: </source>
-        <translation>Erreur : Impossible d'ouvrir le fichier </translation>
+        <translation>Erreur : Impossible d&apos;ouvrir le fichier </translation>
     </message>
     <message>
-        <location filename="../src/filetransfers.cpp" line="530"/>
+        <location filename="../src/filetransfers.cpp" line="532"/>
         <source>Error: Filename too long</source>
         <translation>Erreur : Nom de fichier trop long</translation>
     </message>
     <message>
-        <location filename="../src/filetransfers.cpp" line="532"/>
+        <location filename="../src/filetransfers.cpp" line="534"/>
         <source>Error: Too many ongoing transfers</source>
         <translation>Erreur : Trop de transferts en cours</translation>
+    </message>
+</context>
+<context>
+    <name>EnterPassword</name>
+    <message>
+        <location filename="../qml/pages/EnterPassword.qml" line="24"/>
+        <source>Enter password</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -159,7 +167,7 @@
     <message>
         <location filename="../qml/pages/FileChooser.qml" line="56"/>
         <source>Filter by filename extension</source>
-        <translation>Filtrer par l'extension du nom</translation>
+        <translation>Filtrer par l&apos;extension du nom</translation>
     </message>
     <message>
         <location filename="../qml/pages/FileChooser.qml" line="66"/>
@@ -168,9 +176,9 @@
     </message>
     <message>
         <location filename="../qml/pages/FileChooser.qml" line="73"/>
-        <location filename="../qml/pages/FileChooser.qml" line="125"/>
+        <location filename="../qml/pages/FileChooser.qml" line="126"/>
         <source>Failed to set avatar</source>
-        <translation>Impossible de définir l'avatar</translation>
+        <translation>Impossible de définir l&apos;avatar</translation>
     </message>
     <message>
         <location filename="../qml/pages/FileChooser.qml" line="78"/>
@@ -178,9 +186,14 @@
         <translation>Nouveau profil</translation>
     </message>
     <message>
-        <location filename="../qml/pages/FileChooser.qml" line="118"/>
+        <location filename="../qml/pages/FileChooser.qml" line="119"/>
         <source>Failed to send file</source>
-        <translation>Echec d'envoi de fichier</translation>
+        <translation>Echec d&apos;envoi de fichier</translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/FileChooser.qml" line="135"/>
+        <source>Decryption failed</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -208,7 +221,7 @@
     <message>
         <location filename="../qml/pages/Friend.qml" line="343"/>
         <source>Opening URL...</source>
-        <translation>Ouverture de l'URL ...</translation>
+        <translation>Ouverture de l&apos;URL ...</translation>
     </message>
     <message>
         <location filename="../qml/pages/Friend.qml" line="354"/>
@@ -218,7 +231,7 @@
     <message>
         <location filename="../qml/pages/Friend.qml" line="421"/>
         <source>Failed to send message</source>
-        <translation>Echec de l'envoi de message</translation>
+        <translation>Echec de l&apos;envoi de message</translation>
     </message>
 </context>
 <context>
@@ -248,27 +261,27 @@
     <message>
         <location filename="../qml/pages/FriendAction.qml" line="99"/>
         <source>Deleting chat history</source>
-        <translation>Supprimer l'historique des discussions</translation>
+        <translation>Supprimer l&apos;historique des discussions</translation>
     </message>
     <message>
         <location filename="../qml/pages/FriendAction.qml" line="110"/>
         <source>Unblock friend</source>
-        <translation>Débloquer l'ami</translation>
+        <translation>Débloquer l&apos;ami</translation>
     </message>
     <message>
         <location filename="../qml/pages/FriendAction.qml" line="110"/>
         <source>Block friend</source>
-        <translation>Bloquer l'ami</translation>
+        <translation>Bloquer l&apos;ami</translation>
     </message>
     <message>
         <location filename="../qml/pages/FriendAction.qml" line="116"/>
         <source>Remove friend</source>
-        <translation>Supprimer l'ami</translation>
+        <translation>Supprimer l&apos;ami</translation>
     </message>
     <message>
         <location filename="../qml/pages/FriendAction.qml" line="118"/>
         <source>Removing friend</source>
-        <translation>Supprime l'ami</translation>
+        <translation>Supprime l&apos;ami</translation>
     </message>
 </context>
 <context>
@@ -373,7 +386,7 @@
     <message>
         <location filename="../src/settings.cpp" line="22"/>
         <source>Keep chat history</source>
-        <translation>Conserver l'historique des conversations</translation>
+        <translation>Conserver l&apos;historique des conversations</translation>
     </message>
     <message>
         <location filename="../src/settings.cpp" line="24"/>
@@ -393,20 +406,20 @@
     <message>
         <location filename="../src/settings.cpp" line="29"/>
         <source>I receive a friend request</source>
-        <translation>Je reçois une demande d'un ami</translation>
+        <translation>Je reçois une demande d&apos;un ami</translation>
     </message>
 </context>
 <context>
     <name>cyanide</name>
     <message>
-        <location filename="../qml/cyanide.qml" line="203"/>
+        <location filename="../qml/cyanide.qml" line="213"/>
         <source>Incoming file: </source>
         <translation>Fichier entrant : </translation>
     </message>
     <message>
-        <location filename="../qml/cyanide.qml" line="234"/>
+        <location filename="../qml/cyanide.qml" line="244"/>
         <source>Friend request received!</source>
-        <translation>Demande d'un ami reçue !</translation>
+        <translation>Demande d&apos;un ami reçue !</translation>
     </message>
 </context>
 </TS>
