@@ -13,7 +13,7 @@ Name:       cyanide
 %{!?qtc_make:%define qtc_make make}
 %{?qtc_builddir:%define _builddir %qtc_builddir}
 Summary:    Tox client for SailfishOS
-Version:    0.2.3
+Version:    0.2.4
 Release:    1
 Group:      Qt/Qt
 License:    GPLv3
@@ -22,7 +22,7 @@ Source0:    %{name}-%{version}.tar.bz2
 Source100:  cyanide.yaml
 Requires:   sailfishsilica-qt5 >= 0.10.9
 Requires:   qt5-qtdeclarative-import-folderlistmodel
-Requires:   toxcore >= 15.0426
+Requires:   toxcore = 15.0610
 BuildRequires:  pkgconfig(sailfishapp) >= 1.0.2
 BuildRequires:  pkgconfig(Qt5Core)
 BuildRequires:  pkgconfig(Qt5Qml)
