@@ -58,7 +58,17 @@ ApplicationWindow
         }))
     }
 
-    Component.onCompleted: loadSettings()
+    Component.onCompleted: {
+        if(!cyanide.logged_in()) {
+            fileChooserProperties = {
+                    target: "toxSaveFile",
+                    nameFilters: [ '*.tox' ],
+                    filter: true
+                }
+            pageStack.push(Qt.resolvedUrl("pages/FileChooser.qml"), { "folder": "/home/nemo/.config/tox/" } )
+        }
+        loadSettings()
+    }
 
     function loadSettings() {
         var nameList = settings.get_names()

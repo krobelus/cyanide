@@ -49,7 +49,8 @@ OTHER_FILES += \
     filesystem/usr/share/dbus-1/services/harbour.cyanide.service \
     qml/pages/FriendAction.qml \
     filesystem/usr/share/lipstick/notificationcategories/harbour.cyanide.call.conf \
-    filesystem/usr/share/lipstick/notificationcategories/harbour.cyanide.message.conf
+    filesystem/usr/share/lipstick/notificationcategories/harbour.cyanide.message.conf \
+    qml/pages/EnterPassword.qml
 
 
 # to disable building translations every time, comment out the
@@ -78,7 +79,7 @@ HEADERS += \
     src/history.h
 
 unix:!macx: LIBS += -L$$PWD/res/usr/lib/ \
-                -ltoxcore -ltoxdns -ltoxav \
+                -ltoxcore -ltoxdns -ltoxav -ltoxencryptsave \
                 -lsodium -lopus -lvpx \
                 -lrt
 

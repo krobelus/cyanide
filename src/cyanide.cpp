@@ -24,6 +24,8 @@
 /* oh boy, here we go... */
 #define UINT32_MAX (4294967295U)
 
+#define TOX_ENC_SAVE_MAGIC_LENGTH 8
+
 struct Tox_Options tox_options;
 
 int main(int argc, char *argv[])
@@ -73,6 +75,8 @@ Cyanide::Cyanide(QObject *parent) : QObject(parent)
 
     events = eventfd(0, 0);
     check_wifi();
+    have_password = false;
+    tox_save_data = NULL;
 }
 
 QString Cyanide::tox_save_file()
@@ -132,7 +136,7 @@ void Cyanide::load_new_profile()
     QFile file(path);
     file.open(QIODevice::WriteOnly);
     file.close();
-    load_tox_save_file(path);
+    load_tox_save_file(path, NULL);
 }
 
 void Cyanide::delete_current_profile()
@@ -146,8 +150,11 @@ void Cyanide::delete_current_profile()
     qDebug() << "removed db:" << success;
 }
 
-void Cyanide::load_tox_save_file(QString path)
+bool Cyanide::load_tox_save_file(QString path, QString passphrase)
 {
+    int error;
+    bool success;
+
     QString basename = path.mid(path.lastIndexOf('/') + 1);
     if(!basename.endsWith(".tox"))
         basename += ".tox";
@@ -158,6 +165,25 @@ void Cyanide::load_tox_save_file(QString path)
     /* remove the .tox extension */
     basename.chop(4);
     next_profile_name = basename;
+    have_password = passphrase != NULL;
+
+    if(have_password) {
+        size_t size;
+        uint8_t *data = (uint8_t*)file_raw(tox_save_file(next_profile_name).toUtf8().data(), &size);
+        uint8_t salt[TOX_PASS_SALT_LENGTH];
+        memcpy(salt, (const void*)(data + TOX_ENC_SAVE_MAGIC_LENGTH), TOX_PASS_SALT_LENGTH);
+        tox_derive_key_with_salt((const uint8_t*)passphrase.toUtf8().constData(), passphrase.toUtf8().size(), salt, &tox_pass_key, (TOX_ERR_KEY_DERIVATION*)&error);
+        qDebug() << "key derivation error:" << error;
+        tox_save_data = (uint8_t*)malloc(size - TOX_PASS_ENCRYPTION_EXTRA_LENGTH);
+        success = tox_pass_key_decrypt(data, size, &tox_pass_key, tox_save_data, (TOX_ERR_DECRYPTION*)&error);
+        qDebug() << "decryption error:" << error;
+        tox_save_data_size = size - TOX_PASS_ENCRYPTION_EXTRA_LENGTH;
+        if(!success) {
+            free(tox_save_data);
+            tox_save_data = NULL;
+            return false;
+        }
+    }
 
     if(loop == LOOP_STOP) {
         // tox_loop not running, resume it
@@ -166,6 +192,18 @@ void Cyanide::load_tox_save_file(QString path)
     } else {
         loop = LOOP_RELOAD_OTHER;
     }
+    return true;
+}
+
+bool Cyanide::file_is_encrypted(QString path)
+{
+    uint8_t data[TOX_ENC_SAVE_MAGIC_LENGTH] = {0};
+    QFile file(path);
+    file.open(QIODevice::ReadOnly);
+    file.read((char*)data, TOX_ENC_SAVE_MAGIC_LENGTH);
+    file.close();
+
+    return tox_is_data_encrypted(data);
 }
 
 void Cyanide::check_wifi()
@@ -329,9 +367,10 @@ void Cyanide::free_friend_messages(Friend *f)
         f->messages.clear();
 }
 
-void Cyanide::load_tox_and_stuff_pretty_please()
+bool Cyanide::load_tox_and_stuff_pretty_please()
 {
     int error;
+    bool valid = true;
 
     settings.open_database(profile_name);
     history.open_database(profile_name);
@@ -352,17 +391,29 @@ void Cyanide::load_tox_and_stuff_pretty_please()
 
     tox_options_default(&tox_options);
 
-    size_t save_data_size;
-    const uint8_t *save_data = get_save_data(&save_data_size);
     if(settings.get("udp-enabled") != "true")
         tox_options.udp_enabled = 0;
-    tox_options.savedata_type = TOX_SAVEDATA_TYPE_TOX_SAVE;
-    tox_options.savedata_data = save_data;
-    tox_options.savedata_length = save_data_size;
-    if((tox = tox_new(&tox_options, (TOX_ERR_NEW*)&error)) == 0) {
-        qDebug() << "tox_new() failed:" << error;
+
+    if(tox_save_data == NULL)
+        tox_save_data = (uint8_t*)file_raw(tox_save_file().toUtf8().data(), &tox_save_data_size);
+    if(tox_save_data == NULL)
+        tox_save_data_size = 0;
+
+    login = true;
+
+    if(tox_save_data_size >= TOX_ENC_SAVE_MAGIC_LENGTH && tox_is_data_encrypted(tox_save_data)) {
+        login = valid = false;
+    } else {
+        tox_options.savedata_data = tox_save_data;
+        tox_options.savedata_length = tox_save_data_size;
     }
+    valid = valid && tox_save_data_size > 0;
+    tox_options.savedata_type = valid ? TOX_SAVEDATA_TYPE_TOX_SAVE : TOX_SAVEDATA_TYPE_NONE;
+
+    tox = tox_new(&tox_options, (TOX_ERR_NEW*)&error);
     // TODO switch(error)
+    free(tox_save_data);
+    tox_save_data = NULL;
 
     tox_self_get_address(tox, self_address);
     tox_self_get_public_key(tox, self.public_key);
@@ -373,7 +424,7 @@ void Cyanide::load_tox_and_stuff_pretty_please()
     QByteArray saved_hash = settings.get_friend_avatar_hash(public_key);
     memcpy(self.avatar_hash, saved_hash.constData(), TOX_HASH_LENGTH);
 
-    if(save_data_size == 0 || save_data == NULL)
+    if(!valid)
         load_defaults();
     else
         load_tox_data();
@@ -384,6 +435,12 @@ void Cyanide::load_tox_and_stuff_pretty_please()
     qDebug() << "Name:" << self.name;
     qDebug() << "Status" << self.status_message;
     qDebug() << "Tox ID" << get_self_address();
+    return login;
+}
+
+bool Cyanide::logged_in()
+{
+    return login;
 }
 
 void start_tox_thread(Cyanide *cyanide)
@@ -406,21 +463,21 @@ void Cyanide::tox_thread()
     qDebug() << "profile name" << profile_name;
     qDebug() << "tox_save_file" << tox_save_file();
 
-    load_tox_and_stuff_pretty_please();
-
-    set_callbacks();
-
-    // Connect to bootstraped nodes in "tox_bootstrap.h"
-
-    do_bootstrap();
+    if(load_tox_and_stuff_pretty_please()) {
+        qDebug() << "loading succeeded";
+        set_callbacks();
+        // Connect to bootstraped nodes in "tox_bootstrap.h"
+        do_bootstrap();
+        check_wifi();
+    } else {
+        loop = LOOP_STOP;
+    }
 
     // Start the tox av session.
     toxav = toxav_new(tox, MAX_CALLS);
 
     // Give toxcore the av functions to call
     set_av_callbacks();
-
-    check_wifi();
 
     tox_loop();
 }
@@ -616,13 +673,31 @@ void Cyanide::load_defaults()
 
 void Cyanide::write_save()
 {
-    qDebug() << "";
+    if(!login)
+        return;
+
     void *data;
     uint32_t size;
 
     size = tox_get_savedata_size(tox);
     data = malloc(size);
     tox_get_savedata(tox, (uint8_t*)data);
+
+    if(have_password) {
+        qDebug() << "writing encrypted save";
+        uint8_t *encrypted = (uint8_t*)malloc(size + TOX_PASS_ENCRYPTION_EXTRA_LENGTH);
+        if(!tox_pass_key_encrypt((const uint8_t*)data, size, &tox_pass_key, encrypted, NULL)) {
+            qDebug() << "encryption failed, not writing save";
+            free(data);
+            free(encrypted);
+            return;
+        }
+        free(data);
+        data = encrypted;
+        size = size + TOX_PASS_ENCRYPTION_EXTRA_LENGTH;
+    } else {
+        qDebug() << "writing save";
+    }
 
     QDir().mkpath(TOX_DATA_DIR);
     QDir().mkpath(TOX_AVATAR_DIR);
@@ -638,17 +713,6 @@ void Cyanide::write_save()
 
     save_needed = false;
     free(data);
-}
-
-const uint8_t* Cyanide::get_save_data(size_t *size)
-{
-    void *data;
-
-    data = file_raw(tox_save_file().toUtf8().data(), size);
-    if(!data)
-        *size = 0;
-
-    return (const uint8_t*)data;
 }
 
 void Cyanide::load_tox_data()

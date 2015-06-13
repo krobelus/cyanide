@@ -99,7 +99,8 @@ Page {
             width: parent.width
 
             onClicked: {
-                var errmsg;
+                var errmsg
+                var path = folder + fileName
                 if(folderListModel.isFolder(index)) {
                     if(fileName == ".") {
                         ;
@@ -108,25 +109,35 @@ Page {
                                           { "folder": folder.replace(/[^\/]+\/$/, "")}, true)
                     } else {
                         pageStack.push(Qt.resolvedUrl("FileChooser.qml"),
-                                          { "folder": folder+fileName+"/"}, true)
+                                          { "folder": path+"/"}, true)
                     }
                 } else if(fileChooserProperties.target === "fileToSend") {
-                    errmsg = cyanide.send_file(activeFriend(), folder+fileName)
+                    errmsg = cyanide.send_file(activeFriend(), path)
                     if(errmsg === "") {
                         returnToPage("friend")
                     } else {
                         cyanide.notify_error(qsTr("Failed to send file"), qsTr(errmsg))
                     }
                 } else if(fileChooserProperties.target === "selfAvatar") {
-                    errmsg = cyanide.set_self_avatar(folder+fileName)
+                    errmsg = cyanide.set_self_avatar(path)
                     if(errmsg === "") {
                         returnToPage("profile")
                     } else {
                         cyanide.notify_error(qsTr("Failed to set avatar"), qsTr(errmsg))
                     }
                 } else if(fileChooserProperties.target === "toxSaveFile") {
-                    cyanide.load_tox_save_file(folder+fileName)
-                    returnToPage("friendlist")
+                    if(cyanide.file_is_encrypted(path)) {
+                        pageStack.push(Qt.resolvedUrl("EnterPassword.qml"),
+                                { dispatchAction: function(text) {
+                                        if(cyanide.load_tox_save_file(path, text))
+                                            returnToPage("friendlist")
+                                        else
+                                            cyanide.notify_error(qsTr("Decryption failed"), "")
+                                }})
+                    } else {
+                        cyanide.load_tox_save_file(path, null)
+                        returnToPage("friendlist")
+                    }
                 }
             }
 

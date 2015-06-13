@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QtQuick>
 #include <tox/tox.h>
+#include <tox/toxencryptsave.h>
 #include <tox/toxav.h>
 
 #include "friend.h"
@@ -54,6 +55,10 @@ public:
     History history;
 
     QString profile_name, next_profile_name;
+    uint8_t *tox_save_data;
+    size_t tox_save_data_size;
+    bool have_password;
+    TOX_PASS_KEY tox_pass_key;
 
     /* get the tox save file based on profile_name */
     QString tox_save_file();
@@ -86,9 +91,7 @@ public:
     void read_default_profile(QStringList args);
     void write_default_profile();
 
-    void load_tox_and_stuff_pretty_please();
-    /* reads the tox save file into memory and stores the length in *size */
-    const uint8_t *get_save_data(size_t *size);
+    bool load_tox_and_stuff_pretty_please();
     /* loads default name, status, ... */
     void load_defaults();
     /* load name, status, friends from the tox object */
@@ -123,8 +126,11 @@ public:
 
     Q_INVOKABLE void reload();
     Q_INVOKABLE void load_new_profile();
-    Q_INVOKABLE void load_tox_save_file(QString path);
+    Q_INVOKABLE bool load_tox_save_file(QString path, QString passphrase);
     Q_INVOKABLE void delete_current_profile();
+    Q_INVOKABLE bool file_is_encrypted(QString path);
+    bool login;
+    Q_INVOKABLE bool logged_in();
 
     Q_INVOKABLE QString send_friend_request(QString id_string, QString msg_string);
     Q_INVOKABLE bool accept_friend_request(int fid);
