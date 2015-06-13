@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <!DOCTYPE TS>
 <TS version="2.1" language="sv_SE">
 <context>
@@ -128,7 +128,7 @@
     <name>EnterPassword</name>
     <message>
         <source>Enter password</source>
-        <translation type="unfinished"></translation>
+        <translation>Ange lösenord</translation>
     </message>
 </context>
 <context>
@@ -159,7 +159,7 @@
     </message>
     <message>
         <source>Decryption failed</source>
-        <translation type="unfinished"></translation>
+        <translation>Krypteringen misslyckades</translation>
     </message>
 </context>
 <context>
