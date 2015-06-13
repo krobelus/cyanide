@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <!DOCTYPE TS>
 <TS version="2.1" language="ru_RU">
 <context>
@@ -140,7 +140,7 @@
     <name>EnterPassword</name>
     <message>
         <source>Enter password</source>
-        <translation type="unfinished"></translation>
+        <translation>Введите пароль</translation>
     </message>
 </context>
 <context>
@@ -171,7 +171,7 @@
     </message>
     <message>
         <source>Decryption failed</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось расшифровать</translation>
     </message>
 </context>
 <context>
@@ -277,11 +277,11 @@
     <name>LoadChatHistory</name>
     <message>
         <source>From</source>
-        <translation type="unfinished">Начиная с</translation>
+        <translation>Начиная с</translation>
     </message>
     <message>
         <source>To</source>
-        <translation type="unfinished">Заканчивая</translation>
+        <translation>Заканчивая</translation>
     </message>
 </context>
 <context>
