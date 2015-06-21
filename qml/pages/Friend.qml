@@ -258,7 +258,7 @@ Dialog {
 
             delegate: Item {
                 id: delegate
-                height: 2 * Theme.paddingMedium + message.height + inlineImage.height
+                height: 2 * Theme.paddingMedium + message.height + inlineImage.height + timestampLabel.height
 
                 Image {
                     id: attach
@@ -366,21 +366,23 @@ Dialog {
                     fileControlPanel.toggleIcons()
                 }
 
-                /*
                 Label {
                     id: timestampLabel
-                    text: qsTr(Misc.elapsedTime(timestamp))
-                    wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-                    width: content.width/3 - 3*Theme.paddingMedium
+                    text: Misc.elapsedTime(m_timestamp)
+                    x: message.x
+                    y: message.y + message.height + Theme.paddingSmall
                     font.pixelSize: Theme.fontSizeExtraSmall
                     color: Theme.secondaryColor
                     horizontalAlignment: m_author ? Text.AlignRight : Text.AlignLeft
+                    //wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                    //width: content.width/3 - 3*Theme.paddingMedium
+                    /*
                     anchors {
                         right: m_author ? parent.right : messageLabel.left
                         left: m_author ? messageLabel.right : parent.left
                     }
+                    */
                 }
-                */
             }
             VerticalScrollDecorator {}
         }

@@ -145,6 +145,7 @@ ApplicationWindow
                          ,"m_text": m_text
                          //,"m_html_escaped_text": m_escaped
                          ,"m_rich_text": cyanide.get_message_rich_text(fid, mid)
+                         ,"m_timestamp": m_timestamp
                          ,"m_id": "0"
                          ,"f_link": ""
                          ,"f_status": 0
@@ -156,6 +157,7 @@ ApplicationWindow
                          ,"m_text": m_text
                          //, "m_html_escaped_text": m_escaped
                          ,"m_rich_text": ""
+                         ,"m_timestamp": m_timestamp
                          ,"m_id": mid.toString() // :^)
                          ,"f_link": cyanide.get_file_link(fid, mid)
                          ,"f_status": cyanide.get_file_status(fid, mid)
