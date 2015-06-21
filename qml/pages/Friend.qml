@@ -258,7 +258,7 @@ Dialog {
 
             delegate: Item {
                 id: delegate
-                height: 2 * Theme.paddingMedium + message.height + inlineImage.height + timestampLabel.height
+                height: Theme.paddingMedium + message.height + inlineImage.height + timestampLabel.height
 
                 Image {
                     id: attach
@@ -299,7 +299,7 @@ Dialog {
                     y: message.y - Theme.paddingSmall
                     x: message.x - Theme.paddingLarge
                     height: implicitHeight
-                    width: message.width + 2 * Theme.paddingLarge
+                    width: message.width + 2 * Theme.paddingLarge + Theme.paddingMedium
                     readOnly: true
                     focusOnClick: true
                     onFocusChanged: {
@@ -330,7 +330,7 @@ Dialog {
                     }
 
                     x: m_author ? Theme.paddingSmall + attach.width
-                                : content.width - width - Theme.paddingLarge
+                                : content.width - Math.max(width, timestampLabel.width) - Theme.paddingLarge
                     font.pixelSize: Theme.fontSizeExtraSmall
                     // color: m_author ? Theme.secondaryColor : Theme.primaryColor
                     horizontalAlignment: Text.AlignLeft
@@ -374,14 +374,6 @@ Dialog {
                     font.pixelSize: Theme.fontSizeExtraSmall
                     color: Theme.secondaryColor
                     horizontalAlignment: m_author ? Text.AlignRight : Text.AlignLeft
-                    //wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-                    //width: content.width/3 - 3*Theme.paddingMedium
-                    /*
-                    anchors {
-                        right: m_author ? parent.right : messageLabel.left
-                        left: m_author ? messageLabel.right : parent.left
-                    }
-                    */
                 }
             }
             VerticalScrollDecorator {}
