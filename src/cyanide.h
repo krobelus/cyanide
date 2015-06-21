@@ -33,6 +33,7 @@ enum LOOP_STATE
              , LOOP_RELOAD_OTHER
              , LOOP_SUSPEND
              , LOOP_STOP
+             , LOOP_NOT_LOGGED_IN
 };
 
 class Cyanide : public QObject
@@ -57,7 +58,7 @@ public:
     QString profile_name, next_profile_name;
     uint8_t *tox_save_data;
     size_t tox_save_data_size;
-    bool have_password;
+    bool have_password, next_have_password;
     TOX_PASS_KEY tox_pass_key;
 
     /* get the tox save file based on profile_name */
@@ -91,7 +92,7 @@ public:
     void read_default_profile(QStringList args);
     void write_default_profile();
 
-    bool load_tox_and_stuff_pretty_please();
+    void load_tox_and_stuff_pretty_please();
     /* loads default name, status, ... */
     void load_defaults();
     /* load name, status, friends from the tox object */
@@ -116,6 +117,7 @@ public:
 
     void on_message_notification_activated(int fid);
 
+    Q_INVOKABLE bool is_logged_in();
     Q_INVOKABLE void raise();
     Q_INVOKABLE bool is_visible();
     Q_INVOKABLE void visibility_changed(QWindow::Visibility visibility);
@@ -129,8 +131,6 @@ public:
     Q_INVOKABLE bool load_tox_save_file(QString path, QString passphrase);
     Q_INVOKABLE void delete_current_profile();
     Q_INVOKABLE bool file_is_encrypted(QString path);
-    bool login;
-    Q_INVOKABLE bool logged_in();
 
     Q_INVOKABLE QString send_friend_request(QString id_string, QString msg_string);
     Q_INVOKABLE bool accept_friend_request(int fid);
@@ -219,10 +219,6 @@ signals:
 public slots:
     void wifi_changed(QString &str, QDBusVariant &variant);
 };
-
-void start_tox_thread(Cyanide *cyanide);
-void start_toxav_thread(Cyanide *cyanide);
-void start_audio_thread(Cyanide *cyanide);
 
 //: default username
 const QString DEFAULT_NAME = Cyanide::tr("Tox User");

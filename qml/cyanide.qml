@@ -5,7 +5,7 @@ import "pages"
 
 ApplicationWindow
 {
-    initialPage: Component { FriendList { } }
+//    initialPage: Component { FriendList { } }
     cover: Qt.resolvedUrl("cover/CoverPage.qml")
 
     /* pass this to functions that takes a friend ID to refer to self */
@@ -59,14 +59,17 @@ ApplicationWindow
     }
 
     Component.onCompleted: {
-        if(!cyanide.logged_in()) {
+        if(!cyanide.is_logged_in()) {
             fileChooserProperties = {
                     target: "toxSaveFile",
                     nameFilters: [ '*.tox' ],
                     filter: true
                 }
             pageStack.push(Qt.resolvedUrl("pages/FileChooser.qml"), { "folder": "/home/nemo/.config/tox/" } )
+        } else {
+            pageStack.push(Qt.resolvedUrl("pages/FriendList.qml"))
         }
+
         loadSettings()
     }
 

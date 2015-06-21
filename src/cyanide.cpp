@@ -47,7 +47,7 @@ int main(int argc, char *argv[])
 
     cyanide->read_default_profile(app->arguments());
 
-    std::thread my_tox_thread(start_tox_thread, cyanide);
+    std::thread my_tox_thread([&cyanide] () {cyanide->tox_thread();});
 
     qmlRegisterType<Message_Type>("harbour.cyanide", 1, 0, "Message_Type");
     qmlRegisterType<File_State>("harbour.cyanide", 1, 0, "File_State");
@@ -61,6 +61,8 @@ int main(int argc, char *argv[])
 
     int result = app->exec();
 
+    uint64_t event = LOOP_FINISH;
+    write(cyanide->events, &event, sizeof(event));
     cyanide->loop = LOOP_FINISH;
     cyanide->settings.close_databases();
     cyanide->history.close_databases();
@@ -74,7 +76,6 @@ Cyanide::Cyanide(QObject *parent) : QObject(parent)
     view = SailfishApp::createView();
 
     events = eventfd(0, 0);
-    check_wifi();
     have_password = false;
     tox_save_data = NULL;
 }
@@ -142,7 +143,7 @@ void Cyanide::load_new_profile()
 void Cyanide::delete_current_profile()
 {
     bool success;
-    loop = LOOP_STOP;
+    loop = LOOP_NOT_LOGGED_IN;
     usleep(1500 * MAX_ITERATION_TIME);
     success = QFile::remove(tox_save_file());
     qDebug() << "removed" << tox_save_file() << ":" << success;
@@ -165,9 +166,9 @@ bool Cyanide::load_tox_save_file(QString path, QString passphrase)
     /* remove the .tox extension */
     basename.chop(4);
     next_profile_name = basename;
-    have_password = passphrase != NULL;
+    next_have_password = passphrase != NULL;
 
-    if(have_password) {
+    if(next_have_password) {
         size_t size;
         uint8_t *data = (uint8_t*)file_raw(tox_save_file(next_profile_name).toUtf8().data(), &size);
         uint8_t salt[TOX_PASS_SALT_LENGTH];
@@ -185,9 +186,10 @@ bool Cyanide::load_tox_save_file(QString path, QString passphrase)
         }
     }
 
-    if(loop == LOOP_STOP) {
+    if(loop == LOOP_STOP || loop == LOOP_NOT_LOGGED_IN) {
         // tox_loop not running, resume it
-        profile_name = basename;
+        profile_name = next_profile_name;
+        have_password = next_have_password;
         resume_thread();
     } else {
         loop = LOOP_RELOAD_OTHER;
@@ -208,6 +210,9 @@ bool Cyanide::file_is_encrypted(QString path)
 
 void Cyanide::check_wifi()
 {
+    if(!is_logged_in())
+        return;
+
     if(settings.get("wifi-only") == "true") {
         if(0 == system("test true = \"$(dbus-send --system --dest=net.connman --print-reply"
                                       " /net/connman/technology/wifi net.connman.Technology.GetProperties"
@@ -246,6 +251,9 @@ void Cyanide::wifi_monitor()
 
 void Cyanide::wifi_changed(QString &name, QDBusVariant &dbus_variant)
 {
+    if(!is_logged_in())
+        return;
+
     bool value = dbus_variant.variant().toBool();
     qDebug() << "Received DBus signal";
     qDebug() << "Property" << name << "Value" << value;
@@ -266,7 +274,7 @@ void Cyanide::wifi_changed(QString &name, QDBusVariant &dbus_variant)
 void Cyanide::resume_thread()
 {
     loop = LOOP_RUN;
-    uint64_t event = 1;
+    uint64_t event = LOOP_RUN;
     ssize_t tmp = write(events, &event, sizeof(event));
     Q_ASSERT(tmp == sizeof(event));
 }
@@ -342,6 +350,11 @@ void Cyanide::notify_call(int fid, QString summary, QString body)
     f->notification->publish();
 }
 
+bool Cyanide::is_logged_in()
+{
+    return loop != LOOP_NOT_LOGGED_IN;
+}
+
 void Cyanide::raise()
 {
     if(!is_visible()) {
@@ -367,10 +380,9 @@ void Cyanide::free_friend_messages(Friend *f)
         f->messages.clear();
 }
 
-bool Cyanide::load_tox_and_stuff_pretty_please()
+void Cyanide::load_tox_and_stuff_pretty_please()
 {
     int error;
-    bool valid = true;
 
     settings.open_database(profile_name);
     history.open_database(profile_name);
@@ -399,19 +411,52 @@ bool Cyanide::load_tox_and_stuff_pretty_please()
     if(tox_save_data == NULL)
         tox_save_data_size = 0;
 
-    login = true;
-
     if(tox_save_data_size >= TOX_ENC_SAVE_MAGIC_LENGTH && tox_is_data_encrypted(tox_save_data)) {
-        login = valid = false;
+        qDebug() << "save is encrypted";
+        loop = LOOP_NOT_LOGGED_IN;
+        tox_options.savedata_type = TOX_SAVEDATA_TYPE_NONE;
     } else {
+        loop = LOOP_RUN;
         tox_options.savedata_data = tox_save_data;
         tox_options.savedata_length = tox_save_data_size;
+        tox_options.savedata_type = tox_save_data_size ? TOX_SAVEDATA_TYPE_TOX_SAVE : TOX_SAVEDATA_TYPE_NONE;
     }
-    valid = valid && tox_save_data_size > 0;
-    tox_options.savedata_type = valid ? TOX_SAVEDATA_TYPE_TOX_SAVE : TOX_SAVEDATA_TYPE_NONE;
 
     tox = tox_new(&tox_options, (TOX_ERR_NEW*)&error);
-    // TODO switch(error)
+    switch(error) {
+        case TOX_ERR_NEW_OK:
+            break;
+        case TOX_ERR_NEW_NULL:
+            Q_ASSERT(false);
+            break;
+        case TOX_ERR_NEW_MALLOC:
+            Q_ASSERT(false);
+            break;
+        case TOX_ERR_NEW_PORT_ALLOC:
+            Q_ASSERT(false);
+            break;
+        case TOX_ERR_NEW_PROXY_BAD_TYPE:
+            Q_ASSERT(false);
+            break;
+        case TOX_ERR_NEW_PROXY_BAD_HOST:
+            Q_ASSERT(false);
+            break;
+        case TOX_ERR_NEW_PROXY_BAD_PORT:
+            Q_ASSERT(false);
+            break;
+        case TOX_ERR_NEW_PROXY_NOT_FOUND:
+            Q_ASSERT(false);
+            break;
+        case TOX_ERR_NEW_LOAD_ENCRYPTED:
+            qDebug() << "encrypted";
+            Q_ASSERT(false);
+            break;
+        case TOX_ERR_NEW_LOAD_BAD_FORMAT:
+            qDebug() << "bad format";
+            Q_ASSERT(false);
+            break;
+    }
+
     free(tox_save_data);
     tox_save_data = NULL;
 
@@ -424,10 +469,11 @@ bool Cyanide::load_tox_and_stuff_pretty_please()
     QByteArray saved_hash = settings.get_friend_avatar_hash(public_key);
     memcpy(self.avatar_hash, saved_hash.constData(), TOX_HASH_LENGTH);
 
-    if(!valid)
-        load_defaults();
-    else
+    if(tox_save_data_size)
         load_tox_data();
+    else
+        load_defaults();
+
 
     emit signal_friend_added(SELF_FRIEND_NUMBER);
     emit signal_avatar_change(SELF_FRIEND_NUMBER);
@@ -435,27 +481,6 @@ bool Cyanide::load_tox_and_stuff_pretty_please()
     qDebug() << "Name:" << self.name;
     qDebug() << "Status" << self.status_message;
     qDebug() << "Tox ID" << get_self_address();
-    return login;
-}
-
-bool Cyanide::logged_in()
-{
-    return login;
-}
-
-void start_tox_thread(Cyanide *cyanide)
-{
-    cyanide->tox_thread();
-}
-
-void start_toxav_thread(Cyanide *cyanide)
-{
-    cyanide->toxav_thread();
-}
-
-void start_audio_thread(Cyanide *cyanide)
-{
-    cyanide->audio_thread();
 }
 
 void Cyanide::tox_thread()
@@ -463,15 +488,14 @@ void Cyanide::tox_thread()
     qDebug() << "profile name" << profile_name;
     qDebug() << "tox_save_file" << tox_save_file();
 
-    if(load_tox_and_stuff_pretty_please()) {
-        qDebug() << "loading succeeded";
-        set_callbacks();
-        // Connect to bootstraped nodes in "tox_bootstrap.h"
-        do_bootstrap();
-        check_wifi();
-    } else {
-        loop = LOOP_STOP;
-    }
+    load_tox_and_stuff_pretty_please();
+
+    set_callbacks();
+
+    // Connect to bootstraped nodes in "tox_bootstrap.h
+    do_bootstrap();
+
+    check_wifi();
 
     // Start the tox av session.
     toxav = toxav_new(tox, MAX_CALLS);
@@ -484,8 +508,8 @@ void Cyanide::tox_thread()
 
 void Cyanide::tox_loop()
 {
-    std::thread toxav_thread(start_toxav_thread, this);
-    std::thread audio_thread(start_audio_thread, this);
+    std::thread toxav_thread([this] () {this->toxav_thread();});
+    std::thread audio_thread([this] () {this->audio_thread();});
 
     uint64_t last_save = get_time(), time;
     TOX_CONNECTION c, connection = c = TOX_CONNECTION_NONE;
@@ -543,27 +567,27 @@ void Cyanide::tox_loop()
             break;
         case LOOP_RELOAD_OTHER:
             qDebug() << "loading profile" << next_profile_name;
-
             killall_tox();
-
             profile_name = next_profile_name;
-
+            have_password = next_have_password;
             write_default_profile();
-
             tox_thread();
             break;
         case LOOP_SUSPEND:
-            tmp = read(events, &event, sizeof(event));
-            Q_ASSERT(tmp == sizeof(event));
+            read(events, &event, sizeof(event));
+            if(event == LOOP_FINISH)
+                return;
             qDebug() << "read" << event << ", resuming thread";
             tox_loop();
             break;
         case LOOP_STOP:
+        case LOOP_NOT_LOGGED_IN:
             killall_tox();
-            tmp = read(events, &event, sizeof(event));
-            Q_ASSERT(tmp = sizeof(event));
+            read(events, &event, sizeof(event));
+            if(event == LOOP_FINISH)
+                return;
             qDebug() << "read" << event << ", starting thread with profile" << profile_name
-                        << "save file" << tox_save_file();
+                     << "save file" << tox_save_file();
             write_default_profile();
             tox_thread();
             break;
@@ -590,6 +614,9 @@ void Cyanide::toxav_thread()
             break;
         case LOOP_STOP:
             break;
+    case LOOP_NOT_LOGGED_IN:
+        Q_ASSERT(false);
+        break;
     }
 }
 
@@ -673,8 +700,10 @@ void Cyanide::load_defaults()
 
 void Cyanide::write_save()
 {
-    if(!login)
+    if(!is_logged_in()) {
+        qDebug() << "attempting to write save while not logged in";
         return;
+    }
 
     void *data;
     uint32_t size;

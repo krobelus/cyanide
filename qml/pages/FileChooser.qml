@@ -79,7 +79,8 @@ Page {
                 visible: fileChooserProperties.target === "toxSaveFile"
                 onClicked: {
                     cyanide.load_new_profile()
-                    returnToPage("profile")
+                    pageStack.clear()
+                    pageStack.push(Qt.resolvedUrl("FriendList.qml"))
                 }
             }
         }
@@ -126,17 +127,22 @@ Page {
                         cyanide.notify_error(qsTr("Failed to set avatar"), qsTr(errmsg))
                     }
                 } else if(fileChooserProperties.target === "toxSaveFile") {
+                    var ret = function() {
+                            pageStack.clear()
+                            pageStack.push(Qt.resolvedUrl("FriendList.qml"))
+                        }
+
                     if(cyanide.file_is_encrypted(path)) {
                         pageStack.push(Qt.resolvedUrl("EnterPassword.qml"),
                                 { dispatchAction: function(text) {
                                         if(cyanide.load_tox_save_file(path, text))
-                                            returnToPage("friendlist")
+                                            ret()
                                         else
                                             cyanide.notify_error(qsTr("Decryption failed"), "")
                                 }})
                     } else {
                         cyanide.load_tox_save_file(path, null)
-                        returnToPage("friendlist")
+                        ret()
                     }
                 }
             }

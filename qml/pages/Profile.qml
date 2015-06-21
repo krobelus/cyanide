@@ -30,6 +30,7 @@ Page {
                             nameFilters: [ '*.tox' ],
                             filter: true
                         }
+                        pageStack.clear()
                         pageStack.push(Qt.resolvedUrl("FileChooser.qml"), { "folder": "/home/nemo/.config/tox/" } )
                     })
                 }
