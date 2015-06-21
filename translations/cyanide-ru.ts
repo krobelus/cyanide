@@ -357,7 +357,7 @@
     </message>
     <message>
         <source>Send typing notifications?</source>
-        <translation>Отсылать уведомления о наборе?</translation>
+        <translation>Отсылать уведомления о наборе</translation>
     </message>
     <message>
         <source>Enable UDP</source>
