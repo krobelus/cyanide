@@ -15,9 +15,12 @@ Page {
     RemorsePopup { id: remorsePopup }
 
     SilicaFlickable {
+        contentHeight: column.height + Theme.paddingLarge
         anchors {
             fill: parent
         }
+
+        VerticalScrollDecorator { }
 
         PullDownMenu {
             MenuItem {
@@ -40,7 +43,7 @@ Page {
         Column {
             id: column
             spacing: Theme.paddingMedium
-            y: Theme.paddingMedium
+            y: Theme.paddingLarge
 
             TextField {
                 id: profileName
@@ -97,13 +100,22 @@ Page {
                 onCurrentIndexChanged:  cyanide.set_self_user_status(currentIndex)
             }
             Text {
-                id: id
-                width: page.width - Theme.paddingLarge
-                height: implicitHeight
-                x: Theme.paddingMedium
-                color: Theme.primaryColor
+                id: dummy
+                visible: false
+                text: "A"
+                font.family: "Monospace"
+            }
 
+            Text {
+                id: id
+                x: (page.width - width) / 2
                 text: cyanide.get_self_address()
+                color: Theme.primaryColor
+                font.family: "Monospace"
+
+                width: 78 * dummy.paintedWidth / 4 // 19 hex characters per line
+                height: implicitHeight
+
                 wrapMode: Text.WrapAnywhere
             }
             TextEdit {
@@ -122,6 +134,7 @@ Page {
             }
             Button {
                 id: copyButton
+                x: (page.width - width) / 2
                 color: Theme.primaryColor
                 text: qsTr("Copy my Tox ID") + " ☐"
                 onClicked: {
@@ -138,10 +151,6 @@ Page {
             onErrorCountChanged: {
                 source = "qrc:/images/blankavatar"
             }
-            Connections {
-                target: cyanide
-                onSignal_avatar_change: avatar.icon.source = friendList.get(0).friend_avatar
-            }
 
             onClicked: {
                 fileChooserProperties = {
@@ -157,8 +166,14 @@ Page {
         Image {
             id: selfStatusIcon
             source: friendList.get(0).friend_status_icon
-            y: statusMenu.y + statusMenu.height / 2 - height / 2
+            y: statusMenu.y + 2 * Theme.paddingLarge + Theme.paddingMedium
             x: page.width - width - Theme.paddingLarge
+        }
+        Connections {
+            target: cyanide
+            onSignal_avatar_change: avatar.icon.source = friendList.get(0).friend_avatar
+            onSignal_friend_status: selfStatusIcon.source = friendList.get(0).friend_status_icon
+            onSignal_friend_connection_status: selfStatusIcon.source = friendList.get(0).friend_status_icon
         }
     }
 }
