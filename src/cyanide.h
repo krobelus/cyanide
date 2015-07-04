@@ -167,6 +167,7 @@ public:
     Q_INVOKABLE void set_self_status_message(QString status_message);
     Q_INVOKABLE void set_self_user_status(int status);
     Q_INVOKABLE QString set_self_avatar(QString path);
+    Q_INVOKABLE void set_random_nospam();
 
     Q_INVOKABLE QString get_self_address();
     Q_INVOKABLE int get_self_user_status();

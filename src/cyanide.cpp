@@ -1423,6 +1423,12 @@ QString Cyanide::get_friend_public_key(int fid)
     return utf8_to_qstr(hex_id, 2 * TOX_PUBLIC_KEY_SIZE);
 }
 
+void Cyanide::set_random_nospam()
+{
+    tox_self_set_nospam(tox, rand());
+    tox_self_get_address(tox, self_address);
+}
+
 QString Cyanide::get_self_address()
 {
     char hex_address[2 * TOX_ADDRESS_SIZE];
