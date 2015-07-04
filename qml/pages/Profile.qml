@@ -105,7 +105,6 @@ Page {
                 text: "A"
                 font.family: "Monospace"
             }
-
             Text {
                 id: id
                 x: (page.width - width) / 2
@@ -140,6 +139,16 @@ Page {
                 onClicked: {
                     clipboard.setClipboard(id.text)
                     text = qsTr("Copy my Tox ID") + " ☑"
+                }
+            }
+            Button {
+                id: nospamButton
+                x: (page.width - width) / 2
+                text: qsTr("Generate random NoSpam")
+                onClicked: {
+                    cyanide.set_random_nospam()
+                    id.text = cyanide.get_self_address()
+                    copyButton.text = qsTr("Copy my Tox ID") + " ☐"
                 }
             }
         }
