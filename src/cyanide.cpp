@@ -299,10 +299,12 @@ void Cyanide::visibility_changed(QWindow::Visibility visibility)
     for(std::pair<uint32_t, Friend>pair : friends) {
         Friend f = pair.second;
         if(f.notification != NULL) {
+            f.notification->remove();
             f.notification = NULL;
         }
     }
     for(MNotification *n : MNotification::notifications()) {
+        qDebug() << "removing stray notification" << n->body();
         n->remove();
     }
 }
@@ -326,13 +328,15 @@ void Cyanide::notify_message(int fid, QString summary, QString body)
     Friend *f = &friends[fid];
 
     if(f->notification != NULL) {
-        f->notification->remove();
+        f->notification->setSummary(summary);
+        f->notification->setBody(body);
+        f->notification->publish();
+    } else {
+        f->notification = new MNotification("harbour.cyanide.message", summary, body);
+        MRemoteAction action("harbour.cyanide", "/", "harbour.cyanide", "message_notification_activated", QVariantList() << fid);
+        f->notification->setAction(action);
+        f->notification->publish();
     }
-    f->notification = new MNotification("harbour.cyanide.message", summary, body);
-    MRemoteAction action("harbour.cyanide", "/", "harbour.cyanide", "message_notification_activated",
-            QVariantList() << fid);
-    f->notification->setAction(action);
-    f->notification->publish();
 }
 
 void Cyanide::notify_call(int fid, QString summary, QString body)
