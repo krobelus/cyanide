@@ -368,7 +368,8 @@ Dialog {
 
                 Label {
                     id: timestampLabel
-                    text: Misc.elapsedTime(m_timestamp)
+                    text: Misc.messageDate(m_timestamp)
+                    height: text == "" ? 0 : implicitHeight
                     x: message.x
                     y: message.y + message.height + Theme.paddingSmall
                     font.pixelSize: Theme.fontSizeExtraSmall
