@@ -1,0 +1,3 @@
+[submodule "qml/qqr"]
+	path = qml/qqr
+	url = https://github.com/M4rtinK/qqr.js

@@ -1,5 +1,6 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
+import "../qqr"
 
 Page {
     id: page
@@ -99,6 +100,12 @@ Page {
                 }
                 onCurrentIndexChanged:  cyanide.set_self_user_status(currentIndex)
             }
+            Label {
+                x: Theme.paddingLarge
+                text: "Tox ID"
+                font.pixelSize: Theme.fontSizeLarge
+                color: Theme.highlightColor
+            }
             Text {
                 id: dummy
                 visible: false
@@ -140,6 +147,12 @@ Page {
                     clipboard.setClipboard(id.text)
                     text = qsTr("Copy my Tox ID") + " ☑"
                 }
+            }
+            QRCode {
+                x: (page.width - width) / 2
+                width : 297
+                height : 297
+                value : "tox:"+id.text
             }
             Button {
                 id: nospamButton
