@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
 <TS version="2.1" language="da">
 <context>
@@ -38,76 +38,76 @@
 <context>
     <name>Cyanide</name>
     <message>
-        <location filename="../src/cyanide.cpp" line="896"/>
+        <location filename="../src/cyanide.cpp" line="930"/>
         <source>Error: Invalid Tox ID</source>
         <translation>Fejl: Ugyldig ToxID</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="924"/>
+        <location filename="../src/cyanide.cpp" line="958"/>
         <source>Error: Message is too long</source>
         <translation>Fejl: Meddelelse er for lang</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="928"/>
+        <location filename="../src/cyanide.cpp" line="962"/>
         <source>Error: Tox ID is self ID</source>
         <translation>Fejl: ToxID er dit eget ID</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="930"/>
+        <location filename="../src/cyanide.cpp" line="964"/>
         <source>Error: Tox ID is already in friend list</source>
         <translation>Fejl: ToxID er allerede på venneliste</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="932"/>
+        <location filename="../src/cyanide.cpp" line="966"/>
         <source>Error: Invalid Tox ID (bad checksum)</source>
         <translation>Fejl: Ugyldigt ToxID (ugyldig checksum)</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="934"/>
+        <location filename="../src/cyanide.cpp" line="968"/>
         <source>Error: Invalid Tox ID (bad nospam value)</source>
         <translation>Fejl: Ugyldig ToxID (ugyldig nospam værdi)</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="936"/>
+        <location filename="../src/cyanide.cpp" line="970"/>
         <source>Error: No memory</source>
         <translation>Fejl: Hukommelse opbrugt</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="999"/>
+        <location filename="../src/cyanide.cpp" line="1033"/>
         <location filename="../src/filetransfers.cpp" line="418"/>
         <location filename="../src/filetransfers.cpp" line="530"/>
         <source>Error: Friend not connected</source>
         <translation>Fejl: Ven ikke tilsluttet</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="1089"/>
+        <location filename="../src/cyanide.cpp" line="1123"/>
         <source>Error: File exists</source>
         <translation>Fejl: Filen eksisterer allerede</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="1274"/>
+        <location filename="../src/cyanide.cpp" line="1308"/>
         <source>File not found: </source>
         <translation>Filen er ikke fundet: </translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="1279"/>
+        <location filename="../src/cyanide.cpp" line="1313"/>
         <source>Avatar too large. Maximum size: 64KiB</source>
         <translation>Avatar er for stor. Maks. størrelse: 64kB</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.h" line="228"/>
+        <location filename="../src/cyanide.h" line="225"/>
         <source>Tox User</source>
         <extracomment>default username</extracomment>
         <translation>Toxbruger</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.h" line="230"/>
+        <location filename="../src/cyanide.h" line="227"/>
         <source>Toxing on Cyanide</source>
         <extracomment>default status</extracomment>
         <translation>Toxer med Cyanide</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.h" line="232"/>
+        <location filename="../src/cyanide.h" line="229"/>
         <source>Tox me maybe?</source>
         <extracomment>default friend request message - feel free to tranlate freely</extracomment>
         <translation>Tox mig?</translation>
@@ -176,7 +176,7 @@
     </message>
     <message>
         <location filename="../qml/pages/FileChooser.qml" line="73"/>
-        <location filename="../qml/pages/FileChooser.qml" line="126"/>
+        <location filename="../qml/pages/FileChooser.qml" line="127"/>
         <source>Failed to set avatar</source>
         <translation>Kunne ikke sætte avatar</translation>
     </message>
@@ -186,12 +186,12 @@
         <translation>Ny profil</translation>
     </message>
     <message>
-        <location filename="../qml/pages/FileChooser.qml" line="119"/>
+        <location filename="../qml/pages/FileChooser.qml" line="120"/>
         <source>Failed to send file</source>
         <translation>Kan ikke sende filen</translation>
     </message>
     <message>
-        <location filename="../qml/pages/FileChooser.qml" line="135"/>
+        <location filename="../qml/pages/FileChooser.qml" line="141"/>
         <source>Decryption failed</source>
         <translation>Dekryptering mislykkedes</translation>
     </message>
@@ -229,7 +229,7 @@
         <translation>Åbner fil...</translation>
     </message>
     <message>
-        <location filename="../qml/pages/Friend.qml" line="421"/>
+        <location filename="../qml/pages/Friend.qml" line="416"/>
         <source>Failed to send message</source>
         <translation>Kan ikke sende meddelelse</translation>
     </message>
@@ -318,50 +318,50 @@
 <context>
     <name>Profile</name>
     <message>
-        <location filename="../qml/pages/Profile.qml" line="24"/>
+        <location filename="../qml/pages/Profile.qml" line="28"/>
         <source>Delete profile</source>
         <translation>Slet profil</translation>
     </message>
     <message>
-        <location filename="../qml/pages/Profile.qml" line="26"/>
+        <location filename="../qml/pages/Profile.qml" line="30"/>
         <source>Deleting profile</source>
         <translation>Sletter profilen</translation>
     </message>
     <message>
-        <location filename="../qml/pages/Profile.qml" line="48"/>
+        <location filename="../qml/pages/Profile.qml" line="53"/>
         <source>Profile Name</source>
         <translation>Profilnavn</translation>
     </message>
     <message>
-        <location filename="../qml/pages/Profile.qml" line="63"/>
+        <location filename="../qml/pages/Profile.qml" line="68"/>
         <source>Name</source>
         <extracomment>username for this profile</extracomment>
         <translation>Navn</translation>
     </message>
     <message>
-        <location filename="../qml/pages/Profile.qml" line="75"/>
+        <location filename="../qml/pages/Profile.qml" line="80"/>
         <source>Status Message</source>
         <translation>Statusmeddelelse</translation>
     </message>
     <message>
-        <location filename="../qml/pages/Profile.qml" line="92"/>
+        <location filename="../qml/pages/Profile.qml" line="97"/>
         <source>Online</source>
         <extracomment>user status</extracomment>
         <translation>Online</translation>
     </message>
     <message>
-        <location filename="../qml/pages/Profile.qml" line="93"/>
+        <location filename="../qml/pages/Profile.qml" line="98"/>
         <source>Away</source>
         <translation>Væk</translation>
     </message>
     <message>
-        <location filename="../qml/pages/Profile.qml" line="94"/>
+        <location filename="../qml/pages/Profile.qml" line="99"/>
         <source>Busy</source>
         <translation>Optaget</translation>
     </message>
     <message>
-        <location filename="../qml/pages/Profile.qml" line="125"/>
-        <location filename="../qml/pages/Profile.qml" line="128"/>
+        <location filename="../qml/pages/Profile.qml" line="145"/>
+        <location filename="../qml/pages/Profile.qml" line="148"/>
         <source>Copy my Tox ID</source>
         <translation>Kopier mit ToxID</translation>
     </message>
@@ -412,12 +412,12 @@
 <context>
     <name>cyanide</name>
     <message>
-        <location filename="../qml/cyanide.qml" line="213"/>
+        <location filename="../qml/cyanide.qml" line="218"/>
         <source>Incoming file: </source>
         <translation>Indkommen fil: </translation>
     </message>
     <message>
-        <location filename="../qml/cyanide.qml" line="244"/>
+        <location filename="../qml/cyanide.qml" line="249"/>
         <source>Friend request received!</source>
         <translation>Venneanmodning modtaget!</translation>
     </message>

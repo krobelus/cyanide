@@ -38,76 +38,76 @@
 <context>
     <name>Cyanide</name>
     <message>
-        <location filename="../src/cyanide.cpp" line="896"/>
+        <location filename="../src/cyanide.cpp" line="930"/>
         <source>Error: Invalid Tox ID</source>
         <translation>Erreur : Tox ID invalide</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="924"/>
+        <location filename="../src/cyanide.cpp" line="958"/>
         <source>Error: Message is too long</source>
         <translation>Erreur : le message est trop long</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="928"/>
+        <location filename="../src/cyanide.cpp" line="962"/>
         <source>Error: Tox ID is self ID</source>
         <translation>Erreur : le Tox ID est votre propre ID</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="930"/>
+        <location filename="../src/cyanide.cpp" line="964"/>
         <source>Error: Tox ID is already in friend list</source>
         <translation>Erreur : le Tox ID est déjà sur la liste d&apos;amis</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="932"/>
+        <location filename="../src/cyanide.cpp" line="966"/>
         <source>Error: Invalid Tox ID (bad checksum)</source>
         <translation>Erreur : Tox ID invalide (somme de contrôle erronée)</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="934"/>
+        <location filename="../src/cyanide.cpp" line="968"/>
         <source>Error: Invalid Tox ID (bad nospam value)</source>
         <translation>Erreur : Tox ID invalide (mauvaise valeur nospam)</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="936"/>
+        <location filename="../src/cyanide.cpp" line="970"/>
         <source>Error: No memory</source>
         <translation>Erreur : pas de mémoire</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="999"/>
+        <location filename="../src/cyanide.cpp" line="1033"/>
         <location filename="../src/filetransfers.cpp" line="418"/>
         <location filename="../src/filetransfers.cpp" line="530"/>
         <source>Error: Friend not connected</source>
         <translation>Erreur : Ami non connecté</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="1089"/>
+        <location filename="../src/cyanide.cpp" line="1123"/>
         <source>Error: File exists</source>
         <translation>Erreur : Le fichier existe</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="1274"/>
+        <location filename="../src/cyanide.cpp" line="1308"/>
         <source>File not found: </source>
         <translation>Fichier non trouvé : </translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="1279"/>
+        <location filename="../src/cyanide.cpp" line="1313"/>
         <source>Avatar too large. Maximum size: 64KiB</source>
         <translation>Avatar trop grand. Taille maxi : 64 Ko</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.h" line="228"/>
+        <location filename="../src/cyanide.h" line="225"/>
         <source>Tox User</source>
         <extracomment>default username</extracomment>
         <translation>Utilisateur Tox</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.h" line="230"/>
+        <location filename="../src/cyanide.h" line="227"/>
         <source>Toxing on Cyanide</source>
         <extracomment>default status</extracomment>
         <translation>Toxant sur Cyanide</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.h" line="232"/>
+        <location filename="../src/cyanide.h" line="229"/>
         <source>Tox me maybe?</source>
         <extracomment>default friend request message - feel free to tranlate freely</extracomment>
         <translation>Tu me tox ?</translation>
@@ -176,7 +176,7 @@
     </message>
     <message>
         <location filename="../qml/pages/FileChooser.qml" line="73"/>
-        <location filename="../qml/pages/FileChooser.qml" line="126"/>
+        <location filename="../qml/pages/FileChooser.qml" line="127"/>
         <source>Failed to set avatar</source>
         <translation>Impossible de définir l&apos;avatar</translation>
     </message>
@@ -186,12 +186,12 @@
         <translation>Nouveau profil</translation>
     </message>
     <message>
-        <location filename="../qml/pages/FileChooser.qml" line="119"/>
+        <location filename="../qml/pages/FileChooser.qml" line="120"/>
         <source>Failed to send file</source>
         <translation>Echec d&apos;envoi de fichier</translation>
     </message>
     <message>
-        <location filename="../qml/pages/FileChooser.qml" line="135"/>
+        <location filename="../qml/pages/FileChooser.qml" line="141"/>
         <source>Decryption failed</source>
         <translation type="unfinished"></translation>
     </message>
@@ -229,7 +229,7 @@
         <translation>Ouverture de fichier ...</translation>
     </message>
     <message>
-        <location filename="../qml/pages/Friend.qml" line="421"/>
+        <location filename="../qml/pages/Friend.qml" line="416"/>
         <source>Failed to send message</source>
         <translation>Echec de l&apos;envoi de message</translation>
     </message>
@@ -318,50 +318,50 @@
 <context>
     <name>Profile</name>
     <message>
-        <location filename="../qml/pages/Profile.qml" line="24"/>
+        <location filename="../qml/pages/Profile.qml" line="28"/>
         <source>Delete profile</source>
         <translation>Supprimer le profil</translation>
     </message>
     <message>
-        <location filename="../qml/pages/Profile.qml" line="26"/>
+        <location filename="../qml/pages/Profile.qml" line="30"/>
         <source>Deleting profile</source>
         <translation>Suppression du profil</translation>
     </message>
     <message>
-        <location filename="../qml/pages/Profile.qml" line="48"/>
+        <location filename="../qml/pages/Profile.qml" line="53"/>
         <source>Profile Name</source>
         <translation>Nom du Profil</translation>
     </message>
     <message>
-        <location filename="../qml/pages/Profile.qml" line="63"/>
+        <location filename="../qml/pages/Profile.qml" line="68"/>
         <source>Name</source>
         <extracomment>username for this profile</extracomment>
         <translation>Nom</translation>
     </message>
     <message>
-        <location filename="../qml/pages/Profile.qml" line="75"/>
+        <location filename="../qml/pages/Profile.qml" line="80"/>
         <source>Status Message</source>
         <translation>Statut</translation>
     </message>
     <message>
-        <location filename="../qml/pages/Profile.qml" line="92"/>
+        <location filename="../qml/pages/Profile.qml" line="97"/>
         <source>Online</source>
         <extracomment>user status</extracomment>
         <translation>En ligne</translation>
     </message>
     <message>
-        <location filename="../qml/pages/Profile.qml" line="93"/>
+        <location filename="../qml/pages/Profile.qml" line="98"/>
         <source>Away</source>
         <translation>Absent</translation>
     </message>
     <message>
-        <location filename="../qml/pages/Profile.qml" line="94"/>
+        <location filename="../qml/pages/Profile.qml" line="99"/>
         <source>Busy</source>
         <translation>Occupé</translation>
     </message>
     <message>
-        <location filename="../qml/pages/Profile.qml" line="125"/>
-        <location filename="../qml/pages/Profile.qml" line="128"/>
+        <location filename="../qml/pages/Profile.qml" line="145"/>
+        <location filename="../qml/pages/Profile.qml" line="148"/>
         <source>Copy my Tox ID</source>
         <translation>Copier mon Tox ID</translation>
     </message>
@@ -412,12 +412,12 @@
 <context>
     <name>cyanide</name>
     <message>
-        <location filename="../qml/cyanide.qml" line="213"/>
+        <location filename="../qml/cyanide.qml" line="218"/>
         <source>Incoming file: </source>
         <translation>Fichier entrant : </translation>
     </message>
     <message>
-        <location filename="../qml/cyanide.qml" line="244"/>
+        <location filename="../qml/cyanide.qml" line="249"/>
         <source>Friend request received!</source>
         <translation>Demande d&apos;un ami reçue !</translation>
     </message>

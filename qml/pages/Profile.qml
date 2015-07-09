@@ -154,6 +154,7 @@ Page {
                 height : 296
                 value : "tox:"+id.text
             }
+            /*
             Button {
                 id: nospamButton
                 x: (page.width - width) / 2
@@ -164,6 +165,7 @@ Page {
                     copyButton.text = qsTr("Copy my Tox ID") + " ☐"
                 }
             }
+            */
         }
         IconButton {
             id: avatar

@@ -11,6 +11,11 @@
 # * Sun Apr 13 2014 Jack Tar <jack.tar@example.com> 0.0.1-1
 # - Scrubbed the deck
 # - Hoisted the sails
+* Thu Jul 09 2015 Johannes Altmanninger <aclopte@gmail.com> 0.2.5-1
+- notification fix
+- QR code for the Tox ID
+- better timestamps
+
 * Sat Jun 13 2015 Johannes Altmanninger <aclopte@gmail.com> 0.2.4-1
 - added support for encrypted saves
 
