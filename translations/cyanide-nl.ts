@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <!DOCTYPE TS>
 <TS version="2.1" language="nl">
 <context>
@@ -154,7 +154,7 @@
     <message>
         <location filename="../qml/pages/EnterPassword.qml" line="24"/>
         <source>Enter password</source>
-        <translation type="unfinished"></translation>
+        <translation>Voer wachtwoord in</translation>
     </message>
 </context>
 <context>
@@ -193,7 +193,7 @@
     <message>
         <location filename="../qml/pages/FileChooser.qml" line="135"/>
         <source>Decryption failed</source>
-        <translation type="unfinished"></translation>
+        <translation>Ontsleuteling mislukt</translation>
     </message>
 </context>
 <context>
