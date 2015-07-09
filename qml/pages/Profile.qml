@@ -150,8 +150,8 @@ Page {
             }
             QRCode {
                 x: (page.width - width) / 2
-                width : 297
-                height : 297
+                width : 296
+                height : 296
                 value : "tox:"+id.text
             }
             Button {
