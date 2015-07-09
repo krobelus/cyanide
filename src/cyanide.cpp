@@ -297,10 +297,10 @@ void Cyanide::visibility_changed(QWindow::Visibility visibility)
      * (because the error messages are shown too)
      */
     for(std::pair<uint32_t, Friend>pair : friends) {
-        Friend f = pair.second;
-        if(f.notification != NULL) {
-            f.notification->remove();
-            f.notification = NULL;
+        Friend *f = &friends[pair.first];
+        if(f->notification != NULL) {
+            f->notification->remove();
+            f->notification = NULL;
         }
     }
     for(MNotification *n : MNotification::notifications()) {
@@ -330,11 +330,13 @@ void Cyanide::notify_message(int fid, QString summary, QString body)
     if(f->notification != NULL) {
         f->notification->setSummary(summary);
         f->notification->setBody(body);
+        f->notification->setCount(f->notification->count()+1);
         f->notification->publish();
     } else {
         f->notification = new MNotification("harbour.cyanide.message", summary, body);
         MRemoteAction action("harbour.cyanide", "/", "harbour.cyanide", "message_notification_activated", QVariantList() << fid);
         f->notification->setAction(action);
+        f->notification->setCount(1);
         f->notification->publish();
     }
 }
@@ -395,11 +397,10 @@ void Cyanide::load_tox_and_stuff_pretty_please()
     self.connection_status = TOX_CONNECTION_NONE;
     memset(&self.avatar_transfer, 0, sizeof(File_Transfer));
 
-    //TODO use this destructor thingy
     for(std::pair<uint32_t, Friend>pair : friends) {
-        Friend f = pair.second;
-        free(f.avatar_transfer.filename);
-        free_friend_messages(&f);
+        Friend *f = &friends[pair.first];
+        free(f->avatar_transfer.filename);
+        free_friend_messages(f);
     }
     friends.clear();
 
