@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <!DOCTYPE TS>
 <TS version="2.1" language="da">
 <context>
@@ -126,7 +126,7 @@
     <message>
         <location filename="../src/filetransfers.cpp" line="426"/>
         <source>Error: Already paused</source>
-        <translation>Fejl: Allerede pauset</translation>
+        <translation>Fejl: Allerede på pause</translation>
     </message>
     <message>
         <location filename="../src/filetransfers.cpp" line="428"/>
@@ -162,7 +162,7 @@
     <message>
         <location filename="../qml/pages/FileChooser.qml" line="41"/>
         <source>Cancel</source>
-        <translation>Afbryd</translation>
+        <translation>Annuller</translation>
     </message>
     <message>
         <location filename="../qml/pages/FileChooser.qml" line="56"/>
@@ -347,7 +347,7 @@
         <location filename="../qml/pages/Profile.qml" line="97"/>
         <source>Online</source>
         <extracomment>user status</extracomment>
-        <translation>Online</translation>
+        <translation>Til stede</translation>
     </message>
     <message>
         <location filename="../qml/pages/Profile.qml" line="98"/>
@@ -391,7 +391,7 @@
     <message>
         <location filename="../src/settings.cpp" line="29"/>
         <source>I receive a friend request</source>
-        <translation>Venneanmodning</translation>
+        <translation>Venneanmodning modtaget</translation>
     </message>
     <message>
         <location filename="../src/settings.cpp" line="20"/>
