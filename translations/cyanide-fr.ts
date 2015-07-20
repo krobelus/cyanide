@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <!DOCTYPE TS>
 <TS version="2.1" language="fr">
 <context>
@@ -32,7 +32,7 @@
     <message>
         <location filename="../qml/pages/AddFriend.qml" line="55"/>
         <source>Failed to send friend request</source>
-        <translation>L&apos;envoi d&apos;une requête à échoué</translation>
+        <translation>L'envoi d'une requête à échoué</translation>
     </message>
 </context>
 <context>
@@ -55,7 +55,7 @@
     <message>
         <location filename="../src/cyanide.cpp" line="964"/>
         <source>Error: Tox ID is already in friend list</source>
-        <translation>Erreur : le Tox ID est déjà sur la liste d&apos;amis</translation>
+        <translation>Erreur : le Tox ID est déjà sur la liste d'amis</translation>
     </message>
     <message>
         <location filename="../src/cyanide.cpp" line="966"/>
@@ -131,12 +131,12 @@
     <message>
         <location filename="../src/filetransfers.cpp" line="428"/>
         <source>Error: Packet queue is full</source>
-        <translation>Erreur : file d&apos;attente de paquets pleine</translation>
+        <translation>Erreur : file d'attente de paquets pleine</translation>
     </message>
     <message>
         <location filename="../src/filetransfers.cpp" line="507"/>
         <source>Error: Failed to open file: </source>
-        <translation>Erreur : Impossible d&apos;ouvrir le fichier </translation>
+        <translation>Erreur : Impossible d'ouvrir le fichier </translation>
     </message>
     <message>
         <location filename="../src/filetransfers.cpp" line="532"/>
@@ -154,7 +154,7 @@
     <message>
         <location filename="../qml/pages/EnterPassword.qml" line="24"/>
         <source>Enter password</source>
-        <translation type="unfinished"></translation>
+        <translation>Saisir le mot de passe</translation>
     </message>
 </context>
 <context>
@@ -167,7 +167,7 @@
     <message>
         <location filename="../qml/pages/FileChooser.qml" line="56"/>
         <source>Filter by filename extension</source>
-        <translation>Filtrer par l&apos;extension du nom</translation>
+        <translation>Filtrer par l'extension du nom</translation>
     </message>
     <message>
         <location filename="../qml/pages/FileChooser.qml" line="66"/>
@@ -178,7 +178,7 @@
         <location filename="../qml/pages/FileChooser.qml" line="73"/>
         <location filename="../qml/pages/FileChooser.qml" line="127"/>
         <source>Failed to set avatar</source>
-        <translation>Impossible de définir l&apos;avatar</translation>
+        <translation>Impossible de définir l'avatar</translation>
     </message>
     <message>
         <location filename="../qml/pages/FileChooser.qml" line="78"/>
@@ -188,12 +188,12 @@
     <message>
         <location filename="../qml/pages/FileChooser.qml" line="120"/>
         <source>Failed to send file</source>
-        <translation>Echec d&apos;envoi de fichier</translation>
+        <translation>Echec d'envoi de fichier</translation>
     </message>
     <message>
         <location filename="../qml/pages/FileChooser.qml" line="141"/>
         <source>Decryption failed</source>
-        <translation type="unfinished"></translation>
+        <translation>Déchiffrement échoué</translation>
     </message>
 </context>
 <context>
@@ -221,7 +221,7 @@
     <message>
         <location filename="../qml/pages/Friend.qml" line="343"/>
         <source>Opening URL...</source>
-        <translation>Ouverture de l&apos;URL ...</translation>
+        <translation>Ouverture de l'URL ...</translation>
     </message>
     <message>
         <location filename="../qml/pages/Friend.qml" line="354"/>
@@ -231,7 +231,7 @@
     <message>
         <location filename="../qml/pages/Friend.qml" line="416"/>
         <source>Failed to send message</source>
-        <translation>Echec de l&apos;envoi de message</translation>
+        <translation>Echec de l'envoi de message</translation>
     </message>
 </context>
 <context>
@@ -261,27 +261,27 @@
     <message>
         <location filename="../qml/pages/FriendAction.qml" line="99"/>
         <source>Deleting chat history</source>
-        <translation>Supprimer l&apos;historique des discussions</translation>
+        <translation>Supprimer l'historique des discussions</translation>
     </message>
     <message>
         <location filename="../qml/pages/FriendAction.qml" line="110"/>
         <source>Unblock friend</source>
-        <translation>Débloquer l&apos;ami</translation>
+        <translation>Débloquer l'ami</translation>
     </message>
     <message>
         <location filename="../qml/pages/FriendAction.qml" line="110"/>
         <source>Block friend</source>
-        <translation>Bloquer l&apos;ami</translation>
+        <translation>Bloquer l'ami</translation>
     </message>
     <message>
         <location filename="../qml/pages/FriendAction.qml" line="116"/>
         <source>Remove friend</source>
-        <translation>Supprimer l&apos;ami</translation>
+        <translation>Supprimer l'ami</translation>
     </message>
     <message>
         <location filename="../qml/pages/FriendAction.qml" line="118"/>
         <source>Removing friend</source>
-        <translation>Supprime l&apos;ami</translation>
+        <translation>Supprime l'ami</translation>
     </message>
 </context>
 <context>
@@ -386,7 +386,7 @@
     <message>
         <location filename="../src/settings.cpp" line="22"/>
         <source>Keep chat history</source>
-        <translation>Conserver l&apos;historique des conversations</translation>
+        <translation>Conserver l'historique des conversations</translation>
     </message>
     <message>
         <location filename="../src/settings.cpp" line="24"/>
@@ -406,7 +406,7 @@
     <message>
         <location filename="../src/settings.cpp" line="29"/>
         <source>I receive a friend request</source>
-        <translation>Je reçois une demande d&apos;un ami</translation>
+        <translation>Je reçois une demande d'un ami</translation>
     </message>
 </context>
 <context>
@@ -419,7 +419,7 @@
     <message>
         <location filename="../qml/cyanide.qml" line="249"/>
         <source>Friend request received!</source>
-        <translation>Demande d&apos;un ami reçue !</translation>
+        <translation>Demande d'un ami reçue !</translation>
     </message>
 </context>
 </TS>
