@@ -201,7 +201,7 @@
     <message>
         <location filename="../qml/pages/Friend.qml" line="76"/>
         <source>Failed to pause transfer</source>
-        <translation>Impossible de mettre en pause le transfert</translation>
+        <translation>Impossible d'interrompre le transfert</translation>
     </message>
     <message>
         <location filename="../qml/pages/Friend.qml" line="83"/>
@@ -261,7 +261,7 @@
     <message>
         <location filename="../qml/pages/FriendAction.qml" line="99"/>
         <source>Deleting chat history</source>
-        <translation>Supprimer l'historique des discussions</translation>
+        <translation>Suppression de l'historique des discussions</translation>
     </message>
     <message>
         <location filename="../qml/pages/FriendAction.qml" line="110"/>
