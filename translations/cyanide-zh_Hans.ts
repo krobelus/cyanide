@@ -239,7 +239,7 @@
     <message>
         <location filename="../qml/pages/FriendAction.qml" line="73"/>
         <source>Copy Tox ID to clipboard</source>
-        <translation>已复制 Tox ID 到剪切板</translation>
+        <translation>复制 Tox ID 到剪切板</translation>
     </message>
     <message>
         <location filename="../qml/pages/FriendAction.qml" line="83"/>
@@ -307,7 +307,7 @@
     <message>
         <location filename="../qml/pages/LoadChatHistory.qml" line="39"/>
         <source>From</source>
-        <translation>来自</translation>
+        <translation type="unfinished">来自</translation>
     </message>
     <message>
         <location filename="../qml/pages/LoadChatHistory.qml" line="56"/>
@@ -376,12 +376,12 @@
     <message>
         <location filename="../src/settings.cpp" line="18"/>
         <source>Wifi only</source>
-        <translation>仅在使用 Wifi 时</translation>
+        <translation type="unfinished">仅限 Wifi</translation>
     </message>
     <message>
         <location filename="../src/settings.cpp" line="20"/>
         <source>Send typing notifications?</source>
-        <translation>发送"正在输入"通知吗？</translation>
+        <translation>发送"正在输入"的提示？</translation>
     </message>
     <message>
         <location filename="../src/settings.cpp" line="22"/>
