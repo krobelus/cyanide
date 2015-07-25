@@ -70,7 +70,7 @@
     <message>
         <location filename="../src/cyanide.cpp" line="970"/>
         <source>Error: No memory</source>
-        <translation type="unfinished">错误: 没有内存</translation>
+        <translation>错误: 内存不足</translation>
     </message>
     <message>
         <location filename="../src/cyanide.cpp" line="1033"/>
@@ -121,7 +121,7 @@
     <message>
         <location filename="../src/filetransfers.cpp" line="420"/>
         <source>Error: File transfer not found</source>
-        <translation type="unfinished">错误: 文件传输未找到</translation>
+        <translation>错误: 文件未找到</translation>
     </message>
     <message>
         <location filename="../src/filetransfers.cpp" line="426"/>
@@ -396,17 +396,17 @@
     <message>
         <location filename="../src/settings.cpp" line="26"/>
         <source>Notify me when...</source>
-        <translation type="unfinished">当... 时提醒我</translation>
+        <translation>提醒我发生了...</translation>
     </message>
     <message>
         <location filename="../src/settings.cpp" line="27"/>
         <source>I receive a message</source>
-        <translation type="unfinished">我收到一个消息</translation>
+        <translation>收到了一个消息</translation>
     </message>
     <message>
         <location filename="../src/settings.cpp" line="29"/>
         <source>I receive a friend request</source>
-        <translation type="unfinished">我收到一个好友请求</translation>
+        <translation>收到了一个好友请求</translation>
     </message>
 </context>
 <context>
@@ -414,12 +414,12 @@
     <message>
         <location filename="../qml/cyanide.qml" line="218"/>
         <source>Incoming file: </source>
-        <translation type="unfinished">传入的文件: </translation>
+        <translation>传入文件: </translation>
     </message>
     <message>
         <location filename="../qml/cyanide.qml" line="249"/>
         <source>Friend request received!</source>
-        <translation type="unfinished">收到好友请求！</translation>
+        <translation>收到好友请求！</translation>
     </message>
 </context>
 </TS>
