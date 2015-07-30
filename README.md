@@ -1,4 +1,4 @@
-Cyanide is a client for [Tox](https://tox.im).
+Cyanide is a client for [Tox](https://tox.chat).
 Some features are missing and there may be some bugs.
 
 Features

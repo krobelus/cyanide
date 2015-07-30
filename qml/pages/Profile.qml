@@ -15,8 +15,15 @@ Page {
 
     RemorsePopup { id: remorsePopup }
 
+    property bool appActive: Qt.application.active
+
+    onAppActiveChanged: {
+        if(appActive)
+            qrcode.requestPaint()
+    }
+
     SilicaFlickable {
-        contentHeight: column.height + Theme.paddingLarge
+        contentHeight: column.height + 3 * Theme.paddingLarge
         anchors {
             fill: parent
         }
@@ -149,6 +156,7 @@ Page {
                 }
             }
             QRCode {
+                id: qrcode
                 x: (page.width - width) / 2
                 width : 296
                 height : 296
