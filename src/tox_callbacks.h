@@ -101,20 +101,14 @@ void callback_file_chunk_request(Tox *tox, uint32_t friend_number, uint32_t file
                                  uint64_t position, size_t length, void *that);
 
 
-void callback_av_invite(ToxAv *arg, int32_t call_index, void *that);
-void callback_av_start(ToxAv *arg, int32_t call_index, void *that);
-void callback_av_cancel(ToxAv *arg, int32_t call_index, void *that);
-void callback_av_reject(ToxAv *arg, int32_t call_index, void *that);
-void callback_av_end(ToxAv *arg, int32_t call_index, void *that);
+void callback_call(ToxAV *av, uint32_t fid, bool audio_enabled, bool video_enabled, void *that);
+void callback_call_state(ToxAV *av, uint32_t fid, uint32_t state, void *that);
 
-void callback_av_ringing(ToxAv *arg, int32_t call_index, void *that);
+void callback_video_bit_rate_status(ToxAV *av, uint32_t fid, bool stable, uint32_t bit_rate, void *that);
+void callback_audio_bit_rate_status(ToxAV *av, uint32_t fid, bool stable, uint32_t bit_rate, void *that);
 
-void callback_av_requesttimeout(ToxAv *arg, int32_t call_index, void *that);
-void callback_av_peertimeout(ToxAv *arg, int32_t call_index, void *that);
-void callback_av_selfmediachange(ToxAv *arg, int32_t call_index, void *that);
-void callback_av_peermediachange(ToxAv *arg, int32_t call_index, void *that);
-
-void callback_av_audio(ToxAv *av, int32_t call_index, const int16_t *data, uint16_t samples, void *that);
-void callback_av_video(ToxAv *av, int32_t call_index, const vpx_image_t *img, void *that);
+void callback_audio_receive_frame(ToxAV *av, uint32_t fid, const int16_t *pcm, size_t sample_count, uint8_t channels, uint32_t sampling_rate, void *that);
+void callback_video_receive_frame(ToxAV *av, uint32_t fid, uint16_t width, uint16_t height,
+                                  const uint8_t *y, const uint8_t *u, const uint8_t *v, int32_t ystride, int32_t ustride, int32_t vstride, void *that);
 
 #endif // TOX_CALLBACKS_H

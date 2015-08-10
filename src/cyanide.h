@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QtQuick>
+#include <thread>
 #include <tox/tox.h>
 #include <tox/toxencryptsave.h>
 #include <tox/toxav.h>
@@ -51,9 +52,10 @@ private:
 
 public:
     Tox *tox;
-    ToxAv *toxav;
+    ToxAV *toxav;
     Settings settings;
     History history;
+    QQuickView *view;
 
     QString profile_name, next_profile_name;
     uint8_t *tox_save_data;
@@ -61,22 +63,30 @@ public:
     bool have_password, next_have_password;
     TOX_PASS_KEY tox_pass_key;
 
-    /* get the tox save file based on profile_name */
-    QString tox_save_file();
-    QString tox_save_file(QString &name);
-
-    QQuickView *view;
+    bool save_needed;
+    enum LOOP_STATE loop;
     int events;
 
     Friend self;
     static const int SELF_FRIEND_NUMBER = -1;
-
     std::map<uint32_t, Friend> friends;
 
-    bool save_needed;
-    enum LOOP_STATE loop;
+    bool in_call;
+    int call_friend_number;
+    int call_state;
+    int audio_bit_rate, video_bit_rate;
+    Q_PROPERTY(bool in_call MEMBER in_call NOTIFY in_call_changed)
+    Q_PROPERTY(int call_friend_number MEMBER call_friend_number NOTIFY call_friend_number_changed)
+    Q_PROPERTY(int call_state MEMBER call_state NOTIFY call_state_changed)
+    Q_PROPERTY(int audio_bit_rate MEMBER audio_bit_rate NOTIFY audio_bit_rate_changed)
+    Q_PROPERTY(int video_bit_rate MEMBER video_bit_rate NOTIFY video_bit_rate_changed)
+    std::thread *my_audio_thread;
 
     Cyanide(QObject *parent = 0);
+
+    /* get the path of the tox save file based on profile_name */
+    QString tox_save_file();
+    QString tox_save_file(QString &name);
 
     uint32_t add_friend(Friend *f);
     uint32_t next_friend_number();
@@ -143,11 +153,16 @@ public:
     Q_INVOKABLE QString pause_transfer(int mid, int fid);
     Q_INVOKABLE QString cancel_transfer(int mid, int fid);
 
-    Q_INVOKABLE void av_invite_accept(int fid);
-    Q_INVOKABLE void av_invite_reject(int fid);
-    Q_INVOKABLE void av_hangup(int fid);
-    Q_INVOKABLE void av_call(int fid);
-    Q_INVOKABLE void av_call_cancel(int fid);
+    Q_INVOKABLE bool call(int fid, bool video);
+    Q_INVOKABLE bool answer();
+    Q_INVOKABLE bool hang_up();
+    bool call_control(int fid, int control);
+    void _callback_call_state(int fid, int state);
+    void set_in_call(bool in_call);
+    void set_call_friend_number(int call_friend_number);
+    void set_call_state(int call_state);
+    void set_audio_bit_rate(int audio_bit_rate);
+    void set_video_bit_rate(int video_bit_rate);
 
     void free_friend_messages(Friend *f);
     Q_INVOKABLE void load_history(int fid, QDateTime from, QDateTime to);
@@ -181,7 +196,6 @@ public:
     Q_INVOKABLE bool get_friend_connection_status(int fid);
     Q_INVOKABLE bool get_friend_accepted(int fid);
     Q_INVOKABLE bool get_friend_blocked(int fid);
-    Q_INVOKABLE int get_friend_callstate(int fid);
 
     Q_INVOKABLE int get_message_type(int fid, int mid);
     Q_INVOKABLE bool get_message_author(int fid, int mid);
@@ -214,8 +228,13 @@ signals:
     void signal_file_status(int fid, int mid, int status);
     void signal_file_progress(int fid, int mid, int progress);
 
-    void signal_friend_callstate(int fid, int callstate);
-    void signal_av_invite(int fid);
+    void signal_call(int fid);
+
+    void in_call_changed();
+    void call_friend_number_changed();
+    void call_state_changed();
+    void audio_bit_rate_changed();
+    void video_bit_rate_changed();
 
 public slots:
     void wifi_changed(QString &str, QDBusVariant &variant);
