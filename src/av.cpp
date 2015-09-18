@@ -197,7 +197,60 @@ void callback_video_bit_rate_status(ToxAV *av, uint32_t fid, bool stable, uint32
 
 void callback_audio_receive_frame(ToxAV *av, uint32_t fid, const int16_t *pcm, size_t sample_count, uint8_t channels, uint32_t sampling_rate, void *that)
 {
-    qDebug();
+    //Cyanide *cyanide = (Cyanide*)that;
+    static bool init = false;
+
+    static ALCdevice *output_device;
+    static ALCcontext *context;
+    static ALuint source, buffer;
+    static ALint state;
+
+    if(init)
+        goto play;
+
+    init = true;
+    output_device = alcOpenDevice(NULL);
+    context = alcCreateContext(output_device, NULL);
+    alcMakeContextCurrent(context);
+
+    alGenSources(1, &source);
+    alGenBuffers(1, &buffer);
+
+play:
+    ALCenum error;
+#define alck(i) do { \
+    error = alGetError(); \
+    if(error != AL_NO_ERROR) \
+        qDebug() << i << error; \
+    } while(0)
+
+    ALint processed = 0, queued = 16;
+    alGetSourcei(source, AL_BUFFERS_PROCESSED, &processed);
+    alck(1);
+    alGetSourcei(source, AL_BUFFERS_QUEUED, &queued);
+    alck(2);
+    alSourcei(source, AL_LOOPING, AL_FALSE);
+    alck(3);
+
+    qDebug() << "processed:" << processed << "queued" << queued;
+    if(processed) {
+        ALuint buffers[processed];
+        alSourceUnqueueBuffers(source, processed, buffers);
+        alDeleteBuffers(processed - 1, buffers + 1);
+        buffer = buffers[0];
+    } else if(queued < 16) {
+        qDebug() << "dropped audio frame";
+    }
+    alBufferData(buffer, AL_FORMAT_MONO16, pcm, sample_count * 2, sampling_rate);
+    alck(4);
+    alSourceQueueBuffers(source, 1, &buffer);
+    alck(5);
+
+    alGetSourcei(source, AL_SOURCE_STATE, &state);
+    if(state != AL_PLAYING) {
+        qDebug() << "starting source";
+        alSourcePlay(source);
+    }
 }
 
 void callback_video_receive_frame(ToxAV *av, uint32_t fid, uint16_t width, uint16_t height,
@@ -228,6 +281,7 @@ void Cyanide::audio_thread()
             if(error != TOXAV_ERR_SEND_FRAME_OK)
                 qDebug() << "send frame error:" << error;
         }
+        callback_audio_receive_frame(NULL, call_friend_number, buffer, samples_per_frame, 1, AUDIO_SAMPLE_RATE, this);
         if(samples < samples_per_frame * 2)
             usleep(AUDIO_FRAME_DURATION * 1000);
     }

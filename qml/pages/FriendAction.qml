@@ -54,7 +54,7 @@ Page {
             }
             IconButton {
                 icon.source: "qrc:/images/phone_4x"
-                enabled: !cyanide.in_call
+                enabled: !cyanide.in_call && cyanide.get_friend_connection_status(f)
                 onClicked: {
                     cyanide.call(f, false)
                     pageStack.pop()
