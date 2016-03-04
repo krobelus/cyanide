@@ -23,6 +23,14 @@ CoverBackground {
             statusIcon.source = cyanide.get_friend_status_icon(self_friend_number)
         }
     }
+    */
+    Connections {
+        target: cyanide
+
+        onSignal_friend_connection_status: {
+            statusIcon.source = cyanide.get_friend_status_icon(self_friend_number)
+        }
+    }
 
     Image {
         id: statusIcon
@@ -34,11 +42,10 @@ CoverBackground {
             left: tox.left
             right: tox.right
             top: tox.top
-            topMargin: 30
+            topMargin: 36
             bottom: tox.bottom
         }
     }
-    */
     Image {
         id: tox
         source: "qrc:/images/cover"
