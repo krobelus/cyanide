@@ -1,7 +1,7 @@
 #ifndef MESSAGE_H
 #define MESSAGE_H
 
-#include "tox/tox.h"
+#include <tox/tox.h>
 #include <QtCore>
 
 class Message_Type : public QObject
