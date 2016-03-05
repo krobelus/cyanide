@@ -1,6 +1,7 @@
 #include <AL/al.h>
 #include <AL/alc.h>
 #include <thread>
+#include <unistd.h>
 
 #include "cyanide.h"
 

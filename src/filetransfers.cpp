@@ -1,3 +1,5 @@
+#include <unistd.h>
+
 #include "cyanide.h"
 
 #include "settings.h"

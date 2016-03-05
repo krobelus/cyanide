@@ -3,6 +3,7 @@
 #include <sys/stat.h>
 #include <thread>
 #include <time.h>
+#include <unistd.h>
 
 #include <sailfishapp.h>
 #include <mlite5/mnotification.h>
@@ -903,8 +904,8 @@ void Cyanide::set_av_callbacks()
 {
     toxav_callback_call(toxav, callback_call, this);
     toxav_callback_call_state(toxav, callback_call_state, this);
-    toxav_callback_audio_bit_rate_status(toxav, callback_audio_bit_rate_status, this);
-    toxav_callback_video_bit_rate_status(toxav, callback_video_bit_rate_status, this);
+    //toxav_callback_audio_bit_rate_status(toxav, callback_audio_bit_rate_status, this);
+    //toxav_callback_video_bit_rate_status(toxav, callback_video_bit_rate_status, this);
     toxav_callback_audio_receive_frame(toxav, callback_audio_receive_frame, this);
     toxav_callback_video_receive_frame(toxav, callback_video_receive_frame, this);
 }
