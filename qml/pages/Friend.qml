@@ -31,14 +31,13 @@ Dialog {
     }
 
     property int f: activeFriend()
-    property int callstate: 0
     property string friend_name: ""
     property string friend_status_icon: ""
     property bool online: false
+    property bool calling: cyanide.in_call && cyanide.call_friend_number == f
 
     function setProperties() {
         var entry = friendList.get(listFid(f))
-        callstate = entry.friend_callstate
         friend_name = entry.friend_name
         friend_status_icon = entry.friend_status_icon
         online = entry.friend_connection_status
@@ -48,6 +47,8 @@ Dialog {
         target: cyanide
         onSignal_friend_connection_status: setProperties()
         onSignal_friend_status: setProperties()
+        onCall_state_changed: {
+        }
     }
 
     DockedPanel {
@@ -152,41 +153,38 @@ Dialog {
 
         PullDownMenu {
             id: pullDownMenu
-            visible: callstate == -2
+            visible: calling
 
             MenuItem {
-                id: accept
-                //: av call
-                // text: qsTr("Answer")
+                id: callAnswer
+                visible: cyanide.call_state == (Call_State.Ringing | Call_State.Incoming)
+                //: answer the call
+                text: qsTr("Answer")
                 onClicked: {
-                    cyanide.av_invite_accept(f)
+                    cyanide.answer()
                 }
             }
-        }
-
-        PushUpMenu {
-            id: pushUpMenu
-            visible: callstate != 0
-
             MenuItem {
-                id: reject
-                //: av call
-                // text: qsTr("Ignore")
-                visible: callstate == -2
-                onClicked: cyanide.av_invite_reject(f)
+                id: callPause
+                //visible: cyanide.call_state & Call_State.Active
+                visible: false
+                //: pause the
             }
+            /*
             MenuItem {
-                id: cancelCall
-                //: outgoing call
-                // text: qsTr("Cancel")
-                visible: callstate == -1
-                onClicked: cyanide.av_call_cancel(f)
+                id: callReject
+                visible: callAnswer.visible
+                //: reject the call
+                text: qsTr("Reject")
+                onClicked: cyanide.hang_up()
             }
+            */
             MenuItem {
-                id: hangup
-                // text: qsTr("Hang up")
-                visible: callstate > 0
-                onClicked: cyanide.av_hangup(f)
+                id: callHangUp
+                visible: true
+                //: hang up
+                text: qsTr("Hang Up")
+                onClicked: cyanide.hang_up()
             }
         }
 

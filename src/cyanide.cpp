@@ -3,6 +3,7 @@
 #include <sys/stat.h>
 #include <thread>
 #include <time.h>
+#include <unistd.h>
 
 #include <sailfishapp.h>
 #include <mlite5/mnotification.h>
@@ -51,6 +52,8 @@ int main(int argc, char *argv[])
 
     qmlRegisterType<Message_Type>("harbour.cyanide", 1, 0, "Message_Type");
     qmlRegisterType<File_State>("harbour.cyanide", 1, 0, "File_State");
+    qmlRegisterType<Call_Control>("harbour.cyanide", 1, 0, "Call_Control");
+    qmlRegisterType<Call_State>("harbour.cyanide", 1, 0, "Call_State");
     cyanide->view->rootContext()->setContextProperty("cyanide", cyanide);
     cyanide->view->rootContext()->setContextProperty("settings", &cyanide->settings);
     cyanide->view->setSource(SailfishApp::pathTo("qml/cyanide.qml"));
@@ -60,6 +63,9 @@ int main(int argc, char *argv[])
                      cyanide, SLOT(visibility_changed(QWindow::Visibility)));
 
     int result = app->exec();
+
+    if(cyanide->in_call)
+        cyanide->hang_up();
 
     uint64_t event = LOOP_FINISH;
     write(cyanide->events, &event, sizeof(event));
@@ -78,6 +84,8 @@ Cyanide::Cyanide(QObject *parent) : QObject(parent)
     events = eventfd(0, 0);
     have_password = false;
     tox_save_data = NULL;
+    in_call = false;
+    call_state = 0;
 }
 
 QString Cyanide::tox_save_file()
@@ -503,7 +511,21 @@ void Cyanide::tox_thread()
     check_wifi();
 
     // Start the tox av session.
-    toxav = toxav_new(tox, MAX_CALLS);
+    TOXAV_ERR_NEW error;
+    toxav = toxav_new(tox, &error);
+    switch(error) {
+        case TOXAV_ERR_NEW_OK:
+            break;
+        case TOXAV_ERR_NEW_NULL:
+            Q_ASSERT(false);
+            break;
+        case TOXAV_ERR_NEW_MALLOC:
+            qWarning() << "Failed to allocate memory for toxav";
+            break;
+        case TOXAV_ERR_NEW_MULTIPLE:
+            qWarning() << "Attempted to create second toxav session";
+            break;
+    }
 
     // Give toxcore the av functions to call
     set_av_callbacks();
@@ -514,7 +536,6 @@ void Cyanide::tox_thread()
 void Cyanide::tox_loop()
 {
     std::thread toxav_thread([this] () {this->toxav_thread();});
-    std::thread audio_thread([this] () {this->audio_thread();});
 
     uint64_t last_save = get_time(), time;
     TOX_CONNECTION c, connection = c = TOX_CONNECTION_NONE;
@@ -551,7 +572,6 @@ void Cyanide::tox_loop()
 
     if(loop != LOOP_SUSPEND) {
         toxav_thread.join();
-        audio_thread.join();
     }
 
     uint64_t event;
@@ -603,8 +623,8 @@ void Cyanide::toxav_thread()
 {
     return;
     while(loop == LOOP_RUN || loop == LOOP_SUSPEND) {
-        toxav_do(toxav);
-        usleep(toxav_do_interval(toxav));
+        toxav_iterate(toxav);
+        usleep(toxav_iteration_interval(toxav));
     }
     switch(loop) {
         case LOOP_RUN:
@@ -882,21 +902,12 @@ void Cyanide::set_callbacks()
 
 void Cyanide::set_av_callbacks()
 {
-    toxav_register_callstate_callback(toxav, (ToxAVCallback)callback_av_invite, av_OnInvite, this);
-    toxav_register_callstate_callback(toxav, (ToxAVCallback)callback_av_start, av_OnStart, this);
-    toxav_register_callstate_callback(toxav, (ToxAVCallback)callback_av_cancel, av_OnCancel, this);
-    toxav_register_callstate_callback(toxav, (ToxAVCallback)callback_av_reject, av_OnReject, this);
-    toxav_register_callstate_callback(toxav, (ToxAVCallback)callback_av_end, av_OnEnd, this);
-
-    toxav_register_callstate_callback(toxav, (ToxAVCallback)callback_av_ringing, av_OnRinging, this);
-
-    toxav_register_callstate_callback(toxav, (ToxAVCallback)callback_av_requesttimeout, av_OnRequestTimeout, this);
-    toxav_register_callstate_callback(toxav, (ToxAVCallback)callback_av_peertimeout, av_OnPeerTimeout, this);
-    toxav_register_callstate_callback(toxav, (ToxAVCallback)callback_av_selfmediachange, av_OnSelfCSChange, this);
-    toxav_register_callstate_callback(toxav, (ToxAVCallback)callback_av_peermediachange, av_OnPeerCSChange, this);
-
-    toxav_register_audio_callback(toxav, (ToxAvAudioCallback)callback_av_audio, this);
-    toxav_register_video_callback(toxav, (ToxAvVideoCallback)callback_av_video, this);
+    toxav_callback_call(toxav, callback_call, this);
+    toxav_callback_call_state(toxav, callback_call_state, this);
+    //toxav_callback_audio_bit_rate_status(toxav, callback_audio_bit_rate_status, this);
+    //toxav_callback_video_bit_rate_status(toxav, callback_video_bit_rate_status, this);
+    toxav_callback_audio_receive_frame(toxav, callback_audio_receive_frame, this);
+    toxav_callback_video_receive_frame(toxav, callback_video_receive_frame, this);
 }
 
 void Cyanide::send_typing_notification(int fid, bool typing)
@@ -1210,12 +1221,6 @@ void Cyanide::set_friend_blocked(int fid, bool block)
     friends[fid].blocked = block;
     emit signal_friend_blocked(fid, block);
     emit signal_friend_connection_status(fid, f->connection_status != TOX_CONNECTION_NONE);
-}
-
-int Cyanide::get_friend_callstate(int fid)
-{
-    Friend f = fid == SELF_FRIEND_NUMBER ? self : friends[fid];
-    return f.callstate;
 }
 
 void Cyanide::set_self_name(QString name)

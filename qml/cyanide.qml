@@ -5,7 +5,6 @@ import "pages"
 
 ApplicationWindow
 {
-//    initialPage: Component { FriendList { } }
     cover: Qt.resolvedUrl("cover/CoverPage.qml")
 
     /* pass this to functions that takes a friend ID to refer to self */
@@ -115,7 +114,6 @@ ApplicationWindow
                         'friend_status_message': cyanide.get_friend_status_message(f),
                         'friend_blocked': cyanide.get_friend_blocked(f),
                         'friend_address': settings.get_friend_address(cyanide.get_friend_public_key(f)),
-                        'friend_callstate': cyanide.get_friend_callstate(f),
                         'friend_history_from' : undefined,
                         'friend_history_to' : undefined
                          })
@@ -226,12 +224,9 @@ ApplicationWindow
                     appendMessage(mid)
             }
         }
-        onSignal_friend_callstate: {
-            var i = listFid(fid)
-            friendList.setProperty(i, "friend_callstate", callstate)
-        }
-        onSignal_av_invite: {
-            // cyanide.notify_call(fid, cyanide.get_friend_name(fid)+" "+qsTr("is calling"), "")
+        onSignal_call: {
+            cyanide.set_friend_activity(fid, fid != activeFriend())
+            cyanide.notify_call(fid, cyanide.get_friend_name(fid), qsTr("is calling"))
         }
         onSignal_file_status: {
             if(fid == activeFriend()) {

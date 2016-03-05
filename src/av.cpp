@@ -1,388 +1,329 @@
 #include <AL/al.h>
 #include <AL/alc.h>
+#include <thread>
+#include <unistd.h>
 
 #include "cyanide.h"
 
-#include "unused.h"
-#include "util.h"
+/*
+ * toxav_audio_bit_rate_set()
+ * toxav_video_bit_rate_set()
+ */
 
-static ALCdevice *device_out, *device_in;
-static ALCcontext *context;
-static ALuint source[MAX_CALLS];
+const int AUDIO_FRAME_DURATION = 20;
+const int AUDIO_SAMPLE_RATE = 48000;
+const int AUDIO_BIT_RATE = 32; //TODO dew the math
+const int VIDEO_BIT_RATE = 3000;
 
-void callback_av_invite(ToxAv *av, int32_t call_index, void *that)
+bool Cyanide::call(int fid, bool video)
 {
-    qDebug() << "was called";
-    Cyanide *cyanide = (Cyanide*)that;
+    Q_ASSERT(!in_call);
 
-    int fid = toxav_get_peer_id(av, call_index, 0);
-    Friend *f = &cyanide->friends[fid];
+    set_audio_bit_rate(AUDIO_BIT_RATE);
+    set_video_bit_rate(video ? VIDEO_BIT_RATE : 0);
 
-    ToxAvCSettings peer_settings ;
-    toxav_get_peer_csettings(av, call_index, 0, &peer_settings);
-    bool video = peer_settings.call_type == av_TypeVideo;
+    TOXAV_ERR_CALL error;
+    bool success = toxav_call(toxav, fid, audio_bit_rate, video_bit_rate, &error);
 
-    f->call_index = call_index;
-    f->callstate = -2;
-    emit cyanide->signal_friend_callstate(fid, f->callstate);
-    emit cyanide->signal_av_invite(fid);
-}
-
-void callback_av_start(ToxAv *av, int32_t call_index, void *that)
-{
-    qDebug() << "was called";
-    Cyanide *cyanide = (Cyanide*)that;
-    ToxAvCSettings peer_settings;
-    int fid = toxav_get_peer_id(av, call_index, 0);
-    toxav_get_peer_csettings(av, call_index, 0, &peer_settings);
-    bool video = peer_settings.call_type == av_TypeVideo;
-    if(toxav_prepare_transmission(av, call_index, 1) == 0) {
-        // call started
+    if(success) {
+        set_in_call(true);
+        set_call_friend_number(fid);
+        set_call_state(Call_State::Ringing | Call_State::Outgoing);
     } else {
-        qDebug() << "toxav_prepare_transmission() failed";
+        qDebug() << "toxav_call() error:" << error;
+        switch(error) {
+        case TOXAV_ERR_CALL_OK:
+            break;
+        case TOXAV_ERR_CALL_MALLOC:
+            qDebug() << "malloc";
+            break;
+        case TOXAV_ERR_CALL_FRIEND_NOT_FOUND:
+            qDebug() << "friend not found";
+            break;
+        case TOXAV_ERR_CALL_FRIEND_NOT_CONNECTED:
+            qDebug() << "friend not connected";
+            break;
+        case TOXAV_ERR_CALL_FRIEND_ALREADY_IN_CALL:
+            qDebug() << "friend already in call";
+            break;
+        case TOXAV_ERR_CALL_INVALID_BIT_RATE:
+            qDebug() << "invalid bit rate";
+            break;
+        }
+    }
+    return success;
+}
+
+bool Cyanide::answer()
+{
+    Q_ASSERT(in_call);
+    Q_ASSERT(call_state == (Call_State::Ringing | Call_State::Incoming));
+
+    TOXAV_ERR_ANSWER error;
+
+    set_call_state(0);
+
+    bool success = toxav_answer(toxav, call_friend_number, audio_bit_rate, video_bit_rate, &error);
+
+    if(success) {
+    } else {
+        qDebug() << "toxav_answer() error:" << error;
+        switch(error) {
+        case TOXAV_ERR_ANSWER_OK:
+            break;
+        case TOXAV_ERR_ANSWER_CODEC_INITIALIZATION:
+            qDebug() << "codec initialization";
+            break;
+        case TOXAV_ERR_ANSWER_FRIEND_NOT_FOUND:
+            qDebug() << "friend not found";
+            break;
+        case TOXAV_ERR_ANSWER_FRIEND_NOT_CALLING:
+            qDebug() << "friend not calling";
+            break;
+        case TOXAV_ERR_ANSWER_INVALID_BIT_RATE:
+            qDebug() << "invalid bit rate";
+            break;
+        }
+    }
+    return success;
+}
+
+bool Cyanide::hang_up()
+{
+    bool success = call_control(call_friend_number, Call_Control::Cancel);
+    set_in_call(false);
+    if(call_state & Call_State::Active) {
+        my_audio_thread->join();
+        delete my_audio_thread;
+    }
+    return success;
+}
+
+bool Cyanide::call_control(int fid, int control)
+{
+    Q_ASSERT(call_friend_number == fid);
+
+    TOXAV_ERR_CALL_CONTROL error;
+    qDebug() << "sending toxav_call_control" << control;
+    bool success = toxav_call_control(toxav, fid, (TOXAV_CALL_CONTROL)control, &error);
+    if(!success) {
+        qDebug() << "toxav_call_control() error:" << error;
+        switch(error) {
+        case TOXAV_ERR_CALL_CONTROL_OK:
+            break;
+        case TOXAV_ERR_CALL_CONTROL_FRIEND_NOT_FOUND:
+            qDebug() << "friend not found";
+            break;
+        case TOXAV_ERR_CALL_CONTROL_FRIEND_NOT_IN_CALL:
+            qDebug() << "friend not in call";
+            break;
+        case TOXAV_ERR_CALL_CONTROL_INVALID_TRANSITION:
+            qDebug() << "invalid transition";
+            break;
+        }
+    }
+    return success;
+}
+
+void callback_call(ToxAV *av, uint32_t fid, bool audio_enabled, bool video_enabled, void *that)
+{
+    qDebug();
+    Cyanide *cyanide = (Cyanide*)that;
+    if(cyanide->in_call) {
+        qDebug() << "ignoring av invite since we are already in a call";
+        qDebug() << "TODO - notify";
         return;
     }
+    cyanide->set_in_call(true);
+    cyanide->set_call_friend_number(fid);
+    cyanide->set_call_state(Call_State::Ringing | Call_State::Incoming);
+    cyanide->set_audio_bit_rate(audio_enabled ? AUDIO_BIT_RATE : 0);
+    cyanide->set_video_bit_rate(audio_enabled ? VIDEO_BIT_RATE : 0);
+    emit cyanide->signal_call(fid);
 }
 
-void callback_av_cancel(ToxAv *av, int32_t call_index, void *that)
+QStringList Call_State::display(int s)
 {
-    qDebug() << "was called";
-    //Cyanide *cyanide = (Cyanide*)that;
+    return
+    QStringList() << (s & Error ? "Error" : "")
+                  << (s & Finished ? "Finished" : "")
+                  << (s & Sending_A ? "Sending_A" : "")
+                  << (s & Sending_V ? "Sending_V" : "")
+                  << (s & Accepting_A ? "Accepting_A" : "")
+                  << (s & Accepting_V ? "Accepting_V" : "")
+                  << (s & Ringing ? "Ringing" : "");
 }
 
-void callback_av_reject(ToxAv *av, int32_t call_index, void *that)
+void callback_call_state(ToxAV *av, uint32_t fid, uint32_t state, void *that)
 {
-    qDebug() << "was called";
-    //Cyanide *cyanide = (Cyanide*)that;
+    Cyanide *cyanide = (Cyanide*)that;
+    cyanide->_callback_call_state(fid, state);
 }
 
-void callback_av_end(ToxAv *av, int32_t call_index, void *that)
+void Cyanide::_callback_call_state(int fid, int state)
 {
-    qDebug() << "was called";
-    //Cyanide *cyanide = (Cyanide*)that;
-}
+    Q_ASSERT(in_call);
+    Q_ASSERT(call_friend_number == fid);
 
-void callback_av_ringing(ToxAv *av, int32_t call_index, void *that)
-{
-    qDebug() << "was called";
-    //Cyanide *cyanide = (Cyanide*)that;
-}
+    qDebug() << "call with friend" << fid << "changes state from" << Call_State::display(call_state) << "to" << Call_State::display(state);
 
-void callback_av_requesttimeout(ToxAv *av, int32_t call_index, void *that)
-{
-    qDebug() << "was called";
-    //Cyanide *cyanide = (Cyanide*)that;
-}
-
-void callback_av_peertimeout(ToxAv *av, int32_t call_index, void *that)
-{
-    qDebug() << "was called";
-    //Cyanide *cyanide = (Cyanide*)that;
-}
-
-void callback_av_selfmediachange(ToxAv *av, int32_t call_index, void *that)
-{
-    qDebug() << "was called";
-    //Cyanide *cyanide = (Cyanide*)that;
-}
-
-void callback_av_peermediachange(ToxAv *av, int32_t call_index, void *that)
-{
-    qDebug() << "was called";
-    //Cyanide *cyanide = (Cyanide*)that;
-}
-
-void audio_play(int i, const int16_t *data, int samples, uint8_t channels, unsigned int sample_rate)
-{
-    if(!channels || channels > 2) {
-        return;
+    if(call_state & Call_State::Ringing && state & Call_State::Active) {
+        qDebug() << "call was answered";
+        my_audio_thread = new std::thread([this] () { this->audio_thread(); });
+    } else if(state & Call_State::Finished) {
+        qDebug() << "call was finished";
+        set_in_call(false);
+        my_audio_thread->join();
+        delete my_audio_thread;
+    } else if(state & Call_State::Error) {
+        qDebug() << "error in call, terminating";
+        set_in_call(false);
+        my_audio_thread->join();
+        delete my_audio_thread;
+    } else {
+        qDebug() << "unexpected state transition";
     }
+    set_call_state(state);
+}
 
-    ALuint bufid;
+void callback_audio_bit_rate_status(ToxAV *av, uint32_t fid, bool stable, uint32_t bit_rate, void *that)
+{
+    qDebug();
+}
+
+void callback_video_bit_rate_status(ToxAV *av, uint32_t fid, bool stable, uint32_t bit_rate, void *that)
+{
+    qDebug();
+}
+
+void callback_audio_receive_frame(ToxAV *av, uint32_t fid, const int16_t *pcm, size_t sample_count, uint8_t channels, uint32_t sampling_rate, void *that)
+{
+    //Cyanide *cyanide = (Cyanide*)that;
+    static bool init = false;
+
+    static ALCdevice *output_device;
+    static ALCcontext *context;
+    static ALuint source, buffer;
+    static ALint state;
+
+    if(init)
+        goto play;
+
+    init = true;
+    output_device = alcOpenDevice(NULL);
+    context = alcCreateContext(output_device, NULL);
+    alcMakeContextCurrent(context);
+
+    alGenSources(1, &source);
+    alGenBuffers(1, &buffer);
+
+play:
+    ALCenum error;
+#define alck(i) do { \
+    error = alGetError(); \
+    if(error != AL_NO_ERROR) \
+        qDebug() << i << error; \
+    } while(0)
+
     ALint processed = 0, queued = 16;
-    alGetSourcei(source[i], AL_BUFFERS_PROCESSED, &processed);
-    alGetSourcei(source[i], AL_BUFFERS_QUEUED, &queued);
-    alSourcei(source[i], AL_LOOPING, AL_FALSE);
+    alGetSourcei(source, AL_BUFFERS_PROCESSED, &processed);
+    alck(1);
+    alGetSourcei(source, AL_BUFFERS_QUEUED, &queued);
+    alck(2);
+    alSourcei(source, AL_LOOPING, AL_FALSE);
+    alck(3);
 
+    qDebug() << "processed:" << processed << "queued" << queued;
     if(processed) {
-        ALuint bufids[processed];
-        alSourceUnqueueBuffers(source[i], processed, bufids);
-        alDeleteBuffers(processed - 1, bufids + 1);
-        bufid = bufids[0];
+        ALuint buffers[processed];
+        alSourceUnqueueBuffers(source, processed, buffers);
+        alDeleteBuffers(processed - 1, buffers + 1);
+        buffer = buffers[0];
     } else if(queued < 16) {
-        alGenBuffers(1, &bufid);
-    } else {
         qDebug() << "dropped audio frame";
-        return;
     }
+    alBufferData(buffer, AL_FORMAT_MONO16, pcm, sample_count * 2, sampling_rate);
+    alck(4);
+    alSourceQueueBuffers(source, 1, &buffer);
+    alck(5);
 
-    alBufferData(bufid, (channels == 1) ? AL_FORMAT_MONO16 : AL_FORMAT_STEREO16, data, samples * 2 * channels, sample_rate);
-    alSourceQueueBuffers(source[i], 1, &bufid);
-
-    ALint state;
-    alGetSourcei(source[i], AL_SOURCE_STATE, &state);
+    alGetSourcei(source, AL_SOURCE_STATE, &state);
     if(state != AL_PLAYING) {
-        alSourcePlay(source[i]);
-        qDebug() << "Starting source" << i;
+        qDebug() << "starting source";
+        alSourcePlay(source);
     }
+}
+
+void callback_video_receive_frame(ToxAV *av, uint32_t fid, uint16_t width, uint16_t height,
+        const uint8_t *y, const uint8_t *u, const uint8_t *v, int32_t ystride, int32_t ustride, int32_t vstride, void *that)
+{
+    qDebug();
 }
 
 void Cyanide::audio_thread()
 {
-    return;
-    const char *device_list, *output_device = NULL;
-    //void *audio_device = NULL;
+    qDebug() << "starting audio transmission for friend" << call_friend_number;
 
-    bool call[MAX_CALLS] = {0}, preview = 0;
-    bool audio_filtering_enabled;
-    // bool groups_audio[MAX_NUM_GROUPS] = {0};
+    ALCdevice *input_device;
+    int samples_per_frame = (AUDIO_FRAME_DURATION * AUDIO_SAMPLE_RATE) / 1000;
+    int16_t buffer[samples_per_frame];
 
-    int perframe = (av_DefaultSettings.audio_frame_duration * av_DefaultSettings.audio_sample_rate) / 1000;
-    uint8_t buf[perframe * 2 * av_DefaultSettings.audio_channels], dest[perframe * 2 * av_DefaultSettings.audio_channels];
-    memset(buf, 0, sizeof(buf));
+    input_device = alcCaptureOpenDevice(NULL, AUDIO_SAMPLE_RATE, AL_FORMAT_MONO16, sizeof(buffer));
+    alcCaptureStart(input_device);
 
-    uint8_t audio_count = 0;
-    bool record_on = 0;
-    #ifdef AUDIO_FILTERING
-    qDebug() << "Audio Filtering enabled";
-    #ifdef ALC_LOOPBACK_CAPTURE_SAMPLES
-    qDebug() << "Echo cancellation enabled";
-    #endif
-    #endif
+    ALint samples;
+    TOXAV_ERR_SEND_FRAME error;
 
-    qDebug() << "frame size:" << perframe;
-
-    device_list = alcGetString(NULL, ALC_ALL_DEVICES_SPECIFIER);
-    if(device_list) {
-        output_device = device_list;
-        qDebug() << "Output Device List:";
-        while(*device_list) {
-            qDebug() << device_list;
-            //postmessage(NEW_AUDIO_OUT_DEVICE, 0, 0, (void*)device_list);
-            device_list += strlen(device_list) + 1;
+    while(in_call) {
+        alcGetIntegerv(input_device, ALC_CAPTURE_SAMPLES, sizeof(samples), &samples);
+        if(samples >= samples_per_frame) {
+            alcCaptureSamples(input_device, buffer, samples_per_frame);
+            toxav_audio_send_frame(toxav, call_friend_number, buffer, samples_per_frame, 1, AUDIO_SAMPLE_RATE, &error);
+            if(error != TOXAV_ERR_SEND_FRAME_OK)
+                qDebug() << "send frame error:" << error;
         }
+        callback_audio_receive_frame(NULL, call_friend_number, buffer, samples_per_frame, 1, AUDIO_SAMPLE_RATE, this);
+        if(samples < samples_per_frame * 2)
+            usleep(AUDIO_FRAME_DURATION * 1000);
     }
+    alcCaptureStop(input_device);
+    alcCaptureCloseDevice(input_device);
+}
 
-    device_out = alcOpenDevice(output_device);
-    if(!device_out) {
-        qDebug() << "alcOpenDevice() failed";
+void Cyanide::set_in_call(bool in_call)
+{
+    this->in_call = in_call;
+    emit in_call_changed();
+}
+
+void Cyanide::set_call_friend_number(int call_friend_number)
+{
+    if(this->call_friend_number == call_friend_number)
         return;
-    }
+    this->call_friend_number = call_friend_number;
+    emit call_friend_number_changed();
+}
 
-    int attrlist[] = {  ALC_FREQUENCY, av_DefaultSettings.audio_sample_rate,
-                        ALC_INVALID };
-
-    context = alcCreateContext(device_out, attrlist);
-    if(!alcMakeContextCurrent(context)) {
-        qDebug() << "alcMakeContextCurrent() failed";
-        alcCloseDevice(device_out);
+void Cyanide::set_call_state(int call_state)
+{
+    if(this->call_state == call_state)
         return;
-    }
-
-    alGenSources(countof(source), source);
-
-    static ALuint ringSrc[MAX_CALLS];
-    alGenSources(MAX_CALLS, ringSrc);
-
-    /* Create buffer to store samples */
-    ALuint RingBuffer;
-    alGenBuffers(1, &RingBuffer);
-
-    {
-        float frequency1 = 441.f;
-        float frequency2 = 882.f;
-        int seconds = 4;
-        unsigned sample_rate = 22050;
-        size_t buf_size = seconds * sample_rate * 2; //16 bit (2 bytes per sample)
-        int16_t *samples = (int16_t*)malloc(buf_size * sizeof(int16_t));
-        if (!samples)
-            return;
-
-        /*Generate an electronic ringer sound that quickly alternates between two frequencies*/
-        int index = 0;
-        for(index = 0; index < buf_size; ++index) {
-            if ((index / (sample_rate)) % 4 < 2 ) {//4 second ring cycle, first 2 secondsring, the rest(2 seconds) is silence
-                if((index / 1000) % 2 == 1) {
-                    samples[index] = 5000 * sin((2.0 * 3.1415926 * frequency1) / sample_rate * index); //5000=amplitude(volume level). It can be from zero to 32700
-                } else {
-                    samples[index] = 5000 * sin((2.0 * 3.1415926 * frequency2) / sample_rate * index);
-                }
-            } else {
-                samples[index] = 0;
-            }
-        }
-
-        alBufferData(RingBuffer, AL_FORMAT_MONO16, samples, buf_size, sample_rate);
-        free(samples);
-    }
-
-    {
-        unsigned int i;
-        for (i = 0; i < MAX_CALLS; ++i) {
-            alSourcei(ringSrc[i], AL_LOOPING, AL_TRUE);
-            alSourcei(ringSrc[i], AL_BUFFER, RingBuffer);
-        }
-    }
-    #ifdef AUDIO_FILTERING
-    Filter_Audio *f_a = NULL;
-    #endif
-
-    while(loop == LOOP_RUN || loop == LOOP_SUSPEND) {
-        #ifdef AUDIO_FILTERING
-        if (!f_a && audio_filtering_enabled) {
-            f_a = new_filter_audio(av_DefaultSettings.audio_sample_rate);
-            if (!f_a) {
-                audio_filtering_enabled = 0;
-                qDebug() << "filter audio failed";
-            } else {
-                qDebug() << "filter audio on";
-            }
-        } else if (f_a && !audio_filtering_enabled) {
-            kill_filter_audio(f_a);
-            f_a = NULL;
-            qDebug() << "filter audio off";
-        }
-        #else
-        if (audio_filtering_enabled)
-            audio_filtering_enabled = 0;
-        #endif
-
-        bool sleep = 1;
-
-        if(record_on) {
-            ALint samples;
-            alcGetIntegerv(device_in, ALC_CAPTURE_SAMPLES, sizeof(samples), &samples);
-            if(samples >= perframe) {
-                alcCaptureSamples(device_in, buf, perframe);
-                if (samples >= perframe * 2) {
-                    sleep = 0;
-                }
-            }
-        }
-
-        #ifdef AUDIO_FILTERING
-        #ifdef ALC_LOOPBACK_CAPTURE_SAMPLES
-        if (f_a && audio_filtering_enabled) {
-            ALint samples;
-            alcGetIntegerv(device_out, ALC_LOOPBACK_CAPTURE_SAMPLES, sizeof(samples), &samples);
-            if(samples >= perframe) {
-                int16_t buffer[perframe];
-                alcCaptureSamplesLoopback(device_out, buffer, perframe);
-                pass_audio_output(f_a, buffer, perframe);
-                set_echo_delay_ms(f_a, 5);
-                    if (samples >= perframe * 2) {
-                    sleep = 0;
-                }
-            }
-        }
-        #endif
-        #endif
-
-        #ifdef AUDIO_FILTERING
-        if (f_a && filter_audio(f_a, (int16_t*)buf, perframe) == -1) {
-            qDebug() << "filter audio error";
-        }
-        #endif
-        if(preview) {
-            audio_play(0, (int16_t*)buf, perframe, av_DefaultSettings.audio_channels, av_DefaultSettings.audio_sample_rate);
-        }
-
-        int i;
-        for(i = 0; i < MAX_CALLS; i++) {
-            if(call[i]) {
-                int r;
-                if((r = toxav_prepare_audio_frame(toxav, i, dest, sizeof(dest), (const int16_t*)buf, perframe)) < 0) {
-                    qDebug() << "toxav_prepare_audio_frame error" << r;
-                    continue;
-                }
-
-                if((r = toxav_send_audio(toxav, i, dest, r)) < 0) {
-                    qDebug() << "toxav_send_audio error" << r;
-                }
-            }
-        }
-
-        if (sleep) {
-            usleep(5000);
-        }
-    }
-
-    #ifdef AUDIO_FILTERING
-    kill_filter_audio(f_a);
-    #endif
-
-    //missing some cleanup ?
-    alDeleteSources(MAX_CALLS, ringSrc);
-    alDeleteSources(countof(source), source);
-    alDeleteBuffers(1, &RingBuffer);
-
-    if(device_in) {
-        if(record_on) {
-            alcCaptureStop(device_in);
-        }
-        alcCaptureCloseDevice(device_in);
-    }
-
-    alcMakeContextCurrent(NULL);
-    alcDestroyContext(context);
-    alcCloseDevice(device_out);
+    this->call_state = call_state;
+    emit call_state_changed();
 }
 
-void callback_av_audio(ToxAv *av, int32_t call_index, const int16_t *data, uint16_t samples, void *that)
+void Cyanide::set_audio_bit_rate(int audio_bit_rate)
 {
-    //qDebug() << "was called";
-    ToxAvCSettings dest;
-    if(toxav_get_peer_csettings(av, call_index, 0, &dest) == 0) {
-        audio_play(call_index, data, samples, dest.audio_channels, dest.audio_sample_rate);
-    }
+    if(this->audio_bit_rate == audio_bit_rate)
+        return;
+    this->audio_bit_rate = audio_bit_rate;
+    emit audio_bit_rate_changed();
 }
 
-void callback_av_video(ToxAv *av, int32_t call_index, const vpx_image_t *img, void *that)
+void Cyanide::set_video_bit_rate(int video_bit_rate)
 {
-    qDebug() << "was called";
+    if(this->video_bit_rate == video_bit_rate)
+        return;
+    this->video_bit_rate = video_bit_rate;
+    emit video_bit_rate_changed();
 }
-
-void Cyanide::av_invite_accept(int fid)
-{
-    Friend *f = &friends[fid];
-    ToxAvCSettings csettings = av_DefaultSettings;
-    toxav_answer(toxav, f->call_index, &csettings);
-    emit signal_friend_callstate(fid, (f->callstate = 2));
-}
-
-void Cyanide::av_invite_reject(int fid)
-{
-    Friend *f = &friends[fid];
-    toxav_reject(toxav, f->call_index, ""); //TODO add reason
-    emit signal_friend_callstate(fid, (f->callstate = 0));
-}
-
-void Cyanide::av_call(int fid)
-{
-    Friend *f = &friends[fid];
-    if(f->callstate != 0)
-        notify_error("already in a call", "");
-
-    ToxAvCSettings csettings = av_DefaultSettings;
-
-    toxav_call(toxav, &f->call_index, fid, &csettings, 15);
-    emit signal_friend_callstate(fid, (f->callstate = -1));
-}
-
-void Cyanide::av_call_cancel(int fid)
-{
-    qDebug() << "cancelling call";
-    Friend *f = &friends[fid];
-    Q_ASSERT(f->callstate == -1);
-    toxav_cancel(toxav, f->call_index, fid, "Call cancelled by friend");
-    emit signal_friend_callstate(fid, (f->callstate = 0));
-}
-
-void Cyanide::av_hangup(int fid)
-{
-    qDebug() << "hanging up";
-    Friend *f = &friends[fid];
-    toxav_hangup(toxav, f->call_index);
-    emit signal_friend_callstate(fid, (f->callstate = 0));
-}
-

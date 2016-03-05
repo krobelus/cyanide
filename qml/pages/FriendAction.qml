@@ -54,9 +54,9 @@ Page {
             }
             IconButton {
                 icon.source: "qrc:/images/phone_4x"
-                enabled: false
+                enabled: !cyanide.in_call && cyanide.get_friend_connection_status(f)
                 onClicked: {
-                    cyanide.av_call(f)
+                    cyanide.call(f, false)
                     pageStack.pop()
                 }
             }
@@ -64,6 +64,8 @@ Page {
                 icon.source: "qrc:/images/video_4x"
                 enabled: false
                 onClicked: {
+                    cyanide.call(f, true)
+                    pageStack.pop()
                 }
             }
         }
@@ -118,8 +120,7 @@ Page {
                     remorsePopup.execute(qsTr("Removing friend"), function() {
                         cyanide.remove_friend(f)
                         refreshFriendList()
-                        pageStack.pop()
-                        pageStack.pop()
+                        returnToPage("friendlist")
                     })
                 }
             }
