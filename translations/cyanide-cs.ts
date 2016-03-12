@@ -38,113 +38,113 @@
 <context>
     <name>Cyanide</name>
     <message>
-        <location filename="../src/cyanide.cpp" line="930"/>
+        <location filename="../src/cyanide.cpp" line="941"/>
         <source>Error: Invalid Tox ID</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="958"/>
+        <location filename="../src/cyanide.cpp" line="969"/>
         <source>Error: Message is too long</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="962"/>
+        <location filename="../src/cyanide.cpp" line="973"/>
         <source>Error: Tox ID is self ID</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="964"/>
+        <location filename="../src/cyanide.cpp" line="975"/>
         <source>Error: Tox ID is already in friend list</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="966"/>
+        <location filename="../src/cyanide.cpp" line="977"/>
         <source>Error: Invalid Tox ID (bad checksum)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="968"/>
+        <location filename="../src/cyanide.cpp" line="979"/>
         <source>Error: Invalid Tox ID (bad nospam value)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="970"/>
+        <location filename="../src/cyanide.cpp" line="981"/>
         <source>Error: No memory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="1033"/>
-        <location filename="../src/filetransfers.cpp" line="418"/>
-        <location filename="../src/filetransfers.cpp" line="530"/>
+        <location filename="../src/cyanide.cpp" line="1044"/>
+        <location filename="../src/filetransfers.cpp" line="420"/>
+        <location filename="../src/filetransfers.cpp" line="532"/>
         <source>Error: Friend not connected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="1123"/>
+        <location filename="../src/cyanide.cpp" line="1134"/>
         <source>Error: File exists</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="1308"/>
+        <location filename="../src/cyanide.cpp" line="1313"/>
         <source>File not found: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="1313"/>
+        <location filename="../src/cyanide.cpp" line="1318"/>
         <source>Avatar too large. Maximum size: 64KiB</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/cyanide.h" line="225"/>
+        <location filename="../src/cyanide.h" line="244"/>
         <source>Tox User</source>
         <extracomment>default username</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/cyanide.h" line="227"/>
+        <location filename="../src/cyanide.h" line="246"/>
         <source>Toxing on Cyanide</source>
         <extracomment>default status</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/cyanide.h" line="229"/>
+        <location filename="../src/cyanide.h" line="248"/>
         <source>Tox me maybe?</source>
         <extracomment>default friend request message - feel free to tranlate freely</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/filetransfers.cpp" line="416"/>
-        <location filename="../src/filetransfers.cpp" line="528"/>
+        <location filename="../src/filetransfers.cpp" line="418"/>
+        <location filename="../src/filetransfers.cpp" line="530"/>
         <source>Error: Friend not found</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/filetransfers.cpp" line="420"/>
+        <location filename="../src/filetransfers.cpp" line="422"/>
         <source>Error: File transfer not found</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/filetransfers.cpp" line="426"/>
+        <location filename="../src/filetransfers.cpp" line="428"/>
         <source>Error: Already paused</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/filetransfers.cpp" line="428"/>
+        <location filename="../src/filetransfers.cpp" line="430"/>
         <source>Error: Packet queue is full</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/filetransfers.cpp" line="507"/>
+        <location filename="../src/filetransfers.cpp" line="509"/>
         <source>Error: Failed to open file: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/filetransfers.cpp" line="532"/>
+        <location filename="../src/filetransfers.cpp" line="534"/>
         <source>Error: Filename too long</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/filetransfers.cpp" line="534"/>
+        <location filename="../src/filetransfers.cpp" line="536"/>
         <source>Error: Too many ongoing transfers</source>
         <translation type="unfinished"></translation>
     </message>
@@ -199,37 +199,49 @@
 <context>
     <name>Friend</name>
     <message>
-        <location filename="../qml/pages/Friend.qml" line="76"/>
+        <location filename="../qml/pages/Friend.qml" line="77"/>
         <source>Failed to pause transfer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/Friend.qml" line="83"/>
+        <location filename="../qml/pages/Friend.qml" line="84"/>
         <source>Failed to resume transfer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/Friend.qml" line="104"/>
+        <location filename="../qml/pages/Friend.qml" line="105"/>
         <source>Failed to cancel transfer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/Friend.qml" line="242"/>
+        <location filename="../qml/pages/Friend.qml" line="162"/>
+        <source>Answer</source>
+        <extracomment>answer the call</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/Friend.qml" line="186"/>
+        <source>Hang Up</source>
+        <extracomment>hang up</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/Friend.qml" line="240"/>
         <source> is typing...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/Friend.qml" line="343"/>
+        <location filename="../qml/pages/Friend.qml" line="341"/>
         <source>Opening URL...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/Friend.qml" line="354"/>
+        <location filename="../qml/pages/Friend.qml" line="352"/>
         <source>Opening file...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/Friend.qml" line="416"/>
+        <location filename="../qml/pages/Friend.qml" line="414"/>
         <source>Failed to send message</source>
         <translation type="unfinished"></translation>
     </message>
@@ -237,49 +249,49 @@
 <context>
     <name>FriendAction</name>
     <message>
-        <location filename="../qml/pages/FriendAction.qml" line="73"/>
+        <location filename="../qml/pages/FriendAction.qml" line="75"/>
         <source>Copy Tox ID to clipboard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/FriendAction.qml" line="83"/>
+        <location filename="../qml/pages/FriendAction.qml" line="85"/>
         <source>Chat history</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/FriendAction.qml" line="88"/>
+        <location filename="../qml/pages/FriendAction.qml" line="90"/>
         <source>Load</source>
         <extracomment>chat history</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/FriendAction.qml" line="92"/>
+        <location filename="../qml/pages/FriendAction.qml" line="94"/>
         <source>Delete</source>
         <extracomment>chat history</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/FriendAction.qml" line="99"/>
+        <location filename="../qml/pages/FriendAction.qml" line="101"/>
         <source>Deleting chat history</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/FriendAction.qml" line="110"/>
+        <location filename="../qml/pages/FriendAction.qml" line="112"/>
         <source>Unblock friend</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/FriendAction.qml" line="110"/>
+        <location filename="../qml/pages/FriendAction.qml" line="112"/>
         <source>Block friend</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/FriendAction.qml" line="116"/>
+        <location filename="../qml/pages/FriendAction.qml" line="118"/>
         <source>Remove friend</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/FriendAction.qml" line="118"/>
+        <location filename="../qml/pages/FriendAction.qml" line="120"/>
         <source>Removing friend</source>
         <translation type="unfinished"></translation>
     </message>
@@ -412,12 +424,17 @@
 <context>
     <name>cyanide</name>
     <message>
-        <location filename="../qml/cyanide.qml" line="218"/>
+        <location filename="../qml/cyanide.qml" line="216"/>
         <source>Incoming file: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/cyanide.qml" line="249"/>
+        <location filename="../qml/cyanide.qml" line="229"/>
+        <source>is calling</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/cyanide.qml" line="244"/>
         <source>Friend request received!</source>
         <translation type="unfinished"></translation>
     </message>

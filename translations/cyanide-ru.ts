@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
 <TS version="2.1" language="ru_RU">
 <context>
@@ -35,10 +35,6 @@
     <message>
         <source>Error: Message is too long</source>
         <translation>Ошибка: сообщение слишком длинное</translation>
-    </message>
-    <message>
-        <source>Error: Empty message</source>
-        <translation type="vanished">Ошибка: пустое сообщение</translation>
     </message>
     <message>
         <source>Error: Tox ID is self ID</source>
@@ -97,24 +93,12 @@
         <translation>Ошибка: передача не найдена</translation>
     </message>
     <message>
-        <source>Error: Not paused</source>
-        <translation type="vanished">Ошибка: не остановлено</translation>
-    </message>
-    <message>
         <source>Error: Already paused</source>
         <translation>Ошибка: уже остановлено</translation>
     </message>
     <message>
         <source>Error: Packet queue is full</source>
         <translation>Ошибка: очередь заполнена</translation>
-    </message>
-    <message>
-        <source>Error: Unknown</source>
-        <translation type="vanished">Ошибка: неизвестная</translation>
-    </message>
-    <message>
-        <source>Error: Transfer is paused by peer</source>
-        <translation type="vanished">Ошибка: Передача остановлена собеседником</translation>
     </message>
     <message>
         <source>Tox User</source>
@@ -185,14 +169,6 @@
         <translation> печатает...</translation>
     </message>
     <message>
-        <source>Settings</source>
-        <translation type="vanished">Настройки</translation>
-    </message>
-    <message>
-        <source>Send a file</source>
-        <translation type="vanished">Передать файл</translation>
-    </message>
-    <message>
         <source>Failed to pause transfer</source>
         <translation>Не удалось остановить передачу</translation>
     </message>
@@ -211,6 +187,16 @@
     <message>
         <source>Failed to send message</source>
         <translation>Не удалось отправить сообщение</translation>
+    </message>
+    <message>
+        <source>Answer</source>
+        <extracomment>answer the call</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hang Up</source>
+        <extracomment>hang up</extracomment>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -259,10 +245,6 @@
     <message>
         <source>Add a friend</source>
         <translation>Добавить друзей</translation>
-    </message>
-    <message>
-        <source>Friends</source>
-        <translation type="vanished">Друзья</translation>
     </message>
     <message>
         <source>Settings</source>
@@ -344,18 +326,6 @@
         <translation>Показывать уведомление когда...</translation>
     </message>
     <message>
-        <source>Yes</source>
-        <translation type="vanished">Да</translation>
-    </message>
-    <message>
-        <source>No</source>
-        <translation type="vanished">Нет</translation>
-    </message>
-    <message>
-        <source>No sound</source>
-        <translation type="vanished">Без звука</translation>
-    </message>
-    <message>
         <source>Send typing notifications?</source>
         <translation>Отсылать уведомления о наборе</translation>
     </message>
@@ -375,20 +345,16 @@
 <context>
     <name>cyanide</name>
     <message>
-        <source>New message</source>
-        <translation type="vanished">Новое сообщение</translation>
-    </message>
-    <message>
-        <source>New messages</source>
-        <translation type="vanished">Новые сообщения</translation>
-    </message>
-    <message>
         <source>Friend request received!</source>
         <translation>Запрос на добавление в друзья!</translation>
     </message>
     <message>
         <source>Incoming file: </source>
         <translation>Входящий файл: </translation>
+    </message>
+    <message>
+        <source>is calling</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

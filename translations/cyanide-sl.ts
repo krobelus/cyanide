@@ -188,6 +188,16 @@
         <source>Failed to send message</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Answer</source>
+        <extracomment>answer the call</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hang Up</source>
+        <extracomment>hang up</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>FriendAction</name>
@@ -235,10 +245,6 @@
     <message>
         <source>Add a friend</source>
         <translation>Dodaj prijatelja</translation>
-    </message>
-    <message>
-        <source>Friends</source>
-        <translation type="vanished">Prijatelji</translation>
     </message>
     <message>
         <source>Settings</source>
@@ -344,6 +350,10 @@
     </message>
     <message>
         <source>Incoming file: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>is calling</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

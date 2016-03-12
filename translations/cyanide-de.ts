@@ -101,10 +101,6 @@
         <translation>Fehler: Paket-Warteschlange ist voll</translation>
     </message>
     <message>
-        <source>Error: Tox save file already exists</source>
-        <translation type="vanished">Fehler: Tox-Datei existiert bereits</translation>
-    </message>
-    <message>
         <source>Tox User</source>
         <extracomment>default username</extracomment>
         <translation>Tox Benutzer</translation>
@@ -192,6 +188,16 @@
         <source>Failed to send message</source>
         <translation>Fehler beim Schicken der Nachricht</translation>
     </message>
+    <message>
+        <source>Answer</source>
+        <extracomment>answer the call</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hang Up</source>
+        <extracomment>hang up</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>FriendAction</name>
@@ -239,10 +245,6 @@
     <message>
         <source>Add a friend</source>
         <translation>Freund hinzufügen</translation>
-    </message>
-    <message>
-        <source>Friends</source>
-        <translation type="vanished">Freunde</translation>
     </message>
     <message>
         <source>Settings</source>
@@ -349,6 +351,10 @@
     <message>
         <source>Incoming file: </source>
         <translation>Eingehende Datei: </translation>
+    </message>
+    <message>
+        <source>is calling</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

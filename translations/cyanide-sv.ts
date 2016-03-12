@@ -101,10 +101,6 @@
         <translation>Fel: Paketkön är full</translation>
     </message>
     <message>
-        <source>Error: Tox save file already exists</source>
-        <translation type="vanished">Fel: Filen finns redan</translation>
-    </message>
-    <message>
         <source>Tox User</source>
         <extracomment>default username</extracomment>
         <translation>Tox-användare</translation>
@@ -192,6 +188,16 @@
         <source>Failed to send message</source>
         <translation>Kunde inte skicka meddelande</translation>
     </message>
+    <message>
+        <source>Answer</source>
+        <extracomment>answer the call</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hang Up</source>
+        <extracomment>hang up</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>FriendAction</name>
@@ -214,10 +220,6 @@
     <message>
         <source>Block friend</source>
         <translation>Blockera vän</translation>
-    </message>
-    <message>
-        <source>Clear chat log</source>
-        <translation type="vanished">Rensa chattloggen</translation>
     </message>
     <message>
         <source>Chat history</source>
@@ -243,10 +245,6 @@
     <message>
         <source>Add a friend</source>
         <translation>Lägg till en vän</translation>
-    </message>
-    <message>
-        <source>Friends</source>
-        <translation type="vanished">Vänner</translation>
     </message>
     <message>
         <source>Settings</source>
@@ -353,6 +351,10 @@
     <message>
         <source>Incoming file: </source>
         <translation>Inkommande fil: </translation>
+    </message>
+    <message>
+        <source>is calling</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>
