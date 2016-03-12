@@ -46,16 +46,12 @@ OTHER_FILES += \
     rpm/cyanide.spec \
     rpm/cyanide.yaml \
     translations/*.ts \
-    filesystem/usr/share/dbus-1/services/harbour.cyanide.service \
     qml/pages/FriendAction.qml \
-    filesystem/usr/share/lipstick/notificationcategories/harbour.cyanide.call.conf \
-    filesystem/usr/share/lipstick/notificationcategories/harbour.cyanide.message.conf \
     qml/pages/EnterPassword.qml
-
 
 # to disable building translations every time, comment out the
 # following CONFIG line
-# CONFIG +=  sailfishapp_i18n
+CONFIG +=  sailfishapp_i18n
 
 TRANSLATIONS += translations/cyanide-de.ts \
                 translations/cyanide-ru.ts \
@@ -80,7 +76,7 @@ HEADERS += \
     src/dbusinterface.h \
     src/history.h
 
-unix:!macx: LIBS += -L$$PWD/res/usr/lib/ \
+unix:!macx: LIBS += \
                 -ltoxcore -ltoxdns -ltoxav -ltoxencryptsave \
                 -lsodium -lopus -lvpx \
                 -lrt
@@ -93,6 +89,23 @@ QMAKE_CXXFLAGS += "-Wno-write-strings"
 QMAKE_CXXFLAGS += "-Wno-unused-parameter"
 QMAKE_CXXFLAGS += "-Wno-pointer-arith"
 #QMAKE_CXXFLAGS += "-Wno-unused-function -Wno-comment
+
+QMAKE_RPATHDIR += /usr/share/cyanide/lib
+
+LIBS.path = /usr/share/cyanide/lib/
+LIBS.files += /usr/lib/libsodium.so.18 /usr/lib/libsodium.so.18
+LIBS.files += /usr/lib/libtoxcore.so.0 /usr/lib/libtoxav.so.0 /usr/lib/libtoxdns.so.0 /usr/lib/libtoxencryptsave.so.0
+LIBS.files += /usr/lib/libvpx.so.3
+INSTALLS += LIBS
+
+FILESYSTEM.path = /usr/share/lipstick/notificationcategories/
+FILESYSTEM.files = filesystem/usr/share/lipstick/notificationcategories/harbour.cyanide.call.conf
+FILESYSTEM.files += filesystem/usr/share/lipstick/notificationcategories/harbour.cyanide.message.conf
+INSTALLS += FILESYSTEM
+
+DBUS.path = /usr/share/dbus-1/services
+DBUS.files = filesystem/usr/share/dbus-1/services/harbour.cyanide.service
+INSTALLS += DBUS
 
 RESOURCES += \
     resources.qrc
