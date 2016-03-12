@@ -27,11 +27,14 @@ CoverBackground {
     Connections {
         target: cyanide
 
+        /*
         onSignal_friend_connection_status: {
             statusIcon.source = cyanide.get_friend_status_icon(self_friend_number)
         }
+        */
     }
 
+    /*
     Image {
         id: statusIcon
         source: cyanide.get_friend_status_icon(self_friend_number)
@@ -46,6 +49,7 @@ CoverBackground {
             bottom: tox.bottom
         }
     }
+    */
     Image {
         id: tox
         source: "qrc:/images/cover"
