@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <!DOCTYPE TS>
 <TS version="2.1" language="sv_SE">
 <context>
@@ -191,12 +191,12 @@
     <message>
         <source>Answer</source>
         <extracomment>answer the call</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Svara</translation>
     </message>
     <message>
         <source>Hang Up</source>
         <extracomment>hang up</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Lägg på</translation>
     </message>
 </context>
 <context>
@@ -354,7 +354,7 @@
     </message>
     <message>
         <source>is calling</source>
-        <translation type="unfinished"></translation>
+        <translation>ringer</translation>
     </message>
 </context>
 </TS>
