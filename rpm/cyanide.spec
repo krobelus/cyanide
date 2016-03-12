@@ -22,7 +22,6 @@ Source0:    %{name}-%{version}.tar.bz2
 Source100:  cyanide.yaml
 Requires:   sailfishsilica-qt5 >= 0.10.9
 Requires:   qt5-qtdeclarative-import-folderlistmodel
-Requires:   toxcore = 16.0304
 BuildRequires:  pkgconfig(sailfishapp) >= 1.0.2
 BuildRequires:  pkgconfig(Qt5Core)
 BuildRequires:  pkgconfig(Qt5Qml)
@@ -58,14 +57,7 @@ rm -rf %{buildroot}
 %qmake5_install
 
 # >> install post
-# TODO use variables for sanity
-install -Dm644 /home/mersdk/share/git/cyanide/filesystem/usr/share/lipstick/notificationcategories/harbour.cyanide.call.conf \
-%{buildroot}%{_datadir}/lipstick/notificationcategories/harbour.cyanide.call.conf
-install -Dm644 /home/mersdk/share/git/cyanide/filesystem/usr/share/lipstick/notificationcategories/harbour.cyanide.message.conf \
-%{buildroot}%{_datadir}/lipstick/notificationcategories/harbour.cyanide.message.conf
 
-install -Dm644 /home/mersdk/share/git/cyanide/filesystem/usr/share/dbus-1/services/harbour.cyanide.service \
-%{buildroot}%{_datadir}/dbus-1/services/harbour.cyanide.service
 # << install post
 
 desktop-file-install --delete-original       \

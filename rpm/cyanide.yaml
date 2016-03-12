@@ -35,7 +35,6 @@ PkgConfigBR:
 Requires:
   - sailfishsilica-qt5 >= 0.10.9 
   - qt5-qtdeclarative-import-folderlistmodel
-  - toxcore = 16.0304
 
 # All installed files
 Files:
