@@ -43,5 +43,9 @@ You can use this script:
 $ sh get_libraries.sh
 ``
 
-It will download and extract the rpms I built to the "res" folder,
-   then compiling should work in QtCreator.
+It will download and extract the rpms I built to the "res" folder.
+Additionally, you need to install the dependencies on the mersdk vm:
+
+``
+$ sb2 -t SailfishOS-armv7hl -m sdk-install -R rpm -i *.rpm
+``

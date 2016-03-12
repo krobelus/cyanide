@@ -81,9 +81,6 @@ unix:!macx: LIBS += \
                 -lsodium -lopus -lvpx \
                 -lrt
 
-INCLUDEPATH += $$PWD/res/usr/include
-DEPENDPATH += $$PWD/res/usr/include
-
 QMAKE_CXXFLAGS += "-std=c++0x -pthread"
 QMAKE_CXXFLAGS += "-Wno-write-strings"
 QMAKE_CXXFLAGS += "-Wno-unused-parameter"
