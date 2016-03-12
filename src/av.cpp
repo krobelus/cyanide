@@ -64,9 +64,8 @@ bool Cyanide::answer()
 
     TOXAV_ERR_ANSWER error;
 
-    set_call_state(0);
-
     bool success = toxav_answer(toxav, call_friend_number, audio_bit_rate, video_bit_rate, &error);
+    my_audio_thread = new std::thread([this] () { this->audio_thread(); });
 
     if(success) {
     } else {
@@ -98,13 +97,12 @@ bool Cyanide::hang_up()
 {
     bool success = call_control(call_friend_number, Call_Control::Cancel);
     set_in_call(false);
-    qDebug() << "call state:" << call_state;
-    /*
+    qDebug() << "call state:" << Call_State::display(call_state);
     if(call_state & Call_State::Active) {
+        qDebug() << "waiting for audio transmission to finish";
         my_audio_thread->join();
         delete my_audio_thread;
     }
-    */
     return success;
 }
 
@@ -236,6 +234,7 @@ play:
     if(error != AL_NO_ERROR) \
         qDebug() << i << error; \
     } while(0)
+#define alck(i) ;
 
     ALint processed = 0, queued = 16;
     alGetSourcei(source, AL_BUFFERS_PROCESSED, &processed);
@@ -245,7 +244,7 @@ play:
     alSourcei(source, AL_LOOPING, AL_FALSE);
     alck(3);
 
-    qDebug() << "processed:" << processed << "queued" << queued;
+    // qDebug() << "processed:" << processed << "queued" << queued;
     if(processed) {
         ALuint buffers[processed];
         alSourceUnqueueBuffers(source, processed, buffers);
@@ -300,6 +299,7 @@ void Cyanide::audio_thread()
     }
     alcCaptureStop(input_device);
     alcCaptureCloseDevice(input_device);
+    qDebug() << "stopping audio transmission";
 }
 
 void Cyanide::set_in_call(bool in_call)

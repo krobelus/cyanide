@@ -18,10 +18,10 @@ public:
            , Sending_V = TOXAV_FRIEND_CALL_STATE_SENDING_V
            , Accepting_A = TOXAV_FRIEND_CALL_STATE_ACCEPTING_A
            , Accepting_V = TOXAV_FRIEND_CALL_STATE_ACCEPTING_V
-           , Outgoing = 1 << 29
-           , Incoming = 1 << 30
-           , Ringing = 1 << 31
-           , Active = ~(Finished | Ringing)
+           , Outgoing = 1 << 28
+           , Incoming = 1 << 29
+           , Ringing = 1 << 30
+           , Active = Sending_A | Sending_V | Accepting_A | Accepting_V
            };
     static QStringList display(int s);
 };
