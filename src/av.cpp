@@ -49,6 +49,9 @@ bool Cyanide::call(int fid, bool video)
         case TOXAV_ERR_CALL_INVALID_BIT_RATE:
             qDebug() << "invalid bit rate";
             break;
+        case TOXAV_ERR_CALL_SYNC:
+            qDebug() << "toxav error call sync";
+            break;
         }
     }
     return success;
@@ -83,6 +86,9 @@ bool Cyanide::answer()
         case TOXAV_ERR_ANSWER_INVALID_BIT_RATE:
             qDebug() << "invalid bit rate";
             break;
+        case TOXAV_ERR_ANSWER_SYNC:
+            qDebug() << "toxav error answer sync";
+            break;
         }
     }
     return success;
@@ -92,10 +98,13 @@ bool Cyanide::hang_up()
 {
     bool success = call_control(call_friend_number, Call_Control::Cancel);
     set_in_call(false);
+    qDebug() << "call state:" << call_state;
+    /*
     if(call_state & Call_State::Active) {
         my_audio_thread->join();
         delete my_audio_thread;
     }
+    */
     return success;
 }
 
@@ -119,6 +128,9 @@ bool Cyanide::call_control(int fid, int control)
             break;
         case TOXAV_ERR_CALL_CONTROL_INVALID_TRANSITION:
             qDebug() << "invalid transition";
+            break;
+        case TOXAV_ERR_CALL_CONTROL_SYNC:
+            qDebug() << "toxav error call control sync";
             break;
         }
     }
