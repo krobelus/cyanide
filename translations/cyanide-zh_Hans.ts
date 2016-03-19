@@ -393,7 +393,7 @@
     <message>
         <location filename="../src/settings.cpp" line="20"/>
         <source>Send typing notifications?</source>
-        <translation>发送&quot;正在输入&quot;通知吗？</translation>
+        <translation>发送"正在输入"通知吗？</translation>
     </message>
     <message>
         <location filename="../src/settings.cpp" line="22"/>
@@ -431,7 +431,7 @@
     <message>
         <location filename="../qml/cyanide.qml" line="229"/>
         <source>is calling</source>
-        <translation type="unfinished"></translation>
+        <translation>正在呼叫</translation>
     </message>
     <message>
         <location filename="../qml/cyanide.qml" line="244"/>
