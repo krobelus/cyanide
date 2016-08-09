@@ -49,9 +49,9 @@ It will download the RPMs I built to the "res" folder. Then you need to install
 those on the Mer SDK VM. In the VM there is the folder `/home/merdsk/share`
 which is a shared folder of the home directory of the host system.
 
-``
+```sh
 $ ssh -p 2222 -i ~/SailfishOS/vmshare/ssh/private_keys/engine/mersdk mersdk@localhost
 ``
 ``
 $ sb2 -t SailfishOS-armv7hl -m sdk-install -R rpm -i /home/merdsk/share/path/to/cyanide/res/*.rpm
-``
+```
