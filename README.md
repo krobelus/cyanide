@@ -51,5 +51,7 @@ which is a shared folder of the home directory of the host system.
 
 ``
 $ ssh -p 2222 -i ~/SailfishOS/vmshare/ssh/private_keys/engine/mersdk mersdk@localhost
+``
+``
 $ sb2 -t SailfishOS-armv7hl -m sdk-install -R rpm -i /home/merdsk/share/path/to/cyanide/res/*.rpm
 ``
