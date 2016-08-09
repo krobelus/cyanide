@@ -33,9 +33,11 @@ and improve translations. Alternatively, send a patch or use github.
 Building
 --------
 
-I use the sailfish sdk to build this program. It requires several
-libraries which are not in the official repositories. I built them
-using the [Mer Project Open Build Service](https://build.merproject.org/)
+First install the [Sailfish OS SDK](https://sailfishos.org/wiki/Application_SDK_Installation).
+
+Then you need some libraries which are not in the official repositories.  I
+built them using the [Mer Project Open Build
+Service](https://build.merproject.org/)
 
 You can use this script:
 
@@ -43,9 +45,11 @@ You can use this script:
 $ sh get_libraries.sh
 ``
 
-It will download and extract the rpms I built to the "res" folder.
-Additionally, you need to install the dependencies on the mersdk vm:
+It will download the RPMs I built to the "res" folder. Then you need to install
+those on the Mer SDK VM. In the VM there is the folder `/home/merdsk/share`
+which is a shared folder of the home directory of the host system.
 
 ``
-$ sb2 -t SailfishOS-armv7hl -m sdk-install -R rpm -i *.rpm
+$ ssh -p 2222 -i ~/SailfishOS/vmshare/ssh/private_keys/engine/mersdk mersdk@localhost
+$ sb2 -t SailfishOS-armv7hl -m sdk-install -R rpm -i /home/merdsk/share/path/to/cyanide/res/*.rpm
 ``

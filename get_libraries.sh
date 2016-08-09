@@ -12,12 +12,12 @@ die() {
 }
 
 which wget || die "wget not found"
-which rpm2cpio || die "rpm2cpio not found"
-which bsdtar || die "bsdtar not found"
+# which rpm2cpio || die "rpm2cpio not found"
+# which bsdtar || die "bsdtar not found"
 
-rpmextract() {
-    rpm2cpio "$1" | bsdtar -xf -
-}
+# rpmextract() {
+#     rpm2cpio "$1" | bsdtar -xf -
+# }
 
 cat << EOF | while read package; do wget $repo$package || exit 1; done
 filter_audio-15.0211-10.8.2.jolla.armv7hl.rpm
@@ -36,6 +36,6 @@ toxcore-devel-16.0304-10.1.1.jolla.armv7hl.rpm
 EOF
 
 
-for package in *.rpm; do
-    rpmextract "$package"
-done
+# for package in *.rpm; do
+#     rpmextract "$package"
+# done
