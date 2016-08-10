@@ -35,6 +35,12 @@ Building
 
 First install the [Sailfish OS SDK](https://sailfishos.org/wiki/Application_SDK_Installation).
 
+Clone the repository - it currently includes a submodule so you have to do
+
+```
+git clone --recursive https://github.com/krobelus/cyanide
+```
+
 Then you need some libraries which are not in the official repositories.  I
 built them using the [Mer Project Open Build
 Service](https://build.merproject.org/)
