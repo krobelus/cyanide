@@ -124,7 +124,7 @@
     <name>EnterPassword</name>
     <message>
         <source>Enter password</source>
-        <translation type="unfinished"></translation>
+        <translation>Passwort eingeben</translation>
     </message>
 </context>
 <context>
