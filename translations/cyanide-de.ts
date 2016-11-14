@@ -27,7 +27,7 @@
     </message>
     <message>
         <source>Failed to send friend request</source>
-        <translation>Fehler beim Senden der Freundschaftsanfrage</translation>
+        <translation>Fehler beim Senden der freundschaftsanfrage</translation>
     </message>
 </context>
 <context>
@@ -135,23 +135,23 @@
     </message>
     <message>
         <source>Remove my avatar</source>
-        <translation>Meinen Avatar entfernen</translation>
+        <translation>Meinen avatar entfernen</translation>
     </message>
     <message>
         <source>Failed to set avatar</source>
-        <translation>Fehler beim Setzen des Avatars</translation>
+        <translation>Fehler beim Setzen des avatars</translation>
     </message>
     <message>
         <source>Filter by filename extension</source>
-        <translation>Nach Dateierweiterung filtern</translation>
+        <translation>Nach dateierweiterung filtern</translation>
     </message>
     <message>
         <source>Failed to send file</source>
-        <translation>Fehler beim Schicken der Datei</translation>
+        <translation>Fehler beim Schicken der datei</translation>
     </message>
     <message>
         <source>New profile</source>
-        <translation>Neues Profil</translation>
+        <translation>Neues profil</translation>
     </message>
     <message>
         <source>Decryption failed</source>
@@ -170,15 +170,15 @@
     </message>
     <message>
         <source>Failed to pause transfer</source>
-        <translation>Fehler beim Pausieren der Dateiübertragung</translation>
+        <translation>Fehler beim pausieren der dateiübertragung</translation>
     </message>
     <message>
         <source>Failed to resume transfer</source>
-        <translation>Fehler beim Fortsetzen der Dateiübertragung</translation>
+        <translation>Fehler beim fortsetzen der dateiübertragung</translation>
     </message>
     <message>
         <source>Failed to cancel transfer</source>
-        <translation>Fehler beim Abbrechen der Dateiübertragung</translation>
+        <translation>Fehler beim abbrechen der dateiübertragung</translation>
     </message>
     <message>
         <source>Opening file...</source>
@@ -186,7 +186,7 @@
     </message>
     <message>
         <source>Failed to send message</source>
-        <translation>Fehler beim Schicken der Nachricht</translation>
+        <translation>Fehler beim schicken der nachricht</translation>
     </message>
     <message>
         <source>Answer</source>
@@ -315,11 +315,11 @@
     </message>
     <message>
         <source>I receive a message</source>
-        <translation>ich eine Nachricht bekomme</translation>
+        <translation>Ich eine nachricht bekomme</translation>
     </message>
     <message>
         <source>I receive a friend request</source>
-        <translation>ich eine Freundschaftsanfrage bekomme</translation>
+        <translation>Ich eine Freundschaftsanfrage bekomme</translation>
     </message>
     <message>
         <source>Notify me when...</source>
@@ -350,7 +350,7 @@
     </message>
     <message>
         <source>Incoming file: </source>
-        <translation>Eingehende Datei: </translation>
+        <translation>Eingehende datei: </translation>
     </message>
     <message>
         <source>is calling</source>
