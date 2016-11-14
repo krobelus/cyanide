@@ -155,7 +155,7 @@
     </message>
     <message>
         <source>Decryption failed</source>
-        <translation type="unfinished"></translation>
+        <translation>Entschlüsseln fehlgeschlagen</translation>
     </message>
 </context>
 <context>
