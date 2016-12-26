@@ -7,187 +7,172 @@
 
 #include <QDebug>
 
-void* file_raw(char *path, uint32_t *size)
-{
-    FILE *file;
-    char *data;
-    int len;
+void *file_raw(char *path, uint32_t *size) {
+  FILE *file;
+  char *data;
+  int len;
 
-    file = fopen(path, "rb");
-    if(!file) {
-        qDebug() << "File not found (" << path << ")";
-        return NULL;
-    }
+  file = fopen(path, "rb");
+  if (!file) {
+    qDebug() << "File not found (" << path << ")";
+    return NULL;
+  }
 
-    fseek(file, 0, SEEK_END);
-    len = ftell(file);
-    data = (char*)malloc(len);
-    if(!data) {
-        fclose(file);
-        return NULL;
-    }
-
-    fseek(file, 0, SEEK_SET);
-
-    if(fread(data, len, 1, file) != 1) {
-        qDebug() << "Read error (" << path << ")";
-        fclose(file);
-        free(data);
-        return NULL;
-    }
-
+  fseek(file, 0, SEEK_END);
+  len = ftell(file);
+  data = (char *)malloc(len);
+  if (!data) {
     fclose(file);
+    return NULL;
+  }
 
-    qDebug() << "Read " << len << "bytes (" << path << ")";
+  fseek(file, 0, SEEK_SET);
 
-    if(size) {
-        *size = len;
-    }
-    return data;
-}
-
-void* file_text(char *path)
-{
-    FILE *file;
-    char *data;
-    int len;
-
-    file = fopen(path, "rb");
-    if(!file) {
-        qDebug() << "File not found (" << path << ")";
-        return NULL;
-    }
-
-    fseek(file, 0, SEEK_END);
-    len = ftell(file);
-    data = (char*)malloc(len + 1);
-    if(!data) {
-        fclose(file);
-        return NULL;
-    }
-
-    fseek(file, 0, SEEK_SET);
-
-    if(fread(data, len, 1, file) != 1) {
-        qDebug() << "Read error (" << path << ")";
-        fclose(file);
-        free(data);
-        return NULL;
-    }
-
+  if (fread(data, len, 1, file) != 1) {
+    qDebug() << "Read error (" << path << ")";
     fclose(file);
+    free(data);
+    return NULL;
+  }
 
-    qDebug() << "Read " << len << " bytes (" << path << ")";
+  fclose(file);
 
-    data[len] = 0;
-    return data;
+  qDebug() << "Read " << len << "bytes (" << path << ")";
+
+  if (size) {
+    *size = len;
+  }
+  return data;
 }
 
-void to_hex(char *a, char *p, int size)
-{
-    char b, c, *end = p + size;
+void *file_text(char *path) {
+  FILE *file;
+  char *data;
+  int len;
 
-    while(p != end) {
-        b = *p++;
+  file = fopen(path, "rb");
+  if (!file) {
+    qDebug() << "File not found (" << path << ")";
+    return NULL;
+  }
 
-        c = (b & 0xF);
-        b = (b >> 4);
+  fseek(file, 0, SEEK_END);
+  len = ftell(file);
+  data = (char *)malloc(len + 1);
+  if (!data) {
+    fclose(file);
+    return NULL;
+  }
 
-        if(b < 10) {
-            *a++ = b + '0';
-        } else {
-            *a++ = b - 10 + 'A';
-        }
+  fseek(file, 0, SEEK_SET);
 
-        if(c < 10) {
-            *a++ = c + '0';
-        } else {
-            *a++ = c  - 10 + 'A';
-        }
-    }
+  if (fread(data, len, 1, file) != 1) {
+    qDebug() << "Read error (" << path << ")";
+    fclose(file);
+    free(data);
+    return NULL;
+  }
+
+  fclose(file);
+
+  qDebug() << "Read " << len << " bytes (" << path << ")";
+
+  data[len] = 0;
+  return data;
 }
 
-void address_to_string(char *dest, char *src)
-{
-    to_hex(dest, src, TOX_ADDRESS_SIZE);
-}
+void to_hex(char *a, char *p, int size) {
+  char b, c, *end = p + size;
 
-void public_key_to_string(char *dest, char *src)
-{
-    to_hex(dest, src, TOX_PUBLIC_KEY_SIZE);
-}
+  while (p != end) {
+    b = *p++;
 
-void hash_to_string(char *dest, char *src)
-{
-    to_hex(dest, src, TOX_HASH_LENGTH);
-}
+    c = (b & 0xF);
+    b = (b >> 4);
 
-bool string_to_address(char *w, char *a)
-{
-    char *end = w + TOX_ADDRESS_SIZE;
-    while(w != end) {
-        char c, v;
-
-        c = *a++;
-        if(c >= '0' && c <= '9') {
-            v = (c - '0') << 4;
-        } else if(c >= 'A' && c <= 'F') {
-            v = (c - 'A' + 10) << 4;
-        } else if(c >= 'a' && c <= 'f') {
-            v = (c - 'a' + 10) << 4;
-        } else {
-            return 0;
-        }
-
-        c = *a++;
-        if(c >= '0' && c <= '9') {
-            v |= (c - '0');
-        } else if(c >= 'A' && c <= 'F') {
-            v |= (c - 'A' + 10);
-        } else if(c >= 'a' && c <= 'f') {
-            v |= (c - 'a' + 10);
-        } else {
-            return 0;
-        }
-
-        *w++ = v;
+    if (b < 10) {
+      *a++ = b + '0';
+    } else {
+      *a++ = b - 10 + 'A';
     }
 
-    return 1;
+    if (c < 10) {
+      *a++ = c + '0';
+    } else {
+      *a++ = c - 10 + 'A';
+    }
+  }
 }
 
-QString utf8_to_qstr(const void *src, size_t length)
-{
-    return QString(QByteArray((const char*)src, length));
+void address_to_string(char *dest, char *src) {
+  to_hex(dest, src, TOX_ADDRESS_SIZE);
 }
 
-
-size_t qstrlen(QString str)
-{
-    return str.toUtf8().length();
+void public_key_to_string(char *dest, char *src) {
+  to_hex(dest, src, TOX_PUBLIC_KEY_SIZE);
 }
 
-void qstr_to_utf8(uint8_t *dest, QString src)
-{
-    QByteArray bytes = src.toUtf8();
-    const char *charp = bytes.constData();
-    memcpy(dest, charp, bytes.size());
+void hash_to_string(char *dest, char *src) {
+  to_hex(dest, src, TOX_HASH_LENGTH);
 }
 
-uint64_t get_time()
-{
-    struct timespec ts;
-    #ifdef CLOCK_MONOTONIC_RAW
-    clock_gettime(CLOCK_MONOTONIC_RAW, &ts);
-    #else
-    clock_gettime(CLOCK_MONOTONIC, &ts);
-    #endif
+bool string_to_address(uint8_t *w, uint8_t *a) {
+  uint8_t *end = w + TOX_ADDRESS_SIZE;
+  while (w != end) {
+    uint8_t c, v;
 
-    return ((uint64_t)ts.tv_sec * (1000 * 1000 * 1000)) + (uint64_t)ts.tv_nsec;
+    c = *a++;
+    if (c >= '0' && c <= '9') {
+      v = (c - '0') << 4;
+    } else if (c >= 'A' && c <= 'F') {
+      v = (c - 'A' + 10) << 4;
+    } else if (c >= 'a' && c <= 'f') {
+      v = (c - 'a' + 10) << 4;
+    } else {
+      return 0;
+    }
+
+    c = *a++;
+    if (c >= '0' && c <= '9') {
+      v |= (c - '0');
+    } else if (c >= 'A' && c <= 'F') {
+      v |= (c - 'A' + 10);
+    } else if (c >= 'a' && c <= 'f') {
+      v |= (c - 'a' + 10);
+    } else {
+      return 0;
+    }
+
+    *w++ = v;
+  }
+
+  return 1;
 }
 
-bool looks_like_an_image(QString &path)
-{
-    QRegExp rx("\\.(png|jpeg|gif)$");
-    return rx.indexIn(path) != -1;
+QString utf8_to_qstr(const void *src, size_t length) {
+  return QString(QByteArray((const char *)src, length));
+}
+
+size_t qstrlen(QString const &str) { return str.toUtf8().length(); }
+
+void qstr_to_utf8(uint8_t *dest, QString const &src) {
+  QByteArray bytes = src.toUtf8();
+  const char *charp = bytes.constData();
+  memcpy(dest, charp, bytes.size());
+}
+
+uint64_t get_time() {
+  struct timespec ts;
+#ifdef CLOCK_MONOTONIC_RAW
+  clock_gettime(CLOCK_MONOTONIC_RAW, &ts);
+#else
+  clock_gettime(CLOCK_MONOTONIC, &ts);
+#endif
+
+  return ((uint64_t)ts.tv_sec * (1000 * 1000 * 1000)) + (uint64_t)ts.tv_nsec;
+}
+
+bool looks_like_an_image(QString const &path) {
+  QRegExp rx("\\.(png|jpeg|gif)$");
+  return rx.indexIn(path) != -1;
 }

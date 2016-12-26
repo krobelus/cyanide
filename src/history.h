@@ -3,23 +3,25 @@
 
 #include "message.h"
 
-class History
-{
- private:
-    QString profile_name;
-    int get_chat_id(QString &public_key);
-    int get_file_id(QByteArray &tox_file_id);
-    static QString tables[];
-    static QString db_version;
- public:
-    void open_database(QString &name);
-    void close_databases();
-    void add_message(QString public_key, Message *m);
-    void add_file(File_Transfer *ft);
-    void update_file(File_Transfer *ft);
-    void load_messages(QString public_key, QList<Message> *messages, QDateTime from = QDateTime(), QDateTime to = QDateTime()); // TODO make sense
-    void load_file_transfer(int file_id, File_Transfer *ft);
-    void clear_messages(QString public_key);
+class History {
+private:
+  QString profile_name;
+  int get_chat_id(QString const &public_key) const;
+  int get_file_id(QByteArray const &tox_file_id) const;
+  static const QString tables[];
+  static const QString db_version;
+
+public:
+  void open_database(QString const &name);
+  ~History();
+  void add_message(QString const &public_key, Message const &m) const;
+  void add_file(File_Transfer const &ft) const;
+  void update_file(File_Transfer const &ft) const;
+  void load_messages(QString const &public_key, QList<Message> &messages,
+                     QDateTime const &from = QDateTime(),
+                     QDateTime const &to = QDateTime()) const;
+  void load_file_transfer(int file_id, File_Transfer &ft) const;
+  void clear_messages(QString const &public_key) const;
 };
 
 #endif // HISTORY_H

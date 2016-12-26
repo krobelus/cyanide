@@ -38,113 +38,113 @@
 <context>
     <name>Cyanide</name>
     <message>
-        <location filename="../src/cyanide.cpp" line="941"/>
+        <location filename="../src/cyanide.cpp" line="952"/>
         <source>Error: Invalid Tox ID</source>
         <translation>Eroare: ID Tox invalid</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="969"/>
+        <location filename="../src/cyanide.cpp" line="980"/>
         <source>Error: Message is too long</source>
         <translation>Eroare: Mesajul este prea lung</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="973"/>
+        <location filename="../src/cyanide.cpp" line="984"/>
         <source>Error: Tox ID is self ID</source>
         <translation>Eroare: ID-ul Tox este identic cu ID-ul personal</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="975"/>
+        <location filename="../src/cyanide.cpp" line="986"/>
         <source>Error: Tox ID is already in friend list</source>
         <translation>Eroare: ID-ul Tox este deja in lista de prieteni</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="977"/>
+        <location filename="../src/cyanide.cpp" line="988"/>
         <source>Error: Invalid Tox ID (bad checksum)</source>
         <translation>Eroare: Id Tox invalid (checksum eronat)</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="979"/>
+        <location filename="../src/cyanide.cpp" line="990"/>
         <source>Error: Invalid Tox ID (bad nospam value)</source>
         <translation>Eroare: ID Tox invalid (valoare nospam eronata)</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="981"/>
+        <location filename="../src/cyanide.cpp" line="992"/>
         <source>Error: No memory</source>
         <translation>Eroare: Fara memorie</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="1044"/>
-        <location filename="../src/filetransfers.cpp" line="420"/>
-        <location filename="../src/filetransfers.cpp" line="532"/>
+        <location filename="../src/cyanide.cpp" line="1053"/>
+        <location filename="../src/filetransfers.cpp" line="418"/>
+        <location filename="../src/filetransfers.cpp" line="528"/>
         <source>Error: Friend not connected</source>
         <translation>Eroare: Prietenul nu este conectat</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="1134"/>
+        <location filename="../src/cyanide.cpp" line="1135"/>
         <source>Error: File exists</source>
         <translation>Eroare: Fisier existent</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="1313"/>
+        <location filename="../src/cyanide.cpp" line="1301"/>
         <source>File not found: </source>
         <translation>Nu s-a gasit fisierul: </translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="1318"/>
+        <location filename="../src/cyanide.cpp" line="1306"/>
         <source>Avatar too large. Maximum size: 64KiB</source>
         <translation>Avatar prea mare. Dimensiune maxima: 64KiB</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.h" line="244"/>
+        <location filename="../src/cyanide.h" line="250"/>
         <source>Tox User</source>
         <extracomment>default username</extracomment>
         <translation>Utilizator Tox</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.h" line="246"/>
+        <location filename="../src/cyanide.h" line="252"/>
         <source>Toxing on Cyanide</source>
         <extracomment>default status</extracomment>
         <translation>Chat Tox pe Cyanide</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.h" line="248"/>
+        <location filename="../src/cyanide.h" line="254"/>
         <source>Tox me maybe?</source>
         <extracomment>default friend request message - feel free to tranlate freely</extracomment>
         <translation>Vrei sa-mi trimiti un mesaj Tox?</translation>
     </message>
     <message>
-        <location filename="../src/filetransfers.cpp" line="418"/>
-        <location filename="../src/filetransfers.cpp" line="530"/>
+        <location filename="../src/filetransfers.cpp" line="416"/>
+        <location filename="../src/filetransfers.cpp" line="526"/>
         <source>Error: Friend not found</source>
         <translation>Eroare: Prietenul nu a fost gasit</translation>
     </message>
     <message>
-        <location filename="../src/filetransfers.cpp" line="422"/>
+        <location filename="../src/filetransfers.cpp" line="420"/>
         <source>Error: File transfer not found</source>
         <translation>Eroare: Fisierul transferat nu a fost gasit</translation>
     </message>
     <message>
-        <location filename="../src/filetransfers.cpp" line="428"/>
+        <location filename="../src/filetransfers.cpp" line="426"/>
         <source>Error: Already paused</source>
         <translation>Eroare: Deja in pauza</translation>
     </message>
     <message>
-        <location filename="../src/filetransfers.cpp" line="430"/>
+        <location filename="../src/filetransfers.cpp" line="428"/>
         <source>Error: Packet queue is full</source>
         <translation>Eroare: Coada de pachete este deja plina</translation>
     </message>
     <message>
-        <location filename="../src/filetransfers.cpp" line="509"/>
+        <location filename="../src/filetransfers.cpp" line="505"/>
         <source>Error: Failed to open file: </source>
         <translation>Eroare: Nu se poate deschide fisierul: </translation>
     </message>
     <message>
-        <location filename="../src/filetransfers.cpp" line="534"/>
+        <location filename="../src/filetransfers.cpp" line="530"/>
         <source>Error: Filename too long</source>
         <translation>Eroare: Numele fisierului prea lung</translation>
     </message>
     <message>
-        <location filename="../src/filetransfers.cpp" line="536"/>
+        <location filename="../src/filetransfers.cpp" line="532"/>
         <source>Error: Too many ongoing transfers</source>
         <translation>Eroare: Prea multe transferuri simultane</translation>
     </message>
@@ -386,37 +386,37 @@
         <translation>Setări</translation>
     </message>
     <message>
-        <location filename="../src/settings.cpp" line="18"/>
+        <location filename="../src/settings.cpp" line="16"/>
         <source>Wifi only</source>
         <translation>Numai Wifi</translation>
     </message>
     <message>
-        <location filename="../src/settings.cpp" line="20"/>
+        <location filename="../src/settings.cpp" line="18"/>
         <source>Send typing notifications?</source>
         <translation>Trimite notificări cand tastezi?</translation>
     </message>
     <message>
-        <location filename="../src/settings.cpp" line="22"/>
+        <location filename="../src/settings.cpp" line="19"/>
         <source>Keep chat history</source>
         <translation>Păstraţi istoricul chat</translation>
     </message>
     <message>
-        <location filename="../src/settings.cpp" line="24"/>
+        <location filename="../src/settings.cpp" line="20"/>
         <source>Enable UDP</source>
         <translation>Permite UDP</translation>
     </message>
     <message>
-        <location filename="../src/settings.cpp" line="26"/>
+        <location filename="../src/settings.cpp" line="21"/>
         <source>Notify me when...</source>
         <translation>Anunţă-mă când...</translation>
     </message>
     <message>
-        <location filename="../src/settings.cpp" line="27"/>
+        <location filename="../src/settings.cpp" line="23"/>
         <source>I receive a message</source>
         <translation>Am primit un mesaj</translation>
     </message>
     <message>
-        <location filename="../src/settings.cpp" line="29"/>
+        <location filename="../src/settings.cpp" line="25"/>
         <source>I receive a friend request</source>
         <translation>Am primit o cerere de prietenie</translation>
     </message>

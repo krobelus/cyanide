@@ -38,113 +38,113 @@
 <context>
     <name>Cyanide</name>
     <message>
-        <location filename="../src/cyanide.cpp" line="941"/>
+        <location filename="../src/cyanide.cpp" line="952"/>
         <source>Error: Invalid Tox ID</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="969"/>
+        <location filename="../src/cyanide.cpp" line="980"/>
         <source>Error: Message is too long</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="973"/>
+        <location filename="../src/cyanide.cpp" line="984"/>
         <source>Error: Tox ID is self ID</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="975"/>
+        <location filename="../src/cyanide.cpp" line="986"/>
         <source>Error: Tox ID is already in friend list</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="977"/>
+        <location filename="../src/cyanide.cpp" line="988"/>
         <source>Error: Invalid Tox ID (bad checksum)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="979"/>
+        <location filename="../src/cyanide.cpp" line="990"/>
         <source>Error: Invalid Tox ID (bad nospam value)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="981"/>
+        <location filename="../src/cyanide.cpp" line="992"/>
         <source>Error: No memory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="1044"/>
-        <location filename="../src/filetransfers.cpp" line="420"/>
-        <location filename="../src/filetransfers.cpp" line="532"/>
+        <location filename="../src/cyanide.cpp" line="1053"/>
+        <location filename="../src/filetransfers.cpp" line="418"/>
+        <location filename="../src/filetransfers.cpp" line="528"/>
         <source>Error: Friend not connected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="1134"/>
+        <location filename="../src/cyanide.cpp" line="1135"/>
         <source>Error: File exists</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="1313"/>
+        <location filename="../src/cyanide.cpp" line="1301"/>
         <source>File not found: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="1318"/>
+        <location filename="../src/cyanide.cpp" line="1306"/>
         <source>Avatar too large. Maximum size: 64KiB</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/cyanide.h" line="244"/>
+        <location filename="../src/cyanide.h" line="250"/>
         <source>Tox User</source>
         <extracomment>default username</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/cyanide.h" line="246"/>
+        <location filename="../src/cyanide.h" line="252"/>
         <source>Toxing on Cyanide</source>
         <extracomment>default status</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/cyanide.h" line="248"/>
+        <location filename="../src/cyanide.h" line="254"/>
         <source>Tox me maybe?</source>
         <extracomment>default friend request message - feel free to tranlate freely</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/filetransfers.cpp" line="418"/>
-        <location filename="../src/filetransfers.cpp" line="530"/>
+        <location filename="../src/filetransfers.cpp" line="416"/>
+        <location filename="../src/filetransfers.cpp" line="526"/>
         <source>Error: Friend not found</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/filetransfers.cpp" line="422"/>
+        <location filename="../src/filetransfers.cpp" line="420"/>
         <source>Error: File transfer not found</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/filetransfers.cpp" line="428"/>
+        <location filename="../src/filetransfers.cpp" line="426"/>
         <source>Error: Already paused</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/filetransfers.cpp" line="430"/>
+        <location filename="../src/filetransfers.cpp" line="428"/>
         <source>Error: Packet queue is full</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/filetransfers.cpp" line="509"/>
+        <location filename="../src/filetransfers.cpp" line="505"/>
         <source>Error: Failed to open file: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/filetransfers.cpp" line="534"/>
+        <location filename="../src/filetransfers.cpp" line="530"/>
         <source>Error: Filename too long</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/filetransfers.cpp" line="536"/>
+        <location filename="../src/filetransfers.cpp" line="532"/>
         <source>Error: Too many ongoing transfers</source>
         <translation type="unfinished"></translation>
     </message>
@@ -386,37 +386,37 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/settings.cpp" line="18"/>
+        <location filename="../src/settings.cpp" line="16"/>
         <source>Wifi only</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/settings.cpp" line="20"/>
+        <location filename="../src/settings.cpp" line="18"/>
         <source>Send typing notifications?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/settings.cpp" line="22"/>
+        <location filename="../src/settings.cpp" line="19"/>
         <source>Keep chat history</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/settings.cpp" line="24"/>
+        <location filename="../src/settings.cpp" line="20"/>
         <source>Enable UDP</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/settings.cpp" line="26"/>
+        <location filename="../src/settings.cpp" line="21"/>
         <source>Notify me when...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/settings.cpp" line="27"/>
+        <location filename="../src/settings.cpp" line="23"/>
         <source>I receive a message</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/settings.cpp" line="29"/>
+        <location filename="../src/settings.cpp" line="25"/>
         <source>I receive a friend request</source>
         <translation type="unfinished"></translation>
     </message>

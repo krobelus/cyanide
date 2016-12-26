@@ -22,11 +22,15 @@ Source0:    %{name}-%{version}.tar.bz2
 Source100:  cyanide.yaml
 Requires:   sailfishsilica-qt5 >= 0.10.9
 Requires:   qt5-qtdeclarative-import-folderlistmodel
+Requires:   nemo-qml-plugin-notifications-qt5
+Requires:   OpenAL
 BuildRequires:  pkgconfig(sailfishapp) >= 1.0.2
 BuildRequires:  pkgconfig(Qt5Core)
 BuildRequires:  pkgconfig(Qt5Qml)
 BuildRequires:  pkgconfig(Qt5Quick)
+BuildRequires:  pkgconfig(Qt5DBus)
 BuildRequires:  pkgconfig(openal)
+BuildRequires:  pkgconfig(nemonotifications-qt5)
 BuildRequires:  desktop-file-utils
 
 %description

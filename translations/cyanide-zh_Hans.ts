@@ -38,113 +38,113 @@
 <context>
     <name>Cyanide</name>
     <message>
-        <location filename="../src/cyanide.cpp" line="941"/>
+        <location filename="../src/cyanide.cpp" line="952"/>
         <source>Error: Invalid Tox ID</source>
         <translation>错误: 无效的 Tox ID</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="969"/>
+        <location filename="../src/cyanide.cpp" line="980"/>
         <source>Error: Message is too long</source>
         <translation>错误: 消息太长</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="973"/>
+        <location filename="../src/cyanide.cpp" line="984"/>
         <source>Error: Tox ID is self ID</source>
         <translation>错误: 不能添加自己为好友</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="975"/>
+        <location filename="../src/cyanide.cpp" line="986"/>
         <source>Error: Tox ID is already in friend list</source>
         <translation>错误: Tox ID 已经在好友列表里</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="977"/>
+        <location filename="../src/cyanide.cpp" line="988"/>
         <source>Error: Invalid Tox ID (bad checksum)</source>
         <translation>错误: 无效的 Tox ID (错误的 checksum)</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="979"/>
+        <location filename="../src/cyanide.cpp" line="990"/>
         <source>Error: Invalid Tox ID (bad nospam value)</source>
         <translation>错误: 无效的 Tox ID (错误的 nospam 值)</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="981"/>
+        <location filename="../src/cyanide.cpp" line="992"/>
         <source>Error: No memory</source>
         <translation>错误: 内存不足</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="1044"/>
-        <location filename="../src/filetransfers.cpp" line="420"/>
-        <location filename="../src/filetransfers.cpp" line="532"/>
+        <location filename="../src/cyanide.cpp" line="1053"/>
+        <location filename="../src/filetransfers.cpp" line="418"/>
+        <location filename="../src/filetransfers.cpp" line="528"/>
         <source>Error: Friend not connected</source>
         <translation>错误: 未连接到好友</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="1134"/>
+        <location filename="../src/cyanide.cpp" line="1135"/>
         <source>Error: File exists</source>
         <translation>错误: 文件已存在</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="1313"/>
+        <location filename="../src/cyanide.cpp" line="1301"/>
         <source>File not found: </source>
         <translation>文件未找到: </translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="1318"/>
+        <location filename="../src/cyanide.cpp" line="1306"/>
         <source>Avatar too large. Maximum size: 64KiB</source>
         <translation>头像太大，最大尺寸: 64KiB</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.h" line="244"/>
+        <location filename="../src/cyanide.h" line="250"/>
         <source>Tox User</source>
         <extracomment>default username</extracomment>
         <translation>Tox 用户</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.h" line="246"/>
+        <location filename="../src/cyanide.h" line="252"/>
         <source>Toxing on Cyanide</source>
         <extracomment>default status</extracomment>
         <translation>正在 Cyanide 上使用 Tox</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.h" line="248"/>
+        <location filename="../src/cyanide.h" line="254"/>
         <source>Tox me maybe?</source>
         <extracomment>default friend request message - feel free to tranlate freely</extracomment>
         <translation>在 Tox 上联系我？</translation>
     </message>
     <message>
-        <location filename="../src/filetransfers.cpp" line="418"/>
-        <location filename="../src/filetransfers.cpp" line="530"/>
+        <location filename="../src/filetransfers.cpp" line="416"/>
+        <location filename="../src/filetransfers.cpp" line="526"/>
         <source>Error: Friend not found</source>
         <translation>错误: 好友未找到</translation>
     </message>
     <message>
-        <location filename="../src/filetransfers.cpp" line="422"/>
+        <location filename="../src/filetransfers.cpp" line="420"/>
         <source>Error: File transfer not found</source>
         <translation>错误: 文件未找到</translation>
     </message>
     <message>
-        <location filename="../src/filetransfers.cpp" line="428"/>
+        <location filename="../src/filetransfers.cpp" line="426"/>
         <source>Error: Already paused</source>
         <translation>错误：已经暂停</translation>
     </message>
     <message>
-        <location filename="../src/filetransfers.cpp" line="430"/>
+        <location filename="../src/filetransfers.cpp" line="428"/>
         <source>Error: Packet queue is full</source>
         <translation>错误: 数据包队列已满</translation>
     </message>
     <message>
-        <location filename="../src/filetransfers.cpp" line="509"/>
+        <location filename="../src/filetransfers.cpp" line="505"/>
         <source>Error: Failed to open file: </source>
         <translation>错误: 打开文件失败: </translation>
     </message>
     <message>
-        <location filename="../src/filetransfers.cpp" line="534"/>
+        <location filename="../src/filetransfers.cpp" line="530"/>
         <source>Error: Filename too long</source>
         <translation>错误: 文件名太长</translation>
     </message>
     <message>
-        <location filename="../src/filetransfers.cpp" line="536"/>
+        <location filename="../src/filetransfers.cpp" line="532"/>
         <source>Error: Too many ongoing transfers</source>
         <translation>错误: 正在进行太多文件传输</translation>
     </message>
@@ -386,37 +386,37 @@
         <translation>设置</translation>
     </message>
     <message>
-        <location filename="../src/settings.cpp" line="18"/>
+        <location filename="../src/settings.cpp" line="16"/>
         <source>Wifi only</source>
         <translation>仅 Wifi</translation>
     </message>
     <message>
-        <location filename="../src/settings.cpp" line="20"/>
+        <location filename="../src/settings.cpp" line="18"/>
         <source>Send typing notifications?</source>
-        <translation>发送"正在输入"通知吗？</translation>
+        <translation>发送&quot;正在输入&quot;通知吗？</translation>
     </message>
     <message>
-        <location filename="../src/settings.cpp" line="22"/>
+        <location filename="../src/settings.cpp" line="19"/>
         <source>Keep chat history</source>
         <translation>保存聊天历史</translation>
     </message>
     <message>
-        <location filename="../src/settings.cpp" line="24"/>
+        <location filename="../src/settings.cpp" line="20"/>
         <source>Enable UDP</source>
         <translation>启用 UDP</translation>
     </message>
     <message>
-        <location filename="../src/settings.cpp" line="26"/>
+        <location filename="../src/settings.cpp" line="21"/>
         <source>Notify me when...</source>
         <translation>提醒我当发生...</translation>
     </message>
     <message>
-        <location filename="../src/settings.cpp" line="27"/>
+        <location filename="../src/settings.cpp" line="23"/>
         <source>I receive a message</source>
         <translation>我收到一个消息</translation>
     </message>
     <message>
-        <location filename="../src/settings.cpp" line="29"/>
+        <location filename="../src/settings.cpp" line="25"/>
         <source>I receive a friend request</source>
         <translation>我收到一个好友请求</translation>
     </message>

@@ -38,113 +38,113 @@
 <context>
     <name>Cyanide</name>
     <message>
-        <location filename="../src/cyanide.cpp" line="941"/>
+        <location filename="../src/cyanide.cpp" line="952"/>
         <source>Error: Invalid Tox ID</source>
         <translation>Fejl: Ugyldig ToxID</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="969"/>
+        <location filename="../src/cyanide.cpp" line="980"/>
         <source>Error: Message is too long</source>
         <translation>Fejl: Meddelelse er for lang</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="973"/>
+        <location filename="../src/cyanide.cpp" line="984"/>
         <source>Error: Tox ID is self ID</source>
         <translation>Fejl: ToxID er dit eget ID</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="975"/>
+        <location filename="../src/cyanide.cpp" line="986"/>
         <source>Error: Tox ID is already in friend list</source>
         <translation>Fejl: ToxID er allerede på venneliste</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="977"/>
+        <location filename="../src/cyanide.cpp" line="988"/>
         <source>Error: Invalid Tox ID (bad checksum)</source>
         <translation>Fejl: Ugyldigt ToxID (ugyldig checksum)</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="979"/>
+        <location filename="../src/cyanide.cpp" line="990"/>
         <source>Error: Invalid Tox ID (bad nospam value)</source>
         <translation>Fejl: Ugyldig ToxID (ugyldig nospam værdi)</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="981"/>
+        <location filename="../src/cyanide.cpp" line="992"/>
         <source>Error: No memory</source>
         <translation>Fejl: Hukommelse opbrugt</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="1044"/>
-        <location filename="../src/filetransfers.cpp" line="420"/>
-        <location filename="../src/filetransfers.cpp" line="532"/>
+        <location filename="../src/cyanide.cpp" line="1053"/>
+        <location filename="../src/filetransfers.cpp" line="418"/>
+        <location filename="../src/filetransfers.cpp" line="528"/>
         <source>Error: Friend not connected</source>
         <translation>Fejl: Ven ikke tilsluttet</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="1134"/>
+        <location filename="../src/cyanide.cpp" line="1135"/>
         <source>Error: File exists</source>
         <translation>Fejl: Filen eksisterer allerede</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="1313"/>
+        <location filename="../src/cyanide.cpp" line="1301"/>
         <source>File not found: </source>
         <translation>Filen er ikke fundet: </translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="1318"/>
+        <location filename="../src/cyanide.cpp" line="1306"/>
         <source>Avatar too large. Maximum size: 64KiB</source>
         <translation>Avatar er for stor. Maks. størrelse: 64kB</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.h" line="244"/>
+        <location filename="../src/cyanide.h" line="250"/>
         <source>Tox User</source>
         <extracomment>default username</extracomment>
         <translation>Toxbruger</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.h" line="246"/>
+        <location filename="../src/cyanide.h" line="252"/>
         <source>Toxing on Cyanide</source>
         <extracomment>default status</extracomment>
         <translation>Toxer med Cyanide</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.h" line="248"/>
+        <location filename="../src/cyanide.h" line="254"/>
         <source>Tox me maybe?</source>
         <extracomment>default friend request message - feel free to tranlate freely</extracomment>
         <translation>Tox mig?</translation>
     </message>
     <message>
-        <location filename="../src/filetransfers.cpp" line="418"/>
-        <location filename="../src/filetransfers.cpp" line="530"/>
+        <location filename="../src/filetransfers.cpp" line="416"/>
+        <location filename="../src/filetransfers.cpp" line="526"/>
         <source>Error: Friend not found</source>
         <translation>Fejl: Ven ikke fundet</translation>
     </message>
     <message>
-        <location filename="../src/filetransfers.cpp" line="422"/>
+        <location filename="../src/filetransfers.cpp" line="420"/>
         <source>Error: File transfer not found</source>
         <translation>Fejl:  Filoverførsel ikke fundet</translation>
     </message>
     <message>
-        <location filename="../src/filetransfers.cpp" line="428"/>
+        <location filename="../src/filetransfers.cpp" line="426"/>
         <source>Error: Already paused</source>
         <translation>Fejl: Allerede på pause</translation>
     </message>
     <message>
-        <location filename="../src/filetransfers.cpp" line="430"/>
+        <location filename="../src/filetransfers.cpp" line="428"/>
         <source>Error: Packet queue is full</source>
         <translation>Fejl: Pakkekø er fuld</translation>
     </message>
     <message>
-        <location filename="../src/filetransfers.cpp" line="509"/>
+        <location filename="../src/filetransfers.cpp" line="505"/>
         <source>Error: Failed to open file: </source>
         <translation>Fejl: Kan ikke åbne filen: </translation>
     </message>
     <message>
-        <location filename="../src/filetransfers.cpp" line="534"/>
+        <location filename="../src/filetransfers.cpp" line="530"/>
         <source>Error: Filename too long</source>
         <translation>Fejl: Filnavn er for langt</translation>
     </message>
     <message>
-        <location filename="../src/filetransfers.cpp" line="536"/>
+        <location filename="../src/filetransfers.cpp" line="532"/>
         <source>Error: Too many ongoing transfers</source>
         <translation>Fejl: For mange samtidige overførsler</translation>
     </message>
@@ -386,37 +386,37 @@
         <translation>Indstillinger</translation>
     </message>
     <message>
-        <location filename="../src/settings.cpp" line="22"/>
+        <location filename="../src/settings.cpp" line="19"/>
         <source>Keep chat history</source>
         <translation>Bevar samtalehistorik</translation>
     </message>
     <message>
-        <location filename="../src/settings.cpp" line="26"/>
+        <location filename="../src/settings.cpp" line="21"/>
         <source>Notify me when...</source>
         <translation>Påmind mig ved...</translation>
     </message>
     <message>
-        <location filename="../src/settings.cpp" line="27"/>
+        <location filename="../src/settings.cpp" line="23"/>
         <source>I receive a message</source>
         <translation>Ny meddelelse</translation>
     </message>
     <message>
-        <location filename="../src/settings.cpp" line="29"/>
+        <location filename="../src/settings.cpp" line="25"/>
         <source>I receive a friend request</source>
         <translation>Venneanmodning modtaget</translation>
     </message>
     <message>
-        <location filename="../src/settings.cpp" line="20"/>
+        <location filename="../src/settings.cpp" line="18"/>
         <source>Send typing notifications?</source>
         <translation>Sende skrivestatus?</translation>
     </message>
     <message>
-        <location filename="../src/settings.cpp" line="24"/>
+        <location filename="../src/settings.cpp" line="20"/>
         <source>Enable UDP</source>
         <translation>Aktivér UDP</translation>
     </message>
     <message>
-        <location filename="../src/settings.cpp" line="18"/>
+        <location filename="../src/settings.cpp" line="16"/>
         <source>Wifi only</source>
         <translation>Kun ved WiFi</translation>
     </message>

@@ -38,113 +38,113 @@
 <context>
     <name>Cyanide</name>
     <message>
-        <location filename="../src/cyanide.cpp" line="941"/>
+        <location filename="../src/cyanide.cpp" line="952"/>
         <source>Error: Invalid Tox ID</source>
         <translation>Errore: ID Tox non vàlidu</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="969"/>
+        <location filename="../src/cyanide.cpp" line="980"/>
         <source>Error: Message is too long</source>
         <translation>Errore: Messàgiu tropu longu</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="973"/>
+        <location filename="../src/cyanide.cpp" line="984"/>
         <source>Error: Tox ID is self ID</source>
         <translation>Errore: s’ID Tox est s’ID bostru</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="975"/>
+        <location filename="../src/cyanide.cpp" line="986"/>
         <source>Error: Tox ID is already in friend list</source>
         <translation>Errore: s’ID Tox est giai in sa lista amigos</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="977"/>
+        <location filename="../src/cyanide.cpp" line="988"/>
         <source>Error: Invalid Tox ID (bad checksum)</source>
         <translation>Errore: ID Tox non vàlidu (summa de controllos isballiada)</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="979"/>
+        <location filename="../src/cyanide.cpp" line="990"/>
         <source>Error: Invalid Tox ID (bad nospam value)</source>
         <translation>Errore: ID Tox non vàlidu (balore &quot;nospam&quot; isballiadu)</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="981"/>
+        <location filename="../src/cyanide.cpp" line="992"/>
         <source>Error: No memory</source>
         <translation>Errore: non b’est memòria</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="1044"/>
-        <location filename="../src/filetransfers.cpp" line="420"/>
-        <location filename="../src/filetransfers.cpp" line="532"/>
+        <location filename="../src/cyanide.cpp" line="1053"/>
+        <location filename="../src/filetransfers.cpp" line="418"/>
+        <location filename="../src/filetransfers.cpp" line="528"/>
         <source>Error: Friend not connected</source>
         <translation>Errore: Amigu non cunnessu</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="1134"/>
+        <location filename="../src/cyanide.cpp" line="1135"/>
         <source>Error: File exists</source>
         <translation>Errore: su documentu esistit</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="1313"/>
+        <location filename="../src/cyanide.cpp" line="1301"/>
         <source>File not found: </source>
         <translation>Documentu no agatadu: </translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="1318"/>
+        <location filename="../src/cyanide.cpp" line="1306"/>
         <source>Avatar too large. Maximum size: 64KiB</source>
         <translation>Immàgine tropu manna. Mannària màssima: 64KiB</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.h" line="244"/>
+        <location filename="../src/cyanide.h" line="250"/>
         <source>Tox User</source>
         <extracomment>default username</extracomment>
         <translation>Impitadore Tox</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.h" line="246"/>
+        <location filename="../src/cyanide.h" line="252"/>
         <source>Toxing on Cyanide</source>
         <extracomment>default status</extracomment>
         <translation>Toxende in Cyanide</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.h" line="248"/>
+        <location filename="../src/cyanide.h" line="254"/>
         <source>Tox me maybe?</source>
         <extracomment>default friend request message - feel free to tranlate freely</extracomment>
         <translation>Mi boles Tox-are?</translation>
     </message>
     <message>
-        <location filename="../src/filetransfers.cpp" line="418"/>
-        <location filename="../src/filetransfers.cpp" line="530"/>
+        <location filename="../src/filetransfers.cpp" line="416"/>
+        <location filename="../src/filetransfers.cpp" line="526"/>
         <source>Error: Friend not found</source>
         <translation>Errore: Amigu no agatadu</translation>
     </message>
     <message>
-        <location filename="../src/filetransfers.cpp" line="422"/>
+        <location filename="../src/filetransfers.cpp" line="420"/>
         <source>Error: File transfer not found</source>
         <translation>Errore: tramudòngiu documentu no agatadu</translation>
     </message>
     <message>
-        <location filename="../src/filetransfers.cpp" line="428"/>
+        <location filename="../src/filetransfers.cpp" line="426"/>
         <source>Error: Already paused</source>
         <translation>Errore: Giai in pàusa</translation>
     </message>
     <message>
-        <location filename="../src/filetransfers.cpp" line="430"/>
+        <location filename="../src/filetransfers.cpp" line="428"/>
         <source>Error: Packet queue is full</source>
         <translation>Errore: lista de isetu de sos pachetos prena</translation>
     </message>
     <message>
-        <location filename="../src/filetransfers.cpp" line="509"/>
+        <location filename="../src/filetransfers.cpp" line="505"/>
         <source>Error: Failed to open file: </source>
         <translation>Errore: impossìbile abèrrere su documentu: </translation>
     </message>
     <message>
-        <location filename="../src/filetransfers.cpp" line="534"/>
+        <location filename="../src/filetransfers.cpp" line="530"/>
         <source>Error: Filename too long</source>
         <translation>Errore: Nùmene documentu tropu longu</translation>
     </message>
     <message>
-        <location filename="../src/filetransfers.cpp" line="536"/>
+        <location filename="../src/filetransfers.cpp" line="532"/>
         <source>Error: Too many ongoing transfers</source>
         <translation>Errore: Tropu tramudòngios in cursu</translation>
     </message>
@@ -386,37 +386,37 @@
         <translation>Preferèntzias</translation>
     </message>
     <message>
-        <location filename="../src/settings.cpp" line="18"/>
+        <location filename="../src/settings.cpp" line="16"/>
         <source>Wifi only</source>
         <translation>Wifi ebbia</translation>
     </message>
     <message>
-        <location filename="../src/settings.cpp" line="20"/>
+        <location filename="../src/settings.cpp" line="18"/>
         <source>Send typing notifications?</source>
         <translation>Imbiare notìficas de iscritura?</translation>
     </message>
     <message>
-        <location filename="../src/settings.cpp" line="22"/>
+        <location filename="../src/settings.cpp" line="19"/>
         <source>Keep chat history</source>
         <translation>Sarba s’istòria de sas tzarradas</translation>
     </message>
     <message>
-        <location filename="../src/settings.cpp" line="24"/>
+        <location filename="../src/settings.cpp" line="20"/>
         <source>Enable UDP</source>
         <translation>Abìlita s’UDP</translation>
     </message>
     <message>
-        <location filename="../src/settings.cpp" line="26"/>
+        <location filename="../src/settings.cpp" line="21"/>
         <source>Notify me when...</source>
         <translation>Notìfica·mi·nche cando…</translation>
     </message>
     <message>
-        <location filename="../src/settings.cpp" line="27"/>
+        <location filename="../src/settings.cpp" line="23"/>
         <source>I receive a message</source>
         <translation>Apo retzidu unu messàgiu</translation>
     </message>
     <message>
-        <location filename="../src/settings.cpp" line="29"/>
+        <location filename="../src/settings.cpp" line="25"/>
         <source>I receive a friend request</source>
         <translation>Apo retzidu una rechesta de amistade</translation>
     </message>

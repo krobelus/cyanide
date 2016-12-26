@@ -25,7 +25,9 @@ PkgConfigBR:
   - Qt5Core
   - Qt5Qml
   - Qt5Quick
+  - Qt5DBus
   - openal
+  # - nemonotifications-qt5
 
 # Build dependencies without a pkgconfig setup can be listed here
 # PkgBR:
@@ -35,6 +37,8 @@ PkgConfigBR:
 Requires:
   - sailfishsilica-qt5 >= 0.10.9 
   - qt5-qtdeclarative-import-folderlistmodel
+  # - nemo-qml-plugin-notifications-qt5
+  - OpenAL
 
 # All installed files
 Files:
