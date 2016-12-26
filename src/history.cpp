@@ -91,7 +91,7 @@ int History::get_file_id(QByteArray const &tox_file_id) const {
 void History::add_message(QString const &public_key, Message const &m) const {
   QUERY(q);
 
-  if (m.ft != NULL) {
+  if (m.ft != nullptr) {
     add_file(*m.ft);
     q.prepare("INSERT INTO messages (file_id, timestamp, chat_id, author, "
               "message) VALUES (?, ?, ?, ?, ?)");
@@ -182,7 +182,7 @@ void History::load_messages(QString const &public_key, QList<Message> &messages,
     m.timestamp = q.value("timestamp").toDateTime();
     if (q.value("file_id").isNull()) {
       m.type = Message_Type::Normal; // maybe store the type too
-      m.ft = NULL;
+      m.ft = nullptr;
     } else {
       m.type = looks_like_an_image(m.text) ? Message_Type::Image
                                            : Message_Type::File;
@@ -213,8 +213,8 @@ void History::load_file_transfer(int file_id, File_Transfer &ft) const {
          ft.filename_length);
   ft.file_size = q.value("file_size").toInt();
   ft.position = q.value("position").toInt();
-  ft.file = NULL;
-  ft.data = NULL;
+  ft.file = nullptr;
+  ft.data = nullptr;
   /* file_number is unitialized - get it with tox_file_send() */
 }
 

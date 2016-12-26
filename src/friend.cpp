@@ -11,7 +11,7 @@ Friend::Friend() {
   needs_avatar = true;
   memset(avatar_hash, 0, TOX_HASH_LENGTH);
   memset(&avatar_transfer, 0, sizeof(File_Transfer));
-  notification = NULL;
+  notification = nullptr;
 }
 
 Friend::Friend(const uint8_t *public_key, QString name,
@@ -25,7 +25,7 @@ Friend::Friend(const uint8_t *public_key, QString name,
   needs_avatar = true;
   memset(avatar_hash, 0, TOX_HASH_LENGTH);
   memset(&avatar_transfer, 0, sizeof(File_Transfer));
-  notification = NULL;
+  notification = nullptr;
 
   memcpy(this->public_key, public_key, TOX_PUBLIC_KEY_SIZE);
   this->name = name;

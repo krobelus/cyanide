@@ -83,7 +83,7 @@ Cyanide::Cyanide(QObject *parent) : QObject(parent) {
 
   events = eventfd(0, 0);
   have_password = false;
-  tox_save_data = NULL;
+  tox_save_data = nullptr;
   in_call = false;
   call_state = 0;
 }
@@ -138,7 +138,7 @@ void Cyanide::load_new_profile() {
   QFile file{path};
   file.open(QIODevice::WriteOnly);
   file.close();
-  load_tox_save_file(path, NULL);
+  load_tox_save_file(path, nullptr);
 }
 
 void Cyanide::delete_current_profile() {
@@ -152,8 +152,8 @@ void Cyanide::delete_current_profile() {
   qDebug() << "removed db:" << success;
 }
 
-bool Cyanide::load_tox_save_file(QString const &path,
-                                 QString const &passphrase) {
+bool Cyanide::load_tox_save_file(QString const path,
+                                 QString const passphrase) {
   int error;
   bool success;
 
@@ -167,7 +167,7 @@ bool Cyanide::load_tox_save_file(QString const &path,
   /* remove the .tox extension */
   basename.chop(4);
   next_profile_name = basename;
-  next_have_password = passphrase != NULL;
+  next_have_password = passphrase != nullptr;
 
   if (next_have_password) {
     size_t size;
@@ -176,18 +176,19 @@ bool Cyanide::load_tox_save_file(QString const &path,
     uint8_t salt[TOX_PASS_SALT_LENGTH];
     memcpy(salt, (const void *)(data + TOX_ENC_SAVE_MAGIC_LENGTH),
            TOX_PASS_SALT_LENGTH);
-    tox_derive_key_with_salt((const uint8_t *)passphrase.toUtf8().constData(),
-                             passphrase.toUtf8().size(), salt, &tox_pass_key,
+    tox_pass_key = tox_pass_key_new();
+    tox_pass_key_derive_with_salt(tox_pass_key, (const uint8_t *)passphrase.toUtf8().constData(),
+                             passphrase.toUtf8().size(), salt,
                              (TOX_ERR_KEY_DERIVATION *)&error);
     qDebug() << "key derivation error:" << error;
     tox_save_data = (uint8_t *)malloc(size - TOX_PASS_ENCRYPTION_EXTRA_LENGTH);
-    success = tox_pass_key_decrypt(data, size, &tox_pass_key, tox_save_data,
+    success = tox_pass_key_decrypt(tox_pass_key, data, size, tox_save_data,
                                    (TOX_ERR_DECRYPTION *)&error);
     qDebug() << "decryption error:" << error;
     tox_save_data_size = size - TOX_PASS_ENCRYPTION_EXTRA_LENGTH;
     if (!success) {
       free(tox_save_data);
-      tox_save_data = NULL;
+      tox_save_data = nullptr;
       return false;
     }
   }
@@ -203,7 +204,7 @@ bool Cyanide::load_tox_save_file(QString const &path,
   return true;
 }
 
-bool Cyanide::file_is_encrypted(QString const &path) const {
+bool Cyanide::file_is_encrypted(QString const path) const {
   uint8_t data[TOX_ENC_SAVE_MAGIC_LENGTH] = {0};
   QFile file{path};
   file.open(QIODevice::ReadOnly);
@@ -297,13 +298,13 @@ void Cyanide::visibility_changed(QWindow::Visibility visibility) {
    */
   for (auto &entry : friends) {
     Friend &f = entry.second;
-    if (f.notification != NULL) {
+    if (f.notification != nullptr) {
 #ifdef MLITE
       f.notification->remove();
 #else
       f.notification->close();
 #endif
-      f.notification = NULL;
+      f.notification = nullptr;
     }
   }
 #ifdef MLITE
@@ -320,7 +321,7 @@ void Cyanide::on_message_notification_activated(int fid) {
   raise();
 }
 
-void Cyanide::notify_error(QString const &summary, QString const &body) {
+void Cyanide::notify_error(QString const summary, QString const body) {
 #ifdef MLITE
   MNotification *n = new MNotification("", summary, body);
 #else
@@ -332,14 +333,17 @@ void Cyanide::notify_error(QString const &summary, QString const &body) {
   n->publish();
 }
 
-void Cyanide::notify_message(int fid, QString const &summary,
-                             QString const &body) {
+void Cyanide::notify_message(int fid, QString const summary,
+                             QString const body) {
   Q_ASSERT(fid != SELF_FRIEND_NUMBER);
-  Friend *f = &friends[fid];
+  Friend *f = &friends.at(fid);
 
-  if (f->notification != NULL) {
+  if (f->notification != nullptr) {
     f->notification->setSummary(summary);
     f->notification->setBody(body);
+#if MLITE
+    f->notification->setCount(1);
+#endif
     f->notification->publish();
   } else {
 #ifdef MLITE
@@ -347,6 +351,7 @@ void Cyanide::notify_message(int fid, QString const &summary,
     MRemoteAction action{"harbour.cyanide", "/", "harbour.cyanide",
                          "message_notification_activated",
                          QVariantList() << fid};
+    // TODO
     f->notification->setAction(action);
     f->notification->setCount(1);
     f->notification->publish();
@@ -360,12 +365,12 @@ void Cyanide::notify_message(int fid, QString const &summary,
   }
 }
 
-void Cyanide::notify_call(int fid, QString const &summary,
-                          QString const &body) {
+void Cyanide::notify_call(int fid, QString const summary,
+                          QString const body) {
   Q_ASSERT(fid != SELF_FRIEND_NUMBER);
   Friend *f = &friends[fid];
 
-  if (f->notification != NULL) {
+  if (f->notification != nullptr) {
 #ifdef MLITE
     f->notification->remove();
 #else
@@ -379,6 +384,7 @@ void Cyanide::notify_call(int fid, QString const &summary,
   MRemoteAction action{"harbour.cyanide", "/", "harbour.cyanide",
                        "message_notification_activated", QVariantList() << fid};
   f->notification->setAction(action);
+  f->notification->setCount(1);
   f->notification->publish();
 #else
   f->notification = new Notification();
@@ -405,7 +411,7 @@ bool Cyanide::is_visible() const {
 void Cyanide::free_friend_messages(Friend &f) {
   f.files.clear();
   for (auto &m : f.messages) {
-    if (m.ft != NULL) {
+    if (m.ft != nullptr) {
       free(m.ft->filename);
       free(m.ft);
     }
@@ -438,10 +444,10 @@ void Cyanide::load_tox_and_stuff_pretty_please() {
   if (settings.get("udp-enabled") != "true")
     tox_options.udp_enabled = 0;
 
-  if (tox_save_data == NULL)
+  if (tox_save_data == nullptr)
     tox_save_data = (uint8_t *)file_raw(tox_save_file().toUtf8().data(),
                                         &tox_save_data_size);
-  if (tox_save_data == NULL)
+  if (tox_save_data == nullptr)
     tox_save_data_size = 0;
 
   if (tox_save_data_size >= TOX_ENC_SAVE_MAGIC_LENGTH &&
@@ -493,7 +499,7 @@ void Cyanide::load_tox_and_stuff_pretty_please() {
   }
 
   free(tox_save_data);
-  tox_save_data = NULL;
+  tox_save_data = nullptr;
 
   tox_self_get_address(tox, self_address);
   tox_self_get_public_key(tox, self.public_key);
@@ -562,7 +568,7 @@ void Cyanide::tox_loop() {
 
   while (loop == LOOP_RUN) {
     // Put toxcore to work
-    tox_iterate(tox);
+    tox_iterate(tox, this);
 
     // Check current connection
     if ((c = tox_self_get_connection_status(tox)) != connection) {
@@ -739,7 +745,7 @@ void Cyanide::load_defaults() {
   tox_self_set_name(tox, name, name_len, &error);
   tox_self_set_status_message(tox, status, status_len, &error);
 
-  emit signal_friend_name(SELF_FRIEND_NUMBER, NULL);
+  emit signal_friend_name(SELF_FRIEND_NUMBER, nullptr);
   emit signal_friend_status_message(SELF_FRIEND_NUMBER);
   save_needed = true;
 }
@@ -761,8 +767,8 @@ void Cyanide::write_save() {
     qDebug() << "writing encrypted save";
     uint8_t *encrypted =
         (uint8_t *)malloc(size + TOX_PASS_ENCRYPTION_EXTRA_LENGTH);
-    if (!tox_pass_key_encrypt((const uint8_t *)data, size, &tox_pass_key,
-                              encrypted, NULL)) {
+    if (!tox_pass_key_encrypt(tox_pass_key, (const uint8_t *)data, size,
+                              encrypted, nullptr)) {
       qDebug() << "encryption failed, not writing save";
       free(data);
       free(encrypted);
@@ -842,7 +848,7 @@ void Cyanide::load_tox_data() {
   tox_self_get_status_message(tox, status_message);
   self.status_message = utf8_to_qstr(status_message, length);
 
-  emit signal_friend_name(SELF_FRIEND_NUMBER, NULL);
+  emit signal_friend_name(SELF_FRIEND_NUMBER, nullptr);
   emit signal_friend_status_message(SELF_FRIEND_NUMBER);
   save_needed = true;
 }
@@ -886,11 +892,11 @@ void Cyanide::relocate_blocked_friend() {
 }
 
 void Cyanide::add_message(uint32_t fid, Message &message) {
-  friends[fid].messages.append(message);
+  friends.at(fid).messages.append(message);
   uint32_t mid = friends[fid].messages.size() - 1;
-  qDebug() << "added message number" << mid;
+  friends.at(fid).messages.append(message);
 
-  if (message.ft != NULL)
+  if (message.ft != nullptr)
     friends[fid].files[message.ft->file_number] = mid;
 
   if (settings.get("keep-history") == "true") {
@@ -901,20 +907,19 @@ void Cyanide::add_message(uint32_t fid, Message &message) {
 }
 
 void Cyanide::set_callbacks() {
-  tox_callback_friend_request(tox, callback_friend_request, this);
-  tox_callback_friend_message(tox, callback_friend_message, this);
-  tox_callback_friend_name(tox, callback_friend_name, this);
-  tox_callback_friend_status_message(tox, callback_friend_status_message, this);
-  tox_callback_friend_status(tox, callback_friend_status, this);
-  tox_callback_friend_typing(tox, callback_friend_typing, this);
-  tox_callback_friend_read_receipt(tox, callback_friend_read_receipt, this);
-  tox_callback_friend_connection_status(tox, callback_friend_connection_status,
-                                        this);
+  tox_callback_friend_request(tox, callback_friend_request);
+  tox_callback_friend_message(tox, callback_friend_message);
+  tox_callback_friend_name(tox, callback_friend_name);
+  tox_callback_friend_status_message(tox, callback_friend_status_message);
+  tox_callback_friend_status(tox, callback_friend_status);
+  tox_callback_friend_typing(tox, callback_friend_typing);
+  tox_callback_friend_read_receipt(tox, callback_friend_read_receipt);
+  tox_callback_friend_connection_status(tox, callback_friend_connection_status);
 
-  tox_callback_file_recv(tox, callback_file_recv, this);
-  tox_callback_file_recv_chunk(tox, callback_file_recv_chunk, this);
-  tox_callback_file_recv_control(tox, callback_file_recv_control, this);
-  tox_callback_file_chunk_request(tox, callback_file_chunk_request, this);
+  tox_callback_file_recv(tox, callback_file_recv);
+  tox_callback_file_recv_chunk(tox, callback_file_recv_chunk);
+  tox_callback_file_recv_control(tox, callback_file_recv_control);
+  tox_callback_file_chunk_request(tox, callback_file_chunk_request);
 }
 
 void Cyanide::set_av_callbacks() {
@@ -934,7 +939,7 @@ void Cyanide::send_typing_notification(int fid, bool typing) {
     tox_self_set_typing(tox, fid, typing, &error);
 }
 
-QString Cyanide::send_friend_request(QString &id_str, QString &msg_str) {
+QString Cyanide::send_friend_request(QString id_str, QString msg_str) {
   /* honor the Tox URI scheme */
   if (id_str.startsWith("tox:"))
     id_str = id_str.remove(0, 4);
@@ -1023,7 +1028,7 @@ std::vector<QString> split_message(QString &rest) {
   return messages;
 }
 
-QString Cyanide::send_friend_message(int fid, QString &message) {
+QString Cyanide::send_friend_message(int fid, QString message) {
   TOX_ERR_FRIEND_SEND_MESSAGE error;
   QString errmsg{""};
 
@@ -1071,12 +1076,12 @@ QString Cyanide::send_friend_message(int fid, QString &message) {
     if (errmsg != "")
       return errmsg;
 
-    Message m{};
+    Message m;
     m.type = Message_Type::Normal;
     m.author = true;
     m.text = msg_str;
     m.timestamp = QDateTime::currentDateTime();
-    m.ft = NULL;
+    m.ft = nullptr;
 
     add_message(fid, m);
   }
@@ -1109,8 +1114,8 @@ void Cyanide::remove_friend(int fid) {
   friends.erase(fid);
 }
 
-void Cyanide::load_history(int fid, QDateTime const &from,
-                           QDateTime const &to) {
+void Cyanide::load_history(int fid, QDateTime const from,
+                           QDateTime const to) {
   free_friend_messages(friends[fid]);
   history.load_messages(get_friend_public_key(fid), friends[fid].messages, from,
                         to);
@@ -1129,7 +1134,7 @@ QDateTime Cyanide::null_date() const { return QDateTime(); }
 
 QString Cyanide::get_profile_name() { return profile_name; }
 
-QString Cyanide::set_profile_name(QString &name) {
+QString Cyanide::set_profile_name(QString name) {
   QString old_name{tox_save_file()};
   QString new_name{tox_save_file(name)};
 
@@ -1223,7 +1228,7 @@ void Cyanide::set_friend_blocked(int fid, bool block) {
                                                 TOX_CONNECTION_NONE);
 }
 
-void Cyanide::set_self_name(QString const &name) {
+void Cyanide::set_self_name(QString const name) {
   bool success;
   TOX_ERR_SET_INFO error;
   self.name = name;
@@ -1235,10 +1240,10 @@ void Cyanide::set_self_name(QString const &name) {
   Q_ASSERT(success);
 
   save_needed = true;
-  emit signal_friend_name(SELF_FRIEND_NUMBER, NULL);
+  emit signal_friend_name(SELF_FRIEND_NUMBER, nullptr);
 }
 
-void Cyanide::set_self_status_message(QString const &status_message) {
+void Cyanide::set_self_status_message(QString const status_message) {
   bool success;
   TOX_ERR_SET_INFO error;
   self.status_message = status_message;
@@ -1284,7 +1289,7 @@ void Cyanide::set_self_user_status(int status) {
   emit signal_friend_status(SELF_FRIEND_NUMBER);
 }
 
-QString Cyanide::set_self_avatar(QString const &new_avatar) {
+QString Cyanide::set_self_avatar(QString const new_avatar) {
   bool success;
   QString public_key{get_friend_public_key(SELF_FRIEND_NUMBER)};
   QString old_avatar{TOX_AVATAR_DIR + public_key + QString(".png")};
@@ -1304,7 +1309,7 @@ QString Cyanide::set_self_avatar(QString const &new_avatar) {
 
   uint32_t size;
   uint8_t *data = (uint8_t *)file_raw(new_avatar.toUtf8().data(), &size);
-  if (data == NULL) {
+  if (data == nullptr) {
     return tr("File not found: ") + new_avatar;
   }
 

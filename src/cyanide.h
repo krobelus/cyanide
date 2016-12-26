@@ -60,7 +60,7 @@ public:
   uint8_t *tox_save_data;
   size_t tox_save_data_size;
   bool have_password, next_have_password;
-  TOX_PASS_KEY tox_pass_key;
+  Tox_Pass_Key *tox_pass_key;
 
   bool save_needed;
   enum LOOP_STATE loop;
@@ -134,28 +134,28 @@ public:
   Q_INVOKABLE void raise();
   Q_INVOKABLE bool is_visible() const;
   Q_INVOKABLE void visibility_changed(QWindow::Visibility visibility);
-  Q_INVOKABLE void notify_error(QString const &summary, QString const &body);
-  Q_INVOKABLE void notify_message(int fid, QString const &summary,
-                                  QString const &body);
-  Q_INVOKABLE void notify_call(int fid, QString const &summary,
-                               QString const &body);
+  Q_INVOKABLE void notify_error(QString const summary, QString const body);
+  Q_INVOKABLE void notify_message(int fid, QString const summary,
+                                  QString const body);
+  Q_INVOKABLE void notify_call(int fid, QString const summary,
+                               QString const body);
   Q_INVOKABLE void check_wifi();
 
   Q_INVOKABLE void reload();
   Q_INVOKABLE void load_new_profile();
-  Q_INVOKABLE bool load_tox_save_file(QString const &path,
-                                      QString const &passphrase);
+  Q_INVOKABLE bool load_tox_save_file(QString const path,
+                                      QString const passphrase);
   Q_INVOKABLE void delete_current_profile();
-  Q_INVOKABLE bool file_is_encrypted(QString const &path) const;
+  Q_INVOKABLE bool file_is_encrypted(QString const path) const;
 
-  Q_INVOKABLE QString send_friend_request(QString &id_string,
-                                          QString &msg_string);
+  Q_INVOKABLE QString send_friend_request(QString id_string,
+                                          QString msg_string);
   Q_INVOKABLE bool accept_friend_request(int fid);
   Q_INVOKABLE void remove_friend(int fid);
-  Q_INVOKABLE QString send_friend_message(int fid, QString &msg);
+  Q_INVOKABLE QString send_friend_message(int fid, QString msg);
   Q_INVOKABLE void send_typing_notification(int fid, bool typing);
   QString send_avatar(int fid);
-  Q_INVOKABLE QString send_file(int fid, QString const &path);
+  Q_INVOKABLE QString send_file(int fid, QString const path);
   Q_INVOKABLE QString resume_transfer(int mid, int fid);
   Q_INVOKABLE QString pause_transfer(int mid, int fid);
   Q_INVOKABLE QString cancel_transfer(int mid, int fid);
@@ -172,14 +172,14 @@ public:
   void set_video_bit_rate(int video_bit_rate);
 
   void free_friend_messages(Friend &f);
-  Q_INVOKABLE void load_history(int fid, QDateTime const &from,
-                                QDateTime const &to);
+  Q_INVOKABLE void load_history(int fid, QDateTime const from,
+                                QDateTime const to);
   Q_INVOKABLE void clear_history(int fid);
   Q_INVOKABLE QDateTime null_date() const;
 
   /* setters and getters */
   Q_INVOKABLE QString get_profile_name();
-  Q_INVOKABLE QString set_profile_name(QString &name);
+  Q_INVOKABLE QString set_profile_name(QString name);
 
   Q_INVOKABLE QList<int>
   get_friend_numbers() const; /* friend list ordering goes here */
@@ -187,10 +187,10 @@ public:
 
   Q_INVOKABLE void set_friend_activity(int fid, bool status);
   Q_INVOKABLE void set_friend_blocked(int fid, bool block);
-  Q_INVOKABLE void set_self_name(QString const &name);
-  Q_INVOKABLE void set_self_status_message(QString const &status_message);
+  Q_INVOKABLE void set_self_name(QString const name);
+  Q_INVOKABLE void set_self_status_message(QString const status_message);
   Q_INVOKABLE void set_self_user_status(int status);
-  Q_INVOKABLE QString set_self_avatar(QString const &path);
+  Q_INVOKABLE QString set_self_avatar(QString const path);
   Q_INVOKABLE void set_random_nospam();
 
   Q_INVOKABLE QString get_self_address() const;

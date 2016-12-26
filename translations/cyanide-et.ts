@@ -38,76 +38,76 @@
 <context>
     <name>Cyanide</name>
     <message>
-        <location filename="../src/cyanide.cpp" line="952"/>
+        <location filename="../src/cyanide.cpp" line="962"/>
         <source>Error: Invalid Tox ID</source>
         <translation>Viga: Kehtetu Tox ID</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="980"/>
+        <location filename="../src/cyanide.cpp" line="990"/>
         <source>Error: Message is too long</source>
         <translation>Viga: Sõnum on liiga pikk</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="984"/>
+        <location filename="../src/cyanide.cpp" line="994"/>
         <source>Error: Tox ID is self ID</source>
         <translation>Viga: Tox ID on enda ID</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="986"/>
+        <location filename="../src/cyanide.cpp" line="996"/>
         <source>Error: Tox ID is already in friend list</source>
         <translation>Viga: Tox ID on juba sõprade loendis</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="988"/>
+        <location filename="../src/cyanide.cpp" line="998"/>
         <source>Error: Invalid Tox ID (bad checksum)</source>
         <translation>Viga: Kehtetu Tox ID (halb kontrollsumma)</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="990"/>
+        <location filename="../src/cyanide.cpp" line="1000"/>
         <source>Error: Invalid Tox ID (bad nospam value)</source>
         <translation>Viga: Kehtetu Tox ID (halb NoSpam väärtus)</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="992"/>
+        <location filename="../src/cyanide.cpp" line="1002"/>
         <source>Error: No memory</source>
         <translation>Viga: Mälu otsas</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="1053"/>
+        <location filename="../src/cyanide.cpp" line="1063"/>
         <location filename="../src/filetransfers.cpp" line="418"/>
         <location filename="../src/filetransfers.cpp" line="528"/>
         <source>Error: Friend not connected</source>
         <translation>Viga: Sõber ei ole ühendatud</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="1135"/>
+        <location filename="../src/cyanide.cpp" line="1145"/>
         <source>Error: File exists</source>
         <translation>Viga: Fail on olemas</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="1301"/>
+        <location filename="../src/cyanide.cpp" line="1313"/>
         <source>File not found: </source>
         <translation>Faili ei leitud: </translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="1306"/>
+        <location filename="../src/cyanide.cpp" line="1318"/>
         <source>Avatar too large. Maximum size: 64KiB</source>
         <translation>Avatar on liiga suur. Maksimaalne suurus: 64KiB</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.h" line="250"/>
+        <location filename="../src/cyanide.h" line="253"/>
         <source>Tox User</source>
         <extracomment>default username</extracomment>
         <translation>Tox kasutaja</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.h" line="252"/>
+        <location filename="../src/cyanide.h" line="255"/>
         <source>Toxing on Cyanide</source>
         <extracomment>default status</extracomment>
         <translation>Cyanide Tox</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.h" line="254"/>
+        <location filename="../src/cyanide.h" line="257"/>
         <source>Tox me maybe?</source>
         <extracomment>default friend request message - feel free to tranlate freely</extracomment>
         <translation>Võib-olla Toxi mind?</translation>

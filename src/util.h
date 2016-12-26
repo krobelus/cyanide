@@ -11,8 +11,8 @@
 
 /* read a whole file from a path,
  *  on success: returns pointer to data (must be free()'d later), writes size of
- * data to *size if size is not NULL
- *  on failure: returns NULL
+ * data to *size if size is not nullptr
+ *  on failure: returns nullptr
  */
 void *file_raw(char *path, uint32_t *size);
 

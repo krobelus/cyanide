@@ -38,76 +38,76 @@
 <context>
     <name>Cyanide</name>
     <message>
-        <location filename="../src/cyanide.cpp" line="952"/>
+        <location filename="../src/cyanide.cpp" line="962"/>
         <source>Error: Invalid Tox ID</source>
         <translation>Eroare: ID Tox invalid</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="980"/>
+        <location filename="../src/cyanide.cpp" line="990"/>
         <source>Error: Message is too long</source>
         <translation>Eroare: Mesajul este prea lung</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="984"/>
+        <location filename="../src/cyanide.cpp" line="994"/>
         <source>Error: Tox ID is self ID</source>
         <translation>Eroare: ID-ul Tox este identic cu ID-ul personal</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="986"/>
+        <location filename="../src/cyanide.cpp" line="996"/>
         <source>Error: Tox ID is already in friend list</source>
         <translation>Eroare: ID-ul Tox este deja in lista de prieteni</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="988"/>
+        <location filename="../src/cyanide.cpp" line="998"/>
         <source>Error: Invalid Tox ID (bad checksum)</source>
         <translation>Eroare: Id Tox invalid (checksum eronat)</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="990"/>
+        <location filename="../src/cyanide.cpp" line="1000"/>
         <source>Error: Invalid Tox ID (bad nospam value)</source>
         <translation>Eroare: ID Tox invalid (valoare nospam eronata)</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="992"/>
+        <location filename="../src/cyanide.cpp" line="1002"/>
         <source>Error: No memory</source>
         <translation>Eroare: Fara memorie</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="1053"/>
+        <location filename="../src/cyanide.cpp" line="1063"/>
         <location filename="../src/filetransfers.cpp" line="418"/>
         <location filename="../src/filetransfers.cpp" line="528"/>
         <source>Error: Friend not connected</source>
         <translation>Eroare: Prietenul nu este conectat</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="1135"/>
+        <location filename="../src/cyanide.cpp" line="1145"/>
         <source>Error: File exists</source>
         <translation>Eroare: Fisier existent</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="1301"/>
+        <location filename="../src/cyanide.cpp" line="1313"/>
         <source>File not found: </source>
         <translation>Nu s-a gasit fisierul: </translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="1306"/>
+        <location filename="../src/cyanide.cpp" line="1318"/>
         <source>Avatar too large. Maximum size: 64KiB</source>
         <translation>Avatar prea mare. Dimensiune maxima: 64KiB</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.h" line="250"/>
+        <location filename="../src/cyanide.h" line="253"/>
         <source>Tox User</source>
         <extracomment>default username</extracomment>
         <translation>Utilizator Tox</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.h" line="252"/>
+        <location filename="../src/cyanide.h" line="255"/>
         <source>Toxing on Cyanide</source>
         <extracomment>default status</extracomment>
         <translation>Chat Tox pe Cyanide</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.h" line="254"/>
+        <location filename="../src/cyanide.h" line="257"/>
         <source>Tox me maybe?</source>
         <extracomment>default friend request message - feel free to tranlate freely</extracomment>
         <translation>Vrei sa-mi trimiti un mesaj Tox?</translation>

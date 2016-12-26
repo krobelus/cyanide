@@ -85,19 +85,19 @@ unix:!macx: LIBS += \
                 -ltoxcore -ltoxdns -ltoxav -ltoxencryptsave \
                 -lsodium -lopus -lvpx \
                 -lrt \
-                #-lnemonotifications-qt5
+                -lnemonotifications-qt5
 
 QMAKE_CXXFLAGS += "-std=c++11 -pthread"
 QMAKE_CXXFLAGS += "-Wno-unused-parameter"
-QMAKE_CXXFLAGS += "-DMLITE=1"
+#QMAKE_CXXFLAGS += "-DMLITE=1"
 
 QMAKE_RPATHDIR += /usr/share/cyanide/lib
 
 LIBS.path = /usr/share/cyanide/lib/
-LIBS.files += /usr/lib/libsodium.so.13
+LIBS.files += /usr/lib/libsodium.so.18
 LIBS.files += /usr/lib/libtoxcore.so.0 /usr/lib/libtoxav.so.0 /usr/lib/libtoxdns.so.0 /usr/lib/libtoxencryptsave.so.0
 LIBS.files += /usr/lib/libvpx.so.1 /usr/lib/libvpx.so.1.3 /usr/lib/libvpx.so.1.3.0
-LIBS.files += /usr/lib/libopus.so.0 /usr/lib/libopus/libopus.so.0.5.0
+LIBS.files += /usr/lib/libopus.so.0 /usr/lib/libopus/libopus.so.0.5.3
 INSTALLS += LIBS
 
 FILESYSTEM.path = /usr/share/lipstick/notificationcategories/

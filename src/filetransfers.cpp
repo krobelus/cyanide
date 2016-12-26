@@ -28,14 +28,14 @@ void callback_file_recv(Tox *tox, uint32_t fid, uint32_t file_number,
   m.author = false;
 
   File_Transfer *ft = m.ft = (File_Transfer *)malloc(sizeof(File_Transfer));
-  if (ft == NULL) {
+  if (ft == nullptr) {
     qDebug() << "Failed to allocate memory for the file transfer";
     return;
   }
 
   if (file_size == 0) {
     free(m.ft);
-    m.ft = NULL;
+    m.ft = nullptr;
     qDebug() << "ignoring transfer request of size 0";
     return;
   }
@@ -57,7 +57,7 @@ void callback_file_recv(Tox *tox, uint32_t fid, uint32_t file_number,
   }
   m.text = path;
 
-  if ((ft->file = fopen(m.text.toUtf8().constData(), "wb")) == NULL)
+  if ((ft->file = fopen(m.text.toUtf8().constData(), "wb")) == nullptr)
     qDebug() << "Failed to open file " << m.text;
 
   cyanide->add_message(fid, m);
@@ -75,8 +75,8 @@ void Cyanide::incoming_avatar(uint32_t fid, uint32_t file_number,
   ft->file_number = file_number;
   ft->file_size = file_size;
   ft->position = 0;
-  ft->file = NULL;
-  ft->data = NULL;
+  ft->file = nullptr;
+  ft->data = nullptr;
   ft->status = File_State::Paused_Them;
 
   /* check if the hash is the same as the one of the cached avatar */
@@ -105,10 +105,10 @@ void Cyanide::incoming_avatar(uint32_t fid, uint32_t file_number,
   } else if (file_size > MAX_AVATAR_SIZE) {
     qDebug() << "avatar too large, rejecting";
     goto cancel;
-  } else if ((ft->file = fopen(p, "wb")) == NULL) {
+  } else if ((ft->file = fopen(p, "wb")) == nullptr) {
     qDebug() << "Failed to open file " << p;
     goto cancel;
-  } else if ((ft->data = (uint8_t *)malloc(ft->file_size)) == NULL) {
+  } else if ((ft->data = (uint8_t *)malloc(ft->file_size)) == nullptr) {
     qDebug() << "Failed to allocate memory for the avatar";
     goto cancel;
   } else {
@@ -123,7 +123,7 @@ cancel:
   if (errmsg != "")
     qDebug() << "failed to cancel avatar transfer: " << errmsg;
   free(ft->data);
-  if (ft->file != NULL)
+  if (ft->file != nullptr)
     fclose(ft->file);
 }
 
@@ -200,7 +200,7 @@ void callback_file_recv_control(Tox *UNUSED(tox), uint32_t fid,
   int mid = f->files[file_number];
   qDebug() << "message id is" << mid << "file number is" << file_number;
 
-  Message *m = NULL;
+  Message *m = nullptr;
   File_Transfer *ft;
 
   if (mid == -1) {
@@ -245,7 +245,7 @@ void callback_file_recv_control(Tox *UNUSED(tox), uint32_t fid,
     ft->status = File_State::Cancelled;
     cyanide->history.update_file(*ft);
     /* if it's an incoming file, delete the file */
-    if (m != NULL && !m->author) {
+    if (m != nullptr && !m->author) {
       if (!QFile::remove(m->text))
         qDebug() << "Failed to remove file" << m->text;
     }
@@ -263,7 +263,7 @@ void callback_file_chunk_request(Tox *tox, uint32_t fid, uint32_t file_number,
 
   bool success = false;
   TOX_ERR_FILE_SEND_CHUNK error;
-  uint8_t *chunk = NULL;
+  uint8_t *chunk = nullptr;
 
   Friend *f = &cyanide->friends[fid];
   int mid = f->files[file_number];
@@ -356,7 +356,7 @@ QString Cyanide::send_file_control(int fid, int mid, TOX_FILE_CONTROL action) {
   bool success;
   TOX_ERR_FILE_CONTROL error;
 
-  Message *m = NULL;
+  Message *m = nullptr;
   File_Transfer *ft;
 
   if (mid == -1) {
@@ -397,7 +397,7 @@ QString Cyanide::send_file_control(int fid, int mid, TOX_FILE_CONTROL action) {
       ft->status = File_State::Cancelled;
       history.update_file(*ft);
       /* if it's an incoming file, delete the file */
-      if (m != NULL && !m->author) {
+      if (m != nullptr && !m->author) {
         if (!QFile::remove(m->text))
           qDebug() << "Failed to remove file" << m->text;
       }
@@ -455,8 +455,8 @@ bool Cyanide::get_file_id(uint32_t fid, File_Transfer *ft) {
   return true;
 }
 
-QString Cyanide::send_file(int fid, QString const &path) {
-  return send_file(TOX_FILE_KIND_DATA, fid, path, NULL);
+QString Cyanide::send_file(int fid, QString const path) {
+  return send_file(TOX_FILE_KIND_DATA, fid, path, nullptr);
 }
 
 QString Cyanide::send_avatar(int fid) {
@@ -477,7 +477,7 @@ QString Cyanide::send_file(TOX_FILE_KIND kind, int fid, QString const &path,
     ft = &self.avatar_transfer;
   } else {
     ft = (File_Transfer *)malloc(sizeof(File_Transfer));
-    if (ft == NULL) {
+    if (ft == nullptr) {
       qDebug() << "Failed to allocate memory for the file transfer";
       return "no memory";
     }
@@ -498,7 +498,7 @@ QString Cyanide::send_file(TOX_FILE_KIND kind, int fid, QString const &path,
   qstr_to_utf8(ft->filename, basename);
 
   ft->file = fopen(path.toUtf8().constData(), "rb");
-  if (ft->file == NULL) {
+  if (ft->file == nullptr) {
     if (kind == TOX_FILE_KIND_AVATAR) {
       ft->file_size = 0;
     } else {

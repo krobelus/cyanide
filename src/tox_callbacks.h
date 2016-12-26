@@ -31,7 +31,7 @@ void callback_friend_message(Tox *UNUSED(tox), uint32_t fid,
   m.author = false;
   m.text = utf8_to_qstr(msg, length);
   m.timestamp = QDateTime::currentDateTime();
-  m.ft = NULL;
+  m.ft = nullptr;
   cyanide->add_message(fid, m);
 }
 

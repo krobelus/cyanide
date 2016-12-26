@@ -38,76 +38,76 @@
 <context>
     <name>Cyanide</name>
     <message>
-        <location filename="../src/cyanide.cpp" line="952"/>
+        <location filename="../src/cyanide.cpp" line="962"/>
         <source>Error: Invalid Tox ID</source>
         <translation>错误: 无效的 Tox ID</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="980"/>
+        <location filename="../src/cyanide.cpp" line="990"/>
         <source>Error: Message is too long</source>
         <translation>错误: 消息太长</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="984"/>
+        <location filename="../src/cyanide.cpp" line="994"/>
         <source>Error: Tox ID is self ID</source>
         <translation>错误: 不能添加自己为好友</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="986"/>
+        <location filename="../src/cyanide.cpp" line="996"/>
         <source>Error: Tox ID is already in friend list</source>
         <translation>错误: Tox ID 已经在好友列表里</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="988"/>
+        <location filename="../src/cyanide.cpp" line="998"/>
         <source>Error: Invalid Tox ID (bad checksum)</source>
         <translation>错误: 无效的 Tox ID (错误的 checksum)</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="990"/>
+        <location filename="../src/cyanide.cpp" line="1000"/>
         <source>Error: Invalid Tox ID (bad nospam value)</source>
         <translation>错误: 无效的 Tox ID (错误的 nospam 值)</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="992"/>
+        <location filename="../src/cyanide.cpp" line="1002"/>
         <source>Error: No memory</source>
         <translation>错误: 内存不足</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="1053"/>
+        <location filename="../src/cyanide.cpp" line="1063"/>
         <location filename="../src/filetransfers.cpp" line="418"/>
         <location filename="../src/filetransfers.cpp" line="528"/>
         <source>Error: Friend not connected</source>
         <translation>错误: 未连接到好友</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="1135"/>
+        <location filename="../src/cyanide.cpp" line="1145"/>
         <source>Error: File exists</source>
         <translation>错误: 文件已存在</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="1301"/>
+        <location filename="../src/cyanide.cpp" line="1313"/>
         <source>File not found: </source>
         <translation>文件未找到: </translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="1306"/>
+        <location filename="../src/cyanide.cpp" line="1318"/>
         <source>Avatar too large. Maximum size: 64KiB</source>
         <translation>头像太大，最大尺寸: 64KiB</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.h" line="250"/>
+        <location filename="../src/cyanide.h" line="253"/>
         <source>Tox User</source>
         <extracomment>default username</extracomment>
         <translation>Tox 用户</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.h" line="252"/>
+        <location filename="../src/cyanide.h" line="255"/>
         <source>Toxing on Cyanide</source>
         <extracomment>default status</extracomment>
         <translation>正在 Cyanide 上使用 Tox</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.h" line="254"/>
+        <location filename="../src/cyanide.h" line="257"/>
         <source>Tox me maybe?</source>
         <extracomment>default friend request message - feel free to tranlate freely</extracomment>
         <translation>在 Tox 上联系我？</translation>

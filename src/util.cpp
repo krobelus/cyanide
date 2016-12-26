@@ -15,7 +15,7 @@ void *file_raw(char *path, uint32_t *size) {
   file = fopen(path, "rb");
   if (!file) {
     qDebug() << "File not found (" << path << ")";
-    return NULL;
+    return nullptr;
   }
 
   fseek(file, 0, SEEK_END);
@@ -23,7 +23,7 @@ void *file_raw(char *path, uint32_t *size) {
   data = (char *)malloc(len);
   if (!data) {
     fclose(file);
-    return NULL;
+    return nullptr;
   }
 
   fseek(file, 0, SEEK_SET);
@@ -32,7 +32,7 @@ void *file_raw(char *path, uint32_t *size) {
     qDebug() << "Read error (" << path << ")";
     fclose(file);
     free(data);
-    return NULL;
+    return nullptr;
   }
 
   fclose(file);
@@ -53,7 +53,7 @@ void *file_text(char *path) {
   file = fopen(path, "rb");
   if (!file) {
     qDebug() << "File not found (" << path << ")";
-    return NULL;
+    return nullptr;
   }
 
   fseek(file, 0, SEEK_END);
@@ -61,7 +61,7 @@ void *file_text(char *path) {
   data = (char *)malloc(len + 1);
   if (!data) {
     fclose(file);
-    return NULL;
+    return nullptr;
   }
 
   fseek(file, 0, SEEK_SET);
@@ -70,7 +70,7 @@ void *file_text(char *path) {
     qDebug() << "Read error (" << path << ")";
     fclose(file);
     free(data);
-    return NULL;
+    return nullptr;
   }
 
   fclose(file);

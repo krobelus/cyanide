@@ -217,8 +217,8 @@ void callback_audio_receive_frame(ToxAV *av, uint32_t fid, const int16_t *pcm,
     goto play;
 
   init = true;
-  output_device = alcOpenDevice(NULL);
-  context = alcCreateContext(output_device, NULL);
+  output_device = alcOpenDevice(nullptr);
+  context = alcCreateContext(output_device, nullptr);
   alcMakeContextCurrent(context);
 
   alGenSources(1, &source);
@@ -280,7 +280,7 @@ void Cyanide::audio_thread() {
   int samples_per_frame = (AUDIO_FRAME_DURATION * AUDIO_SAMPLE_RATE) / 1000;
   int16_t buffer[samples_per_frame];
 
-  input_device = alcCaptureOpenDevice(NULL, AUDIO_SAMPLE_RATE, AL_FORMAT_MONO16,
+  input_device = alcCaptureOpenDevice(nullptr, AUDIO_SAMPLE_RATE, AL_FORMAT_MONO16,
                                       sizeof(buffer));
   alcCaptureStart(input_device);
 
@@ -297,7 +297,7 @@ void Cyanide::audio_thread() {
       if (error != TOXAV_ERR_SEND_FRAME_OK)
         qDebug() << "send frame error:" << error;
     }
-    callback_audio_receive_frame(NULL, call_friend_number, buffer,
+    callback_audio_receive_frame(nullptr, call_friend_number, buffer,
                                  samples_per_frame, 1, AUDIO_SAMPLE_RATE, this);
     if (samples < samples_per_frame * 2)
       usleep(AUDIO_FRAME_DURATION * 1000);
