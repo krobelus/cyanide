@@ -66,7 +66,8 @@ TRANSLATIONS += translations/cyanide-de.ts \
                 translations/cyanide-zh_Hans.ts \
                 translations/cyanide-nb.ts \
                 translations/cyanide-et.ts \
-                translations/cyanide-ro.ts
+                translations/cyanide-ro.ts \
+                translations/cyanide-es.ts
 
 
 HEADERS += \
