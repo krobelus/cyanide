@@ -7,13 +7,13 @@
         <location filename="../qml/pages/AcceptFriend.qml" line="42"/>
         <source>Accept</source>
         <extracomment>Friend request</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Aceptar</translation>
     </message>
     <message>
         <location filename="../qml/pages/AcceptFriend.qml" line="54"/>
         <source>Ignore</source>
         <extracomment>Friend request</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Ignorar</translation>
     </message>
 </context>
 <context>
@@ -22,17 +22,17 @@
         <location filename="../qml/pages/AddFriend.qml" line="39"/>
         <source>Tox me maybe?</source>
         <extracomment>default friend request message - feel free to tranlate freely</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Tox me talvez?</translation>
     </message>
     <message>
         <location filename="../qml/pages/AddFriend.qml" line="43"/>
         <source>Send friend request</source>
-        <translation type="unfinished"></translation>
+        <translation>Enviar solicitud de amistad</translation>
     </message>
     <message>
         <location filename="../qml/pages/AddFriend.qml" line="55"/>
         <source>Failed to send friend request</source>
-        <translation type="unfinished"></translation>
+        <translation>Error para enviar solicitud de amistad</translation>
     </message>
 </context>
 <context>
@@ -40,88 +40,88 @@
     <message>
         <location filename="../src/cyanide.cpp" line="963"/>
         <source>Error: Invalid Tox ID</source>
-        <translation type="unfinished"></translation>
+        <translation>Error: Clave tox invalida</translation>
     </message>
     <message>
         <location filename="../src/cyanide.cpp" line="991"/>
         <source>Error: Message is too long</source>
-        <translation type="unfinished"></translation>
+        <translation>Error: EL mensaje esta muy largo</translation>
     </message>
     <message>
         <location filename="../src/cyanide.cpp" line="995"/>
         <source>Error: Tox ID is self ID</source>
-        <translation type="unfinished"></translation>
+        <translation>Error: Clave tox es el suyo mismo</translation>
     </message>
     <message>
         <location filename="../src/cyanide.cpp" line="997"/>
         <source>Error: Tox ID is already in friend list</source>
-        <translation type="unfinished"></translation>
+        <translation>Error: Clave tox ya se encuentra en lista de amigos</translation>
     </message>
     <message>
         <location filename="../src/cyanide.cpp" line="999"/>
         <source>Error: Invalid Tox ID (bad checksum)</source>
-        <translation type="unfinished"></translation>
+        <translation>Error: Clave tox invalida (comprobación incorrecta)</translation>
     </message>
     <message>
         <location filename="../src/cyanide.cpp" line="1001"/>
         <source>Error: Invalid Tox ID (bad nospam value)</source>
-        <translation type="unfinished"></translation>
+        <translation>Error: Clave tox invalida (mensaje basura)</translation>
     </message>
     <message>
         <location filename="../src/cyanide.cpp" line="1003"/>
         <source>Error: No memory</source>
-        <translation type="unfinished"></translation>
+        <translation>Error: Sin memoria</translation>
     </message>
     <message>
         <location filename="../src/cyanide.cpp" line="1065"/>
         <location filename="../src/filetransfers.cpp" line="419"/>
         <location filename="../src/filetransfers.cpp" line="529"/>
         <source>Error: Friend not connected</source>
-        <translation type="unfinished"></translation>
+        <translation>Error: Amigo no conectado</translation>
     </message>
     <message>
         <location filename="../src/cyanide.cpp" line="1147"/>
         <source>Error: File exists</source>
-        <translation type="unfinished"></translation>
+        <translation>Error: Archivo existente</translation>
     </message>
     <message>
         <location filename="../src/cyanide.cpp" line="1318"/>
         <source>File not found: </source>
-        <translation type="unfinished"></translation>
+        <translation>Archivo no encontrado</translation>
     </message>
     <message>
         <location filename="../src/cyanide.cpp" line="1323"/>
         <source>Avatar too large. Maximum size: 64KiB</source>
-        <translation type="unfinished"></translation>
+        <translation>Imagen muy grande. Tamaño maximo: 64KiB</translation>
     </message>
     <message>
         <location filename="../src/cyanide.h" line="253"/>
         <source>Tox User</source>
         <extracomment>default username</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Nombre de usuario predeterminado</translation>
     </message>
     <message>
         <location filename="../src/cyanide.h" line="255"/>
         <source>Toxing on Cyanide</source>
         <extracomment>default status</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Toxing con Cyanide</translation>
     </message>
     <message>
         <location filename="../src/cyanide.h" line="257"/>
         <source>Tox me maybe?</source>
         <extracomment>default friend request message - feel free to tranlate freely</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Tox me talvez?</translation>
     </message>
     <message>
         <location filename="../src/filetransfers.cpp" line="417"/>
         <location filename="../src/filetransfers.cpp" line="527"/>
         <source>Error: Friend not found</source>
-        <translation type="unfinished"></translation>
+        <translation>Error: Amigo no encontrado</translation>
     </message>
     <message>
         <location filename="../src/filetransfers.cpp" line="421"/>
         <source>Error: File transfer not found</source>
-        <translation type="unfinished"></translation>
+        <translation>Error: Transferencia de archivos no encontrada</translation>
     </message>
     <message>
         <location filename="../src/filetransfers.cpp" line="427"/>
