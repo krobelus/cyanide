@@ -38,59 +38,59 @@
 <context>
     <name>Cyanide</name>
     <message>
-        <location filename="../src/cyanide.cpp" line="962"/>
+        <location filename="../src/cyanide.cpp" line="963"/>
         <source>Error: Invalid Tox ID</source>
         <translation>Fout: ongeldige Tox-ID</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="990"/>
+        <location filename="../src/cyanide.cpp" line="991"/>
         <source>Error: Message is too long</source>
         <translation>Fout: bericht is te lang</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="994"/>
+        <location filename="../src/cyanide.cpp" line="995"/>
         <source>Error: Tox ID is self ID</source>
         <translation>Fout: Tox-ID is eigen ID</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="996"/>
+        <location filename="../src/cyanide.cpp" line="997"/>
         <source>Error: Tox ID is already in friend list</source>
         <translation>Fout: Tox-ID staat al in vriendenlijst</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="998"/>
+        <location filename="../src/cyanide.cpp" line="999"/>
         <source>Error: Invalid Tox ID (bad checksum)</source>
         <translation>Fout: ongeldige Tox-ID (foute checksum)</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="1000"/>
+        <location filename="../src/cyanide.cpp" line="1001"/>
         <source>Error: Invalid Tox ID (bad nospam value)</source>
         <translation>Fout: ongeldige Tox-ID (foute nospam-waarde)</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="1002"/>
+        <location filename="../src/cyanide.cpp" line="1003"/>
         <source>Error: No memory</source>
         <translation>Fout: geen geheugen</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="1063"/>
-        <location filename="../src/filetransfers.cpp" line="418"/>
-        <location filename="../src/filetransfers.cpp" line="528"/>
+        <location filename="../src/cyanide.cpp" line="1065"/>
+        <location filename="../src/filetransfers.cpp" line="419"/>
+        <location filename="../src/filetransfers.cpp" line="529"/>
         <source>Error: Friend not connected</source>
         <translation>Fout: vriend niet verbonden</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="1145"/>
+        <location filename="../src/cyanide.cpp" line="1147"/>
         <source>Error: File exists</source>
         <translation>Fout: bestand bestaat al</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="1313"/>
+        <location filename="../src/cyanide.cpp" line="1318"/>
         <source>File not found: </source>
         <translation>Bestand niet gevonden: </translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="1318"/>
+        <location filename="../src/cyanide.cpp" line="1323"/>
         <source>Avatar too large. Maximum size: 64KiB</source>
         <translation>Te grote avatar. Maximumgrootte: 64KiB</translation>
     </message>
@@ -113,38 +113,38 @@
         <translation>Tox me misschien?</translation>
     </message>
     <message>
-        <location filename="../src/filetransfers.cpp" line="416"/>
-        <location filename="../src/filetransfers.cpp" line="526"/>
+        <location filename="../src/filetransfers.cpp" line="417"/>
+        <location filename="../src/filetransfers.cpp" line="527"/>
         <source>Error: Friend not found</source>
         <translation>Fout: vriend niet gevonden</translation>
     </message>
     <message>
-        <location filename="../src/filetransfers.cpp" line="420"/>
+        <location filename="../src/filetransfers.cpp" line="421"/>
         <source>Error: File transfer not found</source>
         <translation>Fout: bestandsoverdracht niet gevonden</translation>
     </message>
     <message>
-        <location filename="../src/filetransfers.cpp" line="426"/>
+        <location filename="../src/filetransfers.cpp" line="427"/>
         <source>Error: Already paused</source>
         <translation>Fout: al gepauzeerd</translation>
     </message>
     <message>
-        <location filename="../src/filetransfers.cpp" line="428"/>
+        <location filename="../src/filetransfers.cpp" line="429"/>
         <source>Error: Packet queue is full</source>
         <translation>Fout: pakket-wachtrij is vol</translation>
     </message>
     <message>
-        <location filename="../src/filetransfers.cpp" line="505"/>
+        <location filename="../src/filetransfers.cpp" line="506"/>
         <source>Error: Failed to open file: </source>
         <translation>Fout: kon bestand niet openen: </translation>
     </message>
     <message>
-        <location filename="../src/filetransfers.cpp" line="530"/>
+        <location filename="../src/filetransfers.cpp" line="531"/>
         <source>Error: Filename too long</source>
         <translation>Fout: te lange bestandsnaam</translation>
     </message>
     <message>
-        <location filename="../src/filetransfers.cpp" line="532"/>
+        <location filename="../src/filetransfers.cpp" line="533"/>
         <source>Error: Too many ongoing transfers</source>
         <translation>Fout: te veel lopende overdrachten</translation>
     </message>

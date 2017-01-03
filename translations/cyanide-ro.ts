@@ -38,59 +38,59 @@
 <context>
     <name>Cyanide</name>
     <message>
-        <location filename="../src/cyanide.cpp" line="962"/>
+        <location filename="../src/cyanide.cpp" line="963"/>
         <source>Error: Invalid Tox ID</source>
         <translation>Eroare: ID Tox invalid</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="990"/>
+        <location filename="../src/cyanide.cpp" line="991"/>
         <source>Error: Message is too long</source>
         <translation>Eroare: Mesajul este prea lung</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="994"/>
+        <location filename="../src/cyanide.cpp" line="995"/>
         <source>Error: Tox ID is self ID</source>
         <translation>Eroare: ID-ul Tox este identic cu ID-ul personal</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="996"/>
+        <location filename="../src/cyanide.cpp" line="997"/>
         <source>Error: Tox ID is already in friend list</source>
         <translation>Eroare: ID-ul Tox este deja in lista de prieteni</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="998"/>
+        <location filename="../src/cyanide.cpp" line="999"/>
         <source>Error: Invalid Tox ID (bad checksum)</source>
         <translation>Eroare: Id Tox invalid (checksum eronat)</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="1000"/>
+        <location filename="../src/cyanide.cpp" line="1001"/>
         <source>Error: Invalid Tox ID (bad nospam value)</source>
         <translation>Eroare: ID Tox invalid (valoare nospam eronata)</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="1002"/>
+        <location filename="../src/cyanide.cpp" line="1003"/>
         <source>Error: No memory</source>
         <translation>Eroare: Fara memorie</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="1063"/>
-        <location filename="../src/filetransfers.cpp" line="418"/>
-        <location filename="../src/filetransfers.cpp" line="528"/>
+        <location filename="../src/cyanide.cpp" line="1065"/>
+        <location filename="../src/filetransfers.cpp" line="419"/>
+        <location filename="../src/filetransfers.cpp" line="529"/>
         <source>Error: Friend not connected</source>
         <translation>Eroare: Prietenul nu este conectat</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="1145"/>
+        <location filename="../src/cyanide.cpp" line="1147"/>
         <source>Error: File exists</source>
         <translation>Eroare: Fisier existent</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="1313"/>
+        <location filename="../src/cyanide.cpp" line="1318"/>
         <source>File not found: </source>
         <translation>Nu s-a gasit fisierul: </translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="1318"/>
+        <location filename="../src/cyanide.cpp" line="1323"/>
         <source>Avatar too large. Maximum size: 64KiB</source>
         <translation>Avatar prea mare. Dimensiune maxima: 64KiB</translation>
     </message>
@@ -113,38 +113,38 @@
         <translation>Vrei sa-mi trimiti un mesaj Tox?</translation>
     </message>
     <message>
-        <location filename="../src/filetransfers.cpp" line="416"/>
-        <location filename="../src/filetransfers.cpp" line="526"/>
+        <location filename="../src/filetransfers.cpp" line="417"/>
+        <location filename="../src/filetransfers.cpp" line="527"/>
         <source>Error: Friend not found</source>
         <translation>Eroare: Prietenul nu a fost gasit</translation>
     </message>
     <message>
-        <location filename="../src/filetransfers.cpp" line="420"/>
+        <location filename="../src/filetransfers.cpp" line="421"/>
         <source>Error: File transfer not found</source>
         <translation>Eroare: Fisierul transferat nu a fost gasit</translation>
     </message>
     <message>
-        <location filename="../src/filetransfers.cpp" line="426"/>
+        <location filename="../src/filetransfers.cpp" line="427"/>
         <source>Error: Already paused</source>
         <translation>Eroare: Deja in pauza</translation>
     </message>
     <message>
-        <location filename="../src/filetransfers.cpp" line="428"/>
+        <location filename="../src/filetransfers.cpp" line="429"/>
         <source>Error: Packet queue is full</source>
         <translation>Eroare: Coada de pachete este deja plina</translation>
     </message>
     <message>
-        <location filename="../src/filetransfers.cpp" line="505"/>
+        <location filename="../src/filetransfers.cpp" line="506"/>
         <source>Error: Failed to open file: </source>
         <translation>Eroare: Nu se poate deschide fisierul: </translation>
     </message>
     <message>
-        <location filename="../src/filetransfers.cpp" line="530"/>
+        <location filename="../src/filetransfers.cpp" line="531"/>
         <source>Error: Filename too long</source>
         <translation>Eroare: Numele fisierului prea lung</translation>
     </message>
     <message>
-        <location filename="../src/filetransfers.cpp" line="532"/>
+        <location filename="../src/filetransfers.cpp" line="533"/>
         <source>Error: Too many ongoing transfers</source>
         <translation>Eroare: Prea multe transferuri simultane</translation>
     </message>

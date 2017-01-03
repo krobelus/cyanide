@@ -150,6 +150,8 @@ void Cyanide::incoming_avatar_chunk(uint32_t fid, uint64_t position,
   } else {
     memcpy(ft.data + position, data, length);
   }
+  (void)success;
+  (void)n;
 }
 
 void callback_file_recv_chunk(Tox *tox, uint32_t fid, uint32_t file_number,
@@ -274,9 +276,8 @@ void callback_file_chunk_request(Tox *tox, uint32_t fid, uint32_t file_number,
 
   if (mid == -1) {
     ft = &cyanide->self.avatar_transfer;
-  } else if (mid == -2) {
-    Q_ASSERT(false);
   } else {
+    Q_ASSERT(mid != -2);
     ft = f->messages[mid].ft;
   }
 

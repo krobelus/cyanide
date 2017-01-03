@@ -1,3 +1,7 @@
+* Tue Jan 03 2017 Johannes Altmanninger <aclopte@gmail.com> 0.2.6-1
+- bug fixes
+- audio calls kind of work
+
 * Thu Jul 09 2015 Johannes Altmanninger <aclopte@gmail.com> 0.2.5-1
 - notification fix
 - QR code for the Tox ID

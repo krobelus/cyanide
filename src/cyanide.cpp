@@ -279,6 +279,7 @@ void Cyanide::resume_thread() {
   uint64_t event = LOOP_RUN;
   ssize_t tmp = write(events, &event, sizeof(event));
   Q_ASSERT(tmp == sizeof(event));
+  (void)tmp;
 }
 
 void Cyanide::suspend_thread() {
@@ -1005,6 +1006,7 @@ QString Cyanide::send_friend_request_id(const uint8_t *id, const uint8_t *msg,
     Q_ASSERT(fid == friends.size() - 1);
     return "";
   }
+  (void)fid;
 }
 
 std::vector<QString> split_message(QString &rest) {
@@ -1221,6 +1223,7 @@ void Cyanide::set_friend_blocked(int fid, bool block) {
     int friend_number = tox_friend_add_norequest(tox, f->public_key,
                                                  (TOX_ERR_FRIEND_ADD *)&error);
     Q_ASSERT(friend_number == fid);
+    (void)friend_number;
   }
   friends[fid].blocked = block;
   emit signal_friend_blocked(fid, block);
@@ -1241,6 +1244,7 @@ void Cyanide::set_self_name(QString const name) {
 
   save_needed = true;
   emit signal_friend_name(SELF_FRIEND_NUMBER, nullptr);
+  (void)success;
 }
 
 void Cyanide::set_self_status_message(QString const status_message) {
@@ -1257,6 +1261,7 @@ void Cyanide::set_self_status_message(QString const status_message) {
 
   save_needed = true;
   emit signal_friend_status_message(SELF_FRIEND_NUMBER);
+  (void)success;
 }
 
 int Cyanide::get_self_user_status() const {

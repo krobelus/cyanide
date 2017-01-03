@@ -38,59 +38,59 @@
 <context>
     <name>Cyanide</name>
     <message>
-        <location filename="../src/cyanide.cpp" line="962"/>
+        <location filename="../src/cyanide.cpp" line="963"/>
         <source>Error: Invalid Tox ID</source>
         <translation>Viga: Kehtetu Tox ID</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="990"/>
+        <location filename="../src/cyanide.cpp" line="991"/>
         <source>Error: Message is too long</source>
         <translation>Viga: Sõnum on liiga pikk</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="994"/>
+        <location filename="../src/cyanide.cpp" line="995"/>
         <source>Error: Tox ID is self ID</source>
         <translation>Viga: Tox ID on enda ID</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="996"/>
+        <location filename="../src/cyanide.cpp" line="997"/>
         <source>Error: Tox ID is already in friend list</source>
         <translation>Viga: Tox ID on juba sõprade loendis</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="998"/>
+        <location filename="../src/cyanide.cpp" line="999"/>
         <source>Error: Invalid Tox ID (bad checksum)</source>
         <translation>Viga: Kehtetu Tox ID (halb kontrollsumma)</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="1000"/>
+        <location filename="../src/cyanide.cpp" line="1001"/>
         <source>Error: Invalid Tox ID (bad nospam value)</source>
         <translation>Viga: Kehtetu Tox ID (halb NoSpam väärtus)</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="1002"/>
+        <location filename="../src/cyanide.cpp" line="1003"/>
         <source>Error: No memory</source>
         <translation>Viga: Mälu otsas</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="1063"/>
-        <location filename="../src/filetransfers.cpp" line="418"/>
-        <location filename="../src/filetransfers.cpp" line="528"/>
+        <location filename="../src/cyanide.cpp" line="1065"/>
+        <location filename="../src/filetransfers.cpp" line="419"/>
+        <location filename="../src/filetransfers.cpp" line="529"/>
         <source>Error: Friend not connected</source>
         <translation>Viga: Sõber ei ole ühendatud</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="1145"/>
+        <location filename="../src/cyanide.cpp" line="1147"/>
         <source>Error: File exists</source>
         <translation>Viga: Fail on olemas</translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="1313"/>
+        <location filename="../src/cyanide.cpp" line="1318"/>
         <source>File not found: </source>
         <translation>Faili ei leitud: </translation>
     </message>
     <message>
-        <location filename="../src/cyanide.cpp" line="1318"/>
+        <location filename="../src/cyanide.cpp" line="1323"/>
         <source>Avatar too large. Maximum size: 64KiB</source>
         <translation>Avatar on liiga suur. Maksimaalne suurus: 64KiB</translation>
     </message>
@@ -113,38 +113,38 @@
         <translation>Võib-olla Toxi mind?</translation>
     </message>
     <message>
-        <location filename="../src/filetransfers.cpp" line="416"/>
-        <location filename="../src/filetransfers.cpp" line="526"/>
+        <location filename="../src/filetransfers.cpp" line="417"/>
+        <location filename="../src/filetransfers.cpp" line="527"/>
         <source>Error: Friend not found</source>
         <translation>Viga: Sõpra ei leitud</translation>
     </message>
     <message>
-        <location filename="../src/filetransfers.cpp" line="420"/>
+        <location filename="../src/filetransfers.cpp" line="421"/>
         <source>Error: File transfer not found</source>
         <translation>Viga: Faili ülekannet ei leitud</translation>
     </message>
     <message>
-        <location filename="../src/filetransfers.cpp" line="426"/>
+        <location filename="../src/filetransfers.cpp" line="427"/>
         <source>Error: Already paused</source>
         <translation>Viga: Juba peatatud</translation>
     </message>
     <message>
-        <location filename="../src/filetransfers.cpp" line="428"/>
+        <location filename="../src/filetransfers.cpp" line="429"/>
         <source>Error: Packet queue is full</source>
         <translation>Viga: Pakettide järjekord on täis</translation>
     </message>
     <message>
-        <location filename="../src/filetransfers.cpp" line="505"/>
+        <location filename="../src/filetransfers.cpp" line="506"/>
         <source>Error: Failed to open file: </source>
         <translation>Viga: Faili avamine nurjus: </translation>
     </message>
     <message>
-        <location filename="../src/filetransfers.cpp" line="530"/>
+        <location filename="../src/filetransfers.cpp" line="531"/>
         <source>Error: Filename too long</source>
         <translation>Viga: Failinimi on liiga pikk</translation>
     </message>
     <message>
-        <location filename="../src/filetransfers.cpp" line="532"/>
+        <location filename="../src/filetransfers.cpp" line="533"/>
         <source>Error: Too many ongoing transfers</source>
         <translation>Viga: Liiga palju käimasolevaid ülekandeid</translation>
     </message>
