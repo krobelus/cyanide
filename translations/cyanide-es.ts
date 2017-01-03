@@ -126,27 +126,27 @@
     <message>
         <location filename="../src/filetransfers.cpp" line="427"/>
         <source>Error: Already paused</source>
-        <translation type="unfinished"></translation>
+        <translation>Error: En pausa</translation>
     </message>
     <message>
         <location filename="../src/filetransfers.cpp" line="429"/>
         <source>Error: Packet queue is full</source>
-        <translation type="unfinished"></translation>
+        <translation>Error: La cola de paquetes está llena </translation>
     </message>
     <message>
         <location filename="../src/filetransfers.cpp" line="506"/>
         <source>Error: Failed to open file: </source>
-        <translation type="unfinished"></translation>
+        <translation>Error: No se puede abrir el fichero</translation>
     </message>
     <message>
         <location filename="../src/filetransfers.cpp" line="531"/>
         <source>Error: Filename too long</source>
-        <translation type="unfinished"></translation>
+        <translation>Error: Nombre del archivo muy largo</translation>
     </message>
     <message>
         <location filename="../src/filetransfers.cpp" line="533"/>
         <source>Error: Too many ongoing transfers</source>
-        <translation type="unfinished"></translation>
+        <translation>Error: Muchastransferencias en curso</translation>
     </message>
 </context>
 <context>
@@ -154,7 +154,7 @@
     <message>
         <location filename="../qml/pages/EnterPassword.qml" line="24"/>
         <source>Enter password</source>
-        <translation type="unfinished"></translation>
+        <translation>poner la contraseña</translation>
     </message>
 </context>
 <context>
@@ -162,38 +162,38 @@
     <message>
         <location filename="../qml/pages/FileChooser.qml" line="41"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Cancelar</translation>
     </message>
     <message>
         <location filename="../qml/pages/FileChooser.qml" line="56"/>
         <source>Filter by filename extension</source>
-        <translation type="unfinished"></translation>
+        <translation>Filtrar por extensión de nombres de archivos</translation>
     </message>
     <message>
         <location filename="../qml/pages/FileChooser.qml" line="66"/>
         <source>Remove my avatar</source>
-        <translation type="unfinished"></translation>
+        <translation>Quitar foto de perfil</translation>
     </message>
     <message>
         <location filename="../qml/pages/FileChooser.qml" line="73"/>
         <location filename="../qml/pages/FileChooser.qml" line="127"/>
         <source>Failed to set avatar</source>
-        <translation type="unfinished"></translation>
+        <translation>No se ha podido establecer la foto de perfil</translation>
     </message>
     <message>
         <location filename="../qml/pages/FileChooser.qml" line="78"/>
         <source>New profile</source>
-        <translation type="unfinished"></translation>
+        <translation>Nuevo perfil</translation>
     </message>
     <message>
         <location filename="../qml/pages/FileChooser.qml" line="120"/>
         <source>Failed to send file</source>
-        <translation type="unfinished"></translation>
+        <translation>Ha fallado al enviar el fichero</translation>
     </message>
     <message>
         <location filename="../qml/pages/FileChooser.qml" line="141"/>
         <source>Decryption failed</source>
-        <translation type="unfinished"></translation>
+        <translation>Descifrado fallido</translation>
     </message>
 </context>
 <context>
@@ -201,7 +201,7 @@
     <message>
         <location filename="../qml/pages/Friend.qml" line="77"/>
         <source>Failed to pause transfer</source>
-        <translation type="unfinished"></translation>
+        <translation>Ha fallado en detener la transferencia</translation>
     </message>
     <message>
         <location filename="../qml/pages/Friend.qml" line="84"/>
