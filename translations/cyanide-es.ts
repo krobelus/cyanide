@@ -45,7 +45,7 @@
     <message>
         <location filename="../src/cyanide.cpp" line="991"/>
         <source>Error: Message is too long</source>
-        <translation>Error: EL mensaje esta muy largo</translation>
+        <translation>Error: Mensaje muy largo</translation>
     </message>
     <message>
         <location filename="../src/cyanide.cpp" line="995"/>
@@ -77,7 +77,7 @@
         <location filename="../src/filetransfers.cpp" line="419"/>
         <location filename="../src/filetransfers.cpp" line="529"/>
         <source>Error: Friend not connected</source>
-        <translation>Error: Amigo no conectado</translation>
+        <translation>Error: Contacto no conectado</translation>
     </message>
     <message>
         <location filename="../src/cyanide.cpp" line="1147"/>
@@ -146,7 +146,7 @@
     <message>
         <location filename="../src/filetransfers.cpp" line="533"/>
         <source>Error: Too many ongoing transfers</source>
-        <translation>Error: Muchastransferencias en curso</translation>
+        <translation>Error: Muchas transferencias en curso</translation>
     </message>
 </context>
 <context>
@@ -238,7 +238,7 @@
     <message>
         <location filename="../qml/pages/Friend.qml" line="352"/>
         <source>Opening file...</source>
-        <translation>abriendo fichero</translation>
+        <translation>Abriendo fichero</translation>
     </message>
     <message>
         <location filename="../qml/pages/Friend.qml" line="414"/>
