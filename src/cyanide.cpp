@@ -895,7 +895,6 @@ void Cyanide::relocate_blocked_friend() {
 void Cyanide::add_message(uint32_t fid, Message &message) {
   friends.at(fid).messages.append(message);
   uint32_t mid = friends[fid].messages.size() - 1;
-  friends.at(fid).messages.append(message);
 
   if (message.ft != nullptr)
     friends[fid].files[message.ft->file_number] = mid;
