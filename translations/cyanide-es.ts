@@ -154,7 +154,7 @@
     <message>
         <location filename="../qml/pages/EnterPassword.qml" line="24"/>
         <source>Enter password</source>
-        <translation>poner la contraseña</translation>
+        <translation>Poner contraseña</translation>
     </message>
 </context>
 <context>
@@ -223,12 +223,12 @@
         <location filename="../qml/pages/Friend.qml" line="186"/>
         <source>Hang Up</source>
         <extracomment>hang up</extracomment>
-        <translation>colgar</translation>
+        <translation>Colgar</translation>
     </message>
     <message>
         <location filename="../qml/pages/Friend.qml" line="240"/>
         <source> is typing...</source>
-        <translation>Esta escribiendo</translation>
+        <translation>Escribiendo...</translation>
     </message>
     <message>
         <location filename="../qml/pages/Friend.qml" line="341"/>
@@ -359,12 +359,12 @@
         <location filename="../qml/pages/Profile.qml" line="104"/>
         <source>Online</source>
         <extracomment>user status</extracomment>
-        <translation>En linea</translation>
+        <translation>Conectado</translation>
     </message>
     <message>
         <location filename="../qml/pages/Profile.qml" line="105"/>
         <source>Away</source>
-        <translation>Lejos</translation>
+        <translation>Ausente</translation>
     </message>
     <message>
         <location filename="../qml/pages/Profile.qml" line="106"/>
@@ -413,7 +413,7 @@
     <message>
         <location filename="../src/settings.cpp" line="23"/>
         <source>I receive a message</source>
-        <translation>recibir un mensaje</translation>
+        <translation>Recibir un mensaje</translation>
     </message>
     <message>
         <location filename="../src/settings.cpp" line="25"/>
