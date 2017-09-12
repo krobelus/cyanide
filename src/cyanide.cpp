@@ -225,13 +225,13 @@ void Cyanide::check_wifi() {
             "--print-reply"
             " /net/connman/technology/wifi net.connman.Technology.GetProperties"
             "| grep -A1 Connected | sed -e 1d -e 's/^.*\\s//')\"")) {
-      qDebug() << "connected via wifi, toxing";
+      qDebug() << "connected via Wi-Fi, toxing";
       if (loop == LOOP_SUSPEND)
         resume_thread();
       else
         loop = LOOP_RUN;
     } else {
-      qDebug() << "not connected via wifi, not toxing";
+      qDebug() << "not connected via Wi-Fi, not toxing";
       suspend_thread();
     }
   } else {
@@ -610,7 +610,7 @@ void Cyanide::tox_loop() {
     Q_ASSERT(false);
     break;
   case LOOP_FINISH:
-    qDebug() << "exiting...";
+    qDebug() << "exiting…";
 
     killall_tox();
 
@@ -802,7 +802,7 @@ void Cyanide::load_tox_data() {
   TOX_ERR_FRIEND_QUERY error;
   size_t length;
   size_t nfriends = tox_self_get_friend_list_size(tox);
-  qDebug() << "Loading" << nfriends << "friends...";
+  qDebug() << "Loading" << nfriends << "friends…";
 
   for (size_t i = 0; i < nfriends; i++) {
     Friend f = *new Friend();
@@ -997,7 +997,7 @@ QString Cyanide::send_friend_request_id(const uint8_t *id, const uint8_t *msg,
   case TOX_ERR_FRIEND_ADD_BAD_CHECKSUM:
     return tr("Error: Invalid Tox ID (bad checksum)");
   case TOX_ERR_FRIEND_ADD_SET_NEW_NOSPAM:
-    return tr("Error: Invalid Tox ID (bad nospam value)");
+    return tr("Error: Invalid Tox ID (bad NoSpam value)");
   case TOX_ERR_FRIEND_ADD_MALLOC:
     return tr("Error: No memory");
   default:
@@ -1049,7 +1049,7 @@ QString Cyanide::send_friend_message(int fid, QString message) {
 
     uint32_t message_id =
         tox_friend_send_message(tox, fid, type, msg, msg_len, &error);
-    qDebug() << "message id:" << message_id;
+    qDebug() << "message ID:" << message_id;
 
     switch (error) {
     case TOX_ERR_FRIEND_SEND_MESSAGE_OK:
@@ -1164,7 +1164,7 @@ QList<int> Cyanide::get_friend_numbers() const {
     int fid = entry.first;
     Friend const &f = entry.second;
     if (fid < 0) {
-      qWarning() << "friend id < 0";
+      qWarning() << "friend ID < 0";
       continue;
     }
     if (f.connection_status == TOX_CONNECTION_NONE) {
@@ -1496,7 +1496,7 @@ QString Cyanide::get_message_rich_text(int fid, int mid) const {
         "<a href=\"" +
         QString{(protocol != -1)
                     ? ""
-                    : (rx.cap(1).indexOf("@") != -1) ? "mailto:" : "https:"} +
+                    : (rx.cap(1).indexOf("@") != -1) ? "mailto:" : "HTTPS:"} +
         rx.cap(1) + "\">" + rx.cap(1) + "</a>";
     text.replace(pos, rx.matchedLength(), repl);
     pos += repl.length();
