@@ -13,12 +13,12 @@ const QString Settings::tables[] = {
     "TEXT, avatar_hash BLOB)"};
 
 std::map<QString, settings_entry> Settings::entries = {
-    {"wifi-only", {0, tr("Wifi only"), "bool", "true"}},
+    {"wifi-only", {0, tr("Wi-Fi only"), "bool", "true"}},
     {"send-typing-notifications",
      {1, tr("Send typing notifications?"), "bool", "true"}},
     {"keep-history", {2, tr("Keep chat history"), "bool", "true"}},
     {"udp-enabled", {3, tr("Enable UDP"), "bool", "true"}},
-    {"notification-when", {4, tr("Notify me when..."), "none", ""}},
+    {"notification-when", {4, tr("Notify me when…"), "none", ""}},
     {"notification-message-received",
      {5, tr("I receive a message"), "bool", "true"}},
     {"notification-friend-request-received",
@@ -110,7 +110,7 @@ void Settings::open_database(QString &name) {
   }
 }
 
-Settings::~Settings() { qDebug() << "todo..."; }
+Settings::~Settings() { qDebug() << "todo…"; }
 
 QString Settings::get(QString const &name) const {
   return entries.at(name).value;
